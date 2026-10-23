@@ -13,10 +13,12 @@ room ResRoom {
     // The GUI uses the first charset, so pin ours to slot 1
     chset font @ 1 = "font.char";
     cost guestCost = "guest.cost";
+    cost bellhopCost = "bellhop.cost";
 
     bit cursorShown;
 
     script inventoryClick(int item);
+    script wearUniform(int on);
     script defaultAction(int vrb, int item);
 
     // ------------------------------------------------------------ verbs
@@ -68,12 +70,15 @@ room ResRoom {
         setCurrentVerb(invMatchbook); initVerb(); setVerbName("matchbook");
         setCurrentVerb(invKeycard);   initVerb(); setVerbName("key card");
         setCurrentVerb(invCandy);     initVerb(); setVerbName("candy bar");
-        makeVerb(invMatchbook, 216, 160);
-        makeVerb(invKeycard,   216, 172);
-        makeVerb(invCandy,     216, 184);
+        setCurrentVerb(invUniform);   initVerb(); setVerbName("uniform");
+        makeVerb(invMatchbook, 216, 155);
+        makeVerb(invKeycard,   216, 165);
+        makeVerb(invCandy,     216, 175);
+        makeVerb(invUniform,   216, 185);
         setCurrentVerb(invMatchbook); setVerbColor(C_YELLOW);
         setCurrentVerb(invKeycard);   setVerbColor(C_YELLOW);
         setCurrentVerb(invCandy);     setVerbColor(C_YELLOW);
+        setCurrentVerb(invUniform);   setVerbColor(C_YELLOW);
         refreshInventory();
     }
 
@@ -86,22 +91,28 @@ room ResRoom {
         setCurrentVerb(invMatchbook); setVerbOff(); redrawVerb();
         setCurrentVerb(invKeycard);   setVerbOff(); redrawVerb();
         setCurrentVerb(invCandy);     setVerbOff(); redrawVerb();
+        setCurrentVerb(invUniform);   setVerbOff(); redrawVerb();
 
-        y = 160;
+        // Four items fit in the 56-pixel verb area at 10-pixel spacing
+        y = 155;
         if(hasMatchbook) {
             setCurrentVerb(invMatchbook);
             setVerbXY(216, y); setVerbOn(); redrawVerb();
-            y += 12;
+            y += 10;
         }
         if(hasKeycard) {
             setCurrentVerb(invKeycard);
             setVerbXY(216, y); setVerbOn(); redrawVerb();
-            y += 12;
+            y += 10;
         }
         if(hasCandy) {
             setCurrentVerb(invCandy);
             setVerbXY(216, y); setVerbOn(); redrawVerb();
-            y += 12;
+            y += 10;
+        }
+        if(hasUniform) {
+            setCurrentVerb(invUniform);
+            setVerbXY(216, y); setVerbOn(); redrawVerb();
         }
     }
 
@@ -124,7 +135,7 @@ room ResRoom {
         while(1) {
             obj = getObjectAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
             inv = getVerbAt(VAR_MOUSE_X, VAR_MOUSE_Y);
-            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy ]))
+            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy, invUniform ]))
                 inv = 0;
             hoverObj = obj;
             hoverInv = inv;
@@ -158,7 +169,7 @@ room ResRoom {
         if(gameOver) return;
 
         if(area == 1) {
-            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy ]))
+            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy, invUniform ]))
                 inventoryClick(cmd);
             else if(isAnyOf(cmd, [ Open, Close, TalkTo, PickUp, LookAt,
                                    Use, Push, Pull, WalkTo ])) {
@@ -241,6 +252,11 @@ room ResRoom {
     // ------------------------------------------------------------ inventory
     script inventoryClick(int item) {
         if(curVerb == Use && !withItem) {
+            if(item == invUniform) {
+                wearUniform(!wearingUniform);
+                curVerb = WalkTo;
+                return;
+            }
             if(item == invCandy) {
                 hasCandy = 0;
                 refreshInventory();
@@ -272,6 +288,16 @@ room ResRoom {
             else
                 egoSay("It goes in the slot on the door.");
             break;
+        case invUniform:
+            if(curVerb == LookAt && wearingUniform)
+                egoSay("Red, gold buttons, a little hat. I look extremely official.");
+            else if(curVerb == LookAt)
+                egoSay("A bellhop uniform. Not mine. Probably.");
+            else if(curVerb == Open || curVerb == PickUp)
+                egoSay("I could put it on. Use it, I mean.");
+            else
+                egoSay("It's a uniform. It doesn't do much on its own.");
+            break;
         case invCandy:
             if(curVerb == LookAt)
                 egoSay("A Paradiso Bar. Fourteen dollars of nougat.");
@@ -280,6 +306,20 @@ room ResRoom {
             break;
         }
         curVerb = WalkTo;
+    }
+
+    // Swap the player's sprite set. Both costumes define the same
+    // animations, so the actor keeps walking and talking as before.
+    script wearUniform(int on) {
+        wearingUniform = on;
+        setCurrentActor(VAR_EGO);
+        if(on) {
+            setActorCostume(bellhopCost);
+            egoSay("There. Very official."); waitForMessage();
+        } else {
+            setActorCostume(guestCost);
+            egoSay("Back to the bathrobe. Much breezier."); waitForMessage();
+        }
     }
 
     script readMatchbook() {
@@ -307,6 +347,8 @@ room ResRoom {
         lockRoom(ResRoom);
         loadCostume(guestCost);
         lockCostume(guestCost);
+        loadCostume(bellhopCost);
+        lockCostume(bellhopCost);
 
         // The room picture is 144 lines tall; the verb bar gets the rest
         setScreen(0, 144);

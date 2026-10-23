@@ -74,7 +74,7 @@ def put(img, x, y, col):
 
 
 # --------------------------------------------------------------------------- room
-DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0)
+DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, uniform=0)
 
 
 def draw_wall(img, d):
@@ -304,7 +304,7 @@ def draw_phone(img, d):
         put(img, x, 68, 'grey_hi')
 
 
-def draw_bed(img, d):
+def draw_bed(img, d, s_uniform=0):
     # headboard against the wall
     rect(d, 236, 46, 316, 84, 'wood_dk')
     rect(d, 238, 48, 314, 82, 'wood')
@@ -324,6 +324,18 @@ def draw_bed(img, d):
         rect(d, 238, y, 316, y + 1, 'blanket_dk')
     rect(d, 238, 120, 316, 128, 'blanket_dk')
     rect(d, 238, 120, 316, 121, 'blanket_hi')
+    if s_uniform:
+        # bellhop uniform folded on the blanket, pillbox hat beside it
+        rect(d, 266, 98, 286, 110, 'red_dk')
+        rect(d, 266, 98, 286, 108, 'red')
+        rect(d, 275, 98, 277, 110, 'red_dk')
+        for y in (100, 103, 106):
+            put(img, 276, y, 'brass')
+        rect(d, 266, 98, 270, 101, 'brass')      # epaulette
+        rect(d, 282, 98, 286, 101, 'brass')
+        rect(d, 287, 102, 295, 109, 'red')
+        rect(d, 287, 106, 295, 107, 'brass')
+        rect(d, 287, 108, 295, 109, 'red_dk')
     rect(d, 236, 74, 238, 128, 'wood_dk')
     rect(d, 316, 74, 318, 128, 'wood_dk')
     rect(d, 236, 128, 318, 132, 'wood_xdk')
@@ -382,20 +394,35 @@ def render(state=None):
     draw_nightstand(img, d, s['drawer'])
     draw_lamp(img, d, s['lamp'])
     draw_phone(img, d)
-    draw_bed(img, d)
+    draw_bed(img, d, s['uniform'])
     draw_painting_safe(img, d, s['safe'])
     return img
 
 
 # --------------------------------------------------------------------------- actor
-# Hotel guest in a bathrobe. Frames are 24x52 with feet at the bottom row.
+# The player. Frames are 24x52 with feet at the bottom row. Every frame can be
+# drawn in either outfit: the bathrobe, or the bellhop uniform found on the bed
+# (same body and animation, recoloured, plus buttons and a pillbox hat).
 FW, FH = 24, 52
-A = {
+ROBE = {
     'skin': (232, 176, 136), 'skin_dk': (184, 124, 92), 'hair': (70, 42, 30),
     'robe': (238, 236, 228), 'robe_dk': (180, 178, 172), 'belt': (60, 110, 170),
-    'leg': (214, 160, 122), 'slipper': (190, 50, 60), 'eye': (20, 20, 24), 'mouth': (120, 40, 40),
-    'stripe': (60, 110, 170),
+    'leg': (214, 160, 122), 'leg_back': (184, 124, 92), 'slipper': (190, 50, 60),
+    'eye': (20, 20, 24), 'mouth': (120, 40, 40), 'stripe': (60, 110, 170),
 }
+BELLHOP = dict(ROBE, **{
+    'robe': (176, 30, 40), 'robe_dk': (118, 16, 28), 'belt': (222, 182, 70),
+    'leg': (40, 40, 64), 'leg_back': (26, 26, 44), 'slipper': (16, 16, 20),
+    'stripe': (222, 182, 70), 'hat': (176, 30, 40), 'hat_band': (222, 182, 70),
+})
+OUTFITS = {'robe': ROBE, 'bellhop': BELLHOP}
+A = ROBE   # palette used by _r(); switched per frame by _use()
+
+
+def _use(outfit):
+    global A
+    A = OUTFITS[outfit]
+    return outfit == 'bellhop'
 
 
 def _frame():
@@ -407,7 +434,8 @@ def _r(d, x0, y0, x1, y1, col):
         d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=A[col])
 
 
-def actor_front(step=0, talk=False):
+def actor_front(step=0, talk=False, outfit='robe'):
+    bellhop = _use(outfit)
     im = _frame(); d = ImageDraw.Draw(im)
     # legs
     lo = [0, -2, 2][step]
@@ -440,10 +468,16 @@ def actor_front(step=0, talk=False):
         _r(d, 10, 13, 14, 15, 'mouth')
     else:
         _r(d, 10, 13, 14, 14, 'mouth')
+    if bellhop:
+        for y in (20, 23, 26, 33, 36):          # brass buttons
+            _r(d, 11, y, 13, y + 1, 'hat_band')
+        _r(d, 8, 0, 16, 4, 'hat')                # pillbox hat
+        _r(d, 8, 3, 16, 4, 'hat_band')
     return im
 
 
-def actor_back(step=0):
+def actor_back(step=0, outfit='robe'):
+    bellhop = _use(outfit)
     im = _frame(); d = ImageDraw.Draw(im)
     lo = [0, -2, 2][step]
     _r(d, 8, 40, 11, 49 + min(0, lo), 'leg')
@@ -461,17 +495,21 @@ def actor_back(step=0):
     _r(d, 7, 3, 17, 16, 'hair')
     _r(d, 6, 6, 7, 10, 'skin')
     _r(d, 17, 6, 18, 10, 'skin')
+    if bellhop:
+        _r(d, 8, 0, 16, 4, 'hat')
+        _r(d, 8, 3, 16, 4, 'hat_band')
     return im
 
 
-def actor_side(step=0, talk=False):
+def actor_side(step=0, talk=False, outfit='robe'):
     """Facing east."""
+    bellhop = _use(outfit)
     im = _frame(); d = ImageDraw.Draw(im)
     # legs: 4-step cycle
     leg = [(0, 0), (-3, 3), (0, 0), (3, -3)][step]
     _r(d, 10 + leg[0], 40, 13 + leg[0], 49, 'leg')
     _r(d, 9 + leg[0], 49, 15 + leg[0], 52, 'slipper')
-    _r(d, 10 + leg[1], 40, 13 + leg[1], 49, 'skin_dk')
+    _r(d, 10 + leg[1], 40, 13 + leg[1], 49, 'leg_back')
     _r(d, 9 + leg[1], 49, 15 + leg[1], 52, 'slipper')
     # robe
     _r(d, 7, 18, 17, 42, 'robe')
@@ -493,6 +531,11 @@ def actor_side(step=0, talk=False):
         _r(d, 14, 13, 17, 15, 'mouth')
     else:
         _r(d, 15, 13, 17, 14, 'mouth')
+    if bellhop:
+        for y in (21, 25, 33):                   # buttons on the front edge
+            _r(d, 15, y, 17, y + 1, 'hat_band')
+        _r(d, 8, 0, 15, 4, 'hat')
+        _r(d, 8, 3, 15, 4, 'hat_band')
     return im
 
 

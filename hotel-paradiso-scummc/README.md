@@ -24,6 +24,11 @@ F5 opens the menu, `.` skips a line of dialogue.
 Ten pieces of furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
 nightstand, painting, wall safe and bed. The three things you can take (candy bar,
 matchbook, key card) are objects of their own, clickable only while you can see them.
+
+There's also a bellhop uniform lying on the bed. Pick it up, then **Use** it from the
+inventory to put it on: the player switches to a second costume with its own full set
+of walking and talking frames. Use it again to change back. It isn't needed to finish,
+but it does change the ending slightly.
 Each object has its own verb code and answers the verbs that make sense for it; anything
 else gets a stock reply.
 
@@ -46,7 +51,7 @@ else gets a stock reply.
 | `src/hotel.scc` | `Hotel`: the room, its objects and their verb code, the phone call, the ending |
 | `assets/` | Generated art and data the sources reference (committed, so Python isn't needed to build) |
 | `tools/art.py` | Procedural pixel art: the room in every object state, costume frames, cursor |
-| `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, object state images, costume + `.scost`, font sheet, walk boxes |
+| `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, object state images, both costumes + `.scost` files, font sheet, walk boxes |
 | `dist/` | Prebuilt `tentacle.000` / `tentacle.001` |
 
 ## How it works
@@ -63,6 +68,11 @@ else gets a stock reply.
   engine only lets the cursor find them while the container is in the state that shows
   them. Each is declared before its container so the cursor finds the item first. The safe sits on the same spot as the painting and starts "untouchable" (engine
   class 32); moving the painting swaps which of the two the cursor finds.
+* **Costume swap.** `guest.scost` (bathrobe) and `bellhop.scost` (uniform) are drawn by the
+  same code in `tools/art.py` with a different outfit, and declare the same animations
+  (`init`, `walk`, `stand`, `talkStart`, `talkStop`). That lets `wearUniform` call
+  `setActorCostume()` on the player at any time: the actor keeps its walk and talk frame
+  numbers and just draws them from the other costume. Both are loaded and locked at boot.
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
   in after them, and the costume's 16 local colours are mapped onto room indices with

@@ -101,6 +101,10 @@ room Hotel {
         print("You checked out of the Hotel Paradiso."); waitForMessage();
         printBegin(); printAt(160, 40); printCenter(); printColor(C_WHITE);
         print("THE END.   Thanks for playing!"); waitForMessage();
+        if(wearingUniform) {
+            printBegin(); printAt(160, 40); printCenter(); printColor(C_WHITE);
+            print("Nobody stops a bellhop on the way out."); waitForMessage();
+        }
         printBegin(); printAt(160, 40); printCenter(); printColor(C_GREY);
         print("Late check-out fee: $40. Minibar: $14."); waitForMessage();
         shutdown();
@@ -522,6 +526,38 @@ room Hotel {
         case TalkTo:
             egoSay("Open sesame."); waitForMessage();
             egoSay("Worth a try."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ uniform
+    // Lies folded on the bed (state 1) until picked up. Declared before the
+    // bed so the cursor finds it first.
+    object uniform {
+        x = 264; y = 96; w = 32; h = 16;
+        hs_x = -24; hs_y = 43;
+        dir = EAST;
+        name = "bellhop uniform";
+        states = { { -24, 43, "objects/uniform_1.bmp" } };
+        state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A bellhop uniform, with the hat. I have no idea how it got here."); waitForMessage();
+            return;
+        case PickUp:
+            setObjectState(uniform, 0);
+            setObjectClass(uniform, [ SET_CLASS | UNTOUCHABLE ]);
+            hasUniform = 1;
+            ResRoom::refreshInventory();
+            egoSay("Still warm. Let's not think about that."); waitForMessage();
+            return;
+        case Use:
+            egoSay("I'll pick it up first."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("Front! Boy!"); waitForMessage();
+            egoSay("Nothing. Good help is hard to find."); waitForMessage();
             return;
         }
     }

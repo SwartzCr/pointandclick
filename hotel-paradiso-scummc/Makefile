@@ -33,12 +33,15 @@ $(B):
 $(B)/font.char: assets/font.bmp | $(B)
 	$(CHAR) -ochar $@ -ibmp $< -ibmp-base 32
 
-$(B)/guest.cost $(B)/guest_anim.sch: assets/guest.scost $(wildcard assets/guest/*.bmp) | $(B)
-	cd assets && $(COST) -o ../$(B)/guest.cost -header ../$(B)/guest_anim.sch \
-	    -prefix guest_anim_ guest.scost
+# Player costumes: the bathrobe and the bellhop uniform. Both use the same
+# animation names, so either can be swapped onto the actor.
+$(B)/%.cost $(B)/%_anim.sch: assets/%.scost $(wildcard assets/*/*.bmp) | $(B)
+	cd assets && $(COST) -o ../$(B)/$*.cost -header ../$(B)/$*_anim.sch \
+	    -prefix $*_anim_ $*.scost
 
 # The rooms reference the charset and costume by name, so build those first
-$(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.cost $(B)/guest_anim.sch
+$(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.cost $(B)/guest_anim.sch \
+                    $(B)/bellhop.cost
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) assets/hotel.box | $(B)
