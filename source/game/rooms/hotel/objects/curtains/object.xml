@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>curtains</name>
+  <displayName>curtains</displayName>
+  <hotspotX>164</hotspotX>
+  <hotspotY>104</hotspotY>
+  <x>128</x>
+  <y>0</y>
+  <width>72</width>
+  <height>72</height>
+  <actorDir>north</actorDir>
+  <image>state1</image>
+</object>

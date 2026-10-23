@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>door</name>
+  <displayName>door</displayName>
+  <hotspotX>40</hotspotX>
+  <hotspotY>104</hotspotY>
+  <x>16</x>
+  <y>16</y>
+  <width>48</width>
+  <height>80</height>
+  <actorDir>north</actorDir>
+  <image>state1</image>
+</object>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>safe</name>
+  <displayName>wall safe</displayName>
+  <hotspotX>230</hotspotX>
+  <hotspotY>139</hotspotY>
+  <x>248</x>
+  <y>8</y>
+  <width>48</width>
+  <height>40</height>
+  <actorDir>east</actorDir>
+  <image>state1</image>
+  <image>state2</image>
+  <image>state3</image>
+</object>

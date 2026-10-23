@@ -1,0 +1,526 @@
+// =====================================================================
+//  Room script for "hotel" (Room 714, Hotel Paradiso)
+//
+//  Each <object>_verb function is that object's SCUMM verb table: one
+//  "action" block whose cases are the verbs the object responds to.
+//  Verbs an object doesn't list fall through to defaultReply() in main.
+//
+//  Puzzle chain:
+//    nightstand drawer -> matchbook -> lamp on to read it -> code 714
+//    painting -> reveals wall safe -> open with code -> key card -> door
+// =====================================================================
+
+function hotel_entry()
+{
+	Object_setClass(safe, UNTOUCHABLE, 1);
+	Object_setClass(cursor, UNTOUCHABLE, 1);
+}
+
+function hotel_exit()
+{
+}
+
+// The front desk is a voice on the phone: yellow text at the top
+inline function deskSays(var s)
+{
+	Interface_printLineLoadDefault();
+	Interface_printLineAt(160, 12);
+	Interface_printLineCenter();
+	Interface_printLineColor(C_YELLOW);
+	Interface_printLine(s);
+	Script_waitForMessage();
+}
+
+inline function say(var s)
+{
+	Actor_talkEgo(s);
+	Script_waitForMessage();
+}
+
+function callDesk()
+{
+	Interface_activateUserput(0);
+	Interface_activateCursor(0);
+	phoneCalls++;
+	say("I dial zero.");
+	if (phoneCalls == 1)
+	{
+		deskSays("Front desk, Gustav speaking. How may I help you?");
+		say("I'm locked in my room. I can't find my key card.");
+		deskSays("Have you tried the door, sir?");
+		say("The door needs the key card.");
+		deskSays("Then I suggest finding the key card, sir.");
+		deskSays("Many guests keep valuables in the room safe.");
+		say("There's a safe?");
+		deskSays("Behind the painting, sir. As in every room. Good day.");
+	}
+	else if (phoneCalls == 2)
+	{
+		deskSays("Front desk, Gustav speaking.");
+		say("Hi, it's me again. What's the code for the safe?");
+		deskSays("Whatever you set it to, sir. Guests often write it down.");
+		deskSays("Usually on whatever is lying around the room. Good day.");
+	}
+	else
+	{
+		deskSays("You have reached the front desk. Gustav is on his break.");
+		say("Gustav is avoiding me.");
+	}
+	Interface_activateUserput(1);
+	Interface_activateCursor(1);
+}
+
+function leaveRoom()
+{
+	gameOver = 1;
+	Interface_activateUserput(0);
+	Interface_activateCursor(0);
+	say("I slide the key card into the slot.");
+	Object_setState(door, 1);
+	say("Green light! Freedom!");
+	Actor_walkToXY(ego, 40, 101);
+	Script_waitForActor(ego);
+	Actor_hide(ego);
+	Script_delaySeconds(1);
+	Interface_printLineLoadDefault();
+	Interface_printLineAt(160, 40);
+	Interface_printLineCenter();
+	Interface_printLineColor(C_YELLOW);
+	Interface_printLine("You checked out of the Hotel Paradiso.");
+	Script_waitForMessage();
+	Interface_printLineLoadDefault();
+	Interface_printLineAt(160, 40);
+	Interface_printLineCenter();
+	Interface_printLineColor(C_WHITE);
+	Interface_printLine("THE END.   Thanks for playing!");
+	Script_waitForMessage();
+	Interface_printLineLoadDefault();
+	Interface_printLineAt(160, 40);
+	Interface_printLineCenter();
+	Interface_printLineColor(C_GREY);
+	Interface_printLine("Late check-out fee: $40. Minibar: $14.");
+	Script_waitForMessage();
+	Util_quit();
+}
+
+// ---------------------------------------------------------------- door
+function door_verb()
+{
+	action
+	{
+		case vLook:
+			say("Room 714. It only opens with a key card.");
+			break;
+		case vOpen:
+			if (hasKeycard)
+				leaveRoom();
+			else
+				say("Locked. The card reader blinks red at me. Judgmentally.");
+			break;
+		case vUse:
+			if (withItem == vKeycard || (withItem == 0 && hasKeycard))
+				leaveRoom();
+			else if (withItem)
+				say("That won't fit in the card slot.");
+			else
+				say("It needs a key card. Which I don't have.");
+			break;
+		case vPull:
+			say("I rattle the handle. Still locked.");
+			break;
+		case vPush:
+			say("It opens inward. Also, it's locked.");
+			break;
+		case vClose:
+			say("It's already closed. Very closed.");
+			break;
+		case vTalk:
+			say("Hello? Housekeeping? Anyone?");
+			say("Nothing. They must be on strike.");
+			break;
+		case vPickup:
+			say("The Do Not Disturb sign stays. I am very disturbed.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- tv
+function tv_verb()
+{
+	action
+	{
+		case vLook:
+			if (tvOn)
+			{
+				tvLooks = 1 - tvLooks;
+				if (tvLooks)
+					say("The Paradiso Channel. Forecast: sunny, with a chance of late fees.");
+				else
+					say("An ad: Paradiso safes. Hidden where nobody would ever look.");
+			}
+			else
+				say("A TV the size of a suitcase. Retro, or just old.");
+			break;
+		case vUse:
+		case vPush:
+			if (withItem)
+				say("I don't think the TV needs that.");
+			else if (tvOn)
+			{
+				tvOn = 0;
+				Object_setState(tv, 0);
+				say("Click.");
+			}
+			else
+			{
+				tvOn = 1;
+				Object_setState(tv, 1);
+				say("It warms up with a hum.");
+			}
+			break;
+		case vClose:
+			if (tvOn)
+			{
+				tvOn = 0;
+				Object_setState(tv, 0);
+			}
+			else
+				say("It's already off.");
+			break;
+		case vTalk:
+			say("TV, what's the code for the safe?");
+			if (tvOn)
+				say("It cut to a commercial. Typical.");
+			else
+				say("The silent treatment. Fair.");
+			break;
+		case vPickup:
+			say("It weighs more than I do.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- curtains
+function curtains_verb()
+{
+	action
+	{
+		case vLook:
+			if (curtainsOpen)
+				say("The city at night. Twelve floors down, and the window is sealed.");
+			else
+				say("Heavy velvet curtains. Very dramatic.");
+			break;
+		case vOpen:
+		case vPull:
+			if (curtainsOpen)
+				say("They're already open.");
+			else
+			{
+				curtainsOpen = 1;
+				Object_setState(curtains, 1);
+				say("Night already? How long did I sleep?");
+			}
+			break;
+		case vClose:
+		case vPush:
+			if (curtainsOpen)
+			{
+				curtainsOpen = 0;
+				Object_setState(curtains, 0);
+			}
+			else
+				say("They're already closed.");
+			break;
+		case vUse:
+			if (withItem == vMatchbook)
+				say("Setting the curtains on fire is not a plan. It's a crime.");
+			else
+				say("Climbing out the window is not an option. Twelve floors.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- minibar
+function minibar_verb()
+{
+	action
+	{
+		case vLook:
+			if (minibarOpen && tookCandy == 0)
+				say("Tiny bottles and a candy bar. All priced like jewellery.");
+			else if (minibarOpen)
+				say("Tiny bottles. I'm not paying twelve dollars for those.");
+			else
+				say("The minibar. A tiny fridge full of expensive regret.");
+			break;
+		case vOpen:
+		case vPull:
+			if (minibarOpen)
+				say("It's open.");
+			else
+			{
+				minibarOpen = 1;
+				if (tookCandy)
+					Object_setState(minibar, 2);
+				else
+					Object_setState(minibar, 1);
+			}
+			break;
+		case vClose:
+		case vPush:
+			if (minibarOpen)
+			{
+				minibarOpen = 0;
+				Object_setState(minibar, 0);
+			}
+			else
+				say("It's closed.");
+			break;
+		case vPickup:
+			if (minibarOpen && tookCandy == 0)
+			{
+				tookCandy = 1;
+				hasCandy = 1;
+				Object_setState(minibar, 2);
+				refreshInventory();
+				say("A candy bar. Fourteen dollars. Worth it.");
+			}
+			else if (minibarOpen)
+				say("The bottles are wired to an alarm. Probably.");
+			else
+				say("It's plugged in. I'll just open it.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- lamp
+function lamp_verb()
+{
+	action
+	{
+		case vLook:
+			if (lampOn)
+				say("Nice warm light. Good for reading.");
+			else
+				say("A brass reading lamp. It's off.");
+			break;
+		case vUse:
+		case vPush:
+		case vPull:
+			if (withItem)
+				say("The lamp doesn't need that.");
+			else if (lampOn)
+			{
+				lampOn = 0;
+				Object_setState(lamp, 0);
+				say("Click.");
+			}
+			else
+			{
+				lampOn = 1;
+				Object_setState(lamp, 1);
+				say("Let there be light.");
+			}
+			break;
+		case vPickup:
+			say("It's plugged in. And bolted down. This hotel trusts no one.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- phone
+function phone_verb()
+{
+	action
+	{
+		case vLook:
+			say("A rotary phone. Zero for the front desk.");
+			break;
+		case vUse:
+		case vTalk:
+		case vPickup:
+			if (withItem)
+				say("I'd rather use it to make a call.");
+			else
+				callDesk();
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- nightstand
+function nightstand_verb()
+{
+	action
+	{
+		case vLook:
+			if (drawerOpen && tookMatchbook == 0)
+				say("There's a matchbook in the drawer.");
+			else if (drawerOpen)
+				say("The drawer is empty. Not even a room service menu.");
+			else
+				say("A nightstand with one drawer.");
+			break;
+		case vOpen:
+		case vPull:
+			if (drawerOpen)
+				say("It's already open.");
+			else
+			{
+				drawerOpen = 1;
+				if (tookMatchbook)
+					Object_setState(nightstand, 2);
+				else
+				{
+					Object_setState(nightstand, 1);
+					say("A matchbook from the hotel bar.");
+				}
+			}
+			break;
+		case vClose:
+		case vPush:
+			if (drawerOpen)
+			{
+				drawerOpen = 0;
+				Object_setState(nightstand, 0);
+			}
+			else
+				say("It's closed.");
+			break;
+		case vPickup:
+			if (drawerOpen && tookMatchbook == 0)
+			{
+				tookMatchbook = 1;
+				hasMatchbook = 1;
+				Object_setState(nightstand, 2);
+				refreshInventory();
+				say("Got it. There's writing inside the cover.");
+			}
+			else if (drawerOpen)
+				say("Nothing else in there.");
+			else
+				say("I'll open the drawer first.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- painting
+function revealSafe()
+{
+	safeRevealed = 1;
+	Object_setClass(painting, UNTOUCHABLE, 1);
+	Object_setClass(safe, UNTOUCHABLE, 0);
+	Object_setState(safe, 1);
+	say("Aha! A wall safe. Behind a painting. How original.");
+}
+
+function painting_verb()
+{
+	action
+	{
+		case vLook:
+			say("A sunset over a beach. It hangs a little crooked.");
+			break;
+		case vPull:
+		case vPush:
+		case vPickup:
+		case vOpen:
+			revealSafe();
+			break;
+		case vTalk:
+			say("Lovely brushwork. I don't know anything about brushwork.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- safe
+function safe_verb()
+{
+	action
+	{
+		case vLook:
+			if (safeOpen && tookKeycard == 0)
+				say("My key card! I locked it in the safe. Of course I did.");
+			else if (safeOpen)
+				say("Empty.");
+			else
+				say("A wall safe with a three-digit combination dial.");
+			break;
+		case vOpen:
+		case vUse:
+			if (safeOpen)
+				say("It's already open.");
+			else if (withItem && withItem != vMatchbook)
+				say("That won't open a safe.");
+			else if (knowsCode)
+			{
+				say("Seven. One. Four.");
+				safeOpen = 1;
+				if (tookKeycard)
+					Object_setState(safe, 3);
+				else
+					Object_setState(safe, 2);
+				say("Click! It's open.");
+			}
+			else if (hasMatchbook)
+				say("I think I wrote the code inside the matchbook. I should read it.");
+			else
+				say("I don't remember the combination. I barely remember last night.");
+			break;
+		case vPickup:
+			if (safeOpen && tookKeycard == 0)
+			{
+				tookKeycard = 1;
+				hasKeycard = 1;
+				Object_setState(safe, 3);
+				refreshInventory();
+				say("My key card. Now let's get out of here.");
+			}
+			else if (safeOpen)
+				say("There's nothing left in it.");
+			else
+				say("It's built into the wall.");
+			break;
+		case vClose:
+		case vPush:
+			if (safeOpen)
+			{
+				safeOpen = 0;
+				Object_setState(safe, 1);
+			}
+			else
+				say("It's closed.");
+			break;
+		case vTalk:
+			say("Open sesame.");
+			say("Worth a try.");
+			break;
+	}
+}
+
+// ---------------------------------------------------------------- bed
+function bed_verb()
+{
+	action
+	{
+		case vLook:
+			say("Unmade. My work.");
+			break;
+		case vUse:
+			say("No time for a nap. Check-out was at noon.");
+			break;
+		case vPush:
+		case vPull:
+			say("I'm not wrestling a mattress today.");
+			break;
+		case vPickup:
+			say("Not with my back.");
+			break;
+		case vOpen:
+			say("I check under the covers. One sock. Not mine.");
+			break;
+		case vTalk:
+			say("Goodbye, bed. You were the best part of this trip.");
+			break;
+	}
+}

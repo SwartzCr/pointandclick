@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>bed</name>
+  <displayName>bed</displayName>
+  <hotspotX>240</hotspotX>
+  <hotspotY>139</hotspotY>
+  <x>232</x>
+  <y>48</y>
+  <width>88</width>
+  <height>88</height>
+  <actorDir>east</actorDir>
+</object>

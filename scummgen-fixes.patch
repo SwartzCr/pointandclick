@@ -1,0 +1,48 @@
+diff --git a/src/blocks/DOBJ.cpp b/src/blocks/DOBJ.cpp
+index e251bfe..0187ac6 100644
+--- a/src/blocks/DOBJ.cpp
++++ b/src/blocks/DOBJ.cpp
+@@ -5,6 +5,7 @@
+ #include "types/Object.hpp"
+ 
+ const uint8_t DOBJ::OWNER_AND_STATE = 0;
++const uint8_t DOBJ::OWNER_ROOM = 0x0F;
+ const uint32_t DOBJ::CLASS_DATA = 0;
+ 
+ DOBJ::DOBJ(Game *game)
+@@ -30,7 +31,9 @@ DOBJ::DOBJ(Game *game)
+ 	for (int i = 0; i < game->getNumberOfRooms(); i++)
+ 		for (int j = 0; j < game->getRoom(i)->getNumberOfObjects(); j++)
+ 		{
+-			_ownersAndStates.push_back(OWNER_AND_STATE);
++			// Room objects must be owned by the room (owner nibble 0x0F),
++			// otherwise the engine cannot find their OBCD (verbs, names).
++			_ownersAndStates.push_back(OWNER_ROOM);
+ 			_classData.push_back(CLASS_DATA);
+ 		}
+ 
+diff --git a/src/blocks/DOBJ.hpp b/src/blocks/DOBJ.hpp
+index bce73b7..c196fb8 100644
+--- a/src/blocks/DOBJ.hpp
++++ b/src/blocks/DOBJ.hpp
+@@ -12,6 +12,7 @@ class DOBJ
+ {
+ private:
+ 	static const uint8_t OWNER_AND_STATE;
++	static const uint8_t OWNER_ROOM;
+ 	static const uint32_t CLASS_DATA;
+ 
+ 	uint16_t _nItems;
+diff --git a/src/types/Map.hpp b/src/types/Map.hpp
+index f1bdced..0023d49 100644
+--- a/src/types/Map.hpp
++++ b/src/types/Map.hpp
+@@ -26,7 +26,7 @@ public:
+ 	void save(XMLNode *node);
+ 	string getName() { return _name; }
+ 	uint8_t getID() { return _id; }
+-	uint8_t setID(uint8_t id) { _id = id; }
++	void setID(uint8_t id) { _id = id; }
+ 	int16_t getULX() { return _ulx; }
+ 	int16_t getULY() { return _uly; }
+ 	int16_t getURX() { return _urx; }

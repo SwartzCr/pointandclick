@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>tv</name>
+  <displayName>TV</displayName>
+  <hotspotX>100</hotspotX>
+  <hotspotY>104</hotspotY>
+  <x>80</x>
+  <y>16</y>
+  <width>48</width>
+  <height>48</height>
+  <actorDir>north</actorDir>
+  <image>state1</image>
+</object>

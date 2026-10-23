@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+  <box>
+    <name>floorBack</name>
+    <ulx>10</ulx>
+    <uly>100</uly>
+    <urx>230</urx>
+    <ury>100</ury>
+    <lrx>230</lrx>
+    <lry>136</lry>
+    <llx>8</llx>
+    <lly>136</lly>
+    <mask>0</mask>
+    <flags>0</flags>
+    <scale>255</scale>
+  </box>
+  <box>
+    <name>floorFront</name>
+    <ulx>8</ulx>
+    <uly>136</uly>
+    <urx>312</urx>
+    <ury>136</ury>
+    <lrx>312</lrx>
+    <lry>142</lry>
+    <llx>6</llx>
+    <lly>142</lly>
+    <mask>0</mask>
+    <flags>0</flags>
+    <scale>255</scale>
+  </box>
+</map>

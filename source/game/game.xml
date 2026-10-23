@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<game>
+  <name>tentacle</name>
+  <description>Hotel Paradiso - a one-room SCUMM adventure</description>
+  <key>105</key>
+  <room>hotel</room>
+  <costume>guest</costume>
+  <script>main</script>
+  <charset>font</charset>
+</game>

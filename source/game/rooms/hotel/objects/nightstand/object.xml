@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>nightstand</name>
+  <displayName>nightstand</displayName>
+  <hotspotX>190</hotspotX>
+  <hotspotY>108</hotspotY>
+  <x>200</x>
+  <y>72</y>
+  <width>32</width>
+  <height>24</height>
+  <actorDir>east</actorDir>
+  <image>state1</image>
+  <image>state2</image>
+</object>

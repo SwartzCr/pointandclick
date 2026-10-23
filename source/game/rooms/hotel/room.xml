@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<room>
+  <name>hotel</name>
+  <background>background</background>
+  <script>script</script>
+  <object>door</object>
+  <object>tv</object>
+  <object>curtains</object>
+  <object>minibar</object>
+  <object>lamp</object>
+  <object>phone</object>
+  <object>nightstand</object>
+  <object>painting</object>
+  <object>safe</object>
+  <object>bed</object>
+  <object>cursor</object>
+</room>

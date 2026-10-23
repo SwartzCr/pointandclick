@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>phone</name>
+  <displayName>phone</displayName>
+  <hotspotX>192</hotspotX>
+  <hotspotY>108</hotspotY>
+  <x>216</x>
+  <y>56</y>
+  <width>16</width>
+  <height>16</height>
+  <actorDir>east</actorDir>
+</object>

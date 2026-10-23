@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>minibar</name>
+  <displayName>minibar</displayName>
+  <hotspotX>132</hotspotX>
+  <hotspotY>106</hotspotY>
+  <x>144</x>
+  <y>72</y>
+  <width>32</width>
+  <height>24</height>
+  <actorDir>east</actorDir>
+  <image>state1</image>
+  <image>state2</image>
+</object>

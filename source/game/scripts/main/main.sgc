@@ -1,0 +1,434 @@
+// =====================================================================
+//  HOTEL PARADISO, ROOM 714
+//  A one-room SCUMM v6 adventure, compiled with ScummGEN.
+//
+//  main.sgc: global script. Boot, verb interface, input handling,
+//  inventory and default responses. Object behaviour lives with the
+//  room in rooms/hotel/script/hotel.sgc.
+// =====================================================================
+
+actor ego;
+
+// Verb bar (3 x 3, classic LucasArts layout)
+verb vOpen;
+verb vClose;
+verb vTalk;
+verb vPickup;
+verb vLook;
+verb vUse;
+verb vPush;
+verb vPull;
+verb vWalk;
+
+// Sentence line and inventory slots (these are text verbs too)
+verb vSentence;
+verb vMatchbook;
+verb vKeycard;
+verb vCandy;
+
+// Interface state
+var curVerb;       // verb the next scene click will use
+var withItem;      // inventory verb picked for "Use X with ..."
+var hoverObj;      // object under the cursor
+var hoverInv;      // inventory verb under the cursor
+var lastHover;
+var lastInv;
+var lastVerb;
+var lastWith;
+var gameOver;
+
+// Puzzle state
+var lampOn;
+var tvOn;
+var curtainsOpen;
+var minibarOpen;
+var drawerOpen;
+var safeRevealed;
+var safeOpen;
+var knowsCode;
+var hasMatchbook;
+var hasKeycard;
+var hasCandy;
+var tookMatchbook;
+var tookKeycard;
+var tookCandy;
+var phoneCalls;
+var tvLooks;
+
+// Palette indices of the EGA colours ScummGEN reserves at 0..15
+const C_BLACK = 0;
+const C_TEAL = 3;
+const C_GREY = 7;
+const C_DKGREY = 8;
+const C_CYAN = 11;
+const C_YELLOW = 14;
+const C_WHITE = 15;
+
+const UNTOUCHABLE = 32;
+
+// ---------------------------------------------------------------------
+//  Boot
+// ---------------------------------------------------------------------
+function main()
+{
+	Room_setScreen(0, 144);
+	Interface_setCharset(font);
+	Interface_setCharsetColors([0, 15, 0], 3);
+
+	// Talk text floats centred over the speaker's head
+	Actor_printLoadDefault(ego);
+	Actor_printCenter();      // must come before overhead: center clears it
+	Actor_printOverhead();
+	Actor_printSaveDefault();
+
+	setupVerbs();
+
+	Room_load(hotel);
+
+	Actor_setCurrent(ego);
+	Actor_init();
+	Actor_setCostume(guest);
+	Actor_setWalkAnim(guest_walk);
+	Actor_setStandAnim(guest_stand);
+	Actor_setInitAnim(guest_init);
+	Actor_setTalkAnim(guest_talkStart, guest_talkStop);
+	Actor_setTalkColor(C_WHITE);
+	Actor_setTextOffset(0, -64);
+	Actor_setWidth(24);
+	VAR_EGO = ego;
+	Actor_putAtXY(ego, 110, 124, hotel);
+	Actor_setCurrent(ego);
+	Actor_turnToDirection(ACTOR_DIR_SOUTH);
+
+	Interface_setCursorImage(cursor, hotel);
+	Interface_setCursorHotspot(8, 8);
+	Interface_setCursorTransparentColor(0);
+
+	curVerb = vWalk;
+	VAR_VERB_SCRIPT = inputHandler;
+	sentenceLoop();
+
+	intro();
+}
+
+function intro()
+{
+	Interface_activateUserput(0);
+	Interface_activateCursor(0);
+	Actor_talkEgo("Ugh. What time is it?");
+	Script_waitForMessage();
+	Actor_talkEgo("Check-out was at noon. I have to get out of here.");
+	Script_waitForMessage();
+	Actor_talkEgo("Which would be easier if I knew where I put my key card.");
+	Script_waitForMessage();
+	Interface_activateUserput(1);
+	Interface_activateCursor(1);
+}
+
+// ---------------------------------------------------------------------
+//  Verbs
+// ---------------------------------------------------------------------
+inline function makeVerb(var id, var name, var x, var y)
+{
+	Verb_setCurrent(id);
+	Verb_new();
+	Verb_setNameString(name);
+	Verb_setPos(x, y);
+	Verb_setColor(C_TEAL);
+	Verb_setHiColor(C_CYAN);
+	Verb_setDimColor(C_DKGREY);
+	Verb_setBackColor(C_BLACK);
+	Verb_activate(1);
+	Verb_draw();
+}
+
+function setupVerbs()
+{
+	makeVerb(vOpen, "Open", 8, 160);
+	makeVerb(vClose, "Close", 8, 172);
+	makeVerb(vTalk, "Talk to", 8, 184);
+	makeVerb(vPickup, "Pick up", 72, 160);
+	makeVerb(vLook, "Look at", 72, 172);
+	makeVerb(vUse, "Use", 72, 184);
+	makeVerb(vPush, "Push", 136, 160);
+	makeVerb(vPull, "Pull", 136, 172);
+	makeVerb(vWalk, "Walk to", 136, 184);
+
+	// The sentence line is a verb that is never clickable
+	Verb_setCurrent(vSentence);
+	Verb_new();
+	Verb_setNameString("Walk to");
+	Verb_setPos(160, 146);
+	Verb_center();
+	Verb_setColor(C_WHITE);
+	Verb_setHiColor(C_WHITE);
+	Verb_setBackColor(C_BLACK);
+	Verb_activate(1);
+	Verb_draw();
+
+	// Inventory (shown only while carried)
+	makeVerb(vMatchbook, "matchbook", 216, 160);
+	makeVerb(vKeycard, "key card", 216, 172);
+	makeVerb(vCandy, "candy bar", 216, 184);
+	Verb_setCurrent(vMatchbook);
+	Verb_setColor(C_YELLOW);
+	Verb_activate(0);
+	Verb_setCurrent(vKeycard);
+	Verb_setColor(C_YELLOW);
+	Verb_activate(0);
+	Verb_setCurrent(vCandy);
+	Verb_setColor(C_YELLOW);
+	Verb_activate(0);
+	refreshInventory();
+}
+
+// Lay out carried items top to bottom with no gaps
+function refreshInventory()
+{
+	var y;
+	y = 160;
+
+	Verb_setCurrent(vMatchbook);
+	if (hasMatchbook)
+	{
+		Verb_setPos(216, y);
+		Verb_activate(1);
+		y += 12;
+	}
+	else
+		Verb_activate(0);
+	Verb_draw();
+
+	Verb_setCurrent(vKeycard);
+	if (hasKeycard)
+	{
+		Verb_setPos(216, y);
+		Verb_activate(1);
+		y += 12;
+	}
+	else
+		Verb_activate(0);
+	Verb_draw();
+
+	Verb_setCurrent(vCandy);
+	if (hasCandy)
+	{
+		Verb_setPos(216, y);
+		Verb_activate(1);
+		y += 12;
+	}
+	else
+		Verb_activate(0);
+	Verb_draw();
+}
+
+// ---------------------------------------------------------------------
+//  Sentence line: "Look at lamp", "Use key card with door", ...
+//  Runs forever as a background thread.
+// ---------------------------------------------------------------------
+thread sentenceLoop()
+{
+	var inv;
+	lastHover = -1;
+	while (1)
+	{
+		hoverObj = Object_find(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+		inv = Verb_getFromXY(VAR_MOUSE_X, VAR_MOUSE_Y);
+		if (inv == vMatchbook || inv == vKeycard || inv == vCandy)
+			hoverInv = inv;
+		else
+			hoverInv = 0;
+
+		if (hoverObj != lastHover || hoverInv != lastInv || curVerb != lastVerb || withItem != lastWith)
+		{
+			lastHover = hoverObj;
+			lastInv = hoverInv;
+			lastVerb = curVerb;
+			lastWith = withItem;
+			Verb_setCurrent(vSentence);
+			if (withItem)
+			{
+				if (hoverInv)
+					Verb_setNameString("Use %v{withItem} with %v{hoverInv}");
+				else
+					Verb_setNameString("Use %v{withItem} with %n{hoverObj}");
+			}
+			else if (hoverInv)
+				Verb_setNameString("%v{curVerb} %v{hoverInv}");
+			else
+				Verb_setNameString("%v{curVerb} %n{hoverObj}");
+			Verb_draw();
+		}
+		Script_break();
+	}
+}
+
+// ---------------------------------------------------------------------
+//  Input. The engine calls this with (area, value, button):
+//  area 1 = verb bar, 2 = room, 4 = keyboard.
+// ---------------------------------------------------------------------
+function inputHandler(var area, var cmd, var btn)
+{
+	var obj;
+
+	if (gameOver)
+		return;
+
+	if (area == 1)
+	{
+		if (cmd == vMatchbook || cmd == vKeycard || cmd == vCandy)
+			inventoryClick(cmd);
+		else if (cmd != 0 && cmd != vSentence)
+		{
+			curVerb = cmd;
+			withItem = 0;
+		}
+		return;
+	}
+
+	if (area != 2)
+		return;
+
+	obj = Object_find(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+
+	// Right click is a shortcut for "Look at"
+	if (btn == 2 && obj)
+	{
+		curVerb = vLook;
+		withItem = 0;
+	}
+
+	if (obj == 0 || curVerb == vWalk)
+	{
+		Actor_walkToXY(ego, VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+		curVerb = vWalk;
+		withItem = 0;
+		return;
+	}
+
+	Actor_walkToObject(ego, obj, 0);
+	Script_waitForActor(ego);
+	runVerb(obj, curVerb);
+	curVerb = vWalk;
+	withItem = 0;
+}
+
+// Run the object's own verb script, or a generic reply if it has none
+function runVerb(var obj, var vrb)
+{
+	var entry;
+	entry = Verb_getEntryPoint(obj, vrb);
+	if (entry)
+		asm
+		{
+			pushWordVar .word obj
+			pushWordVar .word vrb
+			pushByte .byte 0
+			startObjectQuick
+		}
+	else
+		defaultReply(vrb);
+}
+
+function defaultReply(var vrb)
+{
+	var r;
+	r = Util_getRandomNumber(1);
+	if (withItem)
+		Actor_talkEgo("That doesn't work.");
+	else if (vrb == vLook)
+	{
+		if (r)
+			Actor_talkEgo("Nothing special about it.");
+		else
+			Actor_talkEgo("Looks like hotel furniture. Hotel-ish.");
+	}
+	else if (vrb == vPickup)
+		Actor_talkEgo("I can't pick that up.");
+	else if (vrb == vOpen)
+		Actor_talkEgo("It doesn't open.");
+	else if (vrb == vClose)
+		Actor_talkEgo("It doesn't close.");
+	else if (vrb == vPush || vrb == vPull)
+	{
+		if (r)
+			Actor_talkEgo("It won't budge.");
+		else
+			Actor_talkEgo("I'd rather not rearrange the furniture.");
+	}
+	else if (vrb == vTalk)
+		Actor_talkEgo("It's not much of a conversationalist.");
+	else if (vrb == vUse)
+		Actor_talkEgo("I don't see how to use that.");
+	else
+		Actor_talkEgo("Hmm.");
+}
+
+// ---------------------------------------------------------------------
+//  Inventory
+// ---------------------------------------------------------------------
+function inventoryClick(var item)
+{
+	if (curVerb == vUse && withItem == 0)
+	{
+		if (item == vCandy)
+		{
+			eatCandy();
+			curVerb = vWalk;
+			return;
+		}
+		withItem = item;
+		return;
+	}
+
+	if (withItem)
+	{
+		Actor_talkEgo("Combining those won't help.");
+		withItem = 0;
+		curVerb = vWalk;
+		return;
+	}
+
+	if (item == vMatchbook)
+	{
+		if (curVerb == vOpen || curVerb == vLook)
+			readMatchbook();
+		else
+			Actor_talkEgo("Hotel Paradiso matches. Classy.");
+	}
+	else if (item == vKeycard)
+	{
+		if (curVerb == vLook)
+			Actor_talkEgo("My key card. Room 714. My ticket out of here.");
+		else
+			Actor_talkEgo("It goes in the slot on the door.");
+	}
+	else if (item == vCandy)
+	{
+		if (curVerb == vLook)
+			Actor_talkEgo("A Paradiso Bar. Fourteen dollars of nougat.");
+		else
+			Actor_talkEgo("I could eat it. I've earned it.");
+	}
+	curVerb = vWalk;
+}
+
+function readMatchbook()
+{
+	if (lampOn)
+	{
+		Actor_talkEgo("Inside the cover, in my handwriting: SAFE 7 1 4.");
+		Script_waitForMessage();
+		Actor_talkEgo("Same as the room number. Past me was not a security genius.");
+		knowsCode = 1;
+	}
+	else
+		Actor_talkEgo("Something's scribbled inside, but it's too dark to read.");
+}
+
+function eatCandy()
+{
+	hasCandy = 0;
+	refreshInventory();
+	Actor_talkEgo("Mmm. That's going on the bill.");
+}

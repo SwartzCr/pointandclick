@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<object>
+  <name>lamp</name>
+  <displayName>lamp</displayName>
+  <hotspotX>190</hotspotX>
+  <hotspotY>108</hotspotY>
+  <x>200</x>
+  <y>32</y>
+  <width>16</width>
+  <height>40</height>
+  <actorDir>east</actorDir>
+  <image>state1</image>
+</object>
