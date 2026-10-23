@@ -74,7 +74,12 @@ def put(img, x, y, col):
 
 
 # --------------------------------------------------------------------------- room
-DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, uniform=0)
+DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, uniform=0,
+               table_matchbook=0, table_candy=0, table_keycard=0, table_uniform=0)
+
+# Coffee table on the floor, x 120..192, top surface y 105..116. Items set down on it sit in four
+# 16-pixel slots across the top (x 128, 144, 160, 176; y 104..120).
+TABLE_X0, TABLE_X1 = 120, 192
 
 
 def draw_wall(img, d):
@@ -379,6 +384,40 @@ def draw_painting_safe(img, d, st):
     rect(d, 289, 29, 294, 34, 'sea')
 
 
+def draw_coffee_table(img, d, s):
+    x0, x1 = TABLE_X0, TABLE_X1
+    rect(d, x0 + 2, 126, x1 + 2, 129, 'carpet_dk')          # shadow on the carpet
+    for lx in (x0 + 2, x1 - 6):                              # front legs
+        rect(d, lx, 117, lx + 4, 128, 'wood_dk')
+        rect(d, lx, 117, lx + 1, 128, 'wood')
+    for lx in (x0 + 8, x1 - 12):                             # back legs, shorter
+        rect(d, lx, 117, lx + 3, 123, 'wood_xdk')
+    d.polygon([(x0 + 4, 105), (x1 - 4, 105), (x1 - 1, 116), (x0, 116)], fill=C['wood'])  # top
+    d.line([(x0 + 4, 105), (x1 - 4, 105)], fill=C['wood_hi'])
+    for x, y in ((x0 + 10, 108), (x0 + 30, 111), (x0 + 48, 108), (x0 + 22, 114), (x0 + 56, 113)):
+        rect(d, x, y, x + 7, y + 1, 'wood_hi')               # grain
+    rect(d, x0, 116, x1, 120, 'wood_dk')                     # front edge
+    rect(d, x0, 116, x1, 117, 'wood_hi')
+    # things set down on it, one per slot
+    if s['table_matchbook']:
+        rect(d, 131, 110, 141, 114, 'match')
+        rect(d, 132, 111, 136, 112, 'match_hi')
+    if s['table_candy']:
+        rect(d, 146, 110, 158, 114, 'candy')
+        rect(d, 150, 110, 155, 114, 'candy2')
+    if s['table_keycard']:
+        rect(d, 162, 110, 174, 115, 'card')
+        rect(d, 162, 112, 174, 113, 'card_dk')
+        rect(d, 164, 113, 167, 114, 'white')
+    if s['table_uniform']:
+        rect(d, 177, 107, 190, 115, 'red')
+        rect(d, 177, 113, 190, 115, 'red_dk')
+        rect(d, 183, 107, 184, 115, 'red_dk')
+        put(img, 183, 109, 'brass'); put(img, 183, 112, 'brass')
+        rect(d, 177, 107, 180, 109, 'brass')
+        rect(d, 187, 107, 190, 109, 'brass')
+
+
 def render(state=None):
     s = dict(DEFAULT)
     if state:
@@ -396,6 +435,7 @@ def render(state=None):
     draw_phone(img, d)
     draw_bed(img, d, s['uniform'])
     draw_painting_safe(img, d, s['safe'])
+    draw_coffee_table(img, d, s)
     return img
 
 

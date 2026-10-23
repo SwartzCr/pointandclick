@@ -19,6 +19,7 @@ room ResRoom {
 
     script inventoryClick(int item);
     script wearUniform(int on);
+    script useOnSelf(int item);
     script defaultAction(int vrb, int item);
 
     // ------------------------------------------------------------ verbs
@@ -134,6 +135,8 @@ room ResRoom {
         lastObj = -1;
         while(1) {
             obj = getObjectAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+            if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO)
+                obj = VAR_EGO;
             inv = getVerbAt(VAR_MOUSE_X, VAR_MOUSE_Y);
             unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy, invUniform ]))
                 inv = 0;
@@ -181,6 +184,15 @@ room ResRoom {
         if(area != 2) return;
 
         obj = getObjectAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+
+        // "Use <item> with me"
+        if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO) {
+            stopSentence();
+            useOnSelf(withItem);
+            withItem = 0;
+            curVerb = WalkTo;
+            return;
+        }
 
         // Right click is a shortcut for "Look at"
         if(btn == 2 && obj) {
@@ -252,20 +264,23 @@ room ResRoom {
     // ------------------------------------------------------------ inventory
     script inventoryClick(int item) {
         if(curVerb == Use && !withItem) {
-            if(item == invUniform) {
-                wearUniform(!wearingUniform);
-                curVerb = WalkTo;
-                return;
-            }
-            if(item == invCandy) {
-                hasCandy = 0;
-                refreshInventory();
-                egoSay("Mmm. That's going on the bill.");
+            // Worn uniform: Use takes it off. Otherwise it goes into
+            // "Use uniform with..." like any item: the coffee table to set it
+            // down, yourself (or the uniform again) to put it on.
+            if(item == invUniform && wearingUniform) {
+                wearUniform(0);
                 curVerb = WalkTo;
                 return;
             }
             // Wait for the object to use it with
             withItem = item;
+            return;
+        }
+        // Clicking the same item again uses it on yourself
+        if(withItem && item == withItem) {
+            useOnSelf(item);
+            withItem = 0;
+            curVerb = WalkTo;
             return;
         }
         if(withItem) {
@@ -320,6 +335,18 @@ room ResRoom {
             setActorCostume(guestCost);
             egoSay("Back to the bathrobe. Much breezier."); waitForMessage();
         }
+    }
+
+    // "Use <item> with me": eat the candy, put on the uniform
+    script useOnSelf(int item) {
+        if(item == invUniform)
+            wearUniform(1);
+        else if(item == invCandy) {
+            hasCandy = 0;
+            refreshInventory();
+            egoSay("Mmm. That's going on the bill.");
+        } else
+            egoSay("I'd rather keep it in my pocket.");
     }
 
     script readMatchbook() {

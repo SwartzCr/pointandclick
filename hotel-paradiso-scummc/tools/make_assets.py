@@ -46,11 +46,22 @@ OBJECT_STATES = {
     'nightstand': ((200, 72, 32, 24), [dict(drawer=1), dict(drawer=2)]),
     'safe':       ((248, 8, 48, 40), [dict(safe=1), dict(safe=2), dict(safe=3)]),
     'uniform':    ((264, 96, 32, 16), [dict(uniform=1)]),
+    # items set down on the coffee table, one 16-pixel slot each
+    'table_matchbook': ((128, 104, 16, 16), [dict(table_matchbook=1)]),
+    'table_candy':     ((144, 104, 16, 16), [dict(table_candy=1)]),
+    'table_keycard':   ((160, 104, 16, 16), [dict(table_keycard=1)]),
+    'table_uniform':   ((176, 104, 16, 16), [dict(table_uniform=1)]),
 }
 
 # Walk boxes (ul, ur, lr, ll). Box 0 is the engine's dummy box.
+# The coffee table (x 120..192, y 109..128) is a hole in the floor. Boxes keep the
+# player's feet half a sprite-width (12px) clear of it on the sides, so the
+# player is never drawn over the table while standing behind its front edge.
 BOXES = [
-    ((10, 100), (230, 100), (230, 136), (8, 136)),   # floor in front of the furniture
+    ((10, 100), (230, 100), (230, 108), (8, 108)),   # behind the table
+    ((8, 108), (106, 108), (106, 136), (8, 136)),    # left of the table
+    ((204, 108), (230, 108), (230, 136), (204, 136)),  # right of the table
+    ((106, 130), (204, 130), (204, 136), (106, 136)),  # in front of the table
     ((8, 136), (312, 136), (312, 142), (6, 142)),    # strip in front of the bed
 ]
 

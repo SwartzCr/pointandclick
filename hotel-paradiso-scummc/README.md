@@ -17,17 +17,22 @@ that's expected.
 
 **Controls:** click a verb, then an object. Right-click an object to look at it.
 To use an inventory item on something, click **Use**, the item, then the object.
+To use an item on yourself (eat the candy, put on the uniform), click **Use**, the
+item, then either yourself or the item again.
 F5 opens the menu, `.` skips a line of dialogue.
 
 ## The room
 
-Ten pieces of furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
-nightstand, painting, wall safe and bed. The three things you can take (candy bar,
+Eleven pieces of furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
+nightstand, painting, wall safe, bed and coffee table. The three things you can take (candy bar,
 matchbook, key card) are objects of their own, clickable only while you can see them.
 
-There's also a bellhop uniform lying on the bed. Pick it up, then **Use** it from the
-inventory to put it on: the player switches to a second costume with its own full set
-of walking and talking frames. Use it again to change back. It isn't needed to finish,
+There's also a bellhop uniform lying on the bed. Pick it up and use it on yourself to put
+it on: the player switches to a second costume with its own full set of walking and
+talking frames. **Use** it again to take it off.
+
+The coffee table can't be picked up, but you can put any inventory item down on it
+("Use matchbook with coffee table") and pick it back up later. It isn't needed to finish,
 but it does change the ending slightly.
 Each object has its own verb code and answers the verbs that make sense for it; anything
 else gets a stock reply.
@@ -68,6 +73,11 @@ else gets a stock reply.
   engine only lets the cursor find them while the container is in the state that shows
   them. Each is declared before its container so the cursor finds the item first. The safe sits on the same spot as the painting and starts "untouchable" (engine
   class 32); moving the painting swaps which of the two the cursor finds.
+* **Coffee table.** The table is a hole in the walk boxes, with a margin of half a sprite
+  width on each side, so the player is never drawn over it while standing behind its
+  front edge (SCUMM has no depth sorting between actors and the background without
+  z-plane masks). Each item has a slot object on the table top with one image state; it
+  starts untouchable and is shown and made clickable when the item is set down.
 * **Costume swap.** `guest.scost` (bathrobe) and `bellhop.scost` (uniform) are drawn by the
   same code in `tools/art.py` with a different outfit, and declare the same animations
   (`init`, `walk`, `stand`, `talkStart`, `talkStop`). That lets `wearUniform` call

@@ -20,6 +20,10 @@ room Hotel {
     trans = 0;
 
     object door;
+    object tableMatchbook;
+    object tableCandy;
+    object tableKeycard;
+    object tableUniform;
     object minibar;
     object nightstand;
     object painting;
@@ -29,6 +33,56 @@ room Hotel {
     // ------------------------------------------------------------ scripts
     // Taking an item: switch the container to its "open and empty" state
     // (which also hides the item object) and add the item to the inventory.
+    // Set an inventory item down on the coffee table
+    local script putOnTable(int item) {
+        if(item == invMatchbook) {
+            hasMatchbook = 0;
+            setObjectState(tableMatchbook, 1);
+            setObjectClass(tableMatchbook, [ UNTOUCHABLE ]);
+        } else if(item == invCandy) {
+            hasCandy = 0;
+            setObjectState(tableCandy, 1);
+            setObjectClass(tableCandy, [ UNTOUCHABLE ]);
+        } else if(item == invKeycard) {
+            hasKeycard = 0;
+            setObjectState(tableKeycard, 1);
+            setObjectClass(tableKeycard, [ UNTOUCHABLE ]);
+        } else if(item == invUniform) {
+            if(wearingUniform) {
+                egoSay("I'd have to take it off first."); waitForMessage();
+                return;
+            }
+            hasUniform = 0;
+            setObjectState(tableUniform, 1);
+            setObjectClass(tableUniform, [ UNTOUCHABLE ]);
+        } else
+            return;
+        ResRoom::refreshInventory();
+        egoSay("There."); waitForMessage();
+    }
+
+    // Pick an item back up off the coffee table
+    local script takeFromTable(int item) {
+        if(item == invMatchbook) {
+            hasMatchbook = 1;
+            setObjectState(tableMatchbook, 0);
+            setObjectClass(tableMatchbook, [ SET_CLASS | UNTOUCHABLE ]);
+        } else if(item == invCandy) {
+            hasCandy = 1;
+            setObjectState(tableCandy, 0);
+            setObjectClass(tableCandy, [ SET_CLASS | UNTOUCHABLE ]);
+        } else if(item == invKeycard) {
+            hasKeycard = 1;
+            setObjectState(tableKeycard, 0);
+            setObjectClass(tableKeycard, [ SET_CLASS | UNTOUCHABLE ]);
+        } else if(item == invUniform) {
+            hasUniform = 1;
+            setObjectState(tableUniform, 0);
+            setObjectClass(tableUniform, [ SET_CLASS | UNTOUCHABLE ]);
+        }
+        ResRoom::refreshInventory();
+    }
+
     local script takeCandy() {
         tookCandy = 1;
         hasCandy = 1;
@@ -562,6 +616,108 @@ room Hotel {
         }
     }
 
+    // ------------------------------------------------------------ coffee table
+    // Inventory items can be set down on the table ("Use X with coffee table")
+    // and picked up again. Each item has its own slot object on the table top:
+    // state 1 shows it, and it's untouchable while the slot is empty. The
+    // slots are declared before the table so the cursor finds them first.
+    // The walk-to spot for all of them is beside the table, so the player
+    // doesn't stand in front of what's on it.
+    object tableMatchbook {
+        x = 128; y = 104; w = 16; h = 16;
+        hs_x = 78; hs_y = 18;
+        dir = WEST;
+        name = "matchbook";
+        states = { { 78, 18, "objects/table_matchbook_1.bmp" } };
+        state = 0;
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("The matchbook, right where I left it."); waitForMessage();
+            return;
+        case PickUp:
+            takeFromTable(invMatchbook);
+            return;
+        }
+    }
+
+    object tableCandy {
+        x = 144; y = 104; w = 16; h = 16;
+        hs_x = 62; hs_y = 18;
+        dir = WEST;
+        name = "candy bar";
+        states = { { 62, 18, "objects/table_candy_1.bmp" } };
+        state = 0;
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("Fourteen dollars of nougat, displayed with pride."); waitForMessage();
+            return;
+        case PickUp:
+            takeFromTable(invCandy);
+            return;
+        }
+    }
+
+    object tableKeycard {
+        x = 160; y = 104; w = 16; h = 16;
+        hs_x = 46; hs_y = 18;
+        dir = WEST;
+        name = "key card";
+        states = { { 46, 18, "objects/table_keycard_1.bmp" } };
+        state = 0;
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("My key card. Let's not lose it again."); waitForMessage();
+            return;
+        case PickUp:
+            takeFromTable(invKeycard);
+            return;
+        }
+    }
+
+    object tableUniform {
+        x = 176; y = 104; w = 16; h = 16;
+        hs_x = 30; hs_y = 18;
+        dir = WEST;
+        name = "bellhop uniform";
+        states = { { 30, 18, "objects/table_uniform_1.bmp" } };
+        state = 0;
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("The bellhop uniform, neatly folded. Neater than I fold anything."); waitForMessage();
+            return;
+        case PickUp:
+            takeFromTable(invUniform);
+            return;
+        }
+    }
+
+    object coffeeTable {
+        x = 120; y = 104; w = 72; h = 24;
+        hs_x = 86; hs_y = 18;
+        dir = WEST;
+        name = "coffee table";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A low coffee table. A good place to put things down."); waitForMessage();
+            return;
+        case Use:
+            if(objB) putOnTable(objB);
+            else { egoSay("I could put something on it."); waitForMessage(); }
+            return;
+        case PickUp:
+            egoSay("It's furniture. It stays."); waitForMessage();
+            return;
+        case Push:
+        case Pull:
+            egoSay("It's heavier than it looks. It can stay where it is."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("Nice table. Sturdy."); waitForMessage();
+            return;
+        }
+    }
+
     // ------------------------------------------------------------ bed
     object bed {
         x = 232; y = 48; w = 88; h = 88;
@@ -606,11 +762,16 @@ room Hotel {
 
         setObjectClass(safe, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(cursor, [ SET_CLASS | UNTOUCHABLE ]);
+        // Nothing is on the coffee table yet
+        setObjectClass(tableMatchbook, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(tableCandy, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(tableKeycard, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(tableUniform, [ SET_CLASS | UNTOUCHABLE ]);
         setCursorImage(cursor, Hotel);
         setCursorHotspot(8, 8);
         setCursorTransparency(0);
 
-        putActorAt(VAR_EGO, 110, 124, Hotel);
+        putActorAt(VAR_EGO, 96, 124, Hotel);
         setCurrentActor(VAR_EGO);
         setActorDirection(180);
 
