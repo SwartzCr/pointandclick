@@ -77,25 +77,32 @@ room ResRoom {
         refreshInventory();
     }
 
-    // Lay out carried items top to bottom with no gaps
+    // Lay out carried items top to bottom with no gaps. Every slot is erased
+    // first: redrawing a moved verb clears its old spot, which would wipe
+    // whatever item was just drawn there.
     script refreshInventory() {
         int y;
+
+        setCurrentVerb(invMatchbook); setVerbOff(); redrawVerb();
+        setCurrentVerb(invKeycard);   setVerbOff(); redrawVerb();
+        setCurrentVerb(invCandy);     setVerbOff(); redrawVerb();
+
         y = 160;
-
-        setCurrentVerb(invMatchbook);
-        if(hasMatchbook) { setVerbXY(216, y); setVerbOn(); y += 12; }
-        else setVerbOff();
-        redrawVerb();
-
-        setCurrentVerb(invKeycard);
-        if(hasKeycard) { setVerbXY(216, y); setVerbOn(); y += 12; }
-        else setVerbOff();
-        redrawVerb();
-
-        setCurrentVerb(invCandy);
-        if(hasCandy) { setVerbXY(216, y); setVerbOn(); y += 12; }
-        else setVerbOff();
-        redrawVerb();
+        if(hasMatchbook) {
+            setCurrentVerb(invMatchbook);
+            setVerbXY(216, y); setVerbOn(); redrawVerb();
+            y += 12;
+        }
+        if(hasKeycard) {
+            setCurrentVerb(invKeycard);
+            setVerbXY(216, y); setVerbOn(); redrawVerb();
+            y += 12;
+        }
+        if(hasCandy) {
+            setCurrentVerb(invCandy);
+            setVerbXY(216, y); setVerbOn(); redrawVerb();
+            y += 12;
+        }
     }
 
     script showInterface(int show) {

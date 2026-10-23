@@ -1,7 +1,9 @@
 /* Hotel Paradiso, Room 714 - the room.
  *
- * Ten objects you can interact with: door, TV, curtains, minibar, lamp,
- * phone, nightstand, painting, wall safe and bed. Each object's verb block
+ * Ten pieces of furniture you can interact with: door, TV, curtains, minibar,
+ * lamp, phone, nightstand, painting, wall safe and bed. The three items you can
+ * take (candy bar, matchbook, key card) are objects too, parented to the
+ * container state that shows them, so they're only clickable while visible. Each object's verb block
  * is its SCUMM verb table; verbs it doesn't list get defaultAction().
  * objB carries the inventory item for "Use X with <object>".
  *
@@ -18,11 +20,39 @@ room Hotel {
     trans = 0;
 
     object door;
+    object minibar;
+    object nightstand;
     object painting;
     object safe;
     object cursor;
 
     // ------------------------------------------------------------ scripts
+    // Taking an item: switch the container to its "open and empty" state
+    // (which also hides the item object) and add the item to the inventory.
+    local script takeCandy() {
+        tookCandy = 1;
+        hasCandy = 1;
+        setObjectState(minibar, 2);
+        ResRoom::refreshInventory();
+        egoSay("A candy bar. Fourteen dollars. Worth it."); waitForMessage();
+    }
+
+    local script takeMatchbook() {
+        tookMatchbook = 1;
+        hasMatchbook = 1;
+        setObjectState(nightstand, 2);
+        ResRoom::refreshInventory();
+        egoSay("Got it. There's writing inside the cover."); waitForMessage();
+    }
+
+    local script takeKeycard() {
+        tookKeycard = 1;
+        hasKeycard = 1;
+        setObjectState(safe, 3);
+        ResRoom::refreshInventory();
+        egoSay("My key card. Now let's get out of here."); waitForMessage();
+    }
+
     // Sets up the next print() as the front desk's voice on the phone:
     // yellow text centred at the top of the screen.
     local script deskSays() {
@@ -201,6 +231,30 @@ room Hotel {
         }
     }
 
+    // ------------------------------------------------------------ candy bar
+    // Only clickable while the minibar is open with the candy inside (state 1)
+    object candy {
+        x = 152; y = 86; w = 16; h = 8;
+        hs_x = -20; hs_y = 20;
+        dir = EAST;
+        name = "candy bar";
+        parent = minibar;
+        parent_state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A Paradiso Bar. The price tag says fourteen dollars."); waitForMessage();
+            return;
+        case PickUp:
+            takeCandy();
+            return;
+        case Use:
+        case TalkTo:
+            egoSay("I'll take it first."); waitForMessage();
+            return;
+        }
+    }
+
     // ------------------------------------------------------------ minibar
     object minibar {
         x = 144; y = 72; w = 32; h = 24;
@@ -233,13 +287,7 @@ room Hotel {
             else { egoSay("It's closed."); waitForMessage(); }
             return;
         case PickUp:
-            if(minibarOpen && !tookCandy) {
-                tookCandy = 1;
-                hasCandy = 1;
-                setObjectState(minibar, 2);
-                ResRoom::refreshInventory();
-                egoSay("A candy bar. Fourteen dollars. Worth it."); waitForMessage();
-            } else if(minibarOpen) {
+            if(minibarOpen && !tookCandy) takeCandy(); else if(minibarOpen) {
                 egoSay("The bottles are wired to an alarm. Probably."); waitForMessage();
             } else {
                 egoSay("It's plugged in. I'll just open it."); waitForMessage();
@@ -303,6 +351,30 @@ room Hotel {
         }
     }
 
+    // ------------------------------------------------------------ matchbook
+    // Only clickable while the drawer is open with the matchbook inside (state 1)
+    object matchbook {
+        x = 208; y = 76; w = 16; h = 8;
+        hs_x = -18; hs_y = 32;
+        dir = EAST;
+        name = "matchbook";
+        parent = nightstand;
+        parent_state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A Hotel Paradiso matchbook. There's writing inside the cover."); waitForMessage();
+            return;
+        case PickUp:
+            takeMatchbook();
+            return;
+        case Use:
+        case Open:
+            egoSay("I'll take it first."); waitForMessage();
+            return;
+        }
+    }
+
     // ------------------------------------------------------------ nightstand
     object nightstand {
         x = 200; y = 72; w = 32; h = 24;
@@ -339,13 +411,7 @@ room Hotel {
             else { egoSay("It's closed."); waitForMessage(); }
             return;
         case PickUp:
-            if(drawerOpen && !tookMatchbook) {
-                tookMatchbook = 1;
-                hasMatchbook = 1;
-                setObjectState(nightstand, 2);
-                ResRoom::refreshInventory();
-                egoSay("Got it. There's writing inside the cover."); waitForMessage();
-            } else if(drawerOpen) {
+            if(drawerOpen && !tookMatchbook) takeMatchbook(); else if(drawerOpen) {
                 egoSay("Nothing else in there."); waitForMessage();
             } else {
                 egoSay("I'll open the drawer first."); waitForMessage();
@@ -378,6 +444,29 @@ room Hotel {
             return;
         case TalkTo:
             egoSay("Lovely brushwork. I don't know anything about brushwork."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ key card
+    // Only clickable while the safe is open with the card inside (state 2)
+    object keycard {
+        x = 260; y = 30; w = 18; h = 8;
+        hs_x = -30; hs_y = 109;
+        dir = EAST;
+        name = "key card";
+        parent = safe;
+        parent_state = 2;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("My key card! I locked it in the safe. Of course I did."); waitForMessage();
+            return;
+        case PickUp:
+            takeKeycard();
+            return;
+        case Use:
+            egoSay("I'll take it first."); waitForMessage();
             return;
         }
     }
@@ -419,13 +508,7 @@ room Hotel {
             }
             return;
         case PickUp:
-            if(safeOpen && !tookKeycard) {
-                tookKeycard = 1;
-                hasKeycard = 1;
-                setObjectState(safe, 3);
-                ResRoom::refreshInventory();
-                egoSay("My key card. Now let's get out of here."); waitForMessage();
-            } else if(safeOpen) {
+            if(safeOpen && !tookKeycard) takeKeycard(); else if(safeOpen) {
                 egoSay("There's nothing left in it."); waitForMessage();
             } else {
                 egoSay("It's built into the wall."); waitForMessage();

@@ -21,13 +21,15 @@ F5 opens the menu, `.` skips a line of dialogue.
 
 ## The room
 
-Ten objects you can interact with: door, TV, curtains, minibar, lamp, phone, nightstand,
-painting, wall safe and bed. Each has its own verb code and answers the verbs that make
-sense for it; anything else gets a stock reply.
+Ten pieces of furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
+nightstand, painting, wall safe and bed. The three things you can take (candy bar,
+matchbook, key card) are objects of their own, clickable only while you can see them.
+Each object has its own verb code and answers the verbs that make sense for it; anything
+else gets a stock reply.
 
 <details><summary>Walkthrough (spoilers)</summary>
 
-1. Open the nightstand and pick up the matchbook.
+1. Open the nightstand and pick up the matchbook inside.
 2. Look at the matchbook: too dark. Use the lamp, then look again. The code is 714.
 3. Pull the painting to reveal the wall safe. Calling the front desk hints at this too.
 4. Open the safe and pick up the key card.
@@ -41,7 +43,7 @@ sense for it; anything else gets a stock reply.
 |---|---|
 | `src/hotel.sch` | Shared declarations: verbs, actor, global variables, colour constants |
 | `src/interface.scc` | `ResRoom`: boot (`main`), verb bar, live sentence line, input handler, sentence handler, stock replies, text inventory |
-| `src/hotel.scc` | `Hotel`: the room, its 10 objects and their verb code, the phone call, the ending |
+| `src/hotel.scc` | `Hotel`: the room, its objects and their verb code, the phone call, the ending |
 | `assets/` | Generated art and data the sources reference (committed, so Python isn't needed to build) |
 | `tools/art.py` | Procedural pixel art: the room in every object state, costume frames, cursor |
 | `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, object state images, costume + `.scost`, font sheet, walk boxes |
@@ -56,7 +58,10 @@ sense for it; anything else gets a stock reply.
   has an entry for that verb, or `defaultAction` if not. The inventory item rides along as
   `objB`, so objects can tell "Use" from "Use key card with".
 * **State.** Opening things, the lamp, the TV and the safe are object states with their own
-  images. The safe sits on the same spot as the painting and starts "untouchable" (engine
+  images. The candy bar, matchbook and key card are drawn as part of their container's
+  "open" image, but they're separate objects with `parent` and `parent_state` set, so the
+  engine only lets the cursor find them while the container is in the state that shows
+  them. Each is declared before its container so the cursor finds the item first. The safe sits on the same spot as the painting and starts "untouchable" (engine
   class 32); moving the painting swaps which of the two the cursor finds.
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
