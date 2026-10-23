@@ -1,0 +1,336 @@
+/* Hotel Paradiso, Room 714 - interface and boot.
+ *
+ * ResRoom never appears on screen. It holds the charset and the player's
+ * costume, and every global script: boot, the verb bar, the live sentence
+ * line, input, the sentence handler and the text inventory.
+ */
+
+#include "hotel.sch"
+#include "guest_anim.sch"
+
+room ResRoom {
+
+    // The GUI uses the first charset, so pin ours to slot 1
+    chset font @ 1 = "font.char";
+    cost guestCost = "guest.cost";
+
+    bit cursorShown;
+
+    script inventoryClick(int item);
+    script defaultAction(int vrb, int item);
+
+    // ------------------------------------------------------------ verbs
+    script makeVerb(int vrb, int x, int y) {
+        setCurrentVerb(vrb);
+        setVerbXY(x, y);
+        setVerbColor(C_TEAL);
+        setVerbHiColor(C_CYAN);
+        setVerbDimColor(C_DKGREY);
+        setVerbBackColor(C_BLACK);
+        setVerbOn();
+        redrawVerb();
+    }
+
+    script setupVerbs() {
+        setCurrentVerb(Open);   initVerb(); setVerbName("Open");    setVerbKey('o');
+        setCurrentVerb(Close);  initVerb(); setVerbName("Close");   setVerbKey('c');
+        setCurrentVerb(TalkTo); initVerb(); setVerbName("Talk to"); setVerbKey('t');
+        setCurrentVerb(PickUp); initVerb(); setVerbName("Pick up"); setVerbKey('p');
+        setCurrentVerb(LookAt); initVerb(); setVerbName("Look at"); setVerbKey('l');
+        setCurrentVerb(Use);    initVerb(); setVerbName("Use");     setVerbKey('u');
+        setCurrentVerb(Push);   initVerb(); setVerbName("Push");
+        setCurrentVerb(Pull);   initVerb(); setVerbName("Pull");
+        setCurrentVerb(WalkTo); initVerb(); setVerbName("Walk to"); setVerbKey('w');
+
+        makeVerb(Open,     8, 160);
+        makeVerb(Close,    8, 172);
+        makeVerb(TalkTo,   8, 184);
+        makeVerb(PickUp,  72, 160);
+        makeVerb(LookAt,  72, 172);
+        makeVerb(Use,     72, 184);
+        makeVerb(Push,   136, 160);
+        makeVerb(Pull,   136, 172);
+        makeVerb(WalkTo, 136, 184);
+
+        // Sentence line: centred, never clickable
+        setCurrentVerb(SntcLine);
+        initVerb();
+        setVerbName("Walk to");
+        setVerbXY(160, 146);
+        verbCenter();
+        setVerbColor(C_WHITE);
+        setVerbHiColor(C_WHITE);
+        setVerbBackColor(C_BLACK);
+        setVerbOn();
+        redrawVerb();
+
+        // Inventory slots, shown only while the item is carried
+        setCurrentVerb(invMatchbook); initVerb(); setVerbName("matchbook");
+        setCurrentVerb(invKeycard);   initVerb(); setVerbName("key card");
+        setCurrentVerb(invCandy);     initVerb(); setVerbName("candy bar");
+        makeVerb(invMatchbook, 216, 160);
+        makeVerb(invKeycard,   216, 172);
+        makeVerb(invCandy,     216, 184);
+        setCurrentVerb(invMatchbook); setVerbColor(C_YELLOW);
+        setCurrentVerb(invKeycard);   setVerbColor(C_YELLOW);
+        setCurrentVerb(invCandy);     setVerbColor(C_YELLOW);
+        refreshInventory();
+    }
+
+    // Lay out carried items top to bottom with no gaps
+    script refreshInventory() {
+        int y;
+        y = 160;
+
+        setCurrentVerb(invMatchbook);
+        if(hasMatchbook) { setVerbXY(216, y); setVerbOn(); y += 12; }
+        else setVerbOff();
+        redrawVerb();
+
+        setCurrentVerb(invKeycard);
+        if(hasKeycard) { setVerbXY(216, y); setVerbOn(); y += 12; }
+        else setVerbOff();
+        redrawVerb();
+
+        setCurrentVerb(invCandy);
+        if(hasCandy) { setVerbXY(216, y); setVerbOn(); y += 12; }
+        else setVerbOff();
+        redrawVerb();
+    }
+
+    script showInterface(int show) {
+        if(show) {
+            cursorOn();
+            userPutOn();
+        } else {
+            cursorOff();
+            userPutOff();
+        }
+        cursorShown = show;
+    }
+
+    // ------------------------------------------------------------ sentence line
+    // Runs forever: rebuilds "Verb object" whenever the cursor or verb changes.
+    script mouseWatch() {
+        int obj, inv, lastObj, lastInv, lastVerb, lastWith;
+        lastObj = -1;
+        while(1) {
+            obj = getObjectAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+            inv = getVerbAt(VAR_MOUSE_X, VAR_MOUSE_Y);
+            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy ]))
+                inv = 0;
+            hoverObj = obj;
+            hoverInv = inv;
+
+            unless(obj == lastObj && inv == lastInv && curVerb == lastVerb && withItem == lastWith) {
+                lastObj = obj;
+                lastInv = inv;
+                lastVerb = curVerb;
+                lastWith = withItem;
+                setCurrentVerb(SntcLine);
+                if(withItem) {
+                    if(inv)
+                        setVerbName("Use %v{withItem} with %v{hoverInv}");
+                    else
+                        setVerbName("Use %v{withItem} with %n{hoverObj}");
+                } else if(inv)
+                    setVerbName("%v{curVerb} %v{hoverInv}");
+                else
+                    setVerbName("%v{curVerb} %n{hoverObj}");
+                redrawVerb();
+            }
+            breakScript();
+        }
+    }
+
+    // ------------------------------------------------------------ input
+    // Called by the engine: area 1 = verb bar, 2 = room, 4 = keyboard.
+    script inputHandler(int area, int cmd, int btn) {
+        int obj;
+
+        if(gameOver) return;
+
+        if(area == 1) {
+            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy ]))
+                inventoryClick(cmd);
+            else if(isAnyOf(cmd, [ Open, Close, TalkTo, PickUp, LookAt,
+                                   Use, Push, Pull, WalkTo ])) {
+                curVerb = cmd;
+                withItem = 0;
+            }
+            return;
+        }
+        if(area != 2) return;
+
+        obj = getObjectAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+
+        // Right click is a shortcut for "Look at"
+        if(btn == 2 && obj) {
+            curVerb = LookAt;
+            withItem = 0;
+        }
+
+        stopSentence();
+        if(!obj || curVerb == WalkTo) {
+            walkActorTo(VAR_EGO, VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
+            curVerb = WalkTo;
+            withItem = 0;
+            return;
+        }
+        // The inventory item (if any) travels as the sentence's second object
+        doSentence(curVerb, obj, 0, withItem);
+    }
+
+    // The engine runs this for every doSentence(): walk over, then let the
+    // object's own verb code handle it, or fall back to a stock reply.
+    script sentenceHandler(int vrb, int objA, int objB) {
+        walkActorToObj(VAR_EGO, objA, 0);
+        waitForActor(VAR_EGO);
+        if(getObjectVerbEntrypoint(objA, vrb))
+            startObject(2, objA, vrb, [ vrb, objA, objB ]);
+        else
+            defaultAction(vrb, objB);
+        curVerb = WalkTo;
+        withItem = 0;
+    }
+
+    script defaultAction(int vrb, int item) {
+        int r;
+        r = getRandomNumber(1);
+        if(item) {
+            egoSay("That doesn't work.");
+            return;
+        }
+        switch(vrb) {
+        case LookAt:
+            if(r) egoSay("Nothing special about it.");
+            else egoSay("Looks like hotel furniture. Hotel-ish.");
+            break;
+        case PickUp:
+            egoSay("I can't pick that up.");
+            break;
+        case Open:
+            egoSay("It doesn't open.");
+            break;
+        case Close:
+            egoSay("It doesn't close.");
+            break;
+        case Push:
+        case Pull:
+            if(r) egoSay("It won't budge.");
+            else egoSay("I'd rather not rearrange the furniture.");
+            break;
+        case TalkTo:
+            egoSay("It's not much of a conversationalist.");
+            break;
+        case Use:
+            egoSay("I don't see how to use that.");
+            break;
+        default:
+            egoSay("Hmm.");
+        }
+    }
+
+    // ------------------------------------------------------------ inventory
+    script inventoryClick(int item) {
+        if(curVerb == Use && !withItem) {
+            if(item == invCandy) {
+                hasCandy = 0;
+                refreshInventory();
+                egoSay("Mmm. That's going on the bill.");
+                curVerb = WalkTo;
+                return;
+            }
+            // Wait for the object to use it with
+            withItem = item;
+            return;
+        }
+        if(withItem) {
+            egoSay("Combining those won't help.");
+            withItem = 0;
+            curVerb = WalkTo;
+            return;
+        }
+
+        switch(item) {
+        case invMatchbook:
+            if(curVerb == LookAt || curVerb == Open)
+                readMatchbook();
+            else
+                egoSay("Hotel Paradiso matches. Classy.");
+            break;
+        case invKeycard:
+            if(curVerb == LookAt)
+                egoSay("My key card. Room 714. My ticket out of here.");
+            else
+                egoSay("It goes in the slot on the door.");
+            break;
+        case invCandy:
+            if(curVerb == LookAt)
+                egoSay("A Paradiso Bar. Fourteen dollars of nougat.");
+            else
+                egoSay("I could eat it. I've earned it.");
+            break;
+        }
+        curVerb = WalkTo;
+    }
+
+    script readMatchbook() {
+        if(lampOn) {
+            egoSay("Inside the cover, in my handwriting: SAFE 7 1 4."); waitForMessage();
+            egoSay("Same as the room number. Past me was not a security genius.");
+            knowsCode = 1;
+        } else
+            egoSay("Something's scribbled inside, but it's too dark to read.");
+    }
+
+    // ------------------------------------------------------------ boot
+    // The first script the engine runs. No room is loaded yet.
+    script main(int bootParam) {
+        VAR_MAINMENU_KEY = 319;      // F5
+        VAR_TALKSTOP_KEY = 46;       // '.' skips a line
+        VAR_PAUSE_KEY = ' ';
+        VAR_CUTSCENEEXIT_KEY = 27;   // Esc
+        VAR_TIMER_NEXT = 2;
+
+        VAR_VERB_SCRIPT = inputHandler;
+        VAR_SENTENCE_SCRIPT = sentenceHandler;
+
+        loadRoom(ResRoom);
+        lockRoom(ResRoom);
+        loadCostume(guestCost);
+        lockCostume(guestCost);
+
+        // The room picture is 144 lines tall; the verb bar gets the rest
+        setScreen(0, 144);
+        initCharset(font);
+        // charset colours: 0 transparent, 1 text, 2 drop shadow
+        setCharsetColors([ 0, C_WHITE, C_BLACK ]);
+
+        setCurrentActor(guest);
+        initActor();
+        setActorCostume(guestCost);
+        setActorWalkFrame(guest_anim_walk);
+        setActorStandFrame(guest_anim_stand);
+        setActorInitFrame(guest_anim_init);
+        setActorTalkFrame(guest_anim_talkStart, guest_anim_talkStop);
+        setActorTalkColor(C_WHITE);
+        setActorTalkPos(0, -64);
+        setActorWidth(24);
+        setActorName("me");
+        VAR_EGO = guest;
+
+        // Talk text floats centred over the speaker. Center clears the
+        // overhead flag, so it must come first.
+        egoPrintBegin();
+        actorPrintCenter();
+        actorPrintOverhead();
+        actorPrintEnd();
+
+        curVerb = WalkTo;
+        setupVerbs();
+        mouseWatch();
+
+        startRoom(Hotel);
+    }
+}

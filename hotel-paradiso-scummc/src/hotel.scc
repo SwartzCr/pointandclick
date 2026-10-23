@@ -1,0 +1,505 @@
+/* Hotel Paradiso, Room 714 - the room.
+ *
+ * Ten objects you can interact with: door, TV, curtains, minibar, lamp,
+ * phone, nightstand, painting, wall safe and bed. Each object's verb block
+ * is its SCUMM verb table; verbs it doesn't list get defaultAction().
+ * objB carries the inventory item for "Use X with <object>".
+ *
+ * Puzzle chain:
+ *   nightstand drawer -> matchbook -> lamp on to read it -> code 714
+ *   painting -> reveals the wall safe -> open with the code -> key card -> door
+ */
+
+#include "hotel.sch"
+
+room Hotel {
+    image = "room.bmp";
+    boxd = "hotel.box";
+    trans = 0;
+
+    object door;
+    object painting;
+    object safe;
+    object cursor;
+
+    // ------------------------------------------------------------ scripts
+    // Sets up the next print() as the front desk's voice on the phone:
+    // yellow text centred at the top of the screen.
+    local script deskSays() {
+        printBegin();
+        printAt(160, 12);
+        printCenter();
+        printColor(C_YELLOW);
+    }
+
+    local script callDesk() {
+        ResRoom::showInterface(0);
+        phoneCalls++;
+        egoSay("I dial zero."); waitForMessage();
+        if(phoneCalls == 1) {
+            deskSays(); print("Front desk, Gustav speaking. How may I help you?"); waitForMessage();
+            egoSay("I'm locked in my room. I can't find my key card."); waitForMessage();
+            deskSays(); print("Have you tried the door, sir?"); waitForMessage();
+            egoSay("The door needs the key card."); waitForMessage();
+            deskSays(); print("Then I suggest finding the key card, sir."); waitForMessage();
+            deskSays(); print("Many guests keep valuables in the room safe."); waitForMessage();
+            egoSay("There's a safe?"); waitForMessage();
+            deskSays(); print("Behind the painting, sir. As in every room. Good day."); waitForMessage();
+        } else if(phoneCalls == 2) {
+            deskSays(); print("Front desk, Gustav speaking."); waitForMessage();
+            egoSay("Hi, it's me again. What's the code for the safe?"); waitForMessage();
+            deskSays(); print("Whatever you set it to, sir. Guests often write it down."); waitForMessage();
+            deskSays(); print("Usually on whatever is lying around the room. Good day."); waitForMessage();
+        } else {
+            deskSays(); print("You have reached the front desk. Gustav is on his break."); waitForMessage();
+            egoSay("Gustav is avoiding me."); waitForMessage();
+        }
+        ResRoom::showInterface(1);
+    }
+
+    local script leaveRoom() {
+        gameOver = 1;
+        ResRoom::showInterface(0);
+        egoSay("I slide the key card into the slot."); waitForMessage();
+        setObjectState(door, 1);
+        egoSay("Green light! Freedom!"); waitForMessage();
+        walkActorTo(VAR_EGO, 40, 101);
+        waitForActor(VAR_EGO);
+        putActorAt(VAR_EGO, 0, 0, 0);    // room 0 = gone
+        delaySeconds(1);
+        printBegin(); printAt(160, 40); printCenter(); printColor(C_YELLOW);
+        print("You checked out of the Hotel Paradiso."); waitForMessage();
+        printBegin(); printAt(160, 40); printCenter(); printColor(C_WHITE);
+        print("THE END.   Thanks for playing!"); waitForMessage();
+        printBegin(); printAt(160, 40); printCenter(); printColor(C_GREY);
+        print("Late check-out fee: $40. Minibar: $14."); waitForMessage();
+        shutdown();
+    }
+
+
+    // ------------------------------------------------------------ door
+    object door {
+        x = 16; y = 16; w = 48; h = 80;
+        hs_x = 24; hs_y = 88;
+        dir = NORTH;
+        name = "door";
+        states = { { 24, 88, "objects/door_1.bmp" } };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("Room 714. It only opens with a key card."); waitForMessage();
+            return;
+        case Open:
+            if(hasKeycard) leaveRoom();
+            else { egoSay("Locked. The card reader blinks red at me. Judgmentally."); waitForMessage(); }
+            return;
+        case Use:
+            if(objB == invKeycard || (!objB && hasKeycard)) leaveRoom();
+            else if(objB) { egoSay("That won't fit in the card slot."); waitForMessage(); }
+            else { egoSay("It needs a key card. Which I don't have."); waitForMessage(); }
+            return;
+        case Pull:
+            egoSay("I rattle the handle. Still locked."); waitForMessage();
+            return;
+        case Push:
+            egoSay("It opens inward. Also, it's locked."); waitForMessage();
+            return;
+        case Close:
+            egoSay("It's already closed. Very closed."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("Hello? Housekeeping? Anyone?"); waitForMessage();
+            egoSay("Nothing. They must be on strike."); waitForMessage();
+            return;
+        case PickUp:
+            egoSay("The Do Not Disturb sign stays. I am very disturbed."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ tv
+    object tv {
+        x = 80; y = 16; w = 48; h = 48;
+        hs_x = 20; hs_y = 88;
+        dir = NORTH;
+        name = "TV";
+        states = { { 20, 88, "objects/tv_1.bmp" } };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(tvOn) {
+                tvAd = !tvAd;
+                if(tvAd) { egoSay("The Paradiso Channel. Forecast: sunny, with a chance of late fees."); waitForMessage(); }
+                else { egoSay("An ad: Paradiso safes. Hidden where nobody would ever look."); waitForMessage(); }
+            } else {
+                egoSay("A TV the size of a suitcase. Retro, or just old."); waitForMessage();
+            }
+            return;
+        case Use:
+        case Push:
+            if(objB) {
+                egoSay("I don't think the TV needs that."); waitForMessage();
+            } else if(tvOn) {
+                tvOn = 0;
+                setObjectState(tv, 0);
+                egoSay("Click."); waitForMessage();
+            } else {
+                tvOn = 1;
+                setObjectState(tv, 1);
+                egoSay("It warms up with a hum."); waitForMessage();
+            }
+            return;
+        case Close:
+            if(tvOn) { tvOn = 0; setObjectState(tv, 0); }
+            else { egoSay("It's already off."); waitForMessage(); }
+            return;
+        case TalkTo:
+            egoSay("TV, what's the code for the safe?"); waitForMessage();
+            if(tvOn) { egoSay("It cut to a commercial. Typical."); waitForMessage(); }
+            else { egoSay("The silent treatment. Fair."); waitForMessage(); }
+            return;
+        case PickUp:
+            egoSay("It weighs more than I do."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ curtains
+    object curtains {
+        x = 128; y = 0; w = 72; h = 72;
+        hs_x = 36; hs_y = 104;
+        dir = NORTH;
+        name = "curtains";
+        states = { { 36, 104, "objects/curtains_1.bmp" } };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(curtainsOpen) { egoSay("The city at night. Twelve floors down, and the window is sealed."); waitForMessage(); }
+            else { egoSay("Heavy velvet curtains. Very dramatic."); waitForMessage(); }
+            return;
+        case Open:
+        case Pull:
+            if(curtainsOpen) { egoSay("They're already open."); waitForMessage(); }
+            else {
+                curtainsOpen = 1;
+                setObjectState(curtains, 1);
+                egoSay("Night already? How long did I sleep?"); waitForMessage();
+            }
+            return;
+        case Close:
+        case Push:
+            if(curtainsOpen) { curtainsOpen = 0; setObjectState(curtains, 0); }
+            else { egoSay("They're already closed."); waitForMessage(); }
+            return;
+        case Use:
+            if(objB == invMatchbook) { egoSay("Setting the curtains on fire is not a plan. It's a crime."); waitForMessage(); }
+            else { egoSay("Climbing out the window is not an option. Twelve floors."); waitForMessage(); }
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ minibar
+    object minibar {
+        x = 144; y = 72; w = 32; h = 24;
+        hs_x = -12; hs_y = 34;
+        dir = EAST;
+        name = "minibar";
+        states = {
+            { -12, 34, "objects/minibar_1.bmp" },   // open, candy inside
+            { -12, 34, "objects/minibar_2.bmp" }    // open, empty
+        };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(minibarOpen && !tookCandy) { egoSay("Tiny bottles and a candy bar. All priced like jewellery."); waitForMessage(); }
+            else if(minibarOpen) { egoSay("Tiny bottles. I'm not paying twelve dollars for those."); waitForMessage(); }
+            else { egoSay("The minibar. A tiny fridge full of expensive regret."); waitForMessage(); }
+            return;
+        case Open:
+        case Pull:
+            if(minibarOpen) { egoSay("It's open."); waitForMessage(); }
+            else {
+                minibarOpen = 1;
+                setObjectState(minibar, tookCandy ? 2 : 1);
+            }
+            return;
+        case Close:
+        case Push:
+            if(minibarOpen) { minibarOpen = 0; setObjectState(minibar, 0); }
+            else { egoSay("It's closed."); waitForMessage(); }
+            return;
+        case PickUp:
+            if(minibarOpen && !tookCandy) {
+                tookCandy = 1;
+                hasCandy = 1;
+                setObjectState(minibar, 2);
+                ResRoom::refreshInventory();
+                egoSay("A candy bar. Fourteen dollars. Worth it."); waitForMessage();
+            } else if(minibarOpen) {
+                egoSay("The bottles are wired to an alarm. Probably."); waitForMessage();
+            } else {
+                egoSay("It's plugged in. I'll just open it."); waitForMessage();
+            }
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ lamp
+    object lamp {
+        x = 200; y = 32; w = 16; h = 40;
+        hs_x = -10; hs_y = 76;
+        dir = EAST;
+        name = "lamp";
+        states = { { -10, 76, "objects/lamp_1.bmp" } };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(lampOn) { egoSay("Nice warm light. Good for reading."); waitForMessage(); }
+            else { egoSay("A brass reading lamp. It's off."); waitForMessage(); }
+            return;
+        case Use:
+        case Push:
+        case Pull:
+            if(objB) {
+                egoSay("The lamp doesn't need that."); waitForMessage();
+            } else if(lampOn) {
+                lampOn = 0;
+                setObjectState(lamp, 0);
+                egoSay("Click."); waitForMessage();
+            } else {
+                lampOn = 1;
+                setObjectState(lamp, 1);
+                egoSay("Let there be light."); waitForMessage();
+            }
+            return;
+        case PickUp:
+            egoSay("It's plugged in. And bolted down. This hotel trusts no one."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ phone
+    object phone {
+        x = 216; y = 56; w = 16; h = 16;
+        hs_x = -24; hs_y = 52;
+        dir = EAST;
+        name = "phone";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A rotary phone. Zero for the front desk."); waitForMessage();
+            return;
+        case Use:
+        case TalkTo:
+        case PickUp:
+            if(objB) { egoSay("I'd rather use it to make a call."); waitForMessage(); }
+            else callDesk();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ nightstand
+    object nightstand {
+        x = 200; y = 72; w = 32; h = 24;
+        hs_x = -10; hs_y = 36;
+        dir = EAST;
+        name = "nightstand";
+        states = {
+            { -10, 36, "objects/nightstand_1.bmp" },   // drawer open, matchbook
+            { -10, 36, "objects/nightstand_2.bmp" }    // drawer open, empty
+        };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(drawerOpen && !tookMatchbook) { egoSay("There's a matchbook in the drawer."); waitForMessage(); }
+            else if(drawerOpen) { egoSay("The drawer is empty. Not even a room service menu."); waitForMessage(); }
+            else { egoSay("A nightstand with one drawer."); waitForMessage(); }
+            return;
+        case Open:
+        case Pull:
+            if(drawerOpen) { egoSay("It's already open."); waitForMessage(); }
+            else {
+                drawerOpen = 1;
+                if(tookMatchbook) setObjectState(nightstand, 2);
+                else {
+                    setObjectState(nightstand, 1);
+                    egoSay("A matchbook from the hotel bar."); waitForMessage();
+                }
+            }
+            return;
+        case Close:
+        case Push:
+            if(drawerOpen) { drawerOpen = 0; setObjectState(nightstand, 0); }
+            else { egoSay("It's closed."); waitForMessage(); }
+            return;
+        case PickUp:
+            if(drawerOpen && !tookMatchbook) {
+                tookMatchbook = 1;
+                hasMatchbook = 1;
+                setObjectState(nightstand, 2);
+                ResRoom::refreshInventory();
+                egoSay("Got it. There's writing inside the cover."); waitForMessage();
+            } else if(drawerOpen) {
+                egoSay("Nothing else in there."); waitForMessage();
+            } else {
+                egoSay("I'll open the drawer first."); waitForMessage();
+            }
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ painting
+    object painting {
+        x = 248; y = 8; w = 48; h = 40;
+        hs_x = -18; hs_y = 131;
+        dir = EAST;
+        name = "painting";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A sunset over a beach. It hangs a little crooked."); waitForMessage();
+            return;
+        case Pull:
+        case Push:
+        case PickUp:
+        case Open:
+            // Swing it aside: the painting stops being clickable and the
+            // safe behind it takes over the same spot on the wall.
+            setObjectClass(painting, [ SET_CLASS | UNTOUCHABLE ]);
+            setObjectClass(safe, [ UNTOUCHABLE ]);
+            setObjectState(safe, 1);
+            egoSay("Aha! A wall safe. Behind a painting. How original."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("Lovely brushwork. I don't know anything about brushwork."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ safe
+    object safe {
+        x = 248; y = 8; w = 48; h = 40;
+        hs_x = -18; hs_y = 131;
+        dir = EAST;
+        name = "wall safe";
+        states = {
+            { -18, 131, "objects/safe_1.bmp" },   // revealed, closed
+            { -18, 131, "objects/safe_2.bmp" },   // open, key card inside
+            { -18, 131, "objects/safe_3.bmp" }    // open, empty
+        };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(safeOpen && !tookKeycard) { egoSay("My key card! I locked it in the safe. Of course I did."); waitForMessage(); }
+            else if(safeOpen) { egoSay("Empty."); waitForMessage(); }
+            else { egoSay("A wall safe with a three-digit combination dial."); waitForMessage(); }
+            return;
+        case Open:
+        case Use:
+            if(safeOpen) {
+                egoSay("It's already open."); waitForMessage();
+            } else if(objB && objB != invMatchbook) {
+                egoSay("That won't open a safe."); waitForMessage();
+            } else if(knowsCode) {
+                egoSay("Seven. One. Four."); waitForMessage();
+                safeOpen = 1;
+                setObjectState(safe, tookKeycard ? 3 : 2);
+                egoSay("Click! It's open."); waitForMessage();
+            } else if(hasMatchbook) {
+                egoSay("I think I wrote the code inside the matchbook. I should read it."); waitForMessage();
+            } else {
+                egoSay("I don't remember the combination. I barely remember last night."); waitForMessage();
+            }
+            return;
+        case PickUp:
+            if(safeOpen && !tookKeycard) {
+                tookKeycard = 1;
+                hasKeycard = 1;
+                setObjectState(safe, 3);
+                ResRoom::refreshInventory();
+                egoSay("My key card. Now let's get out of here."); waitForMessage();
+            } else if(safeOpen) {
+                egoSay("There's nothing left in it."); waitForMessage();
+            } else {
+                egoSay("It's built into the wall."); waitForMessage();
+            }
+            return;
+        case Close:
+        case Push:
+            if(safeOpen) { safeOpen = 0; setObjectState(safe, 1); }
+            else { egoSay("It's closed."); waitForMessage(); }
+            return;
+        case TalkTo:
+            egoSay("Open sesame."); waitForMessage();
+            egoSay("Worth a try."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ bed
+    object bed {
+        x = 232; y = 48; w = 88; h = 88;
+        hs_x = 8; hs_y = 91;
+        dir = EAST;
+        name = "bed";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("Unmade. My work."); waitForMessage();
+            return;
+        case Use:
+            egoSay("No time for a nap. Check-out was at noon."); waitForMessage();
+            return;
+        case Push:
+        case Pull:
+            egoSay("I'm not wrestling a mattress today."); waitForMessage();
+            return;
+        case PickUp:
+            egoSay("Not with my back."); waitForMessage();
+            return;
+        case Open:
+            egoSay("I check under the covers. One sock. Not mine."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("Goodbye, bed. You were the best part of this trip."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ cursor
+    // Holds the mouse cursor image; never drawn and never clickable.
+    object cursor {
+        x = 0; y = 0; w = 16; h = 16;
+        name = "";
+        states = { { 0, 0, "cursor.bmp" } };
+        state = 0;
+    }
+
+    local script entry() {
+        createBoxMatrix();
+
+        setObjectClass(safe, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(cursor, [ SET_CLASS | UNTOUCHABLE ]);
+        setCursorImage(cursor, Hotel);
+        setCursorHotspot(8, 8);
+        setCursorTransparency(0);
+
+        putActorAt(VAR_EGO, 110, 124, Hotel);
+        setCurrentActor(VAR_EGO);
+        setActorDirection(180);
+
+        ResRoom::showInterface(0);
+        delay(30);
+        egoSay("Ugh. What time is it?"); waitForMessage();
+        egoSay("Check-out was at noon. I have to get out of here."); waitForMessage();
+        egoSay("Which would be easier if I knew where I put my key card."); waitForMessage();
+        ResRoom::showInterface(1);
+    }
+}
