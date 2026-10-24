@@ -732,20 +732,35 @@ def draw_bath_walls(img, d):
     rect(d, 0, BATH_FLOOR_Y - 3, W, BATH_FLOOR_Y, 'porcelain_dk')
 
 
+# Bathroom floor perspective. Every floor pixel maps back to a point on the
+# floor plane, so the tile grid stays continuous:
+#   u = (x - BATH_CX) / (y - BATH_VY) * BATH_KX   tile column, converges on (CX, VY)
+#   v = BATH_KZ / (y - BATH_VY)                   tile row, deeper toward the viewer
+BATH_CX, BATH_VY = 160, -80   # vanishing point well above the room: gentle convergence
+BATH_KX = 224 / 30            # tiles are 30px wide at the bottom of the screen
+BATH_KZ = 3700                # about four and a half rows from the wall to the screen edge
+
+
+def _bath_tile_uv(x, y):
+    t = y - BATH_VY
+    return (x - BATH_CX) / t * BATH_KX, BATH_KZ / t
+
+
 def draw_bath_floor(img, d):
-    # soft two-tone tiles whose columns converge on the centre of the room
-    y = BATH_FLOOR_Y
-    row = 0
-    while y < H:
-        h = 5 + row
-        size = 14 + row * 3
-        for i in range(-12, 13):
-            x = W // 2 + i * size - size // 2
-            c = 'floor_a' if (i + row) % 2 else 'floor_b'
-            rect(d, max(0, x), y, min(W, x + size), min(H, y + h), c)
-            rect(d, max(0, x), y, min(W, x + size), y + 1, 'porcelain_dk')
-        y += h
-        row += 1
+    # two-tone checkerboard on one perspective grid, with 1px grout lines
+    px = img.load()
+    a, b, g = C['floor_a'], C['floor_b'], C['porcelain_dk']
+    for y in range(BATH_FLOOR_Y, H):
+        for x in range(W):
+            u, v = _bath_tile_uv(x, y)
+            i, j = int(u // 1), int(v // 1)
+            # grout wherever the next pixel over falls in another tile
+            u2, _ = _bath_tile_uv(x + 1, y)
+            _, v2 = _bath_tile_uv(x, y + 1)
+            if int(u2 // 1) != i or int(v2 // 1) != j:
+                px[x, y] = g
+            else:
+                px[x, y] = a if (i + j) % 2 else b
     rect(d, 0, BATH_FLOOR_Y, W, BATH_FLOOR_Y + 1, 'porcelain_sh')
 
 
