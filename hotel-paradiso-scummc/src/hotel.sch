@@ -31,7 +31,7 @@ bit lampOn, tvOn, curtainsOpen, minibarOpen, drawerOpen;
 bit safeOpen, knowsCode;
 bit hasMatchbook, hasKeycard, hasCandy, hasUniform;
 bit tookMatchbook, tookKeycard, tookCandy;
-bit wearingUniform;
+bit wearingUniform, tookUniform, dresserOpen;
 bit hasTowel, hasSoap, tookTowel, tookSoap;
 bit bathCurtainOpen, cabinetOpen;
 bit hotelVisited;

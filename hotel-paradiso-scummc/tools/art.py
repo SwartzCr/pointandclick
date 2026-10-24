@@ -87,7 +87,7 @@ def put(img, x, y, col):
 
 
 # --------------------------------------------------------------------------- room
-DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, uniform=0,
+DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, dresser=0,
                table_matchbook=0, table_candy=0, table_keycard=0, table_uniform=0,
                table_towel=0, table_soap=0)
 
@@ -212,14 +212,35 @@ def draw_door(img, d, st):
         rect(d, 22, 21, 23, FLOOR_Y, 'wood_dk')
 
 
-def draw_dresser_tv(img, d, tv):
-    # dresser
-    rect(d, 72, 64, 130, FLOOR_Y, 'wood_dk')
-    rect(d, 72, 64, 130, 67, 'wood_hi')
+def draw_dresser_tv(img, d, tv, dresser=0):
+    """dresser: 0 closed, 1 top drawer open with the bellhop uniform inside,
+    2 top drawer open and empty. Everything stays inside x 72..128, y 64..96."""
+    rect(d, 72, 64, 128, FLOOR_Y, 'wood_dk')
+    rect(d, 72, 64, 128, 67, 'wood_hi')
     for y in (69, 78, 87):
-        rect(d, 75, y, 127, y + 7, 'wood')
-        rect(d, 75, y, 127, y + 1, 'wood_hi')
-        rect(d, 98, y + 3, 104, y + 4, 'brass')
+        rect(d, 75, y, 125, y + 7, 'wood')
+        rect(d, 75, y, 125, y + 1, 'wood_hi')
+        rect(d, 97, y + 3, 103, y + 4, 'brass')
+    if dresser:
+        # top drawer pulled out toward the viewer: its inside shows above a
+        # lowered drawer front that now covers the middle drawer
+        rect(d, 74, 68, 126, 77, 'wood_xdk')
+        rect(d, 74, 68, 126, 69, 'wood_dk')
+        if dresser == 1:
+            # folded bellhop jacket with brass buttons, pillbox hat beside it
+            rect(d, 86, 69, 106, 77, 'red')
+            rect(d, 86, 75, 106, 77, 'red_dk')
+            rect(d, 95, 69, 97, 77, 'red_dk')
+            for x in (96,):
+                put(img, x, 71, 'brass'); put(img, x, 74, 'brass')
+            rect(d, 86, 69, 90, 71, 'brass')
+            rect(d, 102, 69, 106, 71, 'brass')
+            rect(d, 109, 71, 117, 77, 'red')
+            rect(d, 109, 74, 117, 75, 'brass')
+        rect(d, 73, 77, 127, 85, 'wood')
+        rect(d, 73, 77, 127, 78, 'wood_hi')
+        rect(d, 73, 84, 127, 85, 'wood_xdk')
+        rect(d, 97, 80, 103, 81, 'brass')
     # TV
     rect(d, 80, 34, 122, 64, 'tv_body')
     rect(d, 80, 34, 122, 35, 'grey_dk')
@@ -357,7 +378,7 @@ def draw_phone(img, d):
         put(img, x, 68, 'grey_hi')
 
 
-def draw_bed(img, d, s_uniform=0):
+def draw_bed(img, d):
     # headboard against the wall
     rect(d, 236, 46, 316, 84, 'wood_dk')
     rect(d, 238, 48, 314, 82, 'wood')
@@ -377,18 +398,6 @@ def draw_bed(img, d, s_uniform=0):
         rect(d, 238, y, 316, y + 1, 'blanket_dk')
     rect(d, 238, 120, 316, 128, 'blanket_dk')
     rect(d, 238, 120, 316, 121, 'blanket_hi')
-    if s_uniform:
-        # bellhop uniform folded on the blanket, pillbox hat beside it
-        rect(d, 266, 98, 286, 110, 'red_dk')
-        rect(d, 266, 98, 286, 108, 'red')
-        rect(d, 275, 98, 277, 110, 'red_dk')
-        for y in (100, 103, 106):
-            put(img, 276, y, 'brass')
-        rect(d, 266, 98, 270, 101, 'brass')      # epaulette
-        rect(d, 282, 98, 286, 101, 'brass')
-        rect(d, 287, 102, 295, 109, 'red')
-        rect(d, 287, 106, 295, 107, 'brass')
-        rect(d, 287, 108, 295, 109, 'red_dk')
     rect(d, 236, 74, 238, 128, 'wood_dk')
     rect(d, 316, 74, 318, 128, 'wood_dk')
     rect(d, 236, 128, 318, 132, 'wood_xdk')
@@ -490,13 +499,13 @@ def render(state=None):
     draw_floor(img, d)
     draw_side_doorway(img, d)
     draw_door(img, d, s['door'])
-    draw_dresser_tv(img, d, s['tv'])
+    draw_dresser_tv(img, d, s['tv'], s['dresser'])
     draw_window(img, d, s['curtains'])
     draw_minibar(img, d, s['minibar'])
     draw_nightstand(img, d, s['drawer'])
     draw_lamp(img, d, s['lamp'])
     draw_phone(img, d)
-    draw_bed(img, d, s['uniform'])
+    draw_bed(img, d)
     draw_painting_safe(img, d, s['safe'])
     draw_coffee_table(img, d, s)
     return img

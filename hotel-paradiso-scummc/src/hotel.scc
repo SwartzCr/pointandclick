@@ -1,10 +1,11 @@
 /* Hotel Paradiso, Room 714 - the bedroom.
  *
  * Furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
- * nightstand, painting, wall safe, bed and coffee table, plus the doorway to
+ * nightstand, dresser, painting, wall safe, bed and coffee table, plus the doorway to
  * the bathroom (src/bathroom.scc). The items you can take (candy bar,
- * matchbook, key card, uniform) are objects too, parented to the container
- * state that shows them, so they're only clickable while visible.
+ * matchbook, key card, and the bellhop uniform in the dresser) are objects
+ * too, parented to the container state that shows them, so they're only
+ * clickable while visible.
  *
  * Each object's verb block is its SCUMM verb table; verbs it doesn't list get
  * defaultAction(). objB carries the inventory item for "Use X with <object>".
@@ -29,6 +30,7 @@ room Hotel {
     object tableTowel;
     object tableSoap;
     object minibar;
+    object dresser;
     object nightstand;
     object painting;
     object safe;
@@ -78,6 +80,14 @@ room Hotel {
 
     // Taking an item: switch the container to its "open and empty" state
     // (which also hides the item object) and add the item to the inventory.
+    local script takeUniform() {
+        tookUniform = 1;
+        hasUniform = 1;
+        setObjectState(dresser, 2);
+        ResRoom::refreshInventory();
+        egoSay("It's exactly my size. That's either lucky or a plot."); waitForMessage();
+    }
+
     local script takeCandy() {
         tookCandy = 1;
         hasCandy = 1;
@@ -223,6 +233,84 @@ room Hotel {
             return;
         case PickUp:
             egoSay("The Do Not Disturb sign stays. I am very disturbed."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ bellhop uniform
+    // Folded in the dresser's top drawer. Only clickable while the drawer is
+    // open with the uniform inside (state 1); declared before the dresser so
+    // the cursor finds it first.
+    object uniform {
+        x = 88; y = 68; w = 32; h = 8;
+        hs_x = -28; hs_y = 38;
+        dir = EAST;
+        name = "bellhop uniform";
+        parent = dresser;
+        parent_state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A bellhop uniform, with the little hat. Not mine. Probably."); waitForMessage();
+            return;
+        case PickUp:
+            takeUniform();
+            return;
+        case Use:
+            egoSay("I'll take it out first."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("Front! Boy!"); waitForMessage();
+            egoSay("Nothing. Good help is hard to find."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ dresser
+    // The chest of drawers under the TV. Opening it pulls out the top drawer:
+    // state 1 with the uniform inside, state 2 once it's been taken.
+    object dresser {
+        x = 72; y = 64; w = 56; h = 32;
+        // Stand beside it so the open drawer stays in view
+        hs_x = -12; hs_y = 42;
+        dir = EAST;
+        name = "dresser";
+        states = {
+            { -12, 42, "objects/dresser_1.bmp" },   // open, uniform inside
+            { -12, 42, "objects/dresser_2.bmp" }    // open, empty
+        };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(dresserOpen && !tookUniform) { egoSay("There's a bellhop uniform folded in the top drawer."); waitForMessage(); }
+            else if(dresserOpen) { egoSay("Empty. Not even a hotel bible."); waitForMessage(); }
+            else { egoSay("A chest of drawers, under a TV that's older than I am."); waitForMessage(); }
+            return;
+        case Open:
+        case Pull:
+            if(dresserOpen) { egoSay("It's already open."); waitForMessage(); }
+            else {
+                dresserOpen = 1;
+                if(tookUniform) setObjectState(dresser, 2);
+                else {
+                    setObjectState(dresser, 1);
+                    egoSay("Huh. Someone left a bellhop uniform in here."); waitForMessage();
+                }
+            }
+            return;
+        case Close:
+        case Push:
+            if(dresserOpen) { dresserOpen = 0; setObjectState(dresser, 0); }
+            else { egoSay("It's closed."); waitForMessage(); }
+            return;
+        case PickUp:
+            if(dresserOpen && !tookUniform) takeUniform();
+            else { egoSay("It's furniture. It stays."); waitForMessage(); }
+            return;
+        case Use:
+            if(objB) { egoSay("I'll leave the drawers to the professionals. The coffee table's right there."); waitForMessage(); }
+            else { egoSay("I could open it."); waitForMessage(); }
             return;
         }
     }
@@ -601,38 +689,6 @@ room Hotel {
         case TalkTo:
             egoSay("Open sesame."); waitForMessage();
             egoSay("Worth a try."); waitForMessage();
-            return;
-        }
-    }
-
-    // ------------------------------------------------------------ uniform
-    // Lies folded on the bed (state 1) until picked up. Declared before the
-    // bed so the cursor finds it first.
-    object uniform {
-        x = 264; y = 96; w = 32; h = 16;
-        hs_x = -24; hs_y = 43;
-        dir = EAST;
-        name = "bellhop uniform";
-        states = { { -24, 43, "objects/uniform_1.bmp" } };
-        state = 1;
-
-        verb(int vrb, int objA, int objB) {
-        case LookAt:
-            egoSay("A bellhop uniform, with the hat. I have no idea how it got here."); waitForMessage();
-            return;
-        case PickUp:
-            setObjectState(uniform, 0);
-            setObjectClass(uniform, [ SET_CLASS | UNTOUCHABLE ]);
-            hasUniform = 1;
-            ResRoom::refreshInventory();
-            egoSay("Still warm. Let's not think about that."); waitForMessage();
-            return;
-        case Use:
-            egoSay("I'll pick it up first."); waitForMessage();
-            return;
-        case TalkTo:
-            egoSay("Front! Boy!"); waitForMessage();
-            egoSay("Nothing. Good help is hard to find."); waitForMessage();
             return;
         }
     }

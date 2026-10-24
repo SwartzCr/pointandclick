@@ -48,7 +48,7 @@ OBJECT_STATES = {
     'lamp':       ((200, 32, 16, 40), [dict(lamp=1)]),
     'nightstand': ((200, 72, 32, 24), [dict(drawer=1), dict(drawer=2)]),
     'safe':       ((248, 8, 48, 40), [dict(safe=1), dict(safe=2), dict(safe=3)]),
-    'uniform':    ((264, 96, 32, 16), [dict(uniform=1)]),
+    'dresser':    ((72, 64, 56, 32), [dict(dresser=1), dict(dresser=2)]),
 }
 # items set down on the coffee table, one 16-pixel slot each
 for _item in art.TABLE_SLOTS:

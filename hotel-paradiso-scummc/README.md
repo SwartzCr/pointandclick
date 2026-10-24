@@ -23,13 +23,13 @@ F5 opens the menu, `.` skips a line of dialogue.
 
 ## The rooms
 
-**Room 714.** Eleven pieces of furniture you can interact with: door, TV, curtains,
-minibar, lamp, phone, nightstand, painting, wall safe, bed and coffee table. The three
-things you can take (candy bar, matchbook, key card) are objects of their own, clickable
-only while you can see them.
+**Room 714.** Twelve pieces of furniture you can interact with: door, TV, dresser,
+curtains, minibar, lamp, phone, nightstand, painting, wall safe, bed and coffee table.
+The things you can take (candy bar, matchbook, key card, bellhop uniform) are objects of
+their own, clickable only while you can see them.
 
-There's also a bellhop uniform lying on the bed. Pick it up and use it on yourself to put
-it on: the player switches to a second costume with its own full set of walking and
+There's a bellhop uniform folded in the dresser's top drawer. Take it and use it on
+yourself to put it on: the player switches to a second costume with its own full set of walking and
 talking frames. **Use** it again to take it off. It isn't needed to finish, but it does
 change the ending slightly.
 
