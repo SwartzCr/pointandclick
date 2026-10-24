@@ -685,7 +685,7 @@ room Hotel {
         case LookAt:
             if(safeOpen && !tookKeycard) { egoSay("My key card! I locked it in the safe. Of course I did."); waitForMessage(); }
             else if(safeOpen) { egoSay("Empty."); waitForMessage(); }
-            else { egoSay("A wall safe with a three-digit combination dial."); waitForMessage(); }
+            else { egoSay("A wall safe with a keypad. It wants a three-digit code."); waitForMessage(); }
             return;
         case Open:
         case Use:
@@ -697,7 +697,7 @@ room Hotel {
                 openSafe(); else if(hasMatchbook) {
                 egoSay("I think I wrote the code inside the matchbook. I should read it."); waitForMessage();
             } else {
-                egoSay("I don't remember the combination. I barely remember last night."); waitForMessage();
+                egoSay("I don't remember the code. I barely remember last night."); waitForMessage();
             }
             return;
         case PickUp:

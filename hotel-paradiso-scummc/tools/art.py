@@ -61,6 +61,8 @@ C = {
     'meadow': (104, 142, 74), 'meadow_dk': (74, 110, 58), 'meadow_hi': (150, 176, 96),
     'deer': (150, 96, 52), 'deer_dk': (96, 58, 32), 'deer_lt': (214, 176, 124),
     'antler': (206, 182, 136),
+    # the safe's keypad
+    'lcd': (52, 82, 58), 'lcd_hi': (150, 220, 130), 'key': (196, 200, 204), 'led_red': (220, 40, 40),
 }
 
 
@@ -470,19 +472,30 @@ def draw_painting_safe(img, d, st):
     if st == 1:
         rect(d, 253, 19, 285, 39, 'steel')
         rect(d, 253, 19, 285, 20, 'steel_hi')
-        rect(d, 263, 24, 273, 34, 'steel_dk')
-        rect(d, 265, 26, 271, 32, 'dial')
-        put(img, 268, 26, 'black'); put(img, 268, 27, 'black')
-        rect(d, 278, 27, 282, 31, 'steel_hi')
+        # electronic keypad: a little LCD over a 3x4 grid of keys
+        rect(d, 257, 21, 272, 39, 'steel_dk')
+        rect(d, 258, 22, 271, 25, 'lcd')
+        for x in (260, 262, 264, 267, 269):        # "- - -" waiting for a code
+            put(img, x, 23, 'lcd_hi')
+        for row in range(4):
+            for col in range(3):
+                kx, ky = 259 + col * 4, 27 + row * 3
+                rect(d, kx, ky, kx + 3, ky + 2, 'key')
+        put(img, 275, 22, 'led_red')                # locked
+        rect(d, 278, 27, 282, 31, 'steel_hi')       # handle
+        rect(d, 278, 30, 282, 31, 'steel_dk')
     else:
         rect(d, 254, 20, 284, 38, 'safe_in')
         if st == 2:
             rect(d, 262, 31, 276, 37, 'card')
             rect(d, 262, 33, 276, 34, 'card_dk')
             rect(d, 264, 35, 268, 36, 'white')
-        # door swung open to the left
+        # door swung open to the left; the keypad faces away, so only its
+        # edge and the bolt show
         rect(d, 248, 18, 254, 40, 'steel')
-        rect(d, 249, 26, 252, 30, 'dial')
+        rect(d, 248, 18, 249, 40, 'steel_hi')
+        rect(d, 250, 22, 253, 36, 'steel_dk')
+        rect(d, 251, 28, 254, 31, 'steel_hi')
     # painting now hangs crooked to the right of the safe
     d.polygon([(286, 14), (296, 16), (296, 40), (288, 41)], fill=C['frame_g'])
     d.polygon([(288, 17), (294, 18), (294, 38), (289, 39)], fill=C['dusk_mid'])
