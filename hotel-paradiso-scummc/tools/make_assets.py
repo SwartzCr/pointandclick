@@ -7,7 +7,7 @@ Writes (all into assets/):
   room.bmp              320x144 background of Room 714, 8-bit; its palette IS the room palette
   bathroom.bmp          the bathroom background, same palette
   bathroom.box          the bathroom's walk boxes
-  flush.voc, tv.voc,    sound effects (toilet flush, TV chatter, safe opening),
+  flush.voc, tv.voc,    sound effects (toilet flush, TV chatter, keypad safe opening),
   safe.voc              built into SOUN resources by `soun`
   objects/<obj>_<n>.bmp state images for the objects (indices into the room palette)
   cursor.bmp            16x16 cursor, index 0 = transparent
@@ -349,41 +349,87 @@ def build_tv_sound():
     write_voc('tv', normalize(out, 0.85))
 
 
+class LowPass:
+    def __init__(self, a):
+        self.a, self.y = a, 0.0
+
+    def __call__(self, x):
+        self.y += self.a * (x - self.y)
+        return self.y
+
+
+def _add(out, t0, gen):
+    i0 = int(t0 * RATE)
+    for k, v in enumerate(gen):
+        if 0 <= i0 + k < len(out):
+            out[i0 + k] += v
+
+
+def _tick(rnd, level, freq=2600, ms=14):
+    """A small dry mechanical tick: a 2ms noise burst through a quickly damped filter."""
+    import math  # noqa: F401
+    rz, n = Resonator(freq, 0.94), int(RATE * ms / 1000)
+    for k in range(n):
+        x = rnd.uniform(-1, 1) if k < 22 else 0.0
+        yield level * rz(x) * 14 * (1 - k / n)
+
+
+def _thud(rnd, level, freq=95, ms=180):
+    """A heavy low impact: a decaying sine with a burst of muffled noise."""
+    import math
+    lp, n = LowPass(0.08), int(RATE * ms / 1000)
+    for k in range(n):
+        t = k / RATE
+        env = math.exp(-t * 26)
+        yield level * env * (math.sin(2 * math.pi * freq * t) + 1.5 * lp(rnd.uniform(-1, 1)) * math.exp(-t * 60))
+
+
+def _tone(freq, ms, level, square=False):
+    import math
+    n = int(RATE * ms / 1000)
+    for k in range(n):
+        v = math.sin(2 * math.pi * freq * k / RATE)
+        if square:
+            v = math.copysign(min(1.0, abs(v) * 3), v)
+        env = min(1.0, k / 40) * min(1.0, (n - k) / 80)
+        yield level * v * env
+
+
 def build_safe_sound():
-    """The safe opening: three dial clicks (7, 1, 4), the latch clunking free,
-    then the heavy door swinging on a creaky hinge."""
+    """The safe opening, as an electronic hotel safe: three keypad beeps (7, 1,
+    4), an "accepted" chime, a motor driving the bolt back into a clunk, then a
+    soft puff of air as the door springs open (at about 1.4s)."""
     import math
     import random
-    rnd = random.Random(714714)
-    n = int(RATE * 2.0)
-    out = [0.0] * n
-
-    def strike(t0, dur, parts, level):
-        res = [Resonator(f, r) for f, r in parts]
-        i0 = int(t0 * RATE)
-        for k in range(int(RATE * dur)):
-            if i0 + k >= n:
-                break
-            x = rnd.uniform(-1, 1) if k < 40 else 0.0          # short burst excites the metal
-            out[i0 + k] += level * sum(rz(x) for rz in res)
-
-    for t0 in (0.05, 0.27, 0.49):                              # dial clicks
-        strike(t0, 0.12, [(3300, 0.993), (1900, 0.99)], 9.0)
-    strike(0.78, 0.25, [(620, 0.995), (1150, 0.99), (240, 0.996)], 14.0)   # latch
-
-    # hinge: stick-slip pulses whose rate rises and falls as the door swings
-    r1, r2, r3 = Resonator(950, 0.992), Resonator(2350, 0.985), Resonator(520, 0.99)
-    t, i0, i1 = 0.0, int(1.0 * RATE), int(1.95 * RATE)
-    next_pulse = i0
+    rnd = random.Random(2)
+    out = [0.0] * int(RATE * 2.0)
+    # three key presses, each a short beep with a soft button click
+    for t0, f in ((0.04, 1336), (0.26, 1209), (0.48, 1336)):
+        _add(out, t0, _tick(rnd, 0.25, freq=3000, ms=8))
+        _add(out, t0 + 0.01, _tone(f, 95, 0.35, square=True))
+    # accepted: a rising two-note chime
+    _add(out, 0.70, _tone(1046, 85, 0.35))
+    _add(out, 0.79, _tone(1568, 140, 0.35))
+    # the motor drives the bolt back: a whirr that winds up and stops
+    lp = LowPass(0.25)
+    i0, i1 = int(0.98 * RATE), int(1.30 * RATE)
+    phase, phase2 = 0.0, 0.0
     for i in range(i0, i1):
         u = (i - i0) / (i1 - i0)
-        x = 0.0
-        if i >= next_pulse:
-            x = 1.0
-            rate = 35 + 110 * math.sin(math.pi * min(1.0, u * 1.2)) + rnd.uniform(-12, 12)
-            next_pulse = i + max(20, int(RATE / max(20, rate)))
-        env = min(1.0, u / 0.08) * (1 - u) ** 0.5
-        out[i] += env * (r1(x) * 22 + r2(x) * 12 + r3(x) * 10)
+        phase = (phase + (95 + 40 * u) / RATE) % 1.0
+        phase2 = (phase2 + (620 + 300 * u) / RATE) % 1.0
+        whine = math.sin(2 * math.pi * phase2) * 0.35
+        buzz = lp(2 * phase - 1)
+        env = min(1.0, u / 0.1) * min(1.0, (1 - u) / 0.08)
+        out[i] += env * 0.55 * (buzz + whine) * (0.8 + 0.2 * math.sin(2 * math.pi * 38 * i / RATE))
+    _add(out, 1.30, _thud(rnd, 0.7, freq=140, ms=120))      # bolt hits its stop
+    _add(out, 1.30, _tick(rnd, 0.5, freq=1200, ms=40))
+    # the door pops open on its spring: a soft puff of air
+    lp_air = LowPass(0.06)
+    i0, i1 = int(1.42 * RATE), int(1.85 * RATE)
+    for i in range(i0, i1):
+        u = (i - i0) / (i1 - i0)
+        out[i] += 0.9 * math.exp(-u * 5) * min(1.0, u / 0.05) * lp_air(rnd.uniform(-1, 1)) * 4
     write_voc('safe', normalize(out, 0.9))
 
 

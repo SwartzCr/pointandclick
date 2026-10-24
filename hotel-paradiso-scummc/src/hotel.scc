@@ -23,7 +23,7 @@ room Hotel {
     trans = 0;
 
     sound tvSnd = "tv.soun";       // two seconds of indistinct chatter
-    sound safeSnd = "safe.soun";   // dial clicks, the latch, a creaky hinge
+    sound safeSnd = "safe.soun";   // keypad beeps, a chime, the bolt motor, the door
 
     object door;
     object tv;
@@ -92,16 +92,16 @@ room Hotel {
         egoSay("Riveting."); waitForMessage();
     }
 
-    // Dial the code: three clicks, the latch, then the door swings open on
-    // its hinge. The door's image changes as the creak starts.
+    // Key in the code: three beeps, the accepted chime, the motor pulling the
+    // bolt back. The door's image changes as it pops open on its spring.
     local script openSafe() {
         ResRoom::showInterface(0);
         egoSay("Seven. One. Four."); waitForMessage();
         startSound(safeSnd);
-        delay(60);                  // clicks and latch: the first second of the sound
+        delay(84);                  // beeps, chime, motor and clunk: 1.4s
         safeOpen = 1;
         setObjectState(safe, tookKeycard ? 3 : 2);
-        delay(55);                  // let the hinge finish creaking
+        delay(30);                  // the puff of air as the door swings open
         ResRoom::showInterface(1);
         egoSay("It's open."); waitForMessage();
     }

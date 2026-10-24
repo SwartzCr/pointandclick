@@ -103,8 +103,9 @@ else gets a stock reply.
   writes 8-bit PCM `.voc` files, which ScummC's `soun` tool wraps into SOUN resources:
   the toilet flush (the toilet alternates between two object states while it plays), two
   seconds of indistinct TV chatter when the TV is switched on (with the weather report
-  shown on screen), and the safe opening (three dial clicks, the latch, then a creaking
-  hinge, with the door's image switching as the creak starts).
+  shown on screen), and the safe opening, as an electronic hotel safe (three keypad beeps, an
+  "accepted" chime, the motor pulling the bolt back, and a puff of air as the door
+  springs open, with the door's image switching at that moment).
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
   in after them, and the costume's 16 local colours are mapped onto room indices with
