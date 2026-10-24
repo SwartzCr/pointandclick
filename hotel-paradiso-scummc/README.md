@@ -69,8 +69,8 @@ The door tells you what's missing, and so does the front desk on the phone.
    3. In the bathroom, use the screwdriver with the mirror to take the mirror door off.
    4. Back in the bedroom, use the mirror with the coffee table, the powder with the
       mirror, and the razor (from the medicine cabinet) with the powder.
-   5. Open the bed to find your wallet under the covers, and open the wallet to take out
-      the dollar bill.
+   5. Open the bed to pull back the covers, pick up your wallet, and open the wallet to
+      take out the dollar bill.
    6. Use the dollar bill with the three lines. One is enough.
 4. Open the door.
 
@@ -98,7 +98,7 @@ The door tells you what's missing, and so does the front desk on the phone.
   has an entry for that verb, or `defaultAction` if not. The inventory item rides along as
   `objB`, so objects can tell "Use" from "Use razor with".
 * **State.** Opening things, the lamp, the TV and the safe are object states with their own
-  images. The candy bar, matchbook and uniform are drawn as part of their container's
+  images. The candy bar, matchbook, uniform and wallet are drawn as part of their container's
   "open" image, but they're separate objects with `parent` and `parent_state` set, so the
   engine only lets the cursor find them while the container is in the state that shows
   them. Each is declared before its container so the cursor finds the item first. The

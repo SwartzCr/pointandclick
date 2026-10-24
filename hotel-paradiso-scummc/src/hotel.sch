@@ -37,7 +37,7 @@ bit hasScrewdriver, tookScrewdriver, hasPowder, tookPowder;
 bit hasMirror, mirrorRemoved;
 int tableMirrorState;               // 0 not on the table, 1 bare, 2 powder, 3 three lines, 4 two lines
 bit readyToParty;                   // party prep 3: pre-gamed
-bit hasWallet, tookWallet, hasDollar;   // wallet under the bed covers, its dollar bill
+bit hasWallet, tookWallet, hasDollar, bedOpen;   // wallet under the bed covers, its dollar bill
 bit wearingUniform, tookUniform, dresserOpen;
 bit hasTowel, hasSoap, tookTowel, tookSoap;
 bit hasShaver, tookShaver;

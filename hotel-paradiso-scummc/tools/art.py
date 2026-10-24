@@ -95,7 +95,7 @@ def put(img, x, y, col):
 
 
 # --------------------------------------------------------------------------- room
-DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, dresser=0,
+DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, dresser=0, bed=0,
                table_matchbook=0, table_candy=0, table_mirror=0, table_uniform=0,
                table_towel=0, table_soap=0)
 
@@ -386,7 +386,9 @@ def draw_phone(img, d):
         put(img, x, 68, 'grey_hi')
 
 
-def draw_bed(img, d):
+def draw_bed(img, d, st=0):
+    """st: 0 made (well, covered), 1 covers pulled back with the wallet on the
+    sheet, 2 covers pulled back, no wallet."""
     # headboard against the wall
     rect(d, 236, 46, 316, 84, 'wood_dk')
     rect(d, 238, 48, 314, 82, 'wood')
@@ -400,10 +402,33 @@ def draw_bed(img, d):
     rect(d, 280, 76, 310, 86, 'pillow')
     rect(d, 244, 85, 274, 86, 'sheet_dk')
     rect(d, 280, 85, 310, 86, 'sheet_dk')
-    rect(d, 238, 90, 316, 120, 'blanket')
-    rect(d, 238, 90, 316, 93, 'sheet')
-    for y in range(96, 120, 6):
-        rect(d, 238, y, 316, y + 1, 'blanket_dk')
+    if st == 0:
+        rect(d, 238, 90, 316, 120, 'blanket')
+        rect(d, 238, 90, 316, 93, 'sheet')
+        for y in range(96, 120, 6):
+            rect(d, 238, y, 316, y + 1, 'blanket_dk')
+    else:
+        # covers thrown back toward the foot of the bed: rumpled bottom sheet,
+        # then the blanket in a thick fold with the top sheet's hem showing
+        rect(d, 238, 86, 316, 108, 'sheet')
+        for (x0, y0, x1) in ((242, 92, 258), (284, 96, 306), (250, 103, 268), (292, 89, 300)):
+            rect(d, x0, y0, x1, y0 + 1, 'sheet_dk')     # creases
+        rect(d, 238, 106, 316, 109, 'pillow')           # top sheet hem
+        rect(d, 238, 108, 316, 109, 'sheet_dk')
+        rect(d, 238, 109, 316, 120, 'blanket')
+        rect(d, 238, 109, 316, 111, 'blanket_hi')        # the fold catches the light
+        for y in (114, 117):
+            rect(d, 238, y, 316, y + 1, 'blanket_dk')
+        if st == 1:
+            # a brown leather wallet, slightly open, a dollar bill peeking out
+            rect(d, 262, 95, 278, 103, 'wood_xdk')
+            rect(d, 263, 96, 277, 102, 'wood_dk')
+            rect(d, 263, 96, 277, 97, 'wood')
+            rect(d, 270, 96, 271, 102, 'wood_xdk')        # the fold
+            rect(d, 265, 94, 270, 96, 'meadow_hi')        # the bill
+            put(img, 266, 95, 'meadow_dk')
+            for x in range(264, 277, 2):
+                put(img, x, 101, 'brass')                  # stitching
     rect(d, 238, 120, 316, 128, 'blanket_dk')
     rect(d, 238, 120, 316, 121, 'blanket_hi')
     rect(d, 236, 74, 238, 128, 'wood_dk')
@@ -589,7 +614,7 @@ def render(state=None):
     draw_nightstand(img, d, s['drawer'])
     draw_lamp(img, d, s['lamp'])
     draw_phone(img, d)
-    draw_bed(img, d)
+    draw_bed(img, d, s['bed'])
     draw_painting_safe(img, d, s['safe'])
     draw_coffee_table(img, d, s)
     return img

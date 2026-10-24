@@ -44,6 +44,7 @@ room Hotel {
     object nightstand;
     object painting;
     object safe;
+    object bed;
     object screwdriver;
     object powder;
     object cursor;
@@ -243,6 +244,14 @@ room Hotel {
         showSafe();
         ResRoom::refreshInventory();
         egoSay("A screwdriver. Past me had plans. Unclear ones."); waitForMessage();
+    }
+
+    local script takeWallet() {
+        tookWallet = 1;
+        hasWallet = 1;
+        setObjectState(bed, 2);
+        ResRoom::refreshInventory();
+        egoSay("My wallet! I slept on it all day. That explains the bruise."); waitForMessage();
     }
 
     local script takePowder() {
@@ -1033,36 +1042,78 @@ room Hotel {
         }
     }
 
+    // ------------------------------------------------------------ wallet
+    // On the bottom sheet. Only clickable while the covers are pulled back
+    // with the wallet still there (bed state 1); declared before the bed so
+    // the cursor finds it first.
+    object wallet {
+        x = 262; y = 94; w = 16; h = 10;
+        hs_x = -22; hs_y = 45;
+        dir = EAST;
+        name = "wallet";
+        parent = bed;
+        parent_state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("My wallet, warm and slightly flattened. There's a dollar bill sticking out."); waitForMessage();
+            return;
+        case PickUp:
+            takeWallet();
+            return;
+        case Open:
+        case Use:
+            egoSay("I'll take it first."); waitForMessage();
+            return;
+        }
+    }
+
     // ------------------------------------------------------------ bed
+    // Opening it pulls the covers back: state 1 with the wallet on the
+    // sheet, state 2 once it's been taken.
     object bed {
         x = 232; y = 48; w = 88; h = 88;
         hs_x = 8; hs_y = 91;
         dir = EAST;
         name = "bed";
+        states = {
+            { 8, 91, "objects/bed_1.bmp" },   // covers back, wallet on the sheet
+            { 8, 91, "objects/bed_2.bmp" }    // covers back, no wallet
+        };
+        state = 0;
 
         verb(int vrb, int objA, int objB) {
         case LookAt:
-            if(tookWallet) { egoSay("Unmade. My work."); waitForMessage(); }
+            if(bedOpen && !tookWallet) { egoSay("My wallet, lying right where I slept."); waitForMessage(); }
+            else if(tookWallet) { egoSay("Unmade. My work."); waitForMessage(); }
             else { egoSay("Unmade. My work. There's a lump under the covers."); waitForMessage(); }
             return;
         case Use:
             egoSay("No time for a nap. There's a party on."); waitForMessage();
             return;
         case Push:
-        case Pull:
             egoSay("I'm not wrestling a mattress today."); waitForMessage();
             return;
         case PickUp:
-            egoSay("Not with my back."); waitForMessage();
+            if(bedOpen && !tookWallet) takeWallet();
+            else { egoSay("Not with my back."); waitForMessage(); }
             return;
         case Open:
-            if(tookWallet) { egoSay("I check under the covers again. One sock. Not mine."); waitForMessage(); }
+        case Pull:
+            if(bedOpen) { egoSay("The covers are already back."); waitForMessage(); }
             else {
-                tookWallet = 1;
-                hasWallet = 1;
-                ResRoom::refreshInventory();
-                egoSay("I pull back the covers. My wallet! I slept on it all day."); waitForMessage();
+                bedOpen = 1;
+                setObjectState(bed, tookWallet ? 2 : 1);
+                if(tookWallet) { egoSay("One sock. Not mine."); waitForMessage(); }
+                else { egoSay("I pull back the covers. There's my wallet!"); waitForMessage(); }
             }
+            return;
+        case Close:
+            if(bedOpen) {
+                bedOpen = 0;
+                setObjectState(bed, 0);
+                egoSay("I make the bed. Loosely."); waitForMessage();
+            } else { egoSay("It's as made as it's going to get."); waitForMessage(); }
             return;
         case TalkTo:
             egoSay("Goodbye, bed. You were the best part of this trip."); waitForMessage();

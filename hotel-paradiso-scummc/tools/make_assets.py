@@ -50,6 +50,7 @@ OBJECT_STATES = {
     'nightstand': ((200, 72, 32, 24), [dict(drawer=1), dict(drawer=2)]),
     'safe':       ((248, 8, 48, 40), [dict(safe=i) for i in range(1, 6)]),
     'dresser':    ((72, 64, 56, 32), [dict(dresser=1), dict(dresser=2)]),
+    'bed':        ((232, 48, 88, 88), [dict(bed=1), dict(bed=2)]),
 }
 # items set down on the coffee table, one 16-pixel slot each
 # (the mirror has four: bare, with the powder, three lines, two lines)
