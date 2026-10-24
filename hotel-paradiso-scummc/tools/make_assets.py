@@ -48,18 +48,21 @@ OBJECT_STATES = {
     'minibar':    ((144, 72, 32, 24), [dict(minibar=1), dict(minibar=2)]),
     'lamp':       ((200, 32, 16, 40), [dict(lamp=1)]),
     'nightstand': ((200, 72, 32, 24), [dict(drawer=1), dict(drawer=2)]),
-    'safe':       ((248, 8, 48, 40), [dict(safe=1), dict(safe=2), dict(safe=3)]),
+    'safe':       ((248, 8, 48, 40), [dict(safe=i) for i in range(1, 6)]),
     'dresser':    ((72, 64, 56, 32), [dict(dresser=1), dict(dresser=2)]),
 }
 # items set down on the coffee table, one 16-pixel slot each
+# (the mirror has four: bare, with the powder, three lines, two lines)
 for _item in art.TABLE_SLOTS:
-    OBJECT_STATES['table_' + _item] = ((art.table_slot_x(_item), 104, 16, 16), [{'table_' + _item: 1}])
+    _n = 4 if _item == 'mirror' else 1
+    OBJECT_STATES['table_' + _item] = ((art.table_slot_x(_item), 104, 16, 16),
+                                       [{'table_' + _item: i} for i in range(1, _n + 1)])
 
 # Bathroom object states, cropped from art.render_bathroom(). Must match the
 # object declarations in src/bathroom.scc.
 BATH_OBJECT_STATES = {
     'curtain': ((16, 8, 96, 72), [dict(curtain=1)]),
-    'mirror':  ((192, 16, 32, 40), [dict(cabinet=1), dict(cabinet=2)]),
+    'mirror':  ((192, 16, 32, 40), [dict(cabinet=i) for i in range(1, 5)]),
     'toilet':  ((128, 48, 40, 56), [dict(flush=1), dict(flush=2)]),
     'towel':   ((248, 32, 40, 40), [dict(towel=1)]),
     'soap':    ((184, 56, 16, 8), [dict(soap=1)]),

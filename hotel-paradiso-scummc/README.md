@@ -3,8 +3,9 @@
 A one-room point-and-click adventure written in [ScummC](https://github.com/AlbanBedel/scummc)
 and compiled to SCUMM v6 bytecode, the engine behind *Day of the Tentacle*. It runs in ScummVM.
 
-You wake up in Room 714 long after check-out. The door only opens with your key card,
-and you have no idea where you put it.
+You wake up in Room 714 at nine at night, and the big party up on the ninth floor is
+tonight. You're in no state to go: you won't leave the room until you've eaten something,
+you're in costume, and you've pre-gamed.
 
 ## Play
 
@@ -25,37 +26,50 @@ F5 opens the menu, `.` skips a line of dialogue.
 
 **Room 714.** Twelve pieces of furniture you can interact with: door, TV, dresser,
 curtains, minibar, lamp, phone, nightstand, painting, wall safe, bed and coffee table.
-The things you can take (candy bar, matchbook, key card, bellhop uniform) are objects of
+The things you can take (candy bar, matchbook, bellhop uniform, and the screwdriver and
+little bag of powder in the safe) are objects of
 their own, clickable only while you can see them.
 
 There's a bellhop uniform folded in the dresser's top drawer. Take it and use it on
 yourself to put it on: the player switches to a second costume with its own full set of walking and
-talking frames. **Use** it again to take it off. It isn't needed to finish, but it does
-change the ending slightly.
+talking frames. **Use** it again to take it off. It's a costume party, so you need it on
+to leave.
 
 The coffee table can't be picked up, but you can put any inventory item down on it
-("Use matches with coffee table") and pick it back up later.
+("Use matches with coffee table") and pick it back up later. It's also where the pre-game
+happens: the cabinet mirror goes on the table, the powder goes on the mirror, the razor
+chops it into three lines, and **Use** on the mirror does one.
 
 **The bathroom**, through the doorway on the left wall: a tub with a shower curtain that
 opens and closes, a bath mat, a toilet that flushes (animated, with a sound), a sink, a
 mirror that opens into a medicine cabinet with a shaving kit inside, a towel and a bar of
-soap. The towel, soap and shaving kit can be taken. Walk through the doorway on the right
+soap. The towel, soap and shaving kit can be taken, and the screwdriver takes the mirror
+door off the cabinet. Walk through the doorway on the right
 to go back.
 
-The inventory holds up to eight items in two columns of four, so it uses short labels
-("matches", "keycard", "razor" for the shaving kit); the objects in the rooms keep their
-full names. Everything except the razor can be set down on the coffee table.
+The inventory holds up to ten items in two columns of five, so it uses short labels
+("matches", "razor" for the shaving kit); the objects in the rooms keep their
+full names.
 
 Each object has its own verb code and answers the verbs that make sense for it; anything
 else gets a stock reply.
 
 <details><summary>Walkthrough (spoilers)</summary>
 
-1. Open the nightstand and pick up the matchbook inside.
-2. Look at the matchbook: too dark. Use the lamp, then look again. The code is 714.
-3. Pull the painting to reveal the wall safe. Calling the front desk hints at this too.
-4. Open the safe and pick up the key card.
-5. Use the key card with the door.
+The door tells you what's missing, and so does the front desk on the phone.
+
+1. **Eat.** Open the minibar, take the candy bar, and use it on yourself.
+2. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.
+3. **Pre-game.**
+   1. Open the nightstand and take the matchbook. Turn on the lamp and look at the
+      matchbook: the safe code is 714.
+   2. Pull the painting to reveal the wall safe, open it, and take the screwdriver and the
+      little bag of powder.
+   3. In the bathroom, use the screwdriver with the mirror to take the mirror door off.
+   4. Back in the bedroom, use the mirror with the coffee table, the powder with the
+      mirror, and the razor (from the medicine cabinet) with the powder.
+   5. Use the three lines. One is enough.
+4. Open the door.
 
 </details>
 
@@ -79,12 +93,16 @@ else gets a stock reply.
 * **Actions.** A room click queues `doSentence(verb, object, 0, item)`. The engine then runs
   `sentenceHandler`, which walks the player over and starts the object's own verb code if it
   has an entry for that verb, or `defaultAction` if not. The inventory item rides along as
-  `objB`, so objects can tell "Use" from "Use key card with".
+  `objB`, so objects can tell "Use" from "Use razor with".
 * **State.** Opening things, the lamp, the TV and the safe are object states with their own
-  images. The candy bar, matchbook and key card are drawn as part of their container's
+  images. The candy bar, matchbook and uniform are drawn as part of their container's
   "open" image, but they're separate objects with `parent` and `parent_state` set, so the
   engine only lets the cursor find them while the container is in the state that shows
-  them. Each is declared before its container so the cursor finds the item first. The safe sits on the same spot as the painting and starts "untouchable" (engine
+  them. Each is declared before its container so the cursor finds the item first. The
+  screwdriver and the bag in the safe (and the shaving kit, which shows both with the
+  cabinet door open and with it unscrewed) can't use `parent_state`, which names just one
+  state: the safe has an open image for each combination of what's left inside, and a
+  script switches each item between clickable and untouchable to match. The safe sits on the same spot as the painting and starts "untouchable" (engine
   class 32); moving the painting swaps which of the two the cursor finds.
 * **Coffee table.** The table is a hole in the walk boxes, with a margin of half a sprite
   width on each side, so the player is never drawn over it while standing behind its

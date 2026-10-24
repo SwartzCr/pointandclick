@@ -4,7 +4,8 @@
  * A tub with a shower curtain, a bath mat, a toilet that flushes (animated,
  * with a sound), a pedestal sink with a bar of soap, a mirror that opens into
  * a medicine cabinet with a shaving kit inside, and a towel on a rail. The
- * soap, towel and shaving kit can be taken.
+ * soap, towel and shaving kit can be taken, and with the screwdriver from the
+ * bedroom safe the mirror door comes off the cabinet.
  * The doorway on the right leads back to the bedroom.
  */
 
@@ -21,14 +22,44 @@ room Bathroom {
     object soap;
     object towel;
     object mirror;
+    object shavingKit;
 
     // ------------------------------------------------------------ scripts
+    // The cabinet's image: 0 closed; open with the door swung aside (1 kit,
+    // 2 empty) or with the door unscrewed and gone (3 kit, 4 empty). The kit
+    // has no parent, since it shows in two states; this sets whether it's
+    // clickable.
+    local script showCabinet() {
+        if(!cabinetOpen && !mirrorRemoved) {
+            setObjectState(mirror, 0);
+            setObjectClass(shavingKit, [ SET_CLASS | UNTOUCHABLE ]);
+            return;
+        }
+        setObjectState(mirror, (mirrorRemoved ? 3 : 1) + tookShaver);
+        if(tookShaver) setObjectClass(shavingKit, [ SET_CLASS | UNTOUCHABLE ]);
+        else setObjectClass(shavingKit, [ UNTOUCHABLE ]);
+    }
+
     local script takeShaver() {
         tookShaver = 1;
         hasShaver = 1;
-        setObjectState(mirror, 2);
+        showCabinet();
         ResRoom::refreshInventory();
         egoSay("A shaving kit. I could use one."); waitForMessage();
+    }
+
+    // Unscrew the cabinet door's hinges and take the mirror
+    local script removeMirror() {
+        ResRoom::showInterface(0);
+        egoSay("Two screws per hinge. Lefty loosey..."); waitForMessage();
+        mirrorRemoved = 1;
+        cabinetOpen = 1;
+        hasMirror = 1;
+        setObjectName(mirror, "medicine cabinet");
+        showCabinet();
+        ResRoom::refreshInventory();
+        ResRoom::showInterface(1);
+        egoSay("The mirror door comes right off. Nice and flat."); waitForMessage();
     }
 
     local script goBedroom() {
@@ -266,16 +297,14 @@ room Bathroom {
     }
 
     // ------------------------------------------------------------ shaving kit
-    // On the cabinet's bottom shelf. Only clickable while the cabinet is open
-    // with the kit inside (state 1); declared before the mirror so the cursor
-    // finds it first.
+    // On the cabinet's bottom shelf. Only clickable while the cabinet shows
+    // it (see showCabinet); declared before the mirror so the cursor finds it
+    // first.
     object shavingKit {
         x = 200; y = 44; w = 16; h = 8;
         hs_x = 8; hs_y = 66;
         dir = NORTH;
         name = "shaving kit";
-        parent = mirror;
-        parent_state = 1;
 
         verb(int vrb, int objA, int objB) {
         case LookAt:
@@ -292,8 +321,8 @@ room Bathroom {
     }
 
     // ------------------------------------------------------------ mirror
-    // Swings open into a medicine cabinet: state 1 with the shaving kit on
-    // the bottom shelf, state 2 once it's been taken.
+    // Swings open into a medicine cabinet. The screwdriver takes the mirror
+    // door off altogether, and the object is renamed "medicine cabinet".
     object mirror {
         x = 192; y = 16; w = 32; h = 40;
         hs_x = 16; hs_y = 94;
@@ -301,7 +330,9 @@ room Bathroom {
         name = "mirror";
         states = {
             { 16, 94, "objects/bath_mirror_1.bmp" },   // open, shaving kit inside
-            { 16, 94, "objects/bath_mirror_2.bmp" }    // open, without it
+            { 16, 94, "objects/bath_mirror_2.bmp" },   // open, without it
+            { 16, 94, "objects/bath_mirror_3.bmp" },   // door removed, kit inside
+            { 16, 94, "objects/bath_mirror_4.bmp" }    // door removed, without it
         };
         state = 0;
 
@@ -311,7 +342,8 @@ room Bathroom {
                 egoSay("Three tiny bottles, a shower cap, a sewing kit, and a shaving kit."); waitForMessage();
             } else if(cabinetOpen) {
                 egoSay("Three tiny bottles, a shower cap and a sewing kit."); waitForMessage();
-                egoSay("Nothing I need. Everything I'd steal, though."); waitForMessage();
+                if(mirrorRemoved) { egoSay("And no door. That one's on me."); waitForMessage(); }
+                else { egoSay("The mirror door's held on by two hinges. Screwed on."); waitForMessage(); }
             } else if(wearingUniform) {
                 egoSay("Dashing. Truly a bellhop among bellhops."); waitForMessage();
             } else {
@@ -323,23 +355,29 @@ room Bathroom {
             if(cabinetOpen) { egoSay("It's already open."); waitForMessage(); }
             else {
                 cabinetOpen = 1;
-                setObjectState(mirror, tookShaver ? 2 : 1);
+                showCabinet();
                 egoSay("It's a medicine cabinet behind the mirror."); waitForMessage();
             }
             return;
         case Close:
         case Push:
-            if(cabinetOpen) {
+            if(mirrorRemoved) { egoSay("There's no door left to close."); waitForMessage(); }
+            else if(cabinetOpen) {
                 cabinetOpen = 0;
-                setObjectState(mirror, 0);
+                showCabinet();
             } else { egoSay("It's closed."); waitForMessage(); }
             return;
         case PickUp:
             if(cabinetOpen && !tookShaver) takeShaver();
-            else { egoSay("It's screwed to the wall."); waitForMessage(); }
+            else if(mirrorRemoved) { egoSay("I already have the mirror. The rest is bolted to the wall."); waitForMessage(); }
+            else { egoSay("It's screwed to the wall. I'd need a screwdriver."); waitForMessage(); }
             return;
         case Use:
-            if(objB == invTowel) { egoSay("I polish the mirror. Now I can see myself more clearly. Mixed feelings."); waitForMessage(); }
+            if(objB == invScrewdriver) {
+                if(mirrorRemoved) { egoSay("I've already taken the door off."); waitForMessage(); }
+                else removeMirror();
+            } else if(mirrorRemoved) { egoSay("There's no mirror left. I'll use the one I'm carrying."); waitForMessage(); }
+            else if(objB == invTowel) { egoSay("I polish the mirror. Now I can see myself more clearly. Mixed feelings."); waitForMessage(); }
             else if(objB == invShaver) { egoSay("I shave in the mirror. Very dapper. Only one nick."); waitForMessage(); }
             else { egoSay("I check my teeth. All present."); waitForMessage(); }
             return;
@@ -381,6 +419,12 @@ room Bathroom {
     // ------------------------------------------------------------ entry
     local script entry() {
         createBoxMatrix();
+        unless(bathroomVisited) {
+            bathroomVisited = 1;
+            setObjectClass(shavingKit, [ SET_CLASS | UNTOUCHABLE ]);
+        }
+        // The engine drops renamed room objects' names when you leave a room
+        if(mirrorRemoved) setObjectName(mirror, "medicine cabinet");
         putActorAt(VAR_EGO, 310, 122, Bathroom);
         setCurrentActor(VAR_EGO);
         setActorDirection(270);

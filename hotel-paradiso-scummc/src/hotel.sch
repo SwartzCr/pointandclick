@@ -15,7 +15,8 @@ verb TalkTo, Use, WalkTo;
 verb SntcLine;
 
 // Text inventory: each carried item is a verb in the right-hand column
-verb invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap, invShaver;
+verb invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver;
+verb invScrewdriver, invPowder, invMirror;
 
 actor guest;
 
@@ -29,13 +30,18 @@ bit gameOver;
 // Puzzle state
 bit lampOn, tvOn, curtainsOpen, minibarOpen, drawerOpen;
 bit safeOpen, knowsCode;
-bit hasMatchbook, hasKeycard, hasCandy, hasUniform;
-bit tookMatchbook, tookKeycard, tookCandy;
+bit hasMatchbook, hasCandy, hasUniform;
+bit tookMatchbook, tookCandy;
+bit ateCandy;                       // party prep 1: something in my stomach
+bit hasScrewdriver, tookScrewdriver, hasPowder, tookPowder;
+bit hasMirror, mirrorRemoved;
+int tableMirrorState;               // 0 not on the table, 1 bare, 2 powder, 3 three lines, 4 two lines
+bit readyToParty;                   // party prep 3: pre-gamed
 bit wearingUniform, tookUniform, dresserOpen;
 bit hasTowel, hasSoap, tookTowel, tookSoap;
 bit hasShaver, tookShaver;
 bit bathCurtainOpen, cabinetOpen;
-bit hotelVisited;
+bit hotelVisited, bathroomVisited;
 bit tvAd;
 int phoneCalls;
 

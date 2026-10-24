@@ -67,40 +67,46 @@ room ResRoom {
         setVerbOn();
         redrawVerb();
 
-        // Inventory slots, shown only while the item is carried
-        // Labels are short so they fit two 62-pixel columns of four
-        setCurrentVerb(invMatchbook); initVerb(); setVerbName("matches");
-        setCurrentVerb(invKeycard);   initVerb(); setVerbName("keycard");
-        setCurrentVerb(invCandy);     initVerb(); setVerbName("candy");
-        setCurrentVerb(invUniform);   initVerb(); setVerbName("uniform");
-        setCurrentVerb(invTowel);     initVerb(); setVerbName("towel");
-        setCurrentVerb(invSoap);      initVerb(); setVerbName("soap");
-        setCurrentVerb(invShaver);    initVerb(); setVerbName("razor");
-        makeVerb(invMatchbook, 196, 155);
-        makeVerb(invKeycard,   196, 165);
-        makeVerb(invCandy,     196, 175);
-        makeVerb(invUniform,   196, 185);
-        makeVerb(invTowel,     258, 155);
-        makeVerb(invSoap,      258, 165);
-        makeVerb(invShaver,    258, 175);
-        setCurrentVerb(invMatchbook); setVerbColor(C_YELLOW);
-        setCurrentVerb(invKeycard);   setVerbColor(C_YELLOW);
-        setCurrentVerb(invCandy);     setVerbColor(C_YELLOW);
-        setCurrentVerb(invUniform);   setVerbColor(C_YELLOW);
-        setCurrentVerb(invTowel);     setVerbColor(C_YELLOW);
-        setCurrentVerb(invSoap);      setVerbColor(C_YELLOW);
-        setCurrentVerb(invShaver);    setVerbColor(C_YELLOW);
+        // Inventory slots, shown only while the item is carried.
+        // Labels are short so they fit two 62-pixel columns of five
+        setCurrentVerb(invMatchbook);   initVerb(); setVerbName("matches");
+        setCurrentVerb(invCandy);       initVerb(); setVerbName("candy");
+        setCurrentVerb(invUniform);     initVerb(); setVerbName("uniform");
+        setCurrentVerb(invTowel);       initVerb(); setVerbName("towel");
+        setCurrentVerb(invSoap);        initVerb(); setVerbName("soap");
+        setCurrentVerb(invShaver);      initVerb(); setVerbName("razor");
+        setCurrentVerb(invScrewdriver); initVerb(); setVerbName("driver");
+        setCurrentVerb(invPowder);      initVerb(); setVerbName("powder");
+        setCurrentVerb(invMirror);      initVerb(); setVerbName("mirror");
+        makeVerb(invMatchbook,   196, 154);
+        makeVerb(invCandy,       196, 163);
+        makeVerb(invUniform,     196, 172);
+        makeVerb(invTowel,       196, 181);
+        makeVerb(invSoap,        196, 190);
+        makeVerb(invShaver,      258, 154);
+        makeVerb(invScrewdriver, 258, 163);
+        makeVerb(invPowder,      258, 172);
+        makeVerb(invMirror,      258, 181);
+        setCurrentVerb(invMatchbook);   setVerbColor(C_YELLOW);
+        setCurrentVerb(invCandy);       setVerbColor(C_YELLOW);
+        setCurrentVerb(invUniform);     setVerbColor(C_YELLOW);
+        setCurrentVerb(invTowel);       setVerbColor(C_YELLOW);
+        setCurrentVerb(invSoap);        setVerbColor(C_YELLOW);
+        setCurrentVerb(invShaver);      setVerbColor(C_YELLOW);
+        setCurrentVerb(invScrewdriver); setVerbColor(C_YELLOW);
+        setCurrentVerb(invPowder);      setVerbColor(C_YELLOW);
+        setCurrentVerb(invMirror);      setVerbColor(C_YELLOW);
         refreshInventory();
     }
 
-    // Put one carried item in the next free inventory slot: four rows in
+    // Put one carried item in the next free inventory slot: five rows in
     // each of two columns, filled top to bottom, left column first.
     script placeInv(int vrb, int slot) {
         setCurrentVerb(vrb);
-        if(slot < 4)
-            setVerbXY(196, 155 + slot * 10);
+        if(slot < 5)
+            setVerbXY(196, 154 + slot * 9);
         else
-            setVerbXY(258, 155 + (slot - 4) * 10);
+            setVerbXY(258, 154 + (slot - 5) * 9);
         setVerbOn();
         redrawVerb();
     }
@@ -111,22 +117,26 @@ room ResRoom {
     script refreshInventory() {
         int slot;
 
-        setCurrentVerb(invMatchbook); setVerbOff(); redrawVerb();
-        setCurrentVerb(invKeycard);   setVerbOff(); redrawVerb();
-        setCurrentVerb(invCandy);     setVerbOff(); redrawVerb();
-        setCurrentVerb(invUniform);   setVerbOff(); redrawVerb();
-        setCurrentVerb(invTowel);     setVerbOff(); redrawVerb();
-        setCurrentVerb(invSoap);      setVerbOff(); redrawVerb();
-        setCurrentVerb(invShaver);    setVerbOff(); redrawVerb();
+        setCurrentVerb(invMatchbook);   setVerbOff(); redrawVerb();
+        setCurrentVerb(invCandy);       setVerbOff(); redrawVerb();
+        setCurrentVerb(invUniform);     setVerbOff(); redrawVerb();
+        setCurrentVerb(invTowel);       setVerbOff(); redrawVerb();
+        setCurrentVerb(invSoap);        setVerbOff(); redrawVerb();
+        setCurrentVerb(invShaver);      setVerbOff(); redrawVerb();
+        setCurrentVerb(invScrewdriver); setVerbOff(); redrawVerb();
+        setCurrentVerb(invPowder);      setVerbOff(); redrawVerb();
+        setCurrentVerb(invMirror);      setVerbOff(); redrawVerb();
 
         slot = 0;
-        if(hasMatchbook) { placeInv(invMatchbook, slot); slot++; }
-        if(hasKeycard)   { placeInv(invKeycard, slot);   slot++; }
-        if(hasCandy)     { placeInv(invCandy, slot);     slot++; }
-        if(hasUniform)   { placeInv(invUniform, slot);   slot++; }
-        if(hasTowel)     { placeInv(invTowel, slot);     slot++; }
-        if(hasSoap)      { placeInv(invSoap, slot);      slot++; }
-        if(hasShaver)    { placeInv(invShaver, slot);    slot++; }
+        if(hasMatchbook)   { placeInv(invMatchbook, slot);   slot++; }
+        if(hasCandy)       { placeInv(invCandy, slot);       slot++; }
+        if(hasUniform)     { placeInv(invUniform, slot);     slot++; }
+        if(hasTowel)       { placeInv(invTowel, slot);       slot++; }
+        if(hasSoap)        { placeInv(invSoap, slot);        slot++; }
+        if(hasShaver)      { placeInv(invShaver, slot);      slot++; }
+        if(hasScrewdriver) { placeInv(invScrewdriver, slot); slot++; }
+        if(hasPowder)      { placeInv(invPowder, slot);      slot++; }
+        if(hasMirror)      { placeInv(invMirror, slot);      slot++; }
     }
 
     script showInterface(int show) {
@@ -150,7 +160,7 @@ room ResRoom {
             if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO)
                 obj = VAR_EGO;
             inv = getVerbAt(VAR_MOUSE_X, VAR_MOUSE_Y);
-            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap, invShaver ]))
+            unless(isAnyOf(inv, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror ]))
                 inv = 0;
             hoverObj = obj;
             hoverInv = inv;
@@ -184,7 +194,7 @@ room ResRoom {
         if(gameOver) return;
 
         if(area == 1) {
-            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap, invShaver ]))
+            if(isAnyOf(cmd, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror ]))
                 inventoryClick(cmd);
             else if(isAnyOf(cmd, [ Open, Close, TalkTo, PickUp, LookAt,
                                    Use, Push, Pull, WalkTo ])) {
@@ -301,7 +311,12 @@ room ResRoom {
             return;
         }
         if(withItem) {
-            egoSay("Combining those won't help.");
+            if(isAnyOf(withItem, [ invPowder, invMirror ]) && isAnyOf(item, [ invPowder, invMirror ]))
+                egoSay("Not in my hands. I'd lose half of it. The mirror needs to lie flat.");
+            else if(isAnyOf(withItem, [ invPowder, invShaver ]) && isAnyOf(item, [ invPowder, invShaver ]))
+                egoSay("I need to pour it out on something flat first.");
+            else
+                egoSay("Combining those won't help.");
             withItem = 0;
             curVerb = WalkTo;
             return;
@@ -314,11 +329,26 @@ room ResRoom {
             else
                 egoSay("Hotel Paradiso matches. Classy.");
             break;
-        case invKeycard:
+        case invScrewdriver:
             if(curVerb == LookAt)
-                egoSay("My key card. Room 714. My ticket out of here.");
+                egoSay("A screwdriver with a red handle. Why did I lock this in the safe?");
             else
-                egoSay("It goes in the slot on the door.");
+                egoSay("It undoes screws. Use it on something with screws in it.");
+            break;
+        case invPowder:
+            if(curVerb == LookAt) {
+                egoSay("A little bag of white powder."); waitForMessage();
+                egoSay("Party supplies. Past me thought of everything.");
+            } else if(curVerb == Open)
+                egoSay("Not here. I need a nice flat surface first.");
+            else
+                egoSay("I need to pour it out on something flat first.");
+            break;
+        case invMirror:
+            if(curVerb == LookAt)
+                egoSay("The mirror door off the medicine cabinet. Nice and flat.");
+            else
+                egoSay("It needs to lie flat somewhere. The coffee table, maybe.");
             break;
         case invUniform:
             if(curVerb == LookAt && wearingUniform)
@@ -334,7 +364,7 @@ room ResRoom {
             if(curVerb == LookAt)
                 egoSay("A Paradiso Bar. Fourteen dollars of nougat.");
             else
-                egoSay("I could eat it. I've earned it.");
+                egoSay("I could eat it. Use it, I mean. I'm starving.");
             break;
         case invTowel:
             if(curVerb == LookAt)
@@ -380,8 +410,17 @@ room ResRoom {
             wearUniform(1);
         else if(item == invCandy) {
             hasCandy = 0;
+            ateCandy = 1;
             refreshInventory();
-            egoSay("Mmm. That's going on the bill.");
+            egoSay("I wolf it down in three bites."); waitForMessage();
+            egoSay("Mmm. Nougat and regret. That's going on the bill.");
+        } else if(item == invPowder)
+            egoSay("Straight from the bag? I'm not an animal. I need a mirror and a flat surface.");
+        else if(item == invScrewdriver)
+            egoSay("I'm not that loose.");
+        else if(item == invMirror) {
+            if(wearingUniform) egoSay("Dashing. Truly a bellhop among bellhops.");
+            else egoSay("I look like I slept in a hotel. Which I did.");
         } else if(item == invTowel)
             egoSay("I pat my face dry. Refreshing, in a hotel sort of way.");
         else if(item == invSoap)

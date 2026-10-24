@@ -96,13 +96,13 @@ def put(img, x, y, col):
 
 # --------------------------------------------------------------------------- room
 DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, dresser=0,
-               table_matchbook=0, table_candy=0, table_keycard=0, table_uniform=0,
+               table_matchbook=0, table_candy=0, table_mirror=0, table_uniform=0,
                table_towel=0, table_soap=0)
 
 # Coffee table on the floor, x 112..208, top surface y 105..116. Items set down on it sit in six
 # 16-pixel slots across the top (y 104..120), in TABLE_SLOTS order.
 TABLE_X0, TABLE_X1 = 112, 208
-TABLE_SLOTS = ['matchbook', 'candy', 'keycard', 'uniform', 'towel', 'soap']
+TABLE_SLOTS = ['matchbook', 'candy', 'mirror', 'uniform', 'towel', 'soap']
 
 
 def table_slot_x(item):
@@ -461,7 +461,8 @@ def draw_deer_canvas(img, d, x0=251, y0=19, w=42, h=18):
 
 def draw_painting_safe(img, d, st):
     """Painting above the bed (x 248..296, y 16..40). st: 0 painting, 1 safe closed,
-    2 safe open with key card, 3 safe open and empty."""
+    2 open with the screwdriver and the bag of powder, 3 screwdriver only,
+    4 bag only, 5 open and empty."""
     if st == 0:
         rect(d, 248, 16, 296, 40, 'frame_g')
         rect(d, 249, 17, 295, 39, 'frame_gd')
@@ -486,10 +487,18 @@ def draw_painting_safe(img, d, st):
         rect(d, 278, 30, 282, 31, 'steel_dk')
     else:
         rect(d, 254, 20, 284, 38, 'safe_in')
-        if st == 2:
-            rect(d, 262, 31, 276, 37, 'card')
-            rect(d, 262, 33, 276, 34, 'card_dk')
-            rect(d, 264, 35, 268, 36, 'white')
+        if st in (2, 3):
+            # screwdriver lying on the floor of the safe: red handle, steel shaft
+            rect(d, 256, 34, 263, 37, 'red')
+            rect(d, 256, 34, 263, 35, 'red_hi')
+            rect(d, 263, 35, 271, 36, 'steel_hi')
+            put(img, 271, 35, 'steel')
+        if st in (2, 4):
+            # a small zip bag of white powder, propped against the back wall
+            rect(d, 273, 29, 282, 38, 'glass_hi')
+            rect(d, 273, 29, 282, 30, 'glass_dk')      # the zip
+            rect(d, 274, 32, 281, 38, 'white')         # the powder inside
+            rect(d, 274, 32, 281, 33, 'porcelain_dk')
         # door swung open to the left; the keypad faces away, so only its
         # edge and the bolt show
         rect(d, 248, 18, 254, 40, 'steel')
@@ -528,11 +537,23 @@ def draw_coffee_table(img, d, s):
         sx = table_slot_x('candy')
         rect(d, sx + 2, 110, sx + 14, 114, 'candy')
         rect(d, sx + 6, 110, sx + 11, 114, 'candy2')
-    if s['table_keycard']:
-        sx = table_slot_x('keycard')
-        rect(d, sx + 2, 110, sx + 14, 115, 'card')
-        rect(d, sx + 2, 112, sx + 14, 113, 'card_dk')
-        rect(d, sx + 4, 113, sx + 7, 114, 'white')
+    if s['table_mirror']:
+        # the medicine cabinet's mirror door, lying flat: 1 bare, 2 with a pile of
+        # powder, 3 chopped into three lines, 4 with one line gone
+        sx = table_slot_x('mirror')
+        m = s['table_mirror']
+        rect(d, sx + 1, 107, sx + 15, 116, 'chrome_dk')
+        rect(d, sx + 2, 108, sx + 14, 115, 'glass')
+        put(img, sx + 3, 109, 'glass_hi'); put(img, sx + 4, 110, 'glass_hi')
+        put(img, sx + 11, 113, 'glass_hi')
+        if m == 2:
+            rect(d, sx + 6, 110, sx + 10, 113, 'white')
+            rect(d, sx + 7, 109, sx + 9, 110, 'white')
+        elif m >= 3:
+            for i, ly in enumerate((109, 111, 113)):
+                if m == 4 and i == 0:
+                    continue
+                rect(d, sx + 4, ly, sx + 12, ly + 1, 'white')
     if s['table_uniform']:
         sx = table_slot_x('uniform')
         rect(d, sx + 1, 107, sx + 14, 115, 'red')
@@ -876,7 +897,8 @@ def draw_sink(img, d, soap):
 
 def draw_mirror(img, d, open_):
     """Medicine cabinet above the sink, x 192..224, y 16..56. open_: 0 closed,
-    1 open with the shaving kit on the bottom shelf, 2 open without it."""
+    1 open with the shaving kit on the bottom shelf, 2 open without it,
+    3 mirror door unscrewed and gone, kit inside, 4 door gone, no kit."""
     rect(d, 194, 18, 222, 54, 'chrome_dk')
     if not open_:
         rect(d, 196, 20, 220, 52, 'glass')
@@ -894,7 +916,7 @@ def draw_mirror(img, d, open_):
         rect(d, 211, 23, 214, 30, 'bottle2')
         rect(d, 203, 36, 212, 42, 'shower_hi')   # shower cap
         rect(d, 214, 37, 218, 42, 'red')          # sewing kit
-        if open_ == 1:
+        if open_ in (1, 3):
             # shaving kit: a zip case with the razor on top, spare blades beside it
             rect(d, 200, 45, 213, 52, 'mat_dk')
             rect(d, 200, 45, 213, 46, 'mat_hi')
@@ -904,8 +926,15 @@ def draw_mirror(img, d, open_):
             put(img, 210, 47, 'chrome_dk')
             rect(d, 214, 49, 218, 52, 'white')       # pack of blades
             rect(d, 214, 50, 218, 51, 'shower_dk')
-        rect(d, 192, 18, 198, 54, 'glass')       # door swung open, edge-on
-        rect(d, 192, 18, 193, 54, 'chrome_dk')
+        if open_ in (1, 2):
+            rect(d, 192, 18, 198, 54, 'glass')       # door swung open, edge-on
+            rect(d, 192, 18, 193, 54, 'chrome_dk')
+        else:
+            # door taken off: just the bare hinge plates where it hung
+            for y in (22, 46):
+                rect(d, 194, y, 197, y + 5, 'chrome')
+                put(img, 195, y + 1, 'chrome_dk')
+                put(img, 195, y + 3, 'chrome_dk')
 
 
 def draw_towel(img, d, towel):

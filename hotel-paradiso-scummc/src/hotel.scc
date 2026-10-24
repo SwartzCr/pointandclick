@@ -3,16 +3,21 @@
  * Furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
  * nightstand, dresser, painting, wall safe, bed and coffee table, plus the doorway to
  * the bathroom (src/bathroom.scc). The items you can take (candy bar,
- * matchbook, key card, and the bellhop uniform in the dresser) are objects
- * too, parented to the container state that shows them, so they're only
- * clickable while visible.
+ * matchbook, bellhop uniform, and the screwdriver and bag of powder in the
+ * safe) are objects too, only clickable while they're visible.
  *
  * Each object's verb block is its SCUMM verb table; verbs it doesn't list get
  * defaultAction(). objB carries the inventory item for "Use X with <object>".
  *
- * Puzzle chain:
- *   nightstand drawer -> matchbook -> lamp on to read it -> code 714
- *   painting -> reveals the wall safe -> open with the code -> key card -> door
+ * Goal: get ready for the party on the ninth floor. The door won't let you
+ * go until you are:
+ *   1. fed:      minibar -> candy bar -> eat it
+ *   2. dressed:  dresser -> bellhop uniform -> put it on (it's a costume party)
+ *   3. pre-gamed:
+ *      nightstand -> matchbook -> lamp on to read it -> code 714
+ *      painting -> wall safe -> screwdriver and bag of powder
+ *      screwdriver on the bathroom mirror -> mirror on the coffee table ->
+ *      powder on the mirror -> razor on the powder -> three lines -> use one
  */
 
 #include "hotel.sch"
@@ -29,7 +34,7 @@ room Hotel {
     object tv;
     object tableMatchbook;
     object tableCandy;
-    object tableKeycard;
+    object tableMirror;
     object tableUniform;
     object tableTowel;
     object tableSoap;
@@ -38,32 +43,42 @@ room Hotel {
     object nightstand;
     object painting;
     object safe;
+    object screwdriver;
+    object powder;
     object cursor;
+
+    local script powderOnMirror();
+    local script chopLines();
+    local script leaveRoom();
 
     // ------------------------------------------------------------ scripts
     // Set an inventory item down on the coffee table. Each item has its own
-    // slot object on the table top (see "coffee table" below).
+    // slot object on the table top (see "coffee table" below). The mirror's
+    // slot is also where the pre-game happens.
     local script putOnTable(int item) {
         int slot;
         if(item == invUniform && wearingUniform) {
             egoSay("I'd have to take it off first."); waitForMessage();
             return;
         }
+        if(item == invPowder) { powderOnMirror(); return; }
+        if(item == invShaver) { chopLines(); return; }
+        if(item == invScrewdriver) {
+            egoSay("I'll hang on to the screwdriver. You never know."); waitForMessage();
+            return;
+        }
         slot = 0;
         if(item == invMatchbook)    { hasMatchbook = 0; slot = tableMatchbook; }
         else if(item == invCandy)   { hasCandy = 0;     slot = tableCandy; }
-        else if(item == invKeycard) { hasKeycard = 0;   slot = tableKeycard; }
+        else if(item == invMirror)  { hasMirror = 0;    slot = tableMirror; tableMirrorState = 1; }
         else if(item == invUniform) { hasUniform = 0;   slot = tableUniform; }
         else if(item == invTowel)   { hasTowel = 0;     slot = tableTowel; }
         else if(item == invSoap)    { hasSoap = 0;      slot = tableSoap; }
-        unless(slot) {
-            egoSay("I'll keep the razor on me. Blades and coffee tables don't mix."); waitForMessage();
-            return;
-        }
         setObjectState(slot, 1);
         setObjectClass(slot, [ UNTOUCHABLE ]);
         ResRoom::refreshInventory();
-        egoSay("There."); waitForMessage();
+        if(item == invMirror) { egoSay("Mirror on the table, face up. A perfect flat surface."); waitForMessage(); }
+        else { egoSay("There."); waitForMessage(); }
     }
 
     // Pick an item back up off the coffee table
@@ -71,13 +86,65 @@ room Hotel {
         int slot;
         if(item == invMatchbook)    { hasMatchbook = 1; slot = tableMatchbook; }
         else if(item == invCandy)   { hasCandy = 1;     slot = tableCandy; }
-        else if(item == invKeycard) { hasKeycard = 1;   slot = tableKeycard; }
+        else if(item == invMirror)  { hasMirror = 1;    slot = tableMirror; tableMirrorState = 0; }
         else if(item == invUniform) { hasUniform = 1;   slot = tableUniform; }
         else if(item == invTowel)   { hasTowel = 1;     slot = tableTowel; }
         else if(item == invSoap)    { hasSoap = 1;      slot = tableSoap; }
         setObjectState(slot, 0);
         setObjectClass(slot, [ SET_CLASS | UNTOUCHABLE ]);
         ResRoom::refreshInventory();
+    }
+
+    // ------------------------------------------------------------ the pre-game
+    // Tip the bag out onto the mirror (mirror state 2)
+    local script powderOnMirror() {
+        if(tableMirrorState == 0) {
+            egoSay("Not straight onto the table. This isn't a frat house. I need a mirror."); waitForMessage();
+            return;
+        }
+        if(tableMirrorState > 1) {
+            egoSay("There's already some on the mirror."); waitForMessage();
+            return;
+        }
+        hasPowder = 0;
+        tableMirrorState = 2;
+        setObjectState(tableMirror, 2);
+        ResRoom::refreshInventory();
+        egoSay("I tip the bag out onto the mirror. A little white hill."); waitForMessage();
+    }
+
+    // The razor turns the pile into three lines (mirror state 3)
+    local script chopLines() {
+        if(tableMirrorState == 2) {
+            tableMirrorState = 3;
+            setObjectState(tableMirror, 3);
+            egoSay("Chop, chop, chop."); waitForMessage();
+            egoSay("Three neat lines. The extra blades finally pay for themselves."); waitForMessage();
+        } else if(tableMirrorState >= 3) {
+            egoSay("They're as neat as they're going to get."); waitForMessage();
+        } else if(tableMirrorState == 1) {
+            egoSay("I'd be shaving a mirror. Nothing on it yet."); waitForMessage();
+        } else {
+            egoSay("I'll keep the razor on me. Blades and coffee tables don't mix."); waitForMessage();
+        }
+    }
+
+    // Do one line (mirror state 4). That's enough to be ready.
+    local script doLine() {
+        if(readyToParty) {
+            egoSay("One was plenty. I'd like to remember this party."); waitForMessage();
+            return;
+        }
+        ResRoom::showInterface(0);
+        readyToParty = 1;
+        tableMirrorState = 4;
+        setObjectState(tableMirror, 4);
+        egoSay("Here goes nothing."); waitForMessage();
+        delay(30);
+        egoSay("...!"); waitForMessage();
+        egoSay("Oh, hello. Hello, everyone. I feel great."); waitForMessage();
+        egoSay("I feel fantastic. Let's go to a party."); waitForMessage();
+        ResRoom::showInterface(1);
     }
 
     // Switch the TV on: a burst of chatter while the weather report scrolls
@@ -95,6 +162,24 @@ room Hotel {
         egoSay("Riveting."); waitForMessage();
     }
 
+    // The safe's open image shows what's still inside: 2 both, 3 just the
+    // screwdriver, 4 just the bag, 5 empty. The two item objects have no
+    // images of their own; they're made clickable while they show.
+    local script showSafe() {
+        setObjectState(safe, 2 + tookPowder + 2 * tookScrewdriver);
+        if(tookScrewdriver) setObjectClass(screwdriver, [ SET_CLASS | UNTOUCHABLE ]);
+        else setObjectClass(screwdriver, [ UNTOUCHABLE ]);
+        if(tookPowder) setObjectClass(powder, [ SET_CLASS | UNTOUCHABLE ]);
+        else setObjectClass(powder, [ UNTOUCHABLE ]);
+    }
+
+    local script closeSafe() {
+        safeOpen = 0;
+        setObjectState(safe, 1);
+        setObjectClass(screwdriver, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(powder, [ SET_CLASS | UNTOUCHABLE ]);
+    }
+
     // Key in the code: three beeps, the accepted chime, the motor pulling the
     // bolt back. The door's image changes as it pops open on its spring.
     local script openSafe() {
@@ -103,7 +188,7 @@ room Hotel {
         startSound(safeSnd);
         delay(84);                  // beeps, chime, motor and clunk: 1.4s
         safeOpen = 1;
-        setObjectState(safe, tookKeycard ? 3 : 2);
+        showSafe();
         delay(30);                  // the puff of air as the door swings open
         ResRoom::showInterface(1);
         egoSay("It's open."); waitForMessage();
@@ -140,12 +225,20 @@ room Hotel {
         egoSay("Got it. There's writing inside the cover."); waitForMessage();
     }
 
-    local script takeKeycard() {
-        tookKeycard = 1;
-        hasKeycard = 1;
-        setObjectState(safe, 3);
+    local script takeScrewdriver() {
+        tookScrewdriver = 1;
+        hasScrewdriver = 1;
+        showSafe();
         ResRoom::refreshInventory();
-        egoSay("My key card. Now let's get out of here."); waitForMessage();
+        egoSay("A screwdriver. Past me had plans. Unclear ones."); waitForMessage();
+    }
+
+    local script takePowder() {
+        tookPowder = 1;
+        hasPowder = 1;
+        showSafe();
+        ResRoom::refreshInventory();
+        egoSay("A little bag of white powder. Ah. Party supplies."); waitForMessage();
     }
 
     // Sets up the next print() as the front desk's voice on the phone:
@@ -157,51 +250,72 @@ room Hotel {
         printColor(C_YELLOW);
     }
 
+    // Gustav's advice depends on what's still standing between you and the party
     local script callDesk() {
         ResRoom::showInterface(0);
         phoneCalls++;
         egoSay("I dial zero."); waitForMessage();
-        if(phoneCalls == 1) {
-            deskSays(); print("Front desk, Gustav speaking. How may I help you?"); waitForMessage();
-            egoSay("I'm locked in my room. I can't find my key card."); waitForMessage();
-            deskSays(); print("Have you tried the door, sir?"); waitForMessage();
-            egoSay("The door needs the key card."); waitForMessage();
-            deskSays(); print("Then I suggest finding the key card, sir."); waitForMessage();
-            deskSays(); print("Many guests keep valuables in the room safe."); waitForMessage();
-            egoSay("There's a safe?"); waitForMessage();
-            deskSays(); print("Behind the painting, sir. As in every room. Good day."); waitForMessage();
-        } else if(phoneCalls == 2) {
-            deskSays(); print("Front desk, Gustav speaking."); waitForMessage();
-            egoSay("Hi, it's me again. What's the code for the safe?"); waitForMessage();
-            deskSays(); print("Whatever you set it to, sir. Guests often write it down."); waitForMessage();
-            deskSays(); print("Usually on whatever is lying around the room. Good day."); waitForMessage();
-        } else {
+        if(phoneCalls > 4) {
             deskSays(); print("You have reached the front desk. Gustav is on his break."); waitForMessage();
             egoSay("Gustav is avoiding me."); waitForMessage();
+            if(phoneCalls > 6) phoneCalls = 0;
+            ResRoom::showInterface(1);
+            return;
+        }
+        deskSays(); print("Front desk, Gustav speaking. How may I help you?"); waitForMessage();
+        if(!ateCandy) {
+            egoSay("Is room service still open? I'm starving."); waitForMessage();
+            deskSays(); print("Room service closed at ten, sir."); waitForMessage();
+            deskSays(); print("Your minibar, however, is fully stocked. Expensively. Good night."); waitForMessage();
+        } else if(!wearingUniform) {
+            egoSay("The party on the ninth floor. Is it fancy dress?"); waitForMessage();
+            deskSays(); print("A costume party, sir. Theme: hotel staff. Hilarious, I'm told."); waitForMessage();
+            deskSays(); print("Housekeeping sometimes leaves spare uniforms in the dresser. Good night."); waitForMessage();
+        } else if(!readyToParty) {
+            egoSay("I'm fed and dressed, but I'm just not feeling it."); waitForMessage();
+            deskSays(); print("Many guests keep their party supplies in the room safe, sir."); waitForMessage();
+            if(!safeOpen && !tookScrewdriver) {
+                deskSays(); print("Behind the painting. The code is whatever you wrote down. Good night."); waitForMessage();
+            } else {
+                deskSays(); print("And the bathroom mirror comes off with a screwdriver. I've said too much."); waitForMessage();
+            }
+        } else {
+            egoSay("Just calling to say I feel great."); waitForMessage();
+            deskSays(); print("I can hear that, sir. The party is on the ninth floor. Good night."); waitForMessage();
         }
         ResRoom::showInterface(1);
+    }
+
+    // The door lets you out once you're fed, dressed and ready
+    local script tryDoor() {
+        if(!ateCandy) {
+            egoSay("I can't go to a party on an empty stomach. I'll pass out by the punch bowl."); waitForMessage();
+        } else if(!wearingUniform) {
+            egoSay("It's a costume party. I can't show up in a bathrobe. Again."); waitForMessage();
+        } else if(!readyToParty) {
+            egoSay("I'm just not feeling it yet. I need to pre-game."); waitForMessage();
+        } else
+            leaveRoom();
     }
 
     local script leaveRoom() {
         gameOver = 1;
         ResRoom::showInterface(0);
-        egoSay("I slide the key card into the slot."); waitForMessage();
+        egoSay("Fed. Dressed. Absolutely buzzing."); waitForMessage();
         setObjectState(door, 1);
-        egoSay("Green light! Freedom!"); waitForMessage();
+        egoSay("Ninth floor, here I come!"); waitForMessage();
         walkActorTo(VAR_EGO, 40, 101);
         waitForActor(VAR_EGO);
         putActorAt(VAR_EGO, 0, 0, 0);    // room 0 = gone
         delaySeconds(1);
         printBegin(); printAt(160, 40); printCenter(); printColor(C_YELLOW);
-        print("You checked out of the Hotel Paradiso."); waitForMessage();
+        print("You made it to the party at the Hotel Paradiso."); waitForMessage();
+        printBegin(); printAt(160, 40); printCenter(); printColor(C_WHITE);
+        print("Everyone loved the bellhop costume. Two guests tipped you."); waitForMessage();
         printBegin(); printAt(160, 40); printCenter(); printColor(C_WHITE);
         print("THE END.   Thanks for playing!"); waitForMessage();
-        if(wearingUniform) {
-            printBegin(); printAt(160, 40); printCenter(); printColor(C_WHITE);
-            print("Nobody stops a bellhop on the way out."); waitForMessage();
-        }
         printBegin(); printAt(160, 40); printCenter(); printColor(C_GREY);
-        print("Late check-out fee: $40. Minibar: $14."); waitForMessage();
+        print("Minibar: $14. Missing mirror door: $85."); waitForMessage();
         shutdown();
     }
 
@@ -243,32 +357,30 @@ room Hotel {
 
         verb(int vrb, int objA, int objB) {
         case LookAt:
-            egoSay("Room 714. It only opens with a key card."); waitForMessage();
+            if(readyToParty) { egoSay("The door to the hallway. And beyond it: the party!"); waitForMessage(); }
+            else { egoSay("The door to the hallway. The party's up on the ninth floor."); waitForMessage(); }
             return;
         case Open:
-            if(hasKeycard) leaveRoom();
-            else { egoSay("Locked. The card reader blinks red at me. Judgmentally."); waitForMessage(); }
+        case Pull:
+            tryDoor();
             return;
         case Use:
-            if(objB == invKeycard || (!objB && hasKeycard)) leaveRoom();
-            else if(objB) { egoSay("That won't fit in the card slot."); waitForMessage(); }
-            else { egoSay("It needs a key card. Which I don't have."); waitForMessage(); }
-            return;
-        case Pull:
-            egoSay("I rattle the handle. Still locked."); waitForMessage();
+            if(objB == invScrewdriver) { egoSay("Take the door off its hinges? It already opens. That's not the problem."); waitForMessage(); }
+            else if(objB) { egoSay("The door doesn't need that."); waitForMessage(); }
+            else tryDoor();
             return;
         case Push:
-            egoSay("It opens inward. Also, it's locked."); waitForMessage();
+            egoSay("It opens inward."); waitForMessage();
             return;
         case Close:
-            egoSay("It's already closed. Very closed."); waitForMessage();
+            egoSay("It's already closed."); waitForMessage();
             return;
         case TalkTo:
-            egoSay("Hello? Housekeeping? Anyone?"); waitForMessage();
-            egoSay("Nothing. They must be on strike."); waitForMessage();
+            egoSay("Hello? Party people? Anyone?"); waitForMessage();
+            egoSay("I can hear the music from here. Faintly."); waitForMessage();
             return;
         case PickUp:
-            egoSay("The Do Not Disturb sign stays. I am very disturbed."); waitForMessage();
+            egoSay("The Do Not Disturb sign stays. I'm getting ready."); waitForMessage();
             return;
         }
     }
@@ -648,24 +760,44 @@ room Hotel {
         }
     }
 
-    // ------------------------------------------------------------ key card
-    // Only clickable while the safe is open with the card inside (state 2)
-    object keycard {
-        x = 260; y = 30; w = 18; h = 8;
-        hs_x = -30; hs_y = 109;
+    // ------------------------------------------------------------ safe contents
+    // Drawn as part of the safe's open images. No parent: their two
+    // combinations need four safe states, so showSafe() and closeSafe() set
+    // whether each is clickable.
+    object screwdriver {
+        x = 254; y = 28; w = 18; h = 10;
+        hs_x = -24; hs_y = 111;
         dir = EAST;
-        name = "key card";
-        parent = safe;
-        parent_state = 2;
+        name = "screwdriver";
 
         verb(int vrb, int objA, int objB) {
         case LookAt:
-            egoSay("My key card! I locked it in the safe. Of course I did."); waitForMessage();
+            egoSay("A screwdriver with a red handle. Locked in a safe. Sure."); waitForMessage();
             return;
         case PickUp:
-            takeKeycard();
+            takeScrewdriver();
             return;
         case Use:
+            egoSay("I'll take it first."); waitForMessage();
+            return;
+        }
+    }
+
+    object powder {
+        x = 272; y = 28; w = 12; h = 10;
+        hs_x = -42; hs_y = 111;
+        dir = EAST;
+        name = "little bag";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A little bag of white powder. I'm sure it's sugar. Party sugar."); waitForMessage();
+            return;
+        case PickUp:
+            takePowder();
+            return;
+        case Use:
+        case Open:
             egoSay("I'll take it first."); waitForMessage();
             return;
         }
@@ -679,14 +811,18 @@ room Hotel {
         name = "wall safe";
         states = {
             { -18, 131, "objects/safe_1.bmp" },   // revealed, closed
-            { -18, 131, "objects/safe_2.bmp" },   // open, key card inside
-            { -18, 131, "objects/safe_3.bmp" }    // open, empty
+            { -18, 131, "objects/safe_2.bmp" },   // open: screwdriver and bag
+            { -18, 131, "objects/safe_3.bmp" },   // open: just the screwdriver
+            { -18, 131, "objects/safe_4.bmp" },   // open: just the bag
+            { -18, 131, "objects/safe_5.bmp" }    // open, empty
         };
         state = 0;
 
         verb(int vrb, int objA, int objB) {
         case LookAt:
-            if(safeOpen && !tookKeycard) { egoSay("My key card! I locked it in the safe. Of course I did."); waitForMessage(); }
+            if(safeOpen && !tookScrewdriver && !tookPowder) { egoSay("A screwdriver and a little bag of white powder. Past me packed for a party."); waitForMessage(); }
+            else if(safeOpen && !tookScrewdriver) { egoSay("Just the screwdriver left."); waitForMessage(); }
+            else if(safeOpen && !tookPowder) { egoSay("Just the little bag left."); waitForMessage(); }
             else if(safeOpen) { egoSay("Empty."); waitForMessage(); }
             else { egoSay("A wall safe with a keypad. It wants a three-digit code."); waitForMessage(); }
             return;
@@ -704,7 +840,9 @@ room Hotel {
             }
             return;
         case PickUp:
-            if(safeOpen && !tookKeycard) takeKeycard(); else if(safeOpen) {
+            if(safeOpen && !tookScrewdriver) takeScrewdriver();
+            else if(safeOpen && !tookPowder) takePowder();
+            else if(safeOpen) {
                 egoSay("There's nothing left in it."); waitForMessage();
             } else {
                 egoSay("It's built into the wall."); waitForMessage();
@@ -712,7 +850,7 @@ room Hotel {
             return;
         case Close:
         case Push:
-            if(safeOpen) { safeOpen = 0; setObjectState(safe, 1); }
+            if(safeOpen) closeSafe();
             else { egoSay("It's closed."); waitForMessage(); }
             return;
         case TalkTo:
@@ -763,19 +901,38 @@ room Hotel {
         }
     }
 
-    object tableKeycard {
+    // The mirror door from the bathroom cabinet. Its states follow
+    // tableMirrorState: 1 bare, 2 a pile of powder, 3 three lines, 4 two.
+    object tableMirror {
         x = 144; y = 104; w = 16; h = 16;
         hs_x = 78; hs_y = 18;
         dir = WEST;
-        name = "key card";
-        states = { { 78, 18, "objects/table_keycard_1.bmp" } };
+        name = "mirror";
+        states = {
+            { 78, 18, "objects/table_mirror_1.bmp" },
+            { 78, 18, "objects/table_mirror_2.bmp" },
+            { 78, 18, "objects/table_mirror_3.bmp" },
+            { 78, 18, "objects/table_mirror_4.bmp" }
+        };
         state = 0;
         verb(int vrb, int objA, int objB) {
         case LookAt:
-            egoSay("My key card. Let's not lose it again."); waitForMessage();
+            if(tableMirrorState == 1) { egoSay("The cabinet mirror, lying flat on the table. Ready for business."); waitForMessage(); }
+            else if(tableMirrorState == 2) { egoSay("A little white hill on the mirror. It needs chopping up."); waitForMessage(); }
+            else if(tableMirrorState == 3) { egoSay("Three lines, neat as a barcode."); waitForMessage(); }
+            else { egoSay("Two lines left. They can stay there."); waitForMessage(); }
             return;
         case PickUp:
-            takeFromTable(invKeycard);
+            if(tableMirrorState == 1) takeFromTable(invMirror);
+            else { egoSay("Not without spilling everything."); waitForMessage(); }
+            return;
+        case Use:
+            if(objB == invPowder) powderOnMirror();
+            else if(objB == invShaver) chopLines();
+            else if(objB) { egoSay("That doesn't go on the mirror."); waitForMessage(); }
+            else if(tableMirrorState >= 3) doLine();
+            else if(tableMirrorState == 2) { egoSay("It's all one lump. I need something sharp to chop it into lines."); waitForMessage(); }
+            else { egoSay("I admire my reflection from above. Still got it."); waitForMessage(); }
             return;
         }
     }
@@ -916,7 +1073,9 @@ room Hotel {
         // Nothing is on the coffee table yet
         setObjectClass(tableMatchbook, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(tableCandy, [ SET_CLASS | UNTOUCHABLE ]);
-        setObjectClass(tableKeycard, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(tableMirror, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(screwdriver, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(powder, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(tableUniform, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(tableTowel, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(tableSoap, [ SET_CLASS | UNTOUCHABLE ]);
@@ -931,8 +1090,8 @@ room Hotel {
         ResRoom::showInterface(0);
         delay(30);
         egoSay("Ugh. What time is it?"); waitForMessage();
-        egoSay("Check-out was at noon. I have to get out of here."); waitForMessage();
-        egoSay("Which would be easier if I knew where I put my key card."); waitForMessage();
+        egoSay("Nine at night? The party! The big party up on the ninth floor."); waitForMessage();
+        egoSay("I am in no state to go to a party. Yet."); waitForMessage();
         ResRoom::showInterface(1);
     }
 }
