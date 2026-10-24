@@ -990,3 +990,126 @@ def render_bathroom(state=None):
     draw_mirror(img, d, s['cabinet'])
     draw_towel(img, d, s['towel'])
     return img
+
+
+# --------------------------------------------------------------------------- title screen
+TITLE_COLOURS = {
+    'facade': (66, 44, 58), 'facade_dk': (44, 28, 40), 'facade_hi': (96, 66, 80),
+    'win_dk': (30, 26, 44), 'party_a': (255, 70, 140), 'party_b': (90, 220, 230),
+    'party_c': (250, 220, 90), 'sign_bg': (24, 14, 26), 'neon_glow': (120, 36, 80),
+    'street': (24, 24, 34), 'kerb': (70, 70, 84), 'lamp_glow': (110, 96, 60),
+}
+C.update(TITLE_COLOURS)
+
+# 3x5 pixel letters for the sign
+GLYPHS = {
+    'H': ['101', '101', '111', '101', '101'], 'O': ['111', '101', '101', '101', '111'],
+    'T': ['111', '010', '010', '010', '010'], 'E': ['111', '100', '110', '100', '111'],
+    'L': ['100', '100', '100', '100', '111'], 'P': ['111', '101', '111', '100', '100'],
+    'A': ['111', '101', '111', '101', '101'], 'R': ['110', '101', '110', '101', '101'],
+    'D': ['110', '101', '101', '101', '110'], 'I': ['111', '010', '010', '010', '111'],
+    'S': ['111', '100', '111', '001', '111'], 'M': ['101', '111', '111', '101', '101'],
+    '7': ['111', '001', '010', '010', '010'], '1': ['010', '110', '010', '010', '111'],
+    '4': ['101', '101', '111', '001', '001'], ' ': ['000'] * 5,
+}
+
+
+def pixel_text(img, d, text, x, y, col, scale=1, glow=None):
+    for ch in text:
+        g = GLYPHS[ch]
+        for r, row in enumerate(g):
+            for c, bit in enumerate(row):
+                if bit == '1':
+                    px, py = x + c * scale, y + r * scale
+                    if glow:
+                        rect(d, px - 1, py - 1, px + scale + 1, py + scale + 1, glow)
+        x += 4 * scale
+    return x
+
+
+def pixel_text_fg(img, d, text, x, y, col, scale=1):
+    for ch in text:
+        for r, row in enumerate(GLYPHS[ch]):
+            for c, bit in enumerate(row):
+                if bit == '1':
+                    rect(d, x + c * scale, y + r * scale, x + (c + 1) * scale, y + (r + 1) * scale, col)
+        x += 4 * scale
+
+
+def text_width(text, scale):
+    return len(text) * 4 * scale - scale
+
+
+def render_title():
+    """The Hotel Paradiso at night: a tower with a neon sign, the party going on
+    on the ninth floor, and one lit window on the seventh: Room 714."""
+    import random
+    rnd = random.Random(714)
+    img = Image.new('RGB', (W, H))
+    d = ImageDraw.Draw(img)
+    vgrad(img, 0, 0, W, 112, 'sky', 'sky2')
+    for _ in range(70):                                   # stars
+        put(img, rnd.randrange(W), rnd.randrange(90), 'white' if rnd.random() < 0.3 else 'grey')
+    rect(d, 272, 14, 284, 26, 'moon')                     # moon
+    rect(d, 270, 16, 286, 24, 'moon')
+    rect(d, 276, 16, 281, 20, 'cream')
+    # the rest of the city, far away
+    x = 0
+    while x < W:
+        w, h = rnd.randrange(16, 34), rnd.randrange(30, 70)
+        rect(d, x, 132 - h, x + w, 132, 'bldg2' if rnd.random() < 0.5 else 'bldg')
+        for wy in range(132 - h + 4, 128, 6):
+            for wx in range(x + 3, x + w - 2, 5):
+                if rnd.random() < 0.18:
+                    rect(d, wx, wy, wx + 2, wy + 2, 'win_y')
+        x += w
+    # the hotel tower: twelve floors, six windows across
+    tx0, tx1, top = 116, 204, 44
+    rect(d, tx0 - 2, top - 2, tx1 + 2, 132, 'facade_dk')
+    rect(d, tx0, top, tx1, 132, 'facade')
+    rect(d, tx0, top, tx0 + 2, 132, 'facade_hi')
+    floors = 12
+    fh = (128 - top - 4) // floors                       # 6 px per floor
+    for f in range(floors):                               # f = 0 is the top floor
+        floor_no = floors - f
+        wy = top + 4 + f * fh
+        for i in range(6):
+            wx = tx0 + 6 + i * 14
+            if floor_no == 9:
+                col = ('party_a', 'party_b', 'party_c')[(i + f) % 3]
+            elif floor_no == 7 and i == 3:
+                col = 'win_y'                              # 714
+            else:
+                col = 'win_y' if rnd.random() < 0.12 else 'win_dk'
+            rect(d, wx, wy, wx + 8, wy + 4, col)
+            if floor_no == 9:
+                put(img, wx + 2 + (i % 3), wy + 1, 'black')   # dancing silhouettes
+                rect(d, wx + 2 + (i % 3), wy + 2, wx + 3 + (i % 3), wy + 4, 'black')
+            if floor_no == 7 and i == 3:
+                rect(d, wx + 3, wy + 1, wx + 5, wy + 4, 'black')   # someone getting ready
+    # entrance with an awning and lamps
+    rect(d, 148, 118, 172, 132, 'hall')
+    rect(d, 144, 114, 176, 118, 'red')
+    rect(d, 144, 117, 176, 118, 'red_dk')
+    for lx in (138, 180):
+        rect(d, lx, 120, lx + 2, 132, 'grey_dk')
+        rect(d, lx - 1, 117, lx + 3, 120, 'lamp_glow')
+        rect(d, lx, 118, lx + 2, 120, 'bulb')
+    # street
+    rect(d, 0, 132, W, 135, 'kerb')
+    rect(d, 0, 135, W, H, 'street')
+    for x in range(8, W, 32):
+        rect(d, x, 140, x + 14, 141, 'grey_dk')
+    # rooftop sign: HOTEL PARADISO in neon, ROOM 714 underneath
+    title, sub = 'HOTEL PARADISO', 'ROOM 714'
+    sw = text_width(title, 3)
+    sx = (W - sw) // 2
+    rect(d, sx - 8, 6, sx + sw + 8, 38, 'sign_bg')
+    rect(d, sx - 8, 6, sx + sw + 8, 7, 'grey_dk')
+    for px in (sx + 4, sx + sw - 6):                      # struts down to the roof
+        rect(d, px, 38, px + 2, top - 2, 'grey_dk')
+    pixel_text(img, d, title, sx, 11, 'neon', 3, glow='neon_glow')
+    pixel_text_fg(img, d, title, sx, 11, 'neon', 3)
+    subw = text_width(sub, 2)
+    pixel_text_fg(img, d, sub, (W - subw) // 2, 28, 'cream', 2)
+    return img

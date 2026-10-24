@@ -16,6 +16,9 @@ ScummVM has no generic "SCUMM v6" entry, so the files are named and encrypted li
 *Day of the Tentacle*'s to load the v6 engine. ScummVM reports the version as unknown;
 that's expected.
 
+The game opens on a title screen: click **New game** (or press `n`) to start, or **Quit**.
+Finishing the game brings you back to it.
+
 **Controls:** click a verb, then an object. Right-click an object to look at it.
 To use an inventory item on something, click **Use**, the item, then the object.
 To use an item on yourself (eat the candy, put on the uniform), click **Use**, the
@@ -84,13 +87,19 @@ The door tells you what's missing, and so does the front desk on the phone.
 | `src/interface.scc` | `ResRoom`: boot (`main`), verb bar, live sentence line, input handler, sentence handler, stock replies, text inventory |
 | `src/hotel.scc` | `Hotel`: Room 714, its objects and their verb code, the phone call, the ending |
 | `src/bathroom.scc` | `Bathroom`: the bathroom, its objects, the flush animation |
+| `src/title.scc` | `Title`: the title screen (its menu lives in `interface.scc`) |
 | `assets/` | Generated art and data the sources reference (committed, so Python isn't needed to build) |
-| `tools/art.py` | Procedural pixel art: the room in every object state, costume frames, cursor |
+| `tools/art.py` | Procedural pixel art: the rooms in every object state, the title screen, costume frames, cursor |
 | `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, both room backgrounds, object state images, both costumes + `.scost` files, font sheet, walk boxes, the flush sound |
 | `dist/` | Prebuilt `tentacle.000` / `tentacle.001` |
 
 ## How it works
 
+* **Title screen.** `main` sets up the verbs, hides the verb bar, shows the two menu
+  verbs and goes to the `Title` room; while `titleMode` is set the input handler only
+  listens to the menu. **New game** swaps the menu for the verb bar and starts the
+  bedroom. The ending calls `restartGame()`, which has the engine reset every variable,
+  bit, object state and the inventory and run `main` again, so each new game starts clean.
 * **Interface.** `mouseWatch` runs every frame and rebuilds the sentence line with SCUMM's
   string codes (`%v{curVerb} %n{hoverObj}`), which the engine expands when it draws the verb.
 * **Actions.** A room click queues `doSentence(verb, object, 0, item)`. The engine then runs

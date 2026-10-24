@@ -14,6 +14,9 @@ verb TalkTo, Use, WalkTo;
 // The sentence line is a verb too ("Look at lamp")
 verb SntcLine;
 
+// Title screen menu
+verb NewGame, QuitGame;
+
 // Text inventory: each carried item is a verb in the right-hand column
 verb invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver;
 verb invScrewdriver, invPowder, invMirror, invWallet, invDollar;
@@ -26,6 +29,7 @@ int withItem;      // inventory verb chosen for "Use X with ..."
 int hoverObj;      // room object under the cursor
 int hoverInv;      // inventory verb under the cursor
 bit gameOver;
+bit titleMode;     // on the title screen: only the menu responds
 
 // Puzzle state
 bit lampOn, tvOn, curtainsOpen, minibarOpen, drawerOpen;
@@ -61,10 +65,13 @@ int phoneCalls;
 
 room Hotel;
 room Bathroom;
+room Title;
 
 // The resource room: charset, costume and all the global scripts
 room ResRoom {
     script refreshInventory();
     script showInterface(int show);
     script readMatchbook();
+    script showGameVerbs(int on);
+    script startNewGame();
 }

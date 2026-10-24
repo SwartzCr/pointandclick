@@ -339,7 +339,10 @@ room Hotel {
         print("THE END.   Thanks for playing!"); waitForMessage();
         printBegin(); printAt(160, 40); printCenter(); printColor(C_GREY);
         print("Minibar: $14. Missing mirror door: $85."); waitForMessage();
-        shutdown();
+        // Back to the title screen. Restarting the engine resets every
+        // variable, object state and the inventory, then runs main() again.
+        delaySeconds(1);
+        restartGame();
     }
 
 

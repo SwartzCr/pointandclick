@@ -103,7 +103,52 @@ room ResRoom {
         setCurrentVerb(invMirror);      setVerbColor(C_YELLOW);
         setCurrentVerb(invWallet);      setVerbColor(C_YELLOW);
         setCurrentVerb(invDollar);      setVerbColor(C_YELLOW);
+        // Title screen menu, centred under the picture
+        setCurrentVerb(NewGame);  initVerb(); setVerbName("New game"); setVerbKey('n');
+        setCurrentVerb(QuitGame); initVerb(); setVerbName("Quit");     setVerbKey('q');
+        makeVerb(NewGame,  160, 158);
+        makeVerb(QuitGame, 160, 174);
+        setCurrentVerb(NewGame);  verbCenter();
+        setCurrentVerb(QuitGame); verbCenter();
         refreshInventory();
+    }
+
+    // The verb bar and sentence line during play, or the title menu
+    script showGameVerb(int vrb, int on) {
+        setCurrentVerb(vrb);
+        if(on) setVerbOn(); else setVerbOff();
+        redrawVerb();
+    }
+
+    script showGameVerbs(int on) {
+        // erase first, then draw, so nothing wipes what's just been drawn
+        showGameVerb(NewGame, 0);
+        showGameVerb(QuitGame, 0);
+        showGameVerb(Open, 0);   showGameVerb(Close, 0);  showGameVerb(TalkTo, 0);
+        showGameVerb(PickUp, 0); showGameVerb(LookAt, 0); showGameVerb(Use, 0);
+        showGameVerb(Push, 0);   showGameVerb(Pull, 0);   showGameVerb(WalkTo, 0);
+        showGameVerb(SntcLine, 0);
+        if(on) {
+            showGameVerb(Open, 1);   showGameVerb(Close, 1);  showGameVerb(TalkTo, 1);
+            showGameVerb(PickUp, 1); showGameVerb(LookAt, 1); showGameVerb(Use, 1);
+            showGameVerb(Push, 1);   showGameVerb(Pull, 1);   showGameVerb(WalkTo, 1);
+            showGameVerb(SntcLine, 1);
+        } else {
+            showGameVerb(NewGame, 1);
+            showGameVerb(QuitGame, 1);
+        }
+        refreshInventory();
+    }
+
+    // "New game" on the title screen. Every puzzle flag and object state is
+    // still at its boot value (the ending restarts the engine), so this just
+    // brings up the verb bar and goes to the bedroom.
+    script startNewGame() {
+        titleMode = 0;
+        curVerb = WalkTo;
+        withItem = 0;
+        showGameVerbs(1);
+        startRoom(Hotel);
     }
 
     // Put one carried item in the next free inventory slot: five rows in
@@ -167,6 +212,11 @@ room ResRoom {
         int obj, inv, lastObj, lastInv, lastVerb, lastWith;
         lastObj = -1;
         while(1) {
+            if(titleMode) {
+                lastObj = -1;
+                breakScript();
+                continue;
+            }
             obj = getObjectAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
             if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO)
                 obj = VAR_EGO;
@@ -203,6 +253,12 @@ room ResRoom {
         int obj;
 
         if(gameOver) return;
+
+        if(titleMode) {
+            if(area == 1 && cmd == NewGame) startNewGame();
+            else if(area == 1 && cmd == QuitGame) shutdown();
+            return;
+        }
 
         if(area == 1) {
             if(isAnyOf(cmd, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror, invWallet, invDollar ]))
@@ -528,6 +584,8 @@ room ResRoom {
         setupVerbs();
         mouseWatch();
 
-        startRoom(Hotel);
+        titleMode = 1;
+        showGameVerbs(0);
+        startRoom(Title);
     }
 }

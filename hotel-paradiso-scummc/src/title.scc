@@ -1,0 +1,29 @@
+/* Hotel Paradiso, Room 714 - the title screen.
+ *
+ * The hotel at night, with the menu ("New game", "Quit") in the verb area
+ * under the picture. main() comes here at boot, and the ending restarts the
+ * engine, which comes back here too. No actor is placed in this room.
+ */
+
+#include "hotel.sch"
+
+room Title {
+    image = "title.bmp";
+    trans = 0;
+
+    // Holds the mouse cursor image; never drawn and never clickable.
+    object titleCursor {
+        x = 0; y = 0; w = 16; h = 16;
+        name = "";
+        states = { { 0, 0, "cursor.bmp" } };
+        state = 0;
+    }
+
+    local script entry() {
+        setObjectClass(titleCursor, [ SET_CLASS | UNTOUCHABLE ]);
+        setCursorImage(titleCursor, Title);
+        setCursorHotspot(8, 8);
+        setCursorTransparency(0);
+        ResRoom::showInterface(1);
+    }
+}

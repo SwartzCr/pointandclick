@@ -442,6 +442,7 @@ def main():
     pal = Palette()
     bg = art.render()
     bath = art.render_bathroom()
+    title = art.render_title()
     crops = {}
     for name, ((x, y, w, h), states) in OBJECT_STATES.items():
         assert x % 8 == 0 and w % 8 == 0, name
@@ -450,7 +451,7 @@ def main():
         assert x % 8 == 0 and w % 8 == 0 and y % 8 == 0 and h % 8 == 0, name
         crops['bath_' + name] = [art.render_bathroom(st).crop((x, y, x + w, y + h)) for st in states]
     # Both rooms share one palette, so the costumes look the same in each
-    for c in pixels(bg) + pixels(bath):
+    for c in pixels(bg) + pixels(bath) + pixels(title):
         pal.add(c)
     for ims in crops.values():
         for im in ims:
@@ -466,6 +467,7 @@ def main():
     full = pal.full()
     write_bmp(os.path.join(OUT, 'room.bmp'), [pal.index[c] for c in pixels(bg)], art.W, art.H, full)
     write_bmp(os.path.join(OUT, 'bathroom.bmp'), [pal.index[c] for c in pixels(bath)], art.W, art.H, full)
+    write_bmp(os.path.join(OUT, 'title.bmp'), [pal.index[c] for c in pixels(title)], art.W, art.H, full)
     for name, ims in crops.items():
         for i, im in enumerate(ims):
             write_bmp(os.path.join(OUT, 'objects', f'{name}_{i + 1}.bmp'),
