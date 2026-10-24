@@ -55,6 +55,12 @@ C = {
     'glass': (168, 196, 204), 'glass_hi': (222, 238, 242), 'glass_dk': (120, 150, 162),
     'duck': (246, 208, 60), 'duck_beak': (232, 120, 40),
     'bottle_b': (90, 140, 190), 'bottle_w': (236, 236, 230),
+    # the painting above the bed: a stag in a forest clearing at dusk
+    'dusk_top': (176, 132, 150), 'dusk_mid': (226, 164, 132), 'dusk_low': (244, 200, 146),
+    'pine': (44, 82, 60), 'pine_dk': (28, 54, 44), 'hill': (92, 110, 104),
+    'meadow': (104, 142, 74), 'meadow_dk': (74, 110, 58), 'meadow_hi': (150, 176, 96),
+    'deer': (150, 96, 52), 'deer_dk': (96, 58, 32), 'deer_lt': (214, 176, 124),
+    'antler': (206, 182, 136),
 }
 
 
@@ -403,19 +409,61 @@ def draw_bed(img, d):
     rect(d, 236, 128, 318, 132, 'wood_xdk')
 
 
+def draw_deer_canvas(img, d, x0=251, y0=19, w=42, h=18):
+    """The 42x18 picture inside the painting's frame: a stag in a forest
+    clearing at dusk, drawn from its top-left corner and clipped to it."""
+    def R(a, b, c, e, col):
+        a, c = max(0, a), min(w, c)
+        b, e = max(0, b), min(h, e)
+        rect(d, x0 + a, y0 + b, x0 + c, y0 + e, col)
+
+    def P(a, b, col):
+        if 0 <= a < w and 0 <= b < h:
+            put(img, x0 + a, y0 + b, col)
+
+    # dusk sky in three soft bands
+    R(0, 0, w, 4, 'dusk_top')
+    R(0, 4, w, 8, 'dusk_mid')
+    R(0, 8, w, 12, 'dusk_low')
+    # distant hill and pines along the horizon
+    R(0, 10, w, 13, 'hill')
+    for px, ph in ((3, 6), (7, 8), (11, 5), (31, 7), (35, 9), (39, 6)):
+        for i in range(ph):
+            half = i // 2
+            R(px - half, 13 - ph + i, px + half + 1, 14 - ph + i, 'pine' if i % 3 else 'pine_dk')
+    # meadow
+    R(0, 12, w, h, 'meadow')
+    R(0, 12, w, 13, 'meadow_dk')
+    for a, b in ((3, 15), (8, 16), (13, 14), (31, 16), (34, 14), (38, 16), (11, 17)):
+        P(a, b, 'meadow_hi')
+    # the stag, facing left with its head raised
+    R(19, 9, 28, 12, 'deer')                       # body
+    R(18, 10, 19, 12, 'deer')                      # chest
+    P(28, 10, 'deer')                              # rump
+    R(20, 11, 27, 12, 'deer_lt')                   # pale belly
+    R(19, 8, 23, 9, 'deer_dk')                     # shoulder shading
+    R(18, 6, 21, 9, 'deer')                        # neck
+    R(15, 5, 19, 7, 'deer')                        # head
+    R(14, 6, 16, 7, 'deer')                        # muzzle
+    P(13, 6, 'deer_dk')                            # nose
+    P(16, 5, 'black')                              # eye
+    P(19, 5, 'deer_dk'); P(20, 4, 'deer_dk')       # ear
+    for lx in (19, 21, 25, 27):                    # legs
+        R(lx, 12, lx + 1, 16, 'deer_dk')
+    P(28, 9, 'deer_lt')                            # tail flash
+    # antlers rising from the head, each beam with two tines
+    for a, b in ((17, 4), (16, 3), (15, 2), (14, 1), (14, 0), (16, 1),
+                 (18, 4), (19, 3), (19, 2), (20, 1), (21, 0), (18, 1)):
+        P(a, b, 'antler')
+
+
 def draw_painting_safe(img, d, st):
     """Painting above the bed (x 248..296, y 16..40). st: 0 painting, 1 safe closed,
     2 safe open with key card, 3 safe open and empty."""
     if st == 0:
         rect(d, 248, 16, 296, 40, 'frame_g')
         rect(d, 249, 17, 295, 39, 'frame_gd')
-        rect(d, 251, 19, 293, 37, 'sky_p')
-        rect(d, 251, 27, 293, 32, 'sea')
-        rect(d, 251, 28, 293, 29, 'sea2')
-        rect(d, 251, 32, 293, 37, 'sand')
-        rect(d, 266, 23, 272, 27, 'sun')
-        d.line([(282, 31), (284, 22)], fill=C['wood_dk'])
-        rect(d, 280, 21, 288, 23, 'bottle')
+        draw_deer_canvas(img, d)
         return
     # wall safe set into the wallpaper
     rect(d, 252, 18, 286, 40, 'steel_dk')
@@ -437,8 +485,10 @@ def draw_painting_safe(img, d, st):
         rect(d, 249, 26, 252, 30, 'dial')
     # painting now hangs crooked to the right of the safe
     d.polygon([(286, 14), (296, 16), (296, 40), (288, 41)], fill=C['frame_g'])
-    d.polygon([(288, 17), (294, 18), (294, 38), (289, 39)], fill=C['sky_p'])
-    rect(d, 289, 29, 294, 34, 'sea')
+    d.polygon([(288, 17), (294, 18), (294, 38), (289, 39)], fill=C['dusk_mid'])
+    rect(d, 289, 26, 294, 30, 'pine')               # a slice of the forest
+    rect(d, 289, 30, 294, 38, 'meadow')
+    rect(d, 290, 27, 293, 30, 'deer')
 
 
 def draw_coffee_table(img, d, s):

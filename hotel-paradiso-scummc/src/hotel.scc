@@ -596,7 +596,7 @@ room Hotel {
 
         verb(int vrb, int objA, int objB) {
         case LookAt:
-            egoSay("A sunset over a beach. It hangs a little crooked."); waitForMessage();
+            egoSay("A stag in a forest clearing at dusk. It hangs a little crooked."); waitForMessage();
             return;
         case Pull:
         case Push:
