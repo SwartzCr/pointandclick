@@ -21,6 +21,7 @@ room ResRoom {
     script wearUniform(int on);
     script useOnSelf(int item);
     script defaultAction(int vrb, int item);
+    script openWallet();
 
     // ------------------------------------------------------------ verbs
     script makeVerb(int vrb, int x, int y) {
@@ -78,6 +79,8 @@ room ResRoom {
         setCurrentVerb(invScrewdriver); initVerb(); setVerbName("driver");
         setCurrentVerb(invPowder);      initVerb(); setVerbName("powder");
         setCurrentVerb(invMirror);      initVerb(); setVerbName("mirror");
+        setCurrentVerb(invWallet);      initVerb(); setVerbName("wallet");
+        setCurrentVerb(invDollar);      initVerb(); setVerbName("dollar");
         makeVerb(invMatchbook,   196, 154);
         makeVerb(invCandy,       196, 163);
         makeVerb(invUniform,     196, 172);
@@ -87,6 +90,8 @@ room ResRoom {
         makeVerb(invScrewdriver, 258, 163);
         makeVerb(invPowder,      258, 172);
         makeVerb(invMirror,      258, 181);
+        makeVerb(invWallet,      258, 190);
+        makeVerb(invDollar,      258, 190);
         setCurrentVerb(invMatchbook);   setVerbColor(C_YELLOW);
         setCurrentVerb(invCandy);       setVerbColor(C_YELLOW);
         setCurrentVerb(invUniform);     setVerbColor(C_YELLOW);
@@ -96,6 +101,8 @@ room ResRoom {
         setCurrentVerb(invScrewdriver); setVerbColor(C_YELLOW);
         setCurrentVerb(invPowder);      setVerbColor(C_YELLOW);
         setCurrentVerb(invMirror);      setVerbColor(C_YELLOW);
+        setCurrentVerb(invWallet);      setVerbColor(C_YELLOW);
+        setCurrentVerb(invDollar);      setVerbColor(C_YELLOW);
         refreshInventory();
     }
 
@@ -126,6 +133,8 @@ room ResRoom {
         setCurrentVerb(invScrewdriver); setVerbOff(); redrawVerb();
         setCurrentVerb(invPowder);      setVerbOff(); redrawVerb();
         setCurrentVerb(invMirror);      setVerbOff(); redrawVerb();
+        setCurrentVerb(invWallet);      setVerbOff(); redrawVerb();
+        setCurrentVerb(invDollar);      setVerbOff(); redrawVerb();
 
         slot = 0;
         if(hasMatchbook)   { placeInv(invMatchbook, slot);   slot++; }
@@ -137,6 +146,8 @@ room ResRoom {
         if(hasScrewdriver) { placeInv(invScrewdriver, slot); slot++; }
         if(hasPowder)      { placeInv(invPowder, slot);      slot++; }
         if(hasMirror)      { placeInv(invMirror, slot);      slot++; }
+        if(hasWallet)      { placeInv(invWallet, slot);      slot++; }
+        if(hasDollar)      { placeInv(invDollar, slot);      slot++; }
     }
 
     script showInterface(int show) {
@@ -160,7 +171,7 @@ room ResRoom {
             if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO)
                 obj = VAR_EGO;
             inv = getVerbAt(VAR_MOUSE_X, VAR_MOUSE_Y);
-            unless(isAnyOf(inv, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror ]))
+            unless(isAnyOf(inv, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror, invWallet, invDollar ]))
                 inv = 0;
             hoverObj = obj;
             hoverInv = inv;
@@ -194,7 +205,7 @@ room ResRoom {
         if(gameOver) return;
 
         if(area == 1) {
-            if(isAnyOf(cmd, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror ]))
+            if(isAnyOf(cmd, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror, invWallet, invDollar ]))
                 inventoryClick(cmd);
             else if(isAnyOf(cmd, [ Open, Close, TalkTo, PickUp, LookAt,
                                    Use, Push, Pull, WalkTo ])) {
@@ -344,6 +355,20 @@ room ResRoom {
             else
                 egoSay("I need to pour it out on something flat first.");
             break;
+        case invWallet:
+            if(curVerb == LookAt)
+                egoSay("My wallet. It feels suspiciously light.");
+            else if(curVerb == Open || curVerb == Use || curVerb == PickUp)
+                openWallet();
+            else
+                egoSay("It's my wallet. I could open it.");
+            break;
+        case invDollar:
+            if(curVerb == LookAt)
+                egoSay("One dollar. My entire remaining budget. Crisp, though.");
+            else
+                egoSay("Crisp enough to roll up tight.");
+            break;
         case invMirror:
             if(curVerb == LookAt)
                 egoSay("The mirror door off the medicine cabinet. Nice and flat.");
@@ -418,6 +443,10 @@ room ResRoom {
             egoSay("Straight from the bag? I'm not an animal. I need a mirror and a flat surface.");
         else if(item == invScrewdriver)
             egoSay("I'm not that loose.");
+        else if(item == invWallet)
+            openWallet();
+        else if(item == invDollar)
+            egoSay("I tuck it behind my ear. Very bellhop.");
         else if(item == invMirror) {
             if(wearingUniform) egoSay("Dashing. Truly a bellhop among bellhops.");
             else egoSay("I look like I slept in a hotel. Which I did.");
@@ -429,6 +458,16 @@ room ResRoom {
             egoSay("I give myself a quick dry shave. Ow. But smooth.");
         else
             egoSay("I'd rather keep it in my pocket.");
+    }
+
+    // The wallet only holds the dollar bill. Taking it out leaves the wallet
+    // in my pocket, so the inventory shows one or the other.
+    script openWallet() {
+        hasWallet = 0;
+        hasDollar = 1;
+        refreshInventory();
+        egoSay("Inside: one dollar bill. And a receipt for a fourteen-dollar candy bar."); waitForMessage();
+        egoSay("I'll keep the dollar handy and the wallet in my pocket.");
     }
 
     script readMatchbook() {

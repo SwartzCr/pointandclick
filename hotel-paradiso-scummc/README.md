@@ -27,8 +27,8 @@ F5 opens the menu, `.` skips a line of dialogue.
 **Room 714.** Twelve pieces of furniture you can interact with: door, TV, dresser,
 curtains, minibar, lamp, phone, nightstand, painting, wall safe, bed and coffee table.
 The things you can take (candy bar, matchbook, bellhop uniform, and the screwdriver and
-little bag of powder in the safe) are objects of
-their own, clickable only while you can see them.
+little bag of powder in the safe) are objects of their own, clickable only while you can
+see them. Your wallet is hidden under the bed covers.
 
 There's a bellhop uniform folded in the dresser's top drawer. Take it and use it on
 yourself to put it on: the player switches to a second costume with its own full set of walking and
@@ -38,7 +38,8 @@ to leave.
 The coffee table can't be picked up, but you can put any inventory item down on it
 ("Use matches with coffee table") and pick it back up later. It's also where the pre-game
 happens: the cabinet mirror goes on the table, the powder goes on the mirror, the razor
-chops it into three lines, and **Use** on the mirror does one.
+chops it into three lines, and the rolled-up dollar bill from your wallet does one. The
+wallet is hidden under the bed covers; open it to take the dollar out.
 
 **The bathroom**, through the doorway on the left wall: a tub with a shower curtain that
 opens and closes, a bath mat, a toilet that flushes (animated, with a sound), a sink, a
@@ -48,7 +49,7 @@ door off the cabinet. Walk through the doorway on the right
 to go back.
 
 The inventory holds up to ten items in two columns of five, so it uses short labels
-("matches", "razor" for the shaving kit); the objects in the rooms keep their
+("matches", "razor" for the shaving kit, "driver" for the screwdriver); the objects in the rooms keep their
 full names.
 
 Each object has its own verb code and answers the verbs that make sense for it; anything
@@ -68,7 +69,9 @@ The door tells you what's missing, and so does the front desk on the phone.
    3. In the bathroom, use the screwdriver with the mirror to take the mirror door off.
    4. Back in the bedroom, use the mirror with the coffee table, the powder with the
       mirror, and the razor (from the medicine cabinet) with the powder.
-   5. Use the three lines. One is enough.
+   5. Open the bed to find your wallet under the covers, and open the wallet to take out
+      the dollar bill.
+   6. Use the dollar bill with the three lines. One is enough.
 4. Open the door.
 
 </details>

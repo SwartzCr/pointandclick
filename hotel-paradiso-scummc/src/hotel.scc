@@ -17,7 +17,8 @@
  *      nightstand -> matchbook -> lamp on to read it -> code 714
  *      painting -> wall safe -> screwdriver and bag of powder
  *      screwdriver on the bathroom mirror -> mirror on the coffee table ->
- *      powder on the mirror -> razor on the powder -> three lines -> use one
+ *      powder on the mirror -> razor on the powder -> three lines
+ *      bed covers -> wallet -> dollar bill -> use it on the lines
  */
 
 #include "hotel.sch"
@@ -49,6 +50,7 @@ room Hotel {
 
     local script powderOnMirror();
     local script chopLines();
+    local script doLine();
     local script leaveRoom();
 
     // ------------------------------------------------------------ scripts
@@ -63,6 +65,15 @@ room Hotel {
         }
         if(item == invPowder) { powderOnMirror(); return; }
         if(item == invShaver) { chopLines(); return; }
+        if(item == invDollar) {
+            if(tableMirrorState >= 3) doLine();
+            else { egoSay("I'll hang on to my last dollar. I'll need it in a minute."); waitForMessage(); }
+            return;
+        }
+        if(item == invWallet) {
+            egoSay("I'm not leaving my wallet lying around. Not again."); waitForMessage();
+            return;
+        }
         if(item == invScrewdriver) {
             egoSay("I'll hang on to the screwdriver. You never know."); waitForMessage();
             return;
@@ -139,6 +150,7 @@ room Hotel {
         readyToParty = 1;
         tableMirrorState = 4;
         setObjectState(tableMirror, 4);
+        egoSay("I roll the dollar bill up nice and tight."); waitForMessage();
         egoSay("Here goes nothing."); waitForMessage();
         delay(30);
         egoSay("...!"); waitForMessage();
@@ -274,7 +286,9 @@ room Hotel {
         } else if(!readyToParty) {
             egoSay("I'm fed and dressed, but I'm just not feeling it."); waitForMessage();
             deskSays(); print("Many guests keep their party supplies in the room safe, sir."); waitForMessage();
-            if(!safeOpen && !tookScrewdriver) {
+            if(tableMirrorState >= 3 && !tookWallet) {
+                deskSays(); print("Guests who've lost their wallet usually find it in the bed, sir. Good night."); waitForMessage();
+            } else if(!safeOpen && !tookScrewdriver) {
                 deskSays(); print("Behind the painting. The code is whatever you wrote down. Good night."); waitForMessage();
             } else {
                 deskSays(); print("And the bathroom mirror comes off with a screwdriver. I've said too much."); waitForMessage();
@@ -929,8 +943,12 @@ room Hotel {
         case Use:
             if(objB == invPowder) powderOnMirror();
             else if(objB == invShaver) chopLines();
+            else if(objB == invDollar && tableMirrorState >= 3) doLine();
+            else if(objB == invDollar) { egoSay("Not yet. It isn't ready."); waitForMessage(); }
             else if(objB) { egoSay("That doesn't go on the mirror."); waitForMessage(); }
-            else if(tableMirrorState >= 3) doLine();
+            else if(tableMirrorState >= 3 && readyToParty) doLine();
+            else if(tableMirrorState >= 3 && (hasDollar || hasWallet)) { egoSay("Not with my bare nose. I'll roll up that dollar bill."); waitForMessage(); }
+            else if(tableMirrorState >= 3) { egoSay("Not with my bare nose. I need something to roll up. Some cash, say."); waitForMessage(); }
             else if(tableMirrorState == 2) { egoSay("It's all one lump. I need something sharp to chop it into lines."); waitForMessage(); }
             else { egoSay("I admire my reflection from above. Still got it."); waitForMessage(); }
             return;
@@ -1024,10 +1042,11 @@ room Hotel {
 
         verb(int vrb, int objA, int objB) {
         case LookAt:
-            egoSay("Unmade. My work."); waitForMessage();
+            if(tookWallet) { egoSay("Unmade. My work."); waitForMessage(); }
+            else { egoSay("Unmade. My work. There's a lump under the covers."); waitForMessage(); }
             return;
         case Use:
-            egoSay("No time for a nap. Check-out was at noon."); waitForMessage();
+            egoSay("No time for a nap. There's a party on."); waitForMessage();
             return;
         case Push:
         case Pull:
@@ -1037,7 +1056,13 @@ room Hotel {
             egoSay("Not with my back."); waitForMessage();
             return;
         case Open:
-            egoSay("I check under the covers. One sock. Not mine."); waitForMessage();
+            if(tookWallet) { egoSay("I check under the covers again. One sock. Not mine."); waitForMessage(); }
+            else {
+                tookWallet = 1;
+                hasWallet = 1;
+                ResRoom::refreshInventory();
+                egoSay("I pull back the covers. My wallet! I slept on it all day."); waitForMessage();
+            }
             return;
         case TalkTo:
             egoSay("Goodbye, bed. You were the best part of this trip."); waitForMessage();
