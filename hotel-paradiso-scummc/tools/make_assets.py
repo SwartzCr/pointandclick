@@ -59,7 +59,7 @@ for _item in art.TABLE_SLOTS:
 # object declarations in src/bathroom.scc.
 BATH_OBJECT_STATES = {
     'curtain': ((16, 8, 96, 72), [dict(curtain=1)]),
-    'mirror':  ((192, 16, 32, 40), [dict(cabinet=1)]),
+    'mirror':  ((192, 16, 32, 40), [dict(cabinet=1), dict(cabinet=2)]),
     'toilet':  ((128, 48, 40, 56), [dict(flush=1), dict(flush=2)]),
     'towel':   ((248, 32, 40, 40), [dict(towel=1)]),
     'soap':    ((184, 56, 16, 8), [dict(soap=1)]),

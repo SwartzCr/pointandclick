@@ -38,11 +38,13 @@ The coffee table can't be picked up, but you can put any inventory item down on 
 
 **The bathroom**, through the doorway on the left wall: a tub with a shower curtain that
 opens and closes, a bath mat, a toilet that flushes (animated, with a sound), a sink, a
-mirror that opens into a medicine cabinet, a towel and a bar of soap. The towel and soap
-can be taken. Walk through the doorway on the right to go back.
+mirror that opens into a medicine cabinet with a shaving kit inside, a towel and a bar of
+soap. The towel, soap and shaving kit can be taken. Walk through the doorway on the right
+to go back.
 
-The inventory holds up to six items in two columns, so it uses short labels
-("matches", "keycard"); the objects in the rooms keep their full names.
+The inventory holds up to eight items in two columns of four, so it uses short labels
+("matches", "keycard", "razor" for the shaving kit); the objects in the rooms keep their
+full names. Everything except the razor can be set down on the coffee table.
 
 Each object has its own verb code and answers the verbs that make sense for it; anything
 else gets a stock reply.

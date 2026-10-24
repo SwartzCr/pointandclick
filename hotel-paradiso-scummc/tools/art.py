@@ -875,7 +875,8 @@ def draw_sink(img, d, soap):
 
 
 def draw_mirror(img, d, open_):
-    # medicine cabinet above the sink, x 192..224, y 16..56
+    """Medicine cabinet above the sink, x 192..224, y 16..56. open_: 0 closed,
+    1 open with the shaving kit on the bottom shelf, 2 open without it."""
     rect(d, 194, 18, 222, 54, 'chrome_dk')
     if not open_:
         rect(d, 196, 20, 220, 52, 'glass')
@@ -893,7 +894,16 @@ def draw_mirror(img, d, open_):
         rect(d, 211, 23, 214, 30, 'bottle2')
         rect(d, 203, 36, 212, 42, 'shower_hi')   # shower cap
         rect(d, 214, 37, 218, 42, 'red')          # sewing kit
-        rect(d, 200, 47, 216, 50, 'bottle_w')    # toothbrush
+        if open_ == 1:
+            # shaving kit: a zip case with the razor on top, spare blades beside it
+            rect(d, 200, 45, 213, 52, 'mat_dk')
+            rect(d, 200, 45, 213, 46, 'mat_hi')
+            rect(d, 201, 49, 212, 50, 'chrome_dk')   # zip
+            rect(d, 202, 47, 209, 48, 'chrome')      # razor handle
+            rect(d, 209, 46, 212, 49, 'chrome')      # razor head
+            put(img, 210, 47, 'chrome_dk')
+            rect(d, 214, 49, 218, 52, 'white')       # pack of blades
+            rect(d, 214, 50, 218, 51, 'shower_dk')
         rect(d, 192, 18, 198, 54, 'glass')       # door swung open, edge-on
         rect(d, 192, 18, 193, 54, 'chrome_dk')
 

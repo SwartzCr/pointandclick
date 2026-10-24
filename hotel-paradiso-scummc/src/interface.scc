@@ -68,36 +68,39 @@ room ResRoom {
         redrawVerb();
 
         // Inventory slots, shown only while the item is carried
-        // Labels are short so six fit in two 62-pixel columns
+        // Labels are short so they fit two 62-pixel columns of four
         setCurrentVerb(invMatchbook); initVerb(); setVerbName("matches");
         setCurrentVerb(invKeycard);   initVerb(); setVerbName("keycard");
         setCurrentVerb(invCandy);     initVerb(); setVerbName("candy");
         setCurrentVerb(invUniform);   initVerb(); setVerbName("uniform");
         setCurrentVerb(invTowel);     initVerb(); setVerbName("towel");
         setCurrentVerb(invSoap);      initVerb(); setVerbName("soap");
-        makeVerb(invMatchbook, 196, 157);
-        makeVerb(invKeycard,   196, 169);
-        makeVerb(invCandy,     196, 181);
-        makeVerb(invUniform,   258, 157);
-        makeVerb(invTowel,     258, 169);
-        makeVerb(invSoap,      258, 181);
+        setCurrentVerb(invShaver);    initVerb(); setVerbName("razor");
+        makeVerb(invMatchbook, 196, 155);
+        makeVerb(invKeycard,   196, 165);
+        makeVerb(invCandy,     196, 175);
+        makeVerb(invUniform,   196, 185);
+        makeVerb(invTowel,     258, 155);
+        makeVerb(invSoap,      258, 165);
+        makeVerb(invShaver,    258, 175);
         setCurrentVerb(invMatchbook); setVerbColor(C_YELLOW);
         setCurrentVerb(invKeycard);   setVerbColor(C_YELLOW);
         setCurrentVerb(invCandy);     setVerbColor(C_YELLOW);
         setCurrentVerb(invUniform);   setVerbColor(C_YELLOW);
         setCurrentVerb(invTowel);     setVerbColor(C_YELLOW);
         setCurrentVerb(invSoap);      setVerbColor(C_YELLOW);
+        setCurrentVerb(invShaver);    setVerbColor(C_YELLOW);
         refreshInventory();
     }
 
-    // Put one carried item in the next free inventory slot: three rows in
+    // Put one carried item in the next free inventory slot: four rows in
     // each of two columns, filled top to bottom, left column first.
     script placeInv(int vrb, int slot) {
         setCurrentVerb(vrb);
-        if(slot < 3)
-            setVerbXY(196, 157 + slot * 12);
+        if(slot < 4)
+            setVerbXY(196, 155 + slot * 10);
         else
-            setVerbXY(258, 157 + (slot - 3) * 12);
+            setVerbXY(258, 155 + (slot - 4) * 10);
         setVerbOn();
         redrawVerb();
     }
@@ -114,6 +117,7 @@ room ResRoom {
         setCurrentVerb(invUniform);   setVerbOff(); redrawVerb();
         setCurrentVerb(invTowel);     setVerbOff(); redrawVerb();
         setCurrentVerb(invSoap);      setVerbOff(); redrawVerb();
+        setCurrentVerb(invShaver);    setVerbOff(); redrawVerb();
 
         slot = 0;
         if(hasMatchbook) { placeInv(invMatchbook, slot); slot++; }
@@ -122,6 +126,7 @@ room ResRoom {
         if(hasUniform)   { placeInv(invUniform, slot);   slot++; }
         if(hasTowel)     { placeInv(invTowel, slot);     slot++; }
         if(hasSoap)      { placeInv(invSoap, slot);      slot++; }
+        if(hasShaver)    { placeInv(invShaver, slot);    slot++; }
     }
 
     script showInterface(int show) {
@@ -145,7 +150,7 @@ room ResRoom {
             if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO)
                 obj = VAR_EGO;
             inv = getVerbAt(VAR_MOUSE_X, VAR_MOUSE_Y);
-            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap ]))
+            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap, invShaver ]))
                 inv = 0;
             hoverObj = obj;
             hoverInv = inv;
@@ -179,7 +184,7 @@ room ResRoom {
         if(gameOver) return;
 
         if(area == 1) {
-            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap ]))
+            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap, invShaver ]))
                 inventoryClick(cmd);
             else if(isAnyOf(cmd, [ Open, Close, TalkTo, PickUp, LookAt,
                                    Use, Push, Pull, WalkTo ])) {
@@ -337,6 +342,14 @@ room ResRoom {
             else
                 egoSay("I could dry off with it. Use it, I mean.");
             break;
+        case invShaver:
+            if(curVerb == LookAt)
+                egoSay("A razor with extra blades.");
+            else if(curVerb == Open)
+                egoSay("A razor, a pack of spare blades and a tiny tube of shaving cream.");
+            else
+                egoSay("I could have a shave. Use it, I mean.");
+            break;
         case invSoap:
             if(curVerb == LookAt)
                 egoSay("A tiny bar of hotel soap. Smells like a meadow that's trying too hard.");
@@ -373,6 +386,8 @@ room ResRoom {
             egoSay("I pat my face dry. Refreshing, in a hotel sort of way.");
         else if(item == invSoap)
             egoSay("I'd need some water for that. There's a sink in the bathroom.");
+        else if(item == invShaver)
+            egoSay("I give myself a quick dry shave. Ow. But smooth.");
         else
             egoSay("I'd rather keep it in my pocket.");
     }

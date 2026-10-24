@@ -56,7 +56,10 @@ room Hotel {
         else if(item == invUniform) { hasUniform = 0;   slot = tableUniform; }
         else if(item == invTowel)   { hasTowel = 0;     slot = tableTowel; }
         else if(item == invSoap)    { hasSoap = 0;      slot = tableSoap; }
-        unless(slot) return;
+        unless(slot) {
+            egoSay("I'll keep the razor on me. Blades and coffee tables don't mix."); waitForMessage();
+            return;
+        }
         setObjectState(slot, 1);
         setObjectClass(slot, [ UNTOUCHABLE ]);
         ResRoom::refreshInventory();
