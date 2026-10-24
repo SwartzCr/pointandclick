@@ -1,11 +1,13 @@
-/* Hotel Paradiso, Room 714 - the room.
+/* Hotel Paradiso, Room 714 - the bedroom.
  *
- * Ten pieces of furniture you can interact with: door, TV, curtains, minibar,
- * lamp, phone, nightstand, painting, wall safe and bed. The three items you can
- * take (candy bar, matchbook, key card) are objects too, parented to the
- * container state that shows them, so they're only clickable while visible. Each object's verb block
- * is its SCUMM verb table; verbs it doesn't list get defaultAction().
- * objB carries the inventory item for "Use X with <object>".
+ * Furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
+ * nightstand, painting, wall safe, bed and coffee table, plus the doorway to
+ * the bathroom (src/bathroom.scc). The items you can take (candy bar,
+ * matchbook, key card, uniform) are objects too, parented to the container
+ * state that shows them, so they're only clickable while visible.
+ *
+ * Each object's verb block is its SCUMM verb table; verbs it doesn't list get
+ * defaultAction(). objB carries the inventory item for "Use X with <object>".
  *
  * Puzzle chain:
  *   nightstand drawer -> matchbook -> lamp on to read it -> code 714
@@ -24,6 +26,8 @@ room Hotel {
     object tableCandy;
     object tableKeycard;
     object tableUniform;
+    object tableTowel;
+    object tableSoap;
     object minibar;
     object nightstand;
     object painting;
@@ -31,58 +35,49 @@ room Hotel {
     object cursor;
 
     // ------------------------------------------------------------ scripts
-    // Taking an item: switch the container to its "open and empty" state
-    // (which also hides the item object) and add the item to the inventory.
-    // Set an inventory item down on the coffee table
+    // Set an inventory item down on the coffee table. Each item has its own
+    // slot object on the table top (see "coffee table" below).
     local script putOnTable(int item) {
-        if(item == invMatchbook) {
-            hasMatchbook = 0;
-            setObjectState(tableMatchbook, 1);
-            setObjectClass(tableMatchbook, [ UNTOUCHABLE ]);
-        } else if(item == invCandy) {
-            hasCandy = 0;
-            setObjectState(tableCandy, 1);
-            setObjectClass(tableCandy, [ UNTOUCHABLE ]);
-        } else if(item == invKeycard) {
-            hasKeycard = 0;
-            setObjectState(tableKeycard, 1);
-            setObjectClass(tableKeycard, [ UNTOUCHABLE ]);
-        } else if(item == invUniform) {
-            if(wearingUniform) {
-                egoSay("I'd have to take it off first."); waitForMessage();
-                return;
-            }
-            hasUniform = 0;
-            setObjectState(tableUniform, 1);
-            setObjectClass(tableUniform, [ UNTOUCHABLE ]);
-        } else
+        int slot;
+        if(item == invUniform && wearingUniform) {
+            egoSay("I'd have to take it off first."); waitForMessage();
             return;
+        }
+        slot = 0;
+        if(item == invMatchbook)    { hasMatchbook = 0; slot = tableMatchbook; }
+        else if(item == invCandy)   { hasCandy = 0;     slot = tableCandy; }
+        else if(item == invKeycard) { hasKeycard = 0;   slot = tableKeycard; }
+        else if(item == invUniform) { hasUniform = 0;   slot = tableUniform; }
+        else if(item == invTowel)   { hasTowel = 0;     slot = tableTowel; }
+        else if(item == invSoap)    { hasSoap = 0;      slot = tableSoap; }
+        unless(slot) return;
+        setObjectState(slot, 1);
+        setObjectClass(slot, [ UNTOUCHABLE ]);
         ResRoom::refreshInventory();
         egoSay("There."); waitForMessage();
     }
 
     // Pick an item back up off the coffee table
     local script takeFromTable(int item) {
-        if(item == invMatchbook) {
-            hasMatchbook = 1;
-            setObjectState(tableMatchbook, 0);
-            setObjectClass(tableMatchbook, [ SET_CLASS | UNTOUCHABLE ]);
-        } else if(item == invCandy) {
-            hasCandy = 1;
-            setObjectState(tableCandy, 0);
-            setObjectClass(tableCandy, [ SET_CLASS | UNTOUCHABLE ]);
-        } else if(item == invKeycard) {
-            hasKeycard = 1;
-            setObjectState(tableKeycard, 0);
-            setObjectClass(tableKeycard, [ SET_CLASS | UNTOUCHABLE ]);
-        } else if(item == invUniform) {
-            hasUniform = 1;
-            setObjectState(tableUniform, 0);
-            setObjectClass(tableUniform, [ SET_CLASS | UNTOUCHABLE ]);
-        }
+        int slot;
+        if(item == invMatchbook)    { hasMatchbook = 1; slot = tableMatchbook; }
+        else if(item == invCandy)   { hasCandy = 1;     slot = tableCandy; }
+        else if(item == invKeycard) { hasKeycard = 1;   slot = tableKeycard; }
+        else if(item == invUniform) { hasUniform = 1;   slot = tableUniform; }
+        else if(item == invTowel)   { hasTowel = 1;     slot = tableTowel; }
+        else if(item == invSoap)    { hasSoap = 1;      slot = tableSoap; }
+        setObjectState(slot, 0);
+        setObjectClass(slot, [ SET_CLASS | UNTOUCHABLE ]);
         ResRoom::refreshInventory();
     }
 
+    // Through the doorway on the left wall
+    local script goBathroom() {
+        startRoom(Bathroom);
+    }
+
+    // Taking an item: switch the container to its "open and empty" state
+    // (which also hides the item object) and add the item to the inventory.
     local script takeCandy() {
         tookCandy = 1;
         hasCandy = 1;
@@ -164,6 +159,32 @@ room Hotel {
         shutdown();
     }
 
+
+    // ------------------------------------------------------------ bathroom doorway
+    // The opening in the left wall. Walking into it goes to the bathroom.
+    object bathroomDoor {
+        x = 0; y = 24; w = 16; h = 104;
+        hs_x = 12; hs_y = 94;
+        dir = WEST;
+        name = "bathroom";
+
+        verb(int vrb, int objA, int objB) {
+        case WalkTo:
+        case Open:
+            goBathroom();
+            return;
+        case Use:
+            if(objB) { egoSay("I'll just carry it in."); waitForMessage(); }
+            goBathroom();
+            return;
+        case LookAt:
+            egoSay("The bathroom. Tiled, bright, and slightly too cold."); waitForMessage();
+            return;
+        case Close:
+            egoSay("There's no door. Just a doorway. Very trusting."); waitForMessage();
+            return;
+        }
+    }
 
     // ------------------------------------------------------------ door
     object door {
@@ -624,11 +645,11 @@ room Hotel {
     // The walk-to spot for all of them is beside the table, so the player
     // doesn't stand in front of what's on it.
     object tableMatchbook {
-        x = 128; y = 104; w = 16; h = 16;
-        hs_x = 78; hs_y = 18;
+        x = 112; y = 104; w = 16; h = 16;
+        hs_x = 110; hs_y = 18;
         dir = WEST;
         name = "matchbook";
-        states = { { 78, 18, "objects/table_matchbook_1.bmp" } };
+        states = { { 110, 18, "objects/table_matchbook_1.bmp" } };
         state = 0;
         verb(int vrb, int objA, int objB) {
         case LookAt:
@@ -641,11 +662,11 @@ room Hotel {
     }
 
     object tableCandy {
-        x = 144; y = 104; w = 16; h = 16;
-        hs_x = 62; hs_y = 18;
+        x = 128; y = 104; w = 16; h = 16;
+        hs_x = 94; hs_y = 18;
         dir = WEST;
         name = "candy bar";
-        states = { { 62, 18, "objects/table_candy_1.bmp" } };
+        states = { { 94, 18, "objects/table_candy_1.bmp" } };
         state = 0;
         verb(int vrb, int objA, int objB) {
         case LookAt:
@@ -658,11 +679,11 @@ room Hotel {
     }
 
     object tableKeycard {
-        x = 160; y = 104; w = 16; h = 16;
-        hs_x = 46; hs_y = 18;
+        x = 144; y = 104; w = 16; h = 16;
+        hs_x = 78; hs_y = 18;
         dir = WEST;
         name = "key card";
-        states = { { 46, 18, "objects/table_keycard_1.bmp" } };
+        states = { { 78, 18, "objects/table_keycard_1.bmp" } };
         state = 0;
         verb(int vrb, int objA, int objB) {
         case LookAt:
@@ -675,11 +696,11 @@ room Hotel {
     }
 
     object tableUniform {
-        x = 176; y = 104; w = 16; h = 16;
-        hs_x = 30; hs_y = 18;
+        x = 160; y = 104; w = 16; h = 16;
+        hs_x = 62; hs_y = 18;
         dir = WEST;
         name = "bellhop uniform";
-        states = { { 30, 18, "objects/table_uniform_1.bmp" } };
+        states = { { 62, 18, "objects/table_uniform_1.bmp" } };
         state = 0;
         verb(int vrb, int objA, int objB) {
         case LookAt:
@@ -691,9 +712,43 @@ room Hotel {
         }
     }
 
+    object tableTowel {
+        x = 176; y = 104; w = 16; h = 16;
+        hs_x = 46; hs_y = 18;
+        dir = WEST;
+        name = "towel";
+        states = { { 46, 18, "objects/table_towel_1.bmp" } };
+        state = 0;
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("The towel, folded on the table like a fancy hotel would."); waitForMessage();
+            return;
+        case PickUp:
+            takeFromTable(invTowel);
+            return;
+        }
+    }
+
+    object tableSoap {
+        x = 192; y = 104; w = 16; h = 16;
+        hs_x = 30; hs_y = 18;
+        dir = WEST;
+        name = "soap";
+        states = { { 30, 18, "objects/table_soap_1.bmp" } };
+        state = 0;
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A bar of soap on the coffee table. Very spa."); waitForMessage();
+            return;
+        case PickUp:
+            takeFromTable(invSoap);
+            return;
+        }
+    }
+
     object coffeeTable {
-        x = 120; y = 104; w = 72; h = 24;
-        hs_x = 86; hs_y = 18;
+        x = 112; y = 104; w = 96; h = 24;
+        hs_x = 110; hs_y = 18;
         dir = WEST;
         name = "coffee table";
 
@@ -760,6 +815,17 @@ room Hotel {
     local script entry() {
         createBoxMatrix();
 
+        // Coming back from the bathroom: step out of the doorway. Object
+        // states and classes are global, so nothing else needs resetting.
+        if(hotelVisited) {
+            putActorAt(VAR_EGO, 10, 118, Hotel);
+            setCurrentActor(VAR_EGO);
+            setActorDirection(90);
+            walkActorTo(VAR_EGO, 36, 120);
+            return;
+        }
+        hotelVisited = 1;
+
         setObjectClass(safe, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(cursor, [ SET_CLASS | UNTOUCHABLE ]);
         // Nothing is on the coffee table yet
@@ -767,6 +833,8 @@ room Hotel {
         setObjectClass(tableCandy, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(tableKeycard, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(tableUniform, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(tableTowel, [ SET_CLASS | UNTOUCHABLE ]);
+        setObjectClass(tableSoap, [ SET_CLASS | UNTOUCHABLE ]);
         setCursorImage(cursor, Hotel);
         setCursorHotspot(8, 8);
         setCursorTransparency(0);

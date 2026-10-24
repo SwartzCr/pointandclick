@@ -14,6 +14,7 @@ SCC  = $(SCUMMC)/scc
 SLD  = $(SCUMMC)/sld
 COST = $(SCUMMC)/cost
 CHAR = $(SCUMMC)/char
+SOUN = $(SCUMMC)/soun
 
 B = build
 
@@ -23,7 +24,7 @@ OUT = $(B)/tentacle
 
 SCC_FLAGS = -V 6 -I $(SCUMMC_INC) -I src -I $(B) -R assets -R $(B)
 
-ROOBJS = $(B)/interface.roobj $(B)/hotel.roobj
+ROOBJS = $(B)/interface.roobj $(B)/hotel.roobj $(B)/bathroom.roobj
 
 all: $(OUT).000
 
@@ -46,6 +47,14 @@ $(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.
 
 $(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) assets/hotel.box | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
+
+$(B)/bathroom.roobj: src/bathroom.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) \
+                   assets/bathroom.box $(B)/flush.soun | $(B)
+	$(SCC) -o $@ $(SCC_FLAGS) $<
+
+# Sound effects: 8-bit PCM .voc files wrapped into SOUN resources
+$(B)/%.soun: assets/%.voc | $(B)
+	$(SOUN) -o $@ -voc $<
 
 $(OUT).000: $(ROOBJS)
 	$(SLD) -o $(OUT) -key 0x69 $(ROOBJS)

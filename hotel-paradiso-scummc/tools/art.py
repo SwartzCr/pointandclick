@@ -42,6 +42,19 @@ C = {
     'hall': (250, 222, 160), 'hall2': (220, 184, 120), 'hall3': (170, 130, 80),
     'match': (40, 40, 120), 'match_hi': (240, 220, 200),
     'tag': (222, 40, 60),
+    # bathroom
+    'tile': (200, 224, 216), 'tile_hi': (226, 240, 234), 'grout': (150, 178, 170),
+    'tile_band': (62, 128, 132), 'floor_a': (222, 226, 220), 'floor_b': (150, 176, 180),
+    'porcelain': (240, 240, 236), 'porcelain_dk': (188, 192, 194), 'porcelain_sh': (150, 156, 160),
+    'chrome': (196, 204, 212), 'chrome_dk': (110, 118, 128),
+    'water': (120, 176, 214), 'water_hi': (196, 228, 246), 'water_dk': (64, 116, 168),
+    'shower': (156, 202, 222), 'shower_dk': (104, 156, 184), 'shower_hi': (204, 234, 244),
+    'mat': (52, 92, 150), 'mat_dk': (36, 66, 116), 'mat_hi': (96, 132, 186),
+    'towel': (240, 232, 214), 'towel_dk': (198, 188, 166), 'towel_band': (62, 128, 132),
+    'soap': (236, 160, 176), 'soap_hi': (250, 204, 214),
+    'glass': (168, 196, 204), 'glass_hi': (222, 238, 242), 'glass_dk': (120, 150, 162),
+    'duck': (246, 208, 60), 'duck_beak': (232, 120, 40),
+    'bottle_b': (90, 140, 190), 'bottle_w': (236, 236, 230),
 }
 
 
@@ -75,11 +88,17 @@ def put(img, x, y, col):
 
 # --------------------------------------------------------------------------- room
 DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, uniform=0,
-               table_matchbook=0, table_candy=0, table_keycard=0, table_uniform=0)
+               table_matchbook=0, table_candy=0, table_keycard=0, table_uniform=0,
+               table_towel=0, table_soap=0)
 
-# Coffee table on the floor, x 120..192, top surface y 105..116. Items set down on it sit in four
-# 16-pixel slots across the top (x 128, 144, 160, 176; y 104..120).
-TABLE_X0, TABLE_X1 = 120, 192
+# Coffee table on the floor, x 112..208, top surface y 105..116. Items set down on it sit in six
+# 16-pixel slots across the top (y 104..120), in TABLE_SLOTS order.
+TABLE_X0, TABLE_X1 = 112, 208
+TABLE_SLOTS = ['matchbook', 'candy', 'keycard', 'uniform', 'towel', 'soap']
+
+
+def table_slot_x(item):
+    return TABLE_X0 + 16 * TABLE_SLOTS.index(item)
 
 
 def draw_wall(img, d):
@@ -120,6 +139,35 @@ def draw_floor(img, d):
         step += 2
     # shadow line under the baseboard
     rect(d, 0, FLOOR_Y, W, FLOOR_Y + 1, 'carpet_dk')
+
+
+def draw_side_doorway(img, d, right=False, inside='bathroom'):
+    """A doorway in the side wall, seen at an angle at the edge of the screen.
+    Bedroom: left edge, looking into the bathroom. Bathroom: right edge, back
+    into the bedroom."""
+    def X(x):
+        return W - 1 - x if right else x
+    # the side wall itself: a darker strip whose foot slants down to the floor
+    for x in range(0, 14):
+        foot = 112 - x                     # floor line in perspective
+        wall_c = 'grout' if inside == 'bedroom' else 'wall_dk'
+        for y in range(0, foot):
+            put(img, X(x), y, wall_c)
+    # the opening: a parallelogram with a wooden frame
+    for x in range(1, 12):
+        top, bot = 18 + x // 2, 110 - x
+        for y in range(top, bot):
+            if x in (1, 11) or y in (top, top + 1):
+                c = 'wood_hi' if x == 1 else 'wood_dk'
+            elif inside == 'bathroom':
+                c = 'tile_hi' if (y // 6 + x // 4) % 2 else 'tile'
+                if y > bot - 10:
+                    c = 'floor_a' if (x + y) % 4 < 2 else 'floor_b'
+            else:
+                c = 'wall_hi' if (x + y // 8) % 3 else 'wall'
+                if y > bot - 10:
+                    c = 'carpet'
+            put(img, X(x), y, c)
 
 
 def draw_door(img, d, st):
@@ -394,28 +442,42 @@ def draw_coffee_table(img, d, s):
         rect(d, lx, 117, lx + 3, 123, 'wood_xdk')
     d.polygon([(x0 + 4, 105), (x1 - 4, 105), (x1 - 1, 116), (x0, 116)], fill=C['wood'])  # top
     d.line([(x0 + 4, 105), (x1 - 4, 105)], fill=C['wood_hi'])
-    for x, y in ((x0 + 10, 108), (x0 + 30, 111), (x0 + 48, 108), (x0 + 22, 114), (x0 + 56, 113)):
+    for x, y in ((x0 + 10, 108), (x0 + 30, 111), (x0 + 48, 108), (x0 + 22, 114), (x0 + 56, 113),
+                 (x0 + 70, 109), (x0 + 80, 113)):
         rect(d, x, y, x + 7, y + 1, 'wood_hi')               # grain
     rect(d, x0, 116, x1, 120, 'wood_dk')                     # front edge
     rect(d, x0, 116, x1, 117, 'wood_hi')
-    # things set down on it, one per slot
+    # things set down on it, one per slot (offsets are relative to the slot)
     if s['table_matchbook']:
-        rect(d, 131, 110, 141, 114, 'match')
-        rect(d, 132, 111, 136, 112, 'match_hi')
+        sx = table_slot_x('matchbook')
+        rect(d, sx + 3, 110, sx + 13, 114, 'match')
+        rect(d, sx + 4, 111, sx + 8, 112, 'match_hi')
     if s['table_candy']:
-        rect(d, 146, 110, 158, 114, 'candy')
-        rect(d, 150, 110, 155, 114, 'candy2')
+        sx = table_slot_x('candy')
+        rect(d, sx + 2, 110, sx + 14, 114, 'candy')
+        rect(d, sx + 6, 110, sx + 11, 114, 'candy2')
     if s['table_keycard']:
-        rect(d, 162, 110, 174, 115, 'card')
-        rect(d, 162, 112, 174, 113, 'card_dk')
-        rect(d, 164, 113, 167, 114, 'white')
+        sx = table_slot_x('keycard')
+        rect(d, sx + 2, 110, sx + 14, 115, 'card')
+        rect(d, sx + 2, 112, sx + 14, 113, 'card_dk')
+        rect(d, sx + 4, 113, sx + 7, 114, 'white')
     if s['table_uniform']:
-        rect(d, 177, 107, 190, 115, 'red')
-        rect(d, 177, 113, 190, 115, 'red_dk')
-        rect(d, 183, 107, 184, 115, 'red_dk')
-        put(img, 183, 109, 'brass'); put(img, 183, 112, 'brass')
-        rect(d, 177, 107, 180, 109, 'brass')
-        rect(d, 187, 107, 190, 109, 'brass')
+        sx = table_slot_x('uniform')
+        rect(d, sx + 1, 107, sx + 14, 115, 'red')
+        rect(d, sx + 1, 113, sx + 14, 115, 'red_dk')
+        rect(d, sx + 7, 107, sx + 8, 115, 'red_dk')
+        put(img, sx + 7, 109, 'brass'); put(img, sx + 7, 112, 'brass')
+        rect(d, sx + 1, 107, sx + 4, 109, 'brass')
+        rect(d, sx + 11, 107, sx + 14, 109, 'brass')
+    if s['table_towel']:
+        sx = table_slot_x('towel')
+        rect(d, sx + 1, 107, sx + 15, 115, 'towel')
+        rect(d, sx + 1, 113, sx + 15, 115, 'towel_dk')
+        rect(d, sx + 1, 109, sx + 15, 110, 'towel_band')
+    if s['table_soap']:
+        sx = table_slot_x('soap')
+        rect(d, sx + 4, 110, sx + 12, 114, 'soap')
+        rect(d, sx + 5, 110, sx + 11, 111, 'soap_hi')
 
 
 def render(state=None):
@@ -426,6 +488,7 @@ def render(state=None):
     d = ImageDraw.Draw(img)
     draw_wall(img, d)
     draw_floor(img, d)
+    draw_side_doorway(img, d)
     draw_door(img, d, s['door'])
     draw_dresser_tv(img, d, s['tv'])
     draw_window(img, d, s['curtains'])
@@ -588,3 +651,191 @@ def cursor_image():
     for (x0, y0, x1, y1) in [(8, 1, 8, 5), (8, 11, 8, 15), (1, 8, 5, 8), (11, 8, 15, 8)]:
         d.line([(x0, y0), (x1, y1)], fill=(255, 255, 255))
     return im
+
+
+# --------------------------------------------------------------------------- bathroom
+BATH_DEFAULT = dict(curtain=0, cabinet=0, flush=0, towel=0, soap=0)
+BATH_FLOOR_Y = 96
+
+
+def draw_bath_walls(img, d):
+    # tiles with grout, a teal band at dado height, plain upper wall
+    rect(d, 0, 0, W, BATH_FLOOR_Y, 'tile')
+    for y in range(0, BATH_FLOOR_Y, 8):
+        rect(d, 0, y, W, y + 1, 'grout')
+        off = 0 if (y // 8) % 2 else 4
+        for x in range(off, W, 8):
+            rect(d, x, y, x + 1, y + 8, 'grout')
+            put(img, x + 2, y + 2, 'tile_hi')
+    rect(d, 0, 46, W, 50, 'tile_band')
+    rect(d, 0, 0, W, 4, 'crown')
+    rect(d, 0, 4, W, 5, 'crown_dk')
+    rect(d, 0, BATH_FLOOR_Y - 3, W, BATH_FLOOR_Y, 'porcelain_dk')
+
+
+def draw_bath_floor(img, d):
+    # soft two-tone tiles whose columns converge on the centre of the room
+    y = BATH_FLOOR_Y
+    row = 0
+    while y < H:
+        h = 5 + row
+        size = 14 + row * 3
+        for i in range(-12, 13):
+            x = W // 2 + i * size - size // 2
+            c = 'floor_a' if (i + row) % 2 else 'floor_b'
+            rect(d, max(0, x), y, min(W, x + size), min(H, y + h), c)
+            rect(d, max(0, x), y, min(W, x + size), y + 1, 'porcelain_dk')
+        y += h
+        row += 1
+    rect(d, 0, BATH_FLOOR_Y, W, BATH_FLOOR_Y + 1, 'porcelain_sh')
+
+
+def draw_tub(img, d, curtain_open):
+    # tub body against the back wall, x 16..112
+    rect(d, 18, 74, 110, 78, 'porcelain')        # rim
+    rect(d, 18, 74, 110, 75, 'white')
+    rect(d, 20, 78, 108, 104, 'porcelain')       # front panel
+    rect(d, 20, 98, 108, 104, 'porcelain_dk')
+    rect(d, 20, 78, 22, 104, 'porcelain_dk')
+    for fx in (24, 98):                          # claw feet
+        rect(d, fx, 104, fx + 6, 109, 'brass')
+        rect(d, fx + 1, 108, fx + 5, 110, 'brass_dk')
+    # chrome tap and shower head on the wall behind
+    rect(d, 92, 60, 104, 63, 'chrome')
+    rect(d, 96, 63, 99, 72, 'chrome_dk')
+    rect(d, 88, 14, 92, 40, 'chrome_dk')
+    rect(d, 82, 14, 96, 18, 'chrome')
+    # curtain rod
+    rect(d, 16, 9, 112, 11, 'chrome')
+    rect(d, 16, 8, 18, 12, 'chrome_dk')
+    rect(d, 110, 8, 112, 12, 'chrome_dk')
+    if curtain_open:
+        # tub interior visible above the rim, with a rubber duck
+        rect(d, 22, 70, 106, 74, 'water')
+        rect(d, 22, 70, 106, 71, 'water_hi')
+        rect(d, 60, 64, 68, 71, 'duck')
+        rect(d, 65, 60, 70, 65, 'duck')
+        rect(d, 70, 62, 73, 64, 'duck_beak')
+        put(img, 67, 61, 'black')
+        # curtain bunched at the left end
+        for x in range(18, 34, 3):
+            rect(d, x, 11, x + 2, 76, 'shower')
+            rect(d, x + 2, 11, x + 3, 76, 'shower_dk')
+        rect(d, 18, 11, 34, 13, 'shower_hi')
+    else:
+        for x in range(18, 110, 6):
+            rect(d, x, 11, x + 4, 80, 'shower')
+            rect(d, x + 4, 11, x + 6, 80, 'shower_dk')
+            rect(d, x + 1, 11, x + 2, 80, 'shower_hi')
+        for x in range(20, 110, 6):              # rings
+            put(img, x, 11, 'chrome_dk')
+
+
+def draw_mat(img, d):
+    rect(d, 34, 113, 94, 120, 'mat')
+    rect(d, 34, 113, 94, 114, 'mat_hi')
+    rect(d, 34, 119, 94, 120, 'mat_dk')
+    for x in range(36, 94, 4):
+        put(img, x, 120, 'mat_hi')              # fringe
+
+
+def draw_toilet(img, d, flush):
+    # tank on the wall
+    rect(d, 132, 52, 164, 74, 'porcelain')
+    rect(d, 132, 52, 164, 55, 'white')
+    rect(d, 132, 70, 164, 74, 'porcelain_dk')
+    # flush handle: up, or pushed down while flushing
+    if flush:
+        rect(d, 134, 59, 140, 61, 'chrome')
+        rect(d, 138, 61, 140, 64, 'chrome_dk')
+    else:
+        rect(d, 134, 57, 140, 59, 'chrome')
+    # seat ring, lid up against the tank, water in the bowl
+    rect(d, 136, 74, 160, 78, 'porcelain_dk')    # raised lid edge
+    d.ellipse([132, 76, 164, 90], fill=C['porcelain'])
+    d.ellipse([136, 78, 160, 88], fill=C['water'])
+    if flush == 1:
+        d.arc([139, 79, 157, 87], 20, 200, fill=C['water_hi'])
+        d.arc([143, 80, 153, 86], 200, 20, fill=C['water_dk'])
+    elif flush == 2:
+        d.arc([139, 79, 157, 87], 200, 20, fill=C['water_hi'])
+        d.arc([143, 80, 153, 86], 20, 200, fill=C['water_dk'])
+        rect(d, 146, 82, 150, 84, 'water_dk')
+    else:
+        rect(d, 142, 80, 152, 81, 'water_hi')
+    # bowl front and pedestal
+    rect(d, 138, 88, 158, 100, 'porcelain')
+    rect(d, 138, 96, 158, 100, 'porcelain_dk')
+    rect(d, 136, 100, 160, 104, 'porcelain_sh')
+
+
+def draw_sink(img, d, soap):
+    rect(d, 198, 92, 218, 100, 'porcelain_sh')   # pedestal foot
+    rect(d, 202, 76, 214, 94, 'porcelain')
+    rect(d, 202, 76, 204, 94, 'porcelain_dk')
+    rect(d, 186, 64, 230, 74, 'porcelain')       # basin
+    rect(d, 186, 64, 230, 65, 'white')
+    rect(d, 190, 72, 226, 76, 'porcelain_dk')
+    rect(d, 194, 65, 222, 68, 'porcelain_sh')    # bowl opening
+    rect(d, 206, 57, 210, 65, 'chrome')          # faucet
+    rect(d, 204, 57, 214, 59, 'chrome')
+    rect(d, 213, 59, 214, 61, 'chrome_dk')
+    rect(d, 198, 61, 202, 64, 'chrome_dk')       # taps
+    rect(d, 214, 61, 218, 64, 'chrome_dk')
+    if soap:
+        rect(d, 188, 60, 196, 64, 'soap')
+        rect(d, 189, 60, 195, 61, 'soap_hi')
+
+
+def draw_mirror(img, d, open_):
+    # medicine cabinet above the sink, x 192..224, y 16..56
+    rect(d, 194, 18, 222, 54, 'chrome_dk')
+    if not open_:
+        rect(d, 196, 20, 220, 52, 'glass')
+        for i in range(6):                       # reflection streaks
+            put(img, 200 + i, 24 + i, 'glass_hi')
+            put(img, 206 + i, 24 + i, 'glass_hi')
+        rect(d, 196, 46, 220, 52, 'glass_dk')
+        rect(d, 216, 34, 218, 40, 'chrome')      # finger pull
+    else:
+        rect(d, 198, 20, 220, 52, 'safe_in')     # cabinet inside
+        for y in (30, 42):
+            rect(d, 198, y, 220, y + 2, 'porcelain_dk')   # shelves
+        rect(d, 201, 22, 204, 30, 'bottle_b')
+        rect(d, 206, 24, 209, 30, 'bottle_w')
+        rect(d, 211, 23, 214, 30, 'bottle2')
+        rect(d, 203, 36, 212, 42, 'shower_hi')   # shower cap
+        rect(d, 214, 37, 218, 42, 'red')          # sewing kit
+        rect(d, 200, 47, 216, 50, 'bottle_w')    # toothbrush
+        rect(d, 192, 18, 198, 54, 'glass')       # door swung open, edge-on
+        rect(d, 192, 18, 193, 54, 'chrome_dk')
+
+
+def draw_towel(img, d, towel):
+    rect(d, 250, 36, 286, 38, 'chrome')          # towel bar
+    rect(d, 248, 34, 251, 40, 'chrome_dk')
+    rect(d, 285, 34, 288, 40, 'chrome_dk')
+    if towel:
+        rect(d, 254, 36, 282, 70, 'towel')
+        rect(d, 254, 36, 282, 40, 'towel_dk')
+        rect(d, 254, 58, 282, 62, 'towel_band')
+        rect(d, 254, 66, 282, 70, 'towel_dk')
+        rect(d, 280, 40, 282, 70, 'towel_dk')
+
+
+def render_bathroom(state=None):
+    s = dict(BATH_DEFAULT)
+    if state:
+        s.update(state)
+    img = Image.new('RGB', (W, H))
+    d = ImageDraw.Draw(img)
+    draw_bath_walls(img, d)
+    draw_bath_floor(img, d)
+    draw_side_doorway(img, d, right=True, inside='bedroom')
+    draw_tub(img, d, s['curtain'])
+    draw_mat(img, d)
+    draw_toilet(img, d, s['flush'])
+    draw_sink(img, d, s['soap'])
+    draw_mirror(img, d, s['cabinet'])
+    draw_towel(img, d, s['towel'])
+    return img

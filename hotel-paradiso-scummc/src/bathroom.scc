@@ -1,0 +1,341 @@
+/* Hotel Paradiso, Room 714 - the bathroom, through the doorway on the
+ * bedroom's left wall.
+ *
+ * A tub with a shower curtain, a bath mat, a toilet that flushes (animated,
+ * with a sound), a pedestal sink with a bar of soap, a mirror that opens into
+ * a medicine cabinet, and a towel on a rail. The soap and towel can be taken.
+ * The doorway on the right leads back to the bedroom.
+ */
+
+#include "hotel.sch"
+
+room Bathroom {
+    image = "bathroom.bmp";
+    boxd = "bathroom.box";
+    trans = 0;
+
+    sound flushSnd = "flush.soun";
+
+    object toilet;
+    object soap;
+    object towel;
+
+    // ------------------------------------------------------------ scripts
+    local script goBedroom() {
+        startRoom(Hotel);
+    }
+
+    // Press the handle: the handle drops and the water swirls while the
+    // flush plays, then everything settles back.
+    local script flushToilet() {
+        int i;
+        ResRoom::showInterface(0);
+        startSound(flushSnd);
+        for(i = 0 ; i < 6 ; i++) {
+            setObjectState(toilet, 1);
+            delay(7);
+            setObjectState(toilet, 2);
+            delay(7);
+        }
+        setObjectState(toilet, 0);
+        ResRoom::showInterface(1);
+        egoSay("Whoosh. Deeply satisfying."); waitForMessage();
+    }
+
+    // ------------------------------------------------------------ doorway
+    object bedroomDoor {
+        x = 304; y = 24; w = 16; h = 104;
+        hs_x = -4; hs_y = 98;
+        dir = EAST;
+        name = "bedroom";
+
+        verb(int vrb, int objA, int objB) {
+        case WalkTo:
+        case Open:
+        case Use:
+            goBedroom();
+            return;
+        case LookAt:
+            egoSay("Back to the bedroom."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ shower curtain
+    // Drawn closed in the background; state 1 shows it pulled aside, with the
+    // tub (and its rubber duck) behind it.
+    object curtain {
+        x = 16; y = 8; w = 96; h = 72;
+        hs_x = 48; hs_y = 114;
+        dir = NORTH;
+        name = "shower curtain";
+        states = { { 48, 114, "objects/bath_curtain_1.bmp" } };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(bathCurtainOpen) { egoSay("A shower curtain, bunched up. Patterned with tiny fish."); waitForMessage(); }
+            else { egoSay("A shower curtain, patterned with tiny fish. Optimistic."); waitForMessage(); }
+            return;
+        case Open:
+        case Pull:
+            if(bathCurtainOpen) { egoSay("It's already open."); waitForMessage(); }
+            else {
+                bathCurtainOpen = 1;
+                setObjectState(curtain, 1);
+                egoSay("A rubber duck! Someone left a rubber duck in the tub."); waitForMessage();
+            }
+            return;
+        case Close:
+        case Push:
+            if(bathCurtainOpen) {
+                bathCurtainOpen = 0;
+                setObjectState(curtain, 0);
+            } else { egoSay("It's already closed."); waitForMessage(); }
+            return;
+        case PickUp:
+            egoSay("It's attached to the rail. Firmly."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ tub
+    object tub {
+        x = 16; y = 80; w = 96; h = 32;
+        hs_x = 48; hs_y = 42;
+        dir = NORTH;
+        name = "bathtub";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(bathCurtainOpen) { egoSay("A claw-foot tub. There's a rubber duck in it, judging me."); waitForMessage(); }
+            else { egoSay("A claw-foot tub. The curtain's drawn."); waitForMessage(); }
+            return;
+        case Use:
+            if(objB == invSoap) { egoSay("Tempting. But check-out was at noon."); waitForMessage(); }
+            else if(objB) { egoSay("That doesn't need a bath."); waitForMessage(); }
+            else { egoSay("No time for a bath. Check-out was at noon."); waitForMessage(); }
+            return;
+        case TalkTo:
+            if(bathCurtainOpen) {
+                egoSay("Hello, duck."); waitForMessage();
+                egoSay("The duck says nothing. Very professional."); waitForMessage();
+            } else { egoSay("Anyone in there?"); waitForMessage(); }
+            return;
+        case PickUp:
+        case Push:
+        case Pull:
+            egoSay("It's a cast-iron bathtub. It's not going anywhere."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ bath mat
+    object mat {
+        x = 32; y = 112; w = 64; h = 8;
+        hs_x = 32; hs_y = 16;
+        dir = NORTH;
+        name = "bath mat";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A bath mat. Damp, for reasons I'd rather not think about."); waitForMessage();
+            return;
+        case PickUp:
+            egoSay("It's damp. Hard pass."); waitForMessage();
+            return;
+        case Pull:
+        case Open:
+            egoSay("I lift a corner. Nothing under it but more floor."); waitForMessage();
+            return;
+        case Push:
+            egoSay("It's already on the floor. It can't get much lower."); waitForMessage();
+            return;
+        case Use:
+            if(objB == invTowel) { egoSay("A towel on a bath mat. That's just a thicker bath mat."); waitForMessage(); }
+            else { egoSay("I wipe my feet. Very civilised."); waitForMessage(); }
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ toilet
+    object toilet {
+        x = 128; y = 48; w = 40; h = 56;
+        // Walk to its right, facing it, so the player doesn't hide the flush
+        hs_x = 46; hs_y = 62;
+        dir = WEST;
+        name = "toilet";
+        states = {
+            { 46, 62, "objects/bath_toilet_1.bmp" },   // flushing, swirl A
+            { 46, 62, "objects/bath_toilet_2.bmp" }    // flushing, swirl B
+        };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A toilet. The lid's up. The handle is very shiny."); waitForMessage();
+            return;
+        case Use:
+            if(objB) { egoSay("That is not going down there."); waitForMessage(); }
+            else flushToilet();
+            return;
+        case Push:
+        case Pull:
+            flushToilet();
+            return;
+        case Open:
+            egoSay("The lid's already up."); waitForMessage();
+            return;
+        case Close:
+            egoSay("I'll leave the lid as it is. Living dangerously."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("Hello down there?"); waitForMessage();
+            egoSay("...it gurgled. I'm choosing to take that as a no."); waitForMessage();
+            return;
+        case PickUp:
+            egoSay("It's plumbed in. Thankfully."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ soap
+    // On the edge of the sink (state 1) until taken. Declared before the sink
+    // so the cursor finds it first.
+    object soap {
+        x = 184; y = 56; w = 16; h = 8;
+        hs_x = 16; hs_y = 54;
+        dir = NORTH;
+        name = "bar of soap";
+        states = { { 16, 54, "objects/bath_soap_1.bmp" } };
+        state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A tiny bar of soap with the hotel's crest pressed into it."); waitForMessage();
+            return;
+        case PickUp:
+            tookSoap = 1;
+            hasSoap = 1;
+            setObjectState(soap, 0);
+            setObjectClass(soap, [ SET_CLASS | UNTOUCHABLE ]);
+            ResRoom::refreshInventory();
+            egoSay("Free soap. The best kind of soap."); waitForMessage();
+            return;
+        case Use:
+            egoSay("I wash my hands. Very hygienic."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ sink
+    object sink {
+        x = 184; y = 56; w = 48; h = 48;
+        hs_x = 24; hs_y = 54;
+        dir = NORTH;
+        name = "sink";
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A pedestal sink. Spotless, unlike me."); waitForMessage();
+            return;
+        case Use:
+            if(objB == invSoap) { egoSay("I wash my hands. Very hygienic. I feel like a new guest."); waitForMessage(); }
+            else if(objB == invTowel) { egoSay("I dry the sink. Nobody asked me to."); waitForMessage(); }
+            else if(objB) { egoSay("I'd rather not get that wet."); waitForMessage(); }
+            else { egoSay("I splash some cold water on my face. That's better."); waitForMessage(); }
+            return;
+        case Open:
+            egoSay("I turn the tap on and off again. Water: confirmed."); waitForMessage();
+            return;
+        case PickUp:
+            egoSay("It's bolted to the wall. And the floor."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ mirror
+    // Swings open into a medicine cabinet (state 1).
+    object mirror {
+        x = 192; y = 16; w = 32; h = 40;
+        hs_x = 16; hs_y = 94;
+        dir = NORTH;
+        name = "mirror";
+        states = { { 16, 94, "objects/bath_mirror_1.bmp" } };
+        state = 0;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            if(cabinetOpen) {
+                egoSay("A shower cap, a sewing kit, a toothbrush and three tiny bottles."); waitForMessage();
+                egoSay("Nothing I need. Everything I'd steal, though."); waitForMessage();
+            } else if(wearingUniform) {
+                egoSay("Dashing. Truly a bellhop among bellhops."); waitForMessage();
+            } else {
+                egoSay("I look like I slept in a hotel. Which I did."); waitForMessage();
+            }
+            return;
+        case Open:
+        case Pull:
+            if(cabinetOpen) { egoSay("It's already open."); waitForMessage(); }
+            else {
+                cabinetOpen = 1;
+                setObjectState(mirror, 1);
+                egoSay("It's a medicine cabinet behind the mirror."); waitForMessage();
+            }
+            return;
+        case Close:
+        case Push:
+            if(cabinetOpen) {
+                cabinetOpen = 0;
+                setObjectState(mirror, 0);
+            } else { egoSay("It's closed."); waitForMessage(); }
+            return;
+        case Use:
+            if(objB == invTowel) { egoSay("I polish the mirror. Now I can see myself more clearly. Mixed feelings."); waitForMessage(); }
+            else { egoSay("I check my teeth. All present."); waitForMessage(); }
+            return;
+        case TalkTo:
+            egoSay("Mirror, mirror on the wall..."); waitForMessage();
+            egoSay("...nothing. Wrong kind of mirror."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ towel
+    // Hangs on the rail (state 1) until taken.
+    object towel {
+        x = 248; y = 32; w = 40; h = 40;
+        hs_x = 20; hs_y = 78;
+        dir = NORTH;
+        name = "towel";
+        states = { { 20, 78, "objects/bath_towel_1.bmp" } };
+        state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case LookAt:
+            egoSay("A fluffy white towel with a teal stripe."); waitForMessage();
+            return;
+        case PickUp:
+            tookTowel = 1;
+            hasTowel = 1;
+            setObjectState(towel, 0);
+            setObjectClass(towel, [ SET_CLASS | UNTOUCHABLE ]);
+            ResRoom::refreshInventory();
+            egoSay("A towel. Every traveller should have one."); waitForMessage();
+            return;
+        case Use:
+            egoSay("I dry my hands on it. Then I put it back exactly how it was."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ entry
+    local script entry() {
+        createBoxMatrix();
+        putActorAt(VAR_EGO, 310, 122, Bathroom);
+        setCurrentActor(VAR_EGO);
+        setActorDirection(270);
+        walkActorTo(VAR_EGO, 284, 122);
+    }
+}

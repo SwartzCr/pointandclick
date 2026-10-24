@@ -21,19 +21,29 @@ To use an item on yourself (eat the candy, put on the uniform), click **Use**, t
 item, then either yourself or the item again.
 F5 opens the menu, `.` skips a line of dialogue.
 
-## The room
+## The rooms
 
-Eleven pieces of furniture you can interact with: door, TV, curtains, minibar, lamp, phone,
-nightstand, painting, wall safe, bed and coffee table. The three things you can take (candy bar,
-matchbook, key card) are objects of their own, clickable only while you can see them.
+**Room 714.** Eleven pieces of furniture you can interact with: door, TV, curtains,
+minibar, lamp, phone, nightstand, painting, wall safe, bed and coffee table. The three
+things you can take (candy bar, matchbook, key card) are objects of their own, clickable
+only while you can see them.
 
 There's also a bellhop uniform lying on the bed. Pick it up and use it on yourself to put
 it on: the player switches to a second costume with its own full set of walking and
-talking frames. **Use** it again to take it off.
+talking frames. **Use** it again to take it off. It isn't needed to finish, but it does
+change the ending slightly.
 
 The coffee table can't be picked up, but you can put any inventory item down on it
-("Use matchbook with coffee table") and pick it back up later. It isn't needed to finish,
-but it does change the ending slightly.
+("Use matches with coffee table") and pick it back up later.
+
+**The bathroom**, through the doorway on the left wall: a tub with a shower curtain that
+opens and closes, a bath mat, a toilet that flushes (animated, with a sound), a sink, a
+mirror that opens into a medicine cabinet, a towel and a bar of soap. The towel and soap
+can be taken. Walk through the doorway on the right to go back.
+
+The inventory holds up to six items in two columns, so it uses short labels
+("matches", "keycard"); the objects in the rooms keep their full names.
+
 Each object has its own verb code and answers the verbs that make sense for it; anything
 else gets a stock reply.
 
@@ -53,10 +63,11 @@ else gets a stock reply.
 |---|---|
 | `src/hotel.sch` | Shared declarations: verbs, actor, global variables, colour constants |
 | `src/interface.scc` | `ResRoom`: boot (`main`), verb bar, live sentence line, input handler, sentence handler, stock replies, text inventory |
-| `src/hotel.scc` | `Hotel`: the room, its objects and their verb code, the phone call, the ending |
+| `src/hotel.scc` | `Hotel`: Room 714, its objects and their verb code, the phone call, the ending |
+| `src/bathroom.scc` | `Bathroom`: the bathroom, its objects, the flush animation |
 | `assets/` | Generated art and data the sources reference (committed, so Python isn't needed to build) |
 | `tools/art.py` | Procedural pixel art: the room in every object state, costume frames, cursor |
-| `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, object state images, both costumes + `.scost` files, font sheet, walk boxes |
+| `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, both room backgrounds, object state images, both costumes + `.scost` files, font sheet, walk boxes, the flush sound |
 | `dist/` | Prebuilt `tentacle.000` / `tentacle.001` |
 
 ## How it works
@@ -83,10 +94,18 @@ else gets a stock reply.
   (`init`, `walk`, `stand`, `talkStart`, `talkStop`). That lets `wearUniform` call
   `setActorCostume()` on the player at any time: the actor keeps its walk and talk frame
   numbers and just draws them from the other costume. Both are loaded and locked at boot.
+* **Two rooms.** Each room is its own `room` block with its own background and walk
+  boxes. The doorways handle **Walk to** themselves (the input handler runs an object's
+  WalkTo code if it has any), and call `startRoom()`. Object states and classes are global
+  in SCUMM, so each room's `entry()` only places the player at the right doorway; Room
+  714's first-visit setup and intro run once.
+* **Flush.** `flush.voc` is generated as 8-bit PCM and wrapped into a SOUN resource by
+  ScummC's `soun` tool. The toilet alternates between two object states while it plays.
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
   in after them, and the costume's 16 local colours are mapped onto room indices with
-  `palette(...)` in `guest.scost`.
+  `palette(...)` in `guest.scost`. Both rooms are given the same palette, so the
+  costumes need only one mapping.
 
 ## Building
 

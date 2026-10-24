@@ -4,7 +4,10 @@
     python3 tools/make_assets.py [assets_dir]
 
 Writes (all into assets/):
-  room.bmp              320x144 background, 8-bit; its palette IS the room palette
+  room.bmp              320x144 background of Room 714, 8-bit; its palette IS the room palette
+  bathroom.bmp          the bathroom background, same palette
+  bathroom.box          the bathroom's walk boxes
+  flush.voc             toilet flush sound, built into a SOUN resource by `soun`
   objects/<obj>_<n>.bmp state images for the objects (indices into the room palette)
   cursor.bmp            16x16 cursor, index 0 = transparent
   hotel.box             walk boxes (raw BOXD block; the matrix is built at runtime)
@@ -46,23 +49,38 @@ OBJECT_STATES = {
     'nightstand': ((200, 72, 32, 24), [dict(drawer=1), dict(drawer=2)]),
     'safe':       ((248, 8, 48, 40), [dict(safe=1), dict(safe=2), dict(safe=3)]),
     'uniform':    ((264, 96, 32, 16), [dict(uniform=1)]),
-    # items set down on the coffee table, one 16-pixel slot each
-    'table_matchbook': ((128, 104, 16, 16), [dict(table_matchbook=1)]),
-    'table_candy':     ((144, 104, 16, 16), [dict(table_candy=1)]),
-    'table_keycard':   ((160, 104, 16, 16), [dict(table_keycard=1)]),
-    'table_uniform':   ((176, 104, 16, 16), [dict(table_uniform=1)]),
+}
+# items set down on the coffee table, one 16-pixel slot each
+for _item in art.TABLE_SLOTS:
+    OBJECT_STATES['table_' + _item] = ((art.table_slot_x(_item), 104, 16, 16), [{'table_' + _item: 1}])
+
+# Bathroom object states, cropped from art.render_bathroom(). Must match the
+# object declarations in src/bathroom.scc.
+BATH_OBJECT_STATES = {
+    'curtain': ((16, 8, 96, 72), [dict(curtain=1)]),
+    'mirror':  ((192, 16, 32, 40), [dict(cabinet=1)]),
+    'toilet':  ((128, 48, 40, 56), [dict(flush=1), dict(flush=2)]),
+    'towel':   ((248, 32, 40, 40), [dict(towel=1)]),
+    'soap':    ((184, 56, 16, 8), [dict(soap=1)]),
 }
 
 # Walk boxes (ul, ur, lr, ll). Box 0 is the engine's dummy box.
-# The coffee table (x 120..192, y 109..128) is a hole in the floor. Boxes keep the
+# The coffee table (x 112..208, y 105..128) is a hole in the floor. Boxes keep the
 # player's feet half a sprite-width (12px) clear of it on the sides, so the
 # player is never drawn over the table while standing behind its front edge.
 BOXES = [
-    ((10, 100), (230, 100), (230, 108), (8, 108)),   # behind the table
-    ((8, 108), (106, 108), (106, 136), (8, 136)),    # left of the table
-    ((204, 108), (230, 108), (230, 136), (204, 136)),  # right of the table
-    ((106, 130), (204, 130), (204, 136), (106, 136)),  # in front of the table
-    ((8, 136), (312, 136), (312, 142), (6, 142)),    # strip in front of the bed
+    ((10, 100), (230, 100), (230, 108), (8, 108)),     # behind the table
+    ((8, 108), (100, 108), (100, 136), (8, 136)),      # left of the table
+    ((220, 108), (230, 108), (230, 136), (220, 136)),  # right of the table
+    ((100, 130), (220, 130), (220, 136), (100, 136)),  # in front of the table
+    ((8, 136), (312, 136), (312, 142), (6, 142)),      # strip in front of the bed
+]
+
+# Bathroom: keep the player's feet in front of the tub (left) and free to walk
+# right up to the toilet and sink.
+BATH_BOXES = [
+    ((8, 114), (116, 114), (116, 142), (6, 142)),      # in front of the tub
+    ((116, 106), (304, 106), (312, 142), (116, 142)),  # toilet, sink, towel, door
 ]
 
 
@@ -219,24 +237,54 @@ def build_font():
               [(0, 0, 0), (255, 255, 255), (40, 40, 40), (255, 0, 255)], 8)
 
 
-def build_boxes():
+def build_boxes(name, boxes):
     def box(ul, ur, lr, ll, scale=255):
         return struct.pack('<8hBBH', *ul, *ur, *lr, *ll, 0, 0, scale)
-    body = struct.pack('<H', len(BOXES) + 1) + box(*[(-32000, -32000)] * 4)
-    body += b''.join(box(*b) for b in BOXES)
-    with open(os.path.join(OUT, 'hotel.box'), 'wb') as f:
+    body = struct.pack('<H', len(boxes) + 1) + box(*[(-32000, -32000)] * 4)
+    body += b''.join(box(*b) for b in boxes)
+    with open(os.path.join(OUT, name), 'wb') as f:
         f.write(b'BOXD' + struct.pack('>I', 8 + len(body)) + body)
+
+
+def build_flush_sound():
+    """A toilet flush: filtered noise that swells, gurgles and drains away.
+    8-bit unsigned PCM at 11025 Hz in a Creative Voice File, for `soun -voc`."""
+    import math
+    import random
+    rnd = random.Random(714)
+    rate = 11025
+    n = int(rate * 1.6)
+    samples, lp, lp2 = [], 0.0, 0.0
+    for i in range(n):
+        t = i / rate
+        env = min(1.0, t / 0.08) * (1.0 if t < 0.7 else max(0.0, 1 - (t - 0.7) / 0.9))
+        lp += 0.25 * (rnd.uniform(-1, 1) - lp)            # rushing water
+        lp2 += 0.04 * (rnd.uniform(-1, 1) - lp2)          # low rumble
+        gurgle = math.sin(2 * math.pi * (180 + 60 * math.sin(t * 9)) * t) * (0.25 if t > 0.9 else 0)
+        v = env * (0.9 * lp + 1.6 * lp2 + gurgle * env)
+        samples.append(max(0, min(255, int(128 + 100 * v))))
+    data = bytes(samples)
+    rate_byte = 256 - 1000000 // rate
+    block = bytes([1]) + struct.pack('<I', len(data) + 2)[:3] + bytes([rate_byte, 0]) + data
+    hdr = b'Creative Voice File\x1a' + struct.pack('<HHH', 26, 0x010A, 0x1129)
+    with open(os.path.join(OUT, 'flush.voc'), 'wb') as f:
+        f.write(hdr + block + bytes([0]))
 
 
 def main():
     os.makedirs(os.path.join(OUT, 'objects'), exist_ok=True)
     pal = Palette()
     bg = art.render()
+    bath = art.render_bathroom()
     crops = {}
     for name, ((x, y, w, h), states) in OBJECT_STATES.items():
         assert x % 8 == 0 and w % 8 == 0, name
         crops[name] = [art.render(st).crop((x, y, x + w, y + h)) for st in states]
-    for c in pixels(bg):
+    for name, ((x, y, w, h), states) in BATH_OBJECT_STATES.items():
+        assert x % 8 == 0 and w % 8 == 0 and y % 8 == 0 and h % 8 == 0, name
+        crops['bath_' + name] = [art.render_bathroom(st).crop((x, y, x + w, y + h)) for st in states]
+    # Both rooms share one palette, so the costumes look the same in each
+    for c in pixels(bg) + pixels(bath):
         pal.add(c)
     for ims in crops.values():
         for im in ims:
@@ -251,6 +299,7 @@ def main():
 
     full = pal.full()
     write_bmp(os.path.join(OUT, 'room.bmp'), [pal.index[c] for c in pixels(bg)], art.W, art.H, full)
+    write_bmp(os.path.join(OUT, 'bathroom.bmp'), [pal.index[c] for c in pixels(bath)], art.W, art.H, full)
     for name, ims in crops.items():
         for i, im in enumerate(ims):
             write_bmp(os.path.join(OUT, 'objects', f'{name}_{i + 1}.bmp'),
@@ -258,7 +307,9 @@ def main():
     write_bmp(os.path.join(OUT, 'cursor.bmp'),
               [0 if c == MAGENTA else pal.index[c] for c in pixels(cursor)], 16, 16, full)
     build_font()
-    build_boxes()
+    build_boxes('hotel.box', BOXES)
+    build_boxes('bathroom.box', BATH_BOXES)
+    build_flush_sound()
     print(f'assets written to {os.path.normpath(OUT)} ({len(pal.colors)} palette entries used)')
 
 

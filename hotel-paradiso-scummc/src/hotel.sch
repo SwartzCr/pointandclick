@@ -15,7 +15,7 @@ verb TalkTo, Use, WalkTo;
 verb SntcLine;
 
 // Text inventory: each carried item is a verb in the right-hand column
-verb invMatchbook, invKeycard, invCandy, invUniform;
+verb invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap;
 
 actor guest;
 
@@ -32,6 +32,9 @@ bit safeOpen, knowsCode;
 bit hasMatchbook, hasKeycard, hasCandy, hasUniform;
 bit tookMatchbook, tookKeycard, tookCandy;
 bit wearingUniform;
+bit hasTowel, hasSoap, tookTowel, tookSoap;
+bit bathCurtainOpen, cabinetOpen;
+bit hotelVisited;
 bit tvAd;
 int phoneCalls;
 
@@ -49,6 +52,7 @@ int phoneCalls;
 #define SET_CLASS   0x80
 
 room Hotel;
+room Bathroom;
 
 // The resource room: charset, costume and all the global scripts
 room ResRoom {

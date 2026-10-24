@@ -68,53 +68,60 @@ room ResRoom {
         redrawVerb();
 
         // Inventory slots, shown only while the item is carried
-        setCurrentVerb(invMatchbook); initVerb(); setVerbName("matchbook");
-        setCurrentVerb(invKeycard);   initVerb(); setVerbName("key card");
-        setCurrentVerb(invCandy);     initVerb(); setVerbName("candy bar");
+        // Labels are short so six fit in two 62-pixel columns
+        setCurrentVerb(invMatchbook); initVerb(); setVerbName("matches");
+        setCurrentVerb(invKeycard);   initVerb(); setVerbName("keycard");
+        setCurrentVerb(invCandy);     initVerb(); setVerbName("candy");
         setCurrentVerb(invUniform);   initVerb(); setVerbName("uniform");
-        makeVerb(invMatchbook, 216, 155);
-        makeVerb(invKeycard,   216, 165);
-        makeVerb(invCandy,     216, 175);
-        makeVerb(invUniform,   216, 185);
+        setCurrentVerb(invTowel);     initVerb(); setVerbName("towel");
+        setCurrentVerb(invSoap);      initVerb(); setVerbName("soap");
+        makeVerb(invMatchbook, 196, 157);
+        makeVerb(invKeycard,   196, 169);
+        makeVerb(invCandy,     196, 181);
+        makeVerb(invUniform,   258, 157);
+        makeVerb(invTowel,     258, 169);
+        makeVerb(invSoap,      258, 181);
         setCurrentVerb(invMatchbook); setVerbColor(C_YELLOW);
         setCurrentVerb(invKeycard);   setVerbColor(C_YELLOW);
         setCurrentVerb(invCandy);     setVerbColor(C_YELLOW);
         setCurrentVerb(invUniform);   setVerbColor(C_YELLOW);
+        setCurrentVerb(invTowel);     setVerbColor(C_YELLOW);
+        setCurrentVerb(invSoap);      setVerbColor(C_YELLOW);
         refreshInventory();
     }
 
-    // Lay out carried items top to bottom with no gaps. Every slot is erased
-    // first: redrawing a moved verb clears its old spot, which would wipe
-    // whatever item was just drawn there.
+    // Put one carried item in the next free inventory slot: three rows in
+    // each of two columns, filled top to bottom, left column first.
+    script placeInv(int vrb, int slot) {
+        setCurrentVerb(vrb);
+        if(slot < 3)
+            setVerbXY(196, 157 + slot * 12);
+        else
+            setVerbXY(258, 157 + (slot - 3) * 12);
+        setVerbOn();
+        redrawVerb();
+    }
+
+    // Lay out carried items with no gaps. Every slot is erased first:
+    // redrawing a moved verb clears its old spot, which would wipe whatever
+    // item was just drawn there.
     script refreshInventory() {
-        int y;
+        int slot;
 
         setCurrentVerb(invMatchbook); setVerbOff(); redrawVerb();
         setCurrentVerb(invKeycard);   setVerbOff(); redrawVerb();
         setCurrentVerb(invCandy);     setVerbOff(); redrawVerb();
         setCurrentVerb(invUniform);   setVerbOff(); redrawVerb();
+        setCurrentVerb(invTowel);     setVerbOff(); redrawVerb();
+        setCurrentVerb(invSoap);      setVerbOff(); redrawVerb();
 
-        // Four items fit in the 56-pixel verb area at 10-pixel spacing
-        y = 155;
-        if(hasMatchbook) {
-            setCurrentVerb(invMatchbook);
-            setVerbXY(216, y); setVerbOn(); redrawVerb();
-            y += 10;
-        }
-        if(hasKeycard) {
-            setCurrentVerb(invKeycard);
-            setVerbXY(216, y); setVerbOn(); redrawVerb();
-            y += 10;
-        }
-        if(hasCandy) {
-            setCurrentVerb(invCandy);
-            setVerbXY(216, y); setVerbOn(); redrawVerb();
-            y += 10;
-        }
-        if(hasUniform) {
-            setCurrentVerb(invUniform);
-            setVerbXY(216, y); setVerbOn(); redrawVerb();
-        }
+        slot = 0;
+        if(hasMatchbook) { placeInv(invMatchbook, slot); slot++; }
+        if(hasKeycard)   { placeInv(invKeycard, slot);   slot++; }
+        if(hasCandy)     { placeInv(invCandy, slot);     slot++; }
+        if(hasUniform)   { placeInv(invUniform, slot);   slot++; }
+        if(hasTowel)     { placeInv(invTowel, slot);     slot++; }
+        if(hasSoap)      { placeInv(invSoap, slot);      slot++; }
     }
 
     script showInterface(int show) {
@@ -138,7 +145,7 @@ room ResRoom {
             if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO)
                 obj = VAR_EGO;
             inv = getVerbAt(VAR_MOUSE_X, VAR_MOUSE_Y);
-            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy, invUniform ]))
+            unless(isAnyOf(inv, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap ]))
                 inv = 0;
             hoverObj = obj;
             hoverInv = inv;
@@ -172,7 +179,7 @@ room ResRoom {
         if(gameOver) return;
 
         if(area == 1) {
-            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy, invUniform ]))
+            if(isAnyOf(cmd, [ invMatchbook, invKeycard, invCandy, invUniform, invTowel, invSoap ]))
                 inventoryClick(cmd);
             else if(isAnyOf(cmd, [ Open, Close, TalkTo, PickUp, LookAt,
                                    Use, Push, Pull, WalkTo ])) {
@@ -201,6 +208,11 @@ room ResRoom {
         }
 
         stopSentence();
+        // Doorways handle Walk to themselves, so walking into one changes room
+        if(obj && curVerb == WalkTo && getObjectVerbEntrypoint(obj, WalkTo)) {
+            doSentence(WalkTo, obj, 0, 0);
+            return;
+        }
         if(!obj || curVerb == WalkTo) {
             walkActorTo(VAR_EGO, VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
             curVerb = WalkTo;
@@ -319,6 +331,18 @@ room ResRoom {
             else
                 egoSay("I could eat it. I've earned it.");
             break;
+        case invTowel:
+            if(curVerb == LookAt)
+                egoSay("A fluffy hotel towel. Embroidered: PROPERTY OF HOTEL PARADISO.");
+            else
+                egoSay("I could dry off with it. Use it, I mean.");
+            break;
+        case invSoap:
+            if(curVerb == LookAt)
+                egoSay("A tiny bar of hotel soap. Smells like a meadow that's trying too hard.");
+            else
+                egoSay("It works better with water.");
+            break;
         }
         curVerb = WalkTo;
     }
@@ -345,7 +369,11 @@ room ResRoom {
             hasCandy = 0;
             refreshInventory();
             egoSay("Mmm. That's going on the bill.");
-        } else
+        } else if(item == invTowel)
+            egoSay("I pat my face dry. Refreshing, in a hotel sort of way.");
+        else if(item == invSoap)
+            egoSay("I'd need some water for that. There's a sink in the bathroom.");
+        else
             egoSay("I'd rather keep it in my pocket.");
     }
 
