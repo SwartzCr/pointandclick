@@ -22,7 +22,11 @@ room Hotel {
     boxd = "hotel.box";
     trans = 0;
 
+    sound tvSnd = "tv.soun";       // two seconds of indistinct chatter
+    sound safeSnd = "safe.soun";   // dial clicks, the latch, a creaky hinge
+
     object door;
+    object tv;
     object tableMatchbook;
     object tableCandy;
     object tableKeycard;
@@ -71,6 +75,35 @@ room Hotel {
         setObjectState(slot, 0);
         setObjectClass(slot, [ SET_CLASS | UNTOUCHABLE ]);
         ResRoom::refreshInventory();
+    }
+
+    // Switch the TV on: a burst of chatter while the weather report scrolls
+    // across the top of the screen in TV-blue.
+    local script switchTvOn() {
+        tvOn = 1;
+        setObjectState(tv, 1);
+        ResRoom::showInterface(0);
+        startSound(tvSnd);
+        printBegin(); printAt(160, 8); printCenter(); printColor(C_CYAN);
+        print("...and now the Paradiso Weather. Sunny and 72 down by the pool."); waitForMessage();
+        printBegin(); printAt(160, 8); printCenter(); printColor(C_CYAN);
+        print("Clear skies all week, with a hundred percent chance of late check-out fees."); waitForMessage();
+        ResRoom::showInterface(1);
+        egoSay("Riveting."); waitForMessage();
+    }
+
+    // Dial the code: three clicks, the latch, then the door swings open on
+    // its hinge. The door's image changes as the creak starts.
+    local script openSafe() {
+        ResRoom::showInterface(0);
+        egoSay("Seven. One. Four."); waitForMessage();
+        startSound(safeSnd);
+        delay(60);                  // clicks and latch: the first second of the sound
+        safeOpen = 1;
+        setObjectState(safe, tookKeycard ? 3 : 2);
+        delay(55);                  // let the hinge finish creaking
+        ResRoom::showInterface(1);
+        egoSay("It's open."); waitForMessage();
     }
 
     // Through the doorway on the left wall
@@ -342,11 +375,8 @@ room Hotel {
                 tvOn = 0;
                 setObjectState(tv, 0);
                 egoSay("Click."); waitForMessage();
-            } else {
-                tvOn = 1;
-                setObjectState(tv, 1);
-                egoSay("It warms up with a hum."); waitForMessage();
-            }
+            } else
+                switchTvOn();
             return;
         case Close:
             if(tvOn) { tvOn = 0; setObjectState(tv, 0); }
@@ -663,12 +693,8 @@ room Hotel {
                 egoSay("It's already open."); waitForMessage();
             } else if(objB && objB != invMatchbook) {
                 egoSay("That won't open a safe."); waitForMessage();
-            } else if(knowsCode) {
-                egoSay("Seven. One. Four."); waitForMessage();
-                safeOpen = 1;
-                setObjectState(safe, tookKeycard ? 3 : 2);
-                egoSay("Click! It's open."); waitForMessage();
-            } else if(hasMatchbook) {
+            } else if(knowsCode)
+                openSafe(); else if(hasMatchbook) {
                 egoSay("I think I wrote the code inside the matchbook. I should read it."); waitForMessage();
             } else {
                 egoSay("I don't remember the combination. I barely remember last night."); waitForMessage();

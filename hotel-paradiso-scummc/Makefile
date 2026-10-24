@@ -45,7 +45,8 @@ $(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.
                     $(B)/bellhop.cost
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
-$(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) assets/hotel.box | $(B)
+$(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) assets/hotel.box \
+                $(B)/tv.soun $(B)/safe.soun | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/bathroom.roobj: src/bathroom.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) \

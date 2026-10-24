@@ -99,8 +99,12 @@ else gets a stock reply.
   WalkTo code if it has any), and call `startRoom()`. Object states and classes are global
   in SCUMM, so each room's `entry()` only places the player at the right doorway; Room
   714's first-visit setup and intro run once.
-* **Flush.** `flush.voc` is generated as 8-bit PCM and wrapped into a SOUN resource by
-  ScummC's `soun` tool. The toilet alternates between two object states while it plays.
+* **Sounds.** `tools/make_assets.py` synthesizes every sound effect in plain Python and
+  writes 8-bit PCM `.voc` files, which ScummC's `soun` tool wraps into SOUN resources:
+  the toilet flush (the toilet alternates between two object states while it plays), two
+  seconds of indistinct TV chatter when the TV is switched on (with the weather report
+  shown on screen), and the safe opening (three dial clicks, the latch, then a creaking
+  hinge, with the door's image switching as the creak starts).
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
   in after them, and the costume's 16 local colours are mapped onto room indices with

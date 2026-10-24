@@ -7,7 +7,8 @@ Writes (all into assets/):
   room.bmp              320x144 background of Room 714, 8-bit; its palette IS the room palette
   bathroom.bmp          the bathroom background, same palette
   bathroom.box          the bathroom's walk boxes
-  flush.voc             toilet flush sound, built into a SOUN resource by `soun`
+  flush.voc, tv.voc,    sound effects (toilet flush, TV chatter, safe opening),
+  safe.voc              built into SOUN resources by `soun`
   objects/<obj>_<n>.bmp state images for the objects (indices into the room palette)
   cursor.bmp            16x16 cursor, index 0 = transparent
   hotel.box             walk boxes (raw BOXD block; the matrix is built at runtime)
@@ -246,29 +247,144 @@ def build_boxes(name, boxes):
         f.write(b'BOXD' + struct.pack('>I', 8 + len(body)) + body)
 
 
+# --------------------------------------------------------------------------- sound
+# Sound effects are synthesized here, pure Python (no numpy), and written as
+# 8-bit unsigned PCM at 11025 Hz in Creative Voice Files for ScummC's `soun -voc`.
+RATE = 11025
+
+
+def write_voc(name, samples):
+    """samples: floats in -1..1."""
+    data = bytes(max(0, min(255, int(round(128 + 127 * v)))) for v in samples)
+    rate_byte = 256 - 1000000 // RATE
+    block = bytes([1]) + struct.pack('<I', len(data) + 2)[:3] + bytes([rate_byte, 0]) + data
+    hdr = b'Creative Voice File\x1a' + struct.pack('<HHH', 26, 0x010A, 0x1129)
+    with open(os.path.join(OUT, name + '.voc'), 'wb') as f:
+        f.write(hdr + block + bytes([0]))
+
+
+class Resonator:
+    """Two-pole band-pass resonator: rings at `freq` and dies away at rate `r`."""
+    def __init__(self, freq, r):
+        import math
+        self.a1 = 2 * r * math.cos(2 * math.pi * freq / RATE)
+        self.a2 = -r * r
+        self.gain = 1 - r
+        self.y1 = self.y2 = 0.0
+
+    def __call__(self, x):
+        y = self.gain * x + self.a1 * self.y1 + self.a2 * self.y2
+        self.y2, self.y1 = self.y1, y
+        return y
+
+
+def normalize(samples, peak=0.9):
+    m = max(abs(v) for v in samples) or 1.0
+    return [v * peak / m for v in samples]
+
+
 def build_flush_sound():
-    """A toilet flush: filtered noise that swells, gurgles and drains away.
-    8-bit unsigned PCM at 11025 Hz in a Creative Voice File, for `soun -voc`."""
+    """A toilet flush: filtered noise that swells, gurgles and drains away."""
     import math
     import random
     rnd = random.Random(714)
-    rate = 11025
-    n = int(rate * 1.6)
-    samples, lp, lp2 = [], 0.0, 0.0
+    n = int(RATE * 1.6)
+    out, lp, lp2 = [], 0.0, 0.0
     for i in range(n):
-        t = i / rate
+        t = i / RATE
         env = min(1.0, t / 0.08) * (1.0 if t < 0.7 else max(0.0, 1 - (t - 0.7) / 0.9))
         lp += 0.25 * (rnd.uniform(-1, 1) - lp)            # rushing water
         lp2 += 0.04 * (rnd.uniform(-1, 1) - lp2)          # low rumble
         gurgle = math.sin(2 * math.pi * (180 + 60 * math.sin(t * 9)) * t) * (0.25 if t > 0.9 else 0)
-        v = env * (0.9 * lp + 1.6 * lp2 + gurgle * env)
-        samples.append(max(0, min(255, int(128 + 100 * v))))
-    data = bytes(samples)
-    rate_byte = 256 - 1000000 // rate
-    block = bytes([1]) + struct.pack('<I', len(data) + 2)[:3] + bytes([rate_byte, 0]) + data
-    hdr = b'Creative Voice File\x1a' + struct.pack('<HHH', 26, 0x010A, 0x1129)
-    with open(os.path.join(OUT, 'flush.voc'), 'wb') as f:
-        f.write(hdr + block + bytes([0]))
+        out.append(env * (0.9 * lp + 1.6 * lp2 + gurgle * env) * 100 / 127)
+    write_voc('flush', out)
+
+
+def build_tv_sound():
+    """Two seconds of indistinct TV chatter: a few voices babbling in made-up
+    syllables (a pitched buzz shaped by vowel formants), squeezed through a
+    small TV speaker with a little hiss."""
+    import math
+    import random
+    rnd = random.Random(1987)
+    n = int(RATE * 2.0)
+    mix = [0.0] * n
+    vowels = [(730, 1090), (530, 1840), (270, 2290), (570, 840), (440, 1020), (660, 1720), (300, 870)]
+    for pitch, level, start in ((118, 1.0, 0.0), (186, 0.6, 0.35), (152, 0.45, 0.9)):
+        i = int(start * RATE)
+        phase = 0.0
+        while i < n:
+            # one word of 1-3 syllables, then a pause
+            for _ in range(rnd.randint(1, 3)):
+                dur = int(RATE * rnd.uniform(0.07, 0.17))
+                f1, f2 = rnd.choice(vowels)
+                r1, r2 = Resonator(f1, 0.97), Resonator(f2, 0.96)
+                fric = rnd.random() < 0.35
+                lift = rnd.uniform(-0.15, 0.2)
+                for k in range(dur):
+                    if i >= n:
+                        break
+                    u = k / dur
+                    env = math.sin(math.pi * u) ** 0.6
+                    f0 = pitch * (1 + lift * (1 - u) + 0.04 * math.sin(i / 200))
+                    phase = (phase + f0 / RATE) % 1.0
+                    src = 2 * phase - 1                         # buzzy glottal source
+                    v = r1(src) * 1.4 + r2(src) * 0.9
+                    if fric and u < 0.3:                        # "s"/"t" at the start
+                        v += rnd.uniform(-1, 1) * 0.25 * (1 - u / 0.3)
+                    mix[i] += v * env * level
+                    i += 1
+                i += int(RATE * rnd.uniform(0.01, 0.05))
+            i += int(RATE * rnd.uniform(0.08, 0.22))
+    # small speaker: high-pass the boom out, low-pass the edge off, add hiss
+    out, hp_x, hp_y, lp = [], 0.0, 0.0, 0.0
+    for i, x in enumerate(mix):
+        hp_y = 0.93 * (hp_y + x - hp_x)
+        hp_x = x
+        lp += 0.55 * (hp_y - lp)
+        v = math.tanh(lp * 1.3) + rnd.uniform(-1, 1) * 0.03
+        t = i / RATE
+        v *= min(1.0, t / 0.06) * min(1.0, (2.0 - t) / 0.2)
+        out.append(v)
+    write_voc('tv', normalize(out, 0.85))
+
+
+def build_safe_sound():
+    """The safe opening: three dial clicks (7, 1, 4), the latch clunking free,
+    then the heavy door swinging on a creaky hinge."""
+    import math
+    import random
+    rnd = random.Random(714714)
+    n = int(RATE * 2.0)
+    out = [0.0] * n
+
+    def strike(t0, dur, parts, level):
+        res = [Resonator(f, r) for f, r in parts]
+        i0 = int(t0 * RATE)
+        for k in range(int(RATE * dur)):
+            if i0 + k >= n:
+                break
+            x = rnd.uniform(-1, 1) if k < 40 else 0.0          # short burst excites the metal
+            out[i0 + k] += level * sum(rz(x) for rz in res)
+
+    for t0 in (0.05, 0.27, 0.49):                              # dial clicks
+        strike(t0, 0.12, [(3300, 0.993), (1900, 0.99)], 9.0)
+    strike(0.78, 0.25, [(620, 0.995), (1150, 0.99), (240, 0.996)], 14.0)   # latch
+
+    # hinge: stick-slip pulses whose rate rises and falls as the door swings
+    r1, r2, r3 = Resonator(950, 0.992), Resonator(2350, 0.985), Resonator(520, 0.99)
+    t, i0, i1 = 0.0, int(1.0 * RATE), int(1.95 * RATE)
+    next_pulse = i0
+    for i in range(i0, i1):
+        u = (i - i0) / (i1 - i0)
+        x = 0.0
+        if i >= next_pulse:
+            x = 1.0
+            rate = 35 + 110 * math.sin(math.pi * min(1.0, u * 1.2)) + rnd.uniform(-12, 12)
+            next_pulse = i + max(20, int(RATE / max(20, rate)))
+        env = min(1.0, u / 0.08) * (1 - u) ** 0.5
+        out[i] += env * (r1(x) * 22 + r2(x) * 12 + r3(x) * 10)
+    write_voc('safe', normalize(out, 0.9))
 
 
 def main():
@@ -310,6 +426,8 @@ def main():
     build_boxes('hotel.box', BOXES)
     build_boxes('bathroom.box', BATH_BOXES)
     build_flush_sound()
+    build_tv_sound()
+    build_safe_sound()
     print(f'assets written to {os.path.normpath(OUT)} ({len(pal.colors)} palette entries used)')
 
 
