@@ -36,9 +36,6 @@ room Hotel {
     object tableMatchbook;
     object tableCandy;
     object tableMirror;
-    object tableUniform;
-    object tableTowel;
-    object tableSoap;
     object minibar;
     object dresser;
     object nightstand;
@@ -55,15 +52,12 @@ room Hotel {
     local script leaveRoom();
 
     // ------------------------------------------------------------ scripts
-    // Set an inventory item down on the coffee table. Each item has its own
-    // slot object on the table top (see "coffee table" below). The mirror's
-    // slot is also where the pre-game happens.
+    // Set an inventory item down on the coffee table. Only the matchbook, the
+    // candy bar and the mirror fit; each has its own slot object on the table
+    // top (see "coffee table" below). The mirror's is also where the pre-game
+    // happens.
     local script putOnTable(int item) {
         int slot;
-        if(item == invUniform && wearingUniform) {
-            egoSay("I'd have to take it off first."); waitForMessage();
-            return;
-        }
         if(item == invPowder) { powderOnMirror(); return; }
         if(item == invShaver) { chopLines(); return; }
         if(item == invDollar) {
@@ -79,13 +73,18 @@ room Hotel {
             egoSay("I'll hang on to the screwdriver. You never know."); waitForMessage();
             return;
         }
+        if(item == invUniform) {
+            egoSay("The uniform stays with me. It's the whole costume."); waitForMessage();
+            return;
+        }
+        if(item == invTowel || item == invSoap) {
+            egoSay("That belongs in the bathroom, not on the coffee table."); waitForMessage();
+            return;
+        }
         slot = 0;
         if(item == invMatchbook)    { hasMatchbook = 0; slot = tableMatchbook; }
         else if(item == invCandy)   { hasCandy = 0;     slot = tableCandy; }
         else if(item == invMirror)  { hasMirror = 0;    slot = tableMirror; tableMirrorState = 1; }
-        else if(item == invUniform) { hasUniform = 0;   slot = tableUniform; }
-        else if(item == invTowel)   { hasTowel = 0;     slot = tableTowel; }
-        else if(item == invSoap)    { hasSoap = 0;      slot = tableSoap; }
         setObjectState(slot, 1);
         setObjectClass(slot, [ UNTOUCHABLE ]);
         ResRoom::refreshInventory();
@@ -99,9 +98,6 @@ room Hotel {
         if(item == invMatchbook)    { hasMatchbook = 1; slot = tableMatchbook; }
         else if(item == invCandy)   { hasCandy = 1;     slot = tableCandy; }
         else if(item == invMirror)  { hasMirror = 1;    slot = tableMirror; tableMirrorState = 0; }
-        else if(item == invUniform) { hasUniform = 1;   slot = tableUniform; }
-        else if(item == invTowel)   { hasTowel = 1;     slot = tableTowel; }
-        else if(item == invSoap)    { hasSoap = 1;      slot = tableSoap; }
         setObjectState(slot, 0);
         setObjectClass(slot, [ SET_CLASS | UNTOUCHABLE ]);
         ResRoom::refreshInventory();
@@ -887,8 +883,9 @@ room Hotel {
     }
 
     // ------------------------------------------------------------ coffee table
-    // Inventory items can be set down on the table ("Use X with coffee table")
-    // and picked up again. Each item has its own slot object on the table top:
+    // The matchbook, the candy bar and the mirror can be set down on the table
+    // ("Use X with coffee table") and picked up again; the mirror takes the
+    // wide middle of the table. Each has its own slot object on the table top:
     // state 1 shows it, and it's untouchable while the slot is empty. The
     // slots are declared before the table so the cursor finds them first.
     // The walk-to spot for all of them is beside the table, so the player
@@ -911,11 +908,11 @@ room Hotel {
     }
 
     object tableCandy {
-        x = 128; y = 104; w = 16; h = 16;
-        hs_x = 94; hs_y = 18;
+        x = 192; y = 104; w = 16; h = 16;
+        hs_x = 30; hs_y = 18;
         dir = WEST;
         name = "candy bar";
-        states = { { 94, 18, "objects/table_candy_1.bmp" } };
+        states = { { 30, 18, "objects/table_candy_1.bmp" } };
         state = 0;
         verb(int vrb, int objA, int objB) {
         case LookAt:
@@ -930,15 +927,15 @@ room Hotel {
     // The mirror door from the bathroom cabinet. Its states follow
     // tableMirrorState: 1 bare, 2 a pile of powder, 3 three lines, 4 two.
     object tableMirror {
-        x = 144; y = 104; w = 16; h = 16;
-        hs_x = 78; hs_y = 18;
+        x = 128; y = 104; w = 64; h = 16;
+        hs_x = 94; hs_y = 18;
         dir = WEST;
         name = "mirror";
         states = {
-            { 78, 18, "objects/table_mirror_1.bmp" },
-            { 78, 18, "objects/table_mirror_2.bmp" },
-            { 78, 18, "objects/table_mirror_3.bmp" },
-            { 78, 18, "objects/table_mirror_4.bmp" }
+            { 94, 18, "objects/table_mirror_1.bmp" },
+            { 94, 18, "objects/table_mirror_2.bmp" },
+            { 94, 18, "objects/table_mirror_3.bmp" },
+            { 94, 18, "objects/table_mirror_4.bmp" }
         };
         state = 0;
         verb(int vrb, int objA, int objB) {
@@ -963,57 +960,6 @@ room Hotel {
             else if(tableMirrorState >= 3) { egoSay("Not with my bare nose. I need something to roll up. Some cash, say."); waitForMessage(); }
             else if(tableMirrorState == 2) { egoSay("It's all one lump. I need something sharp to chop it into lines."); waitForMessage(); }
             else { egoSay("I admire my reflection from above. Still got it."); waitForMessage(); }
-            return;
-        }
-    }
-
-    object tableUniform {
-        x = 160; y = 104; w = 16; h = 16;
-        hs_x = 62; hs_y = 18;
-        dir = WEST;
-        name = "bellhop uniform";
-        states = { { 62, 18, "objects/table_uniform_1.bmp" } };
-        state = 0;
-        verb(int vrb, int objA, int objB) {
-        case LookAt:
-            egoSay("The bellhop uniform, neatly folded. Neater than I fold anything."); waitForMessage();
-            return;
-        case PickUp:
-            takeFromTable(invUniform);
-            return;
-        }
-    }
-
-    object tableTowel {
-        x = 176; y = 104; w = 16; h = 16;
-        hs_x = 46; hs_y = 18;
-        dir = WEST;
-        name = "towel";
-        states = { { 46, 18, "objects/table_towel_1.bmp" } };
-        state = 0;
-        verb(int vrb, int objA, int objB) {
-        case LookAt:
-            egoSay("The towel, folded on the table like a fancy hotel would."); waitForMessage();
-            return;
-        case PickUp:
-            takeFromTable(invTowel);
-            return;
-        }
-    }
-
-    object tableSoap {
-        x = 192; y = 104; w = 16; h = 16;
-        hs_x = 30; hs_y = 18;
-        dir = WEST;
-        name = "soap";
-        states = { { 30, 18, "objects/table_soap_1.bmp" } };
-        state = 0;
-        verb(int vrb, int objA, int objB) {
-        case LookAt:
-            egoSay("A bar of soap on the coffee table. Very spa."); waitForMessage();
-            return;
-        case PickUp:
-            takeFromTable(invSoap);
             return;
         }
     }
@@ -1155,9 +1101,6 @@ room Hotel {
         setObjectClass(tableMirror, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(screwdriver, [ SET_CLASS | UNTOUCHABLE ]);
         setObjectClass(powder, [ SET_CLASS | UNTOUCHABLE ]);
-        setObjectClass(tableUniform, [ SET_CLASS | UNTOUCHABLE ]);
-        setObjectClass(tableTowel, [ SET_CLASS | UNTOUCHABLE ]);
-        setObjectClass(tableSoap, [ SET_CLASS | UNTOUCHABLE ]);
         setCursorImage(cursor, Hotel);
         setCursorHotspot(8, 8);
         setCursorTransparency(0);

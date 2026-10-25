@@ -96,17 +96,17 @@ def put(img, x, y, col):
 
 # --------------------------------------------------------------------------- room
 DEFAULT = dict(tv=0, curtains=0, minibar=0, drawer=0, lamp=0, safe=0, door=0, dresser=0, bed=0,
-               table_matchbook=0, table_candy=0, table_mirror=0, table_uniform=0,
-               table_towel=0, table_soap=0)
+               table_matchbook=0, table_candy=0, table_mirror=0)
 
-# Coffee table on the floor, x 112..208, top surface y 105..116. Items set down on it sit in six
-# 16-pixel slots across the top (y 104..120), in TABLE_SLOTS order.
+# Coffee table on the floor, x 112..208, top surface y 105..116. Only three things can be set
+# down on it: the matchbook and the candy bar at the ends, and the cabinet mirror in a wide
+# space in the middle. Slots span y 104..120; (x, width) for each:
 TABLE_X0, TABLE_X1 = 112, 208
-TABLE_SLOTS = ['matchbook', 'candy', 'mirror', 'uniform', 'towel', 'soap']
+TABLE_SLOTS = {'matchbook': (112, 16), 'mirror': (128, 64), 'candy': (192, 16)}
 
 
 def table_slot_x(item):
-    return TABLE_X0 + 16 * TABLE_SLOTS.index(item)
+    return TABLE_SLOTS[item][0]
 
 
 def draw_wall(img, d):
@@ -563,39 +563,30 @@ def draw_coffee_table(img, d, s):
         rect(d, sx + 2, 110, sx + 14, 114, 'candy')
         rect(d, sx + 6, 110, sx + 11, 114, 'candy2')
     if s['table_mirror']:
-        # the medicine cabinet's mirror door, lying flat: 1 bare, 2 with a pile of
-        # powder, 3 chopped into three lines, 4 with one line gone
-        sx = table_slot_x('mirror')
+        # the medicine cabinet's mirror door, lying flat across the middle of the
+        # table: 1 bare, 2 with a pile of powder, 3 chopped into three lines,
+        # 4 with one line gone
         m = s['table_mirror']
-        rect(d, sx + 1, 107, sx + 15, 116, 'chrome_dk')
-        rect(d, sx + 2, 108, sx + 14, 115, 'glass')
-        put(img, sx + 3, 109, 'glass_hi'); put(img, sx + 4, 110, 'glass_hi')
-        put(img, sx + 11, 113, 'glass_hi')
+        x0, x1 = 138, 182
+        d.polygon([(x0 + 2, 106), (x1 - 2, 106), (x1, 116), (x0, 116)], fill=C['chrome_dk'])
+        d.polygon([(x0 + 3, 107), (x1 - 3, 107), (x1 - 2, 115), (x0 + 2, 115)], fill=C['glass'])
+        for k in range(4):                                    # reflection streaks
+            put(img, x1 - 10 + k, 108 + k, 'glass_hi')
+            put(img, x1 - 6 + k, 108 + k, 'glass_hi')
+        rect(d, x0 + 2, 114, x1 - 2, 115, 'glass_dk')
+        rect(d, x0 + 1, 116, x1 + 1, 117, 'wood_dk')          # its shadow on the wood
         if m == 2:
-            rect(d, sx + 6, 110, sx + 10, 113, 'white')
-            rect(d, sx + 7, 109, sx + 9, 110, 'white')
+            # a little white hill in the middle
+            rect(d, 154, 111, 166, 114, 'white')
+            rect(d, 156, 109, 164, 111, 'white')
+            rect(d, 158, 108, 162, 109, 'white')
+            rect(d, 154, 113, 166, 114, 'porcelain_dk')
         elif m >= 3:
-            for i, ly in enumerate((109, 111, 113)):
-                if m == 4 and i == 0:
-                    continue
-                rect(d, sx + 4, ly, sx + 12, ly + 1, 'white')
-    if s['table_uniform']:
-        sx = table_slot_x('uniform')
-        rect(d, sx + 1, 107, sx + 14, 115, 'red')
-        rect(d, sx + 1, 113, sx + 14, 115, 'red_dk')
-        rect(d, sx + 7, 107, sx + 8, 115, 'red_dk')
-        put(img, sx + 7, 109, 'brass'); put(img, sx + 7, 112, 'brass')
-        rect(d, sx + 1, 107, sx + 4, 109, 'brass')
-        rect(d, sx + 11, 107, sx + 14, 109, 'brass')
-    if s['table_towel']:
-        sx = table_slot_x('towel')
-        rect(d, sx + 1, 107, sx + 15, 115, 'towel')
-        rect(d, sx + 1, 113, sx + 15, 115, 'towel_dk')
-        rect(d, sx + 1, 109, sx + 15, 110, 'towel_band')
-    if s['table_soap']:
-        sx = table_slot_x('soap')
-        rect(d, sx + 4, 110, sx + 12, 114, 'soap')
-        rect(d, sx + 5, 110, sx + 11, 111, 'soap_hi')
+            for k, (ly, lx0, lx1) in enumerate(((108, 150, 172), (110, 147, 170), (112, 151, 173))):
+                if m == 4 and k == 1:
+                    continue                                  # the middle one's gone
+                rect(d, lx0, ly, lx1, ly + 1, 'white')
+
 
 
 def render(state=None):

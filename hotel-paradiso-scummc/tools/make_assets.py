@@ -52,11 +52,11 @@ OBJECT_STATES = {
     'dresser':    ((72, 64, 56, 32), [dict(dresser=1), dict(dresser=2)]),
     'bed':        ((232, 48, 88, 88), [dict(bed=1), dict(bed=2)]),
 }
-# items set down on the coffee table, one 16-pixel slot each
+# things set down on the coffee table, one slot each
 # (the mirror has four: bare, with the powder, three lines, two lines)
-for _item in art.TABLE_SLOTS:
+for _item, (_x, _w) in art.TABLE_SLOTS.items():
     _n = 4 if _item == 'mirror' else 1
-    OBJECT_STATES['table_' + _item] = ((art.table_slot_x(_item), 104, 16, 16),
+    OBJECT_STATES['table_' + _item] = ((_x, 104, _w, 16),
                                        [{'table_' + _item: i} for i in range(1, _n + 1)])
 
 # Bathroom object states, cropped from art.render_bathroom(). Must match the

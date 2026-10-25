@@ -38,9 +38,10 @@ yourself to put it on: the player switches to a second costume with its own full
 talking frames. **Use** it again to take it off. It's a costume party, so you need it on
 to leave.
 
-The coffee table can't be picked up, but you can put any inventory item down on it
-("Use matches with coffee table") and pick it back up later. It's also where the pre-game
-happens: the cabinet mirror goes on the table, the powder goes on the mirror, the razor
+The coffee table can't be picked up, but three things can be put down on it ("Use matches
+with coffee table") and picked back up later: the matchbook and the candy bar at either end,
+and the cabinet mirror across the middle. It's where the pre-game happens: the mirror goes
+on the table, the powder goes on the mirror, the razor
 chops it into three lines, and the rolled-up dollar bill from your wallet does one. The
 wallet is hidden under the bed covers; open it to take the dollar out.
 
@@ -119,8 +120,10 @@ The door tells you what's missing, and so does the front desk on the phone.
 * **Coffee table.** The table is a hole in the walk boxes, with a margin of half a sprite
   width on each side, so the player is never drawn over it while standing behind its
   front edge (SCUMM has no depth sorting between actors and the background without
-  z-plane masks). Each item has a slot object on the table top with one image state; it
-  starts untouchable and is shown and made clickable when the item is set down.
+  z-plane masks). Each of the three items has a slot object on the table top (16 pixels
+  wide at the ends, 64 for the mirror in the middle); it starts untouchable and is shown
+  and made clickable when the item is set down. The mirror's slot has four images: bare,
+  with the powder, three lines, two lines.
 * **Costume swap.** `guest.scost` (bathrobe) and `bellhop.scost` (uniform) are drawn by the
   same code in `tools/art.py` with a different outfit, and declare the same animations
   (`init`, `walk`, `stand`, `talkStart`, `talkStop`). That lets `wearUniform` call
