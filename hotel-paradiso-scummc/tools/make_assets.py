@@ -448,6 +448,9 @@ def main():
     for name, ((x, y, w, h), states) in OBJECT_STATES.items():
         assert x % 8 == 0 and w % 8 == 0, name
         crops[name] = [art.render(st).crop((x, y, x + w, y + h)) for st in states]
+    # the game-over screen's spinning room: frame 0 is the background, the
+    # rest are the full-screen states of its "spinner" object
+    crops['gameover_spin'] = [art.render_gameover(f) for f in range(1, art.GAMEOVER_FRAMES)]
     for name, ((x, y, w, h), states) in BATH_OBJECT_STATES.items():
         assert x % 8 == 0 and w % 8 == 0 and y % 8 == 0 and h % 8 == 0, name
         crops['bath_' + name] = [art.render_bathroom(st).crop((x, y, x + w, y + h)) for st in states]

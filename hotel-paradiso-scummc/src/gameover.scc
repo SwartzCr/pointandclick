@@ -1,8 +1,8 @@
 /* Hotel Paradiso, Room 714 - the game-over screen.
  *
  * Reached by doing the third line: the guest goes to bed instead of the
- * party. No interface, no actor; a few lines of text, then the engine
- * restarts and the title screen comes back.
+ * party, and the bedroom spins around them. No interface, no actor; a few
+ * lines of text, then the engine restarts and the title screen comes back.
  */
 
 #include "hotel.sch"
@@ -10,6 +10,33 @@
 room GameOver {
     image = "gameover.bmp";
     trans = 0;
+
+    // Full-screen frames of the bedroom spinning round the bed, 45 degrees
+    // apart. The background is frame 0; state n shows frame n.
+    object spinner {
+        x = 0; y = 0; w = 320; h = 144;
+        name = "";
+        states = {
+            { 0, 0, "objects/gameover_spin_1.bmp" },
+            { 0, 0, "objects/gameover_spin_2.bmp" },
+            { 0, 0, "objects/gameover_spin_3.bmp" },
+            { 0, 0, "objects/gameover_spin_4.bmp" },
+            { 0, 0, "objects/gameover_spin_5.bmp" },
+            { 0, 0, "objects/gameover_spin_6.bmp" },
+            { 0, 0, "objects/gameover_spin_7.bmp" }
+        };
+        state = 0;
+    }
+
+    local script spin() {
+        int i;
+        while(1) {
+            for(i = 0 ; i < 8 ; i++) {
+                setObjectState(spinner, i);
+                delay(6);
+            }
+        }
+    }
 
     local script caption(int col) {
         printBegin();
@@ -21,6 +48,8 @@ room GameOver {
     local script entry() {
         ResRoom::showInterface(0);
         ResRoom::hideAllVerbs();
+        setObjectClass(spinner, [ SET_CLASS | UNTOUCHABLE ]);
+        spin();
         delaySeconds(2);
         caption(C_WHITE); print("You spent the night in bed, staring at the ceiling."); waitForMessage();
         caption(C_WHITE); print("The ceiling stared back. It was a long night."); waitForMessage();

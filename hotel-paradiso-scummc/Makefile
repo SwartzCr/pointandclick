@@ -53,7 +53,7 @@ $(B)/bathroom.roobj: src/bathroom.scc src/hotel.sch $(wildcard assets/*.bmp asse
                    assets/bathroom.box $(B)/flush.soun | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
-$(B)/gameover.roobj: src/gameover.scc src/hotel.sch assets/gameover.bmp | $(B)
+$(B)/gameover.roobj: src/gameover.scc src/hotel.sch assets/gameover.bmp $(wildcard assets/objects/gameover_*.bmp) | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/title.roobj: src/title.scc src/hotel.sch assets/title.bmp assets/cursor.bmp | $(B)

@@ -110,7 +110,12 @@ The door tells you what's missing, and so does the front desk on the phone.
   palette entries 16..255, so the EGA text and verb colours stay put, and because it's
   global it keeps going in the bathroom (a room change reloads the palette, and the next
   tick tints it again). The third line walks you to the bed and goes to the `GameOver`
-  room, which shows a few captions and then calls `restartGame()`, like the ending.
+  room, which shows a few captions and then calls `restartGame()`, like the ending. The
+  bedroom spins behind the bed there: `tools/art.py` renders eight full-screen frames,
+  the room enlarged and rotated 45 degrees further each time (nearest-neighbour, so no new
+  colours), dimmed with a dither, with stars orbiting the guest's head. Frame 0 is the
+  background and the other seven are states of a full-screen `spinner` object, which a
+  loop steps through every 6 ticks.
 * **Interface.** `mouseWatch` runs every frame and rebuilds the sentence line with SCUMM's
   string codes (`%v{curVerb} %n{hoverObj}`), which the engine expands when it draws the verb.
 * **Actions.** A room click queues `doSentence(verb, object, 0, item)`. The engine then runs

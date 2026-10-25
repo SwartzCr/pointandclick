@@ -1115,39 +1115,79 @@ GLYPHS.update({
 })
 
 
-def render_gameover():
-    """Night. The guest is in bed, staring at the ceiling, and the party goes on
-    without them. GAME OVER in red over the top."""
+GAMEOVER_FRAMES = 8
+
+
+def draw_star(img, d, x, y, col):
+    """A chunky four-pointed cartoon star, 11 pixels across, with a black
+    outline and a white glint, centred on (x, y)."""
+    def pts(r, q):
+        return [(x, y - r), (x + q, y - q), (x + r, y), (x + q, y + q),
+                (x, y + r), (x - q, y + q), (x - r, y), (x - q, y - q)]
+    d.polygon(pts(6, 2), fill=C['black'])
+    d.polygon(pts(5, 1), fill=C[col])
+    put(img, x - 1, y - 1, 'white')
+    put(img, x, y - 2, 'white')
+
+
+def render_gameover(frame=0):
+    """Night. The guest is in bed, staring at the ceiling, while the bedroom
+    spins around them; stars orbit their head. GAME OVER in red over the top.
+    frame 0..GAMEOVER_FRAMES-1 is one step of the spin (45 degrees each)."""
+    import math
     C.setdefault('skin', ROBE['skin'])
     C.setdefault('hair', ROBE['hair'])
-    img = Image.new('RGB', (W, H))
+    # the bedroom, blown up and rotated about the middle of the screen, so it
+    # fills the frame at any angle. NEAREST keeps it to the room's own colours.
+    room = render()
+    big = room.resize((room.width * 5 // 2, room.height * 5 // 2), Image.NEAREST)
+    big = big.rotate(-45 * frame, resample=Image.NEAREST, expand=False)
+    img = big.crop(((big.width - W) // 2, (big.height - H) // 2,
+                    (big.width - W) // 2 + W, (big.height - H) // 2 + H))
+    px = img.load()
+    # darken it with a dither of night blue, so the bed and title stand out
+    for y in range(H):
+        for x in range(W):
+            if (x + y) % 2 == 0 or (x % 2 == 0 and y % 2 == 0):
+                px[x, y] = C['sky']
     d = ImageDraw.Draw(img)
-    rect(d, 0, 0, W, H, 'sky')
-    vgrad(img, 0, 90, W, H, 'sky', 'bldg')
+    # motion streaks curving around the middle of the screen
+    cx, cy = W // 2, H // 2 + 10
+    for r in (70, 96, 124, 150):
+        for k in range(3):
+            a0 = math.radians(-45 * frame + k * 120 + r)
+            for t in range(18):
+                a = a0 + t * 0.03
+                put(img, int(cx + r * math.cos(a)), int(cy + r * 0.55 * math.sin(a)),
+                    'grey_hi' if t > 12 else 'grey')
     # the bed, borrowed from the room and moved to the middle of the screen
-    room = Image.new('RGB', (W, H), C['sky'])
-    draw_bed(room, ImageDraw.Draw(room), 0)
-    bed = room.crop((232, 44, 320, 134))
+    bedroom = Image.new('RGB', (W, H), C['sky'])
+    draw_bed(bedroom, ImageDraw.Draw(bedroom), 0)
+    bed = bedroom.crop((232, 44, 320, 134))
     bx, by = (W - bed.width) // 2, 46
+    rect(d, bx - 2, by - 2, bx + bed.width + 2, by + bed.height + 2, 'black')
     img.paste(bed, (bx, by))
-    ox = bx - 232                                   # room x -> screen x
-    oy = by - 44
+    ox, oy = bx - 232, by - 44                          # room -> screen
     # the guest, tucked in up to the chin, eyes wide open
     hx, hy = 262 + ox, 80 + oy
     rect(d, hx, hy, hx + 12, hy + 9, 'skin')
     rect(d, hx, hy, hx + 12, hy + 3, 'hair')
     rect(d, hx + 3, hy + 4, hx + 5, hy + 6, 'white')
     rect(d, hx + 7, hy + 4, hx + 9, hy + 6, 'white')
-    put(img, hx + 4, hy + 5, 'black'); put(img, hx + 8, hy + 5, 'black')
+    put(img, hx + 4, hy + 5 + frame % 2, 'black'); put(img, hx + 8, hy + 5 + frame % 2, 'black')
     rect(d, hx - 6, hy + 9, hx + 30, hy + 16, 'blanket_hi')   # the lump under the covers
     rect(d, hx - 4, hy + 8, hx + 18, hy + 10, 'sheet')
-    # little stars swirling over the head
-    for (sx, sy, c) in ((hx - 10, hy - 10, 'party_c'), (hx + 4, hy - 16, 'party_a'),
-                        (hx + 20, hy - 9, 'party_b')):
-        rect(d, sx, sy + 1, sx + 3, sy + 2, c)
-        rect(d, sx + 1, sy, sx + 2, sy + 3, c)
+    # four stars orbiting over the head; the ones at the back are drawn first
+    sx0, sy0 = hx + 6, hy - 17
+    stars = []
+    for k, col in enumerate(('party_c', 'party_a', 'party_b', 'win_y')):
+        a = math.radians(45 * frame + k * 90)
+        stars.append((math.sin(a), int(sx0 + 24 * math.cos(a)), int(sy0 + 7 * math.sin(a)), col))
+    for _, x, y, col in sorted(stars):
+        draw_star(img, d, x, y, col)
     title = 'GAME OVER'
     tw = text_width(title, 4)
+    rect(d, (W - tw) // 2 - 6, 5, (W + tw) // 2 + 6, 35, 'black')
     pixel_text(img, d, title, (W - tw) // 2, 10, 'red', 4, glow='red_dk')
     pixel_text_fg(img, d, title, (W - tw) // 2, 10, 'red_hi', 4)
     return img
