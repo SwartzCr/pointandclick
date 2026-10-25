@@ -63,6 +63,11 @@ picture talkE = {
     position = { -12, -52 }
 };
 
+picture carriedE = {
+    path = "guest/carriedE.bmp",
+    position = { -26, -14 }
+};
+
 picture standW = {
     path = "guest/standW.bmp",
     position = { -12, -52 }
@@ -86,6 +91,11 @@ picture walkW3 = {
 picture talkW = {
     path = "guest/talkW.bmp",
     position = { -12, -52 }
+};
+
+picture carriedW = {
+    path = "guest/carriedW.bmp",
+    position = { -26, -14 }
 };
 
 limb body;
@@ -117,4 +127,9 @@ anim talkStart = {
 anim talkStop = {
     E = { body(standE) }; W = { body(standW) };
     S = { body(standS) }; N = { body(standN) };
+};
+
+anim carried = {
+    E = { body(carriedE) }; W = { body(carriedW) };
+    S = { body(carriedE) }; N = { body(carriedW) };
 };

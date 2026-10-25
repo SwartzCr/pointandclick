@@ -22,6 +22,7 @@ verb invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver;
 verb invScrewdriver, invPowder, invMirror, invWallet, invDollar;
 
 actor guest;
+actor clownA, clownB, clownC;   // room service
 
 // Interface state
 int curVerb;       // verb the next room click will use

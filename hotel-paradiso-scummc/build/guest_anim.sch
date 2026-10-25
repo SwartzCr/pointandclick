@@ -5,3 +5,4 @@
 #define guest_anim_stand 3
 #define guest_anim_talkStart 4
 #define guest_anim_talkStop 5
+#define guest_anim_carried 6

@@ -46,7 +46,8 @@ $(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) assets/hotel.box \
-                $(B)/tv.soun $(B)/safe.soun | $(B)
+                $(B)/tv.soun $(B)/safe.soun $(B)/guest_anim.sch \
+                $(B)/clown1.cost $(B)/clown1_anim.sch $(B)/clown2.cost $(B)/clown3.cost | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/bathroom.roobj: src/bathroom.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) \

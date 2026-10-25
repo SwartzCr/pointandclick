@@ -138,6 +138,7 @@ def actor_frames(outfit):
         'standE': art.actor_side(0, outfit=o), 'walkE1': art.actor_side(1, outfit=o),
         'walkE2': art.actor_side(2, outfit=o), 'walkE3': art.actor_side(3, outfit=o),
         'talkS': art.actor_front(0, True, outfit=o), 'talkE': art.actor_side(0, True, outfit=o),
+        'carriedE': art.actor_lying(o),
     }
     for k in [k for k in f if k.endswith('E') or k[-2] == 'E']:
         f[k.replace('E', 'W')] = ImageOps.mirror(f[k])
@@ -181,11 +182,56 @@ anim talkStop = {{
     E = {{ body(standE) }}; W = {{ body(standW) }};
     S = {{ body(standS) }}; N = {{ body(standN) }};
 }};
+{extra}"""
+
+# Extra animations for the player: lying flat, carried overhead by clowns
+PLAYER_EXTRA = """
+anim carried = {
+    E = { body(carriedE) }; W = { body(carriedW) };
+    S = { body(carriedE) }; N = { body(carriedW) };
+};
+"""
+
+# Extra animations for the clowns: walking and standing with their arms up,
+# holding the player overhead
+CLOWN_EXTRA = """
+anim carryWalk = {
+    E = { body(upWalkE1, upE, upWalkE3, upWalkE2) };
+    W = { body(upWalkW1, upW, upWalkW3, upWalkW2) };
+    S = { body(upWalkS1, upS, upWalkS2, upS) };
+    N = { body(upWalkN1, upN, upWalkN2, upN) };
+};
+
+anim carryStand = {
+    E = { body(upE) }; W = { body(upW) };
+    S = { body(upS) }; N = { body(upN) };
+};
 """
 
 
-def build_costume(pal, name, outfit, title):
-    frames = actor_frames(outfit)
+def clown_frames(name):
+    n = name
+    f = {
+        'standS': art.clown_front(n, 0), 'walkS1': art.clown_front(n, 1), 'walkS2': art.clown_front(n, 2),
+        'standN': art.clown_back(n, 0), 'walkN1': art.clown_back(n, 1), 'walkN2': art.clown_back(n, 2),
+        'standE': art.clown_side(n, 0), 'walkE1': art.clown_side(n, 1),
+        'walkE2': art.clown_side(n, 2), 'walkE3': art.clown_side(n, 3),
+        'talkS': art.clown_front(n, 0, talk=True), 'talkE': art.clown_side(n, 0, talk=True),
+        'upS': art.clown_front(n, 0, True), 'upWalkS1': art.clown_front(n, 1, True),
+        'upWalkS2': art.clown_front(n, 2, True),
+        'upN': art.clown_back(n, 0, True), 'upWalkN1': art.clown_back(n, 1, True),
+        'upWalkN2': art.clown_back(n, 2, True),
+        'upE': art.clown_side(n, 0, True), 'upWalkE1': art.clown_side(n, 1, True),
+        'upWalkE2': art.clown_side(n, 2, True), 'upWalkE3': art.clown_side(n, 3, True),
+    }
+    for k in [k for k in f if 'E' in k]:
+        f[k.replace('E', 'W')] = ImageOps.mirror(f[k])
+    return f
+
+
+def build_costume(pal, name, outfit, title, frames=None, extra=PLAYER_EXTRA):
+    if frames is None:
+        frames = actor_frames(outfit)
     local = [MAGENTA]
     for im in frames.values():
         for c in pixels(im):
@@ -198,12 +244,12 @@ def build_costume(pal, name, outfit, title):
     pics = []
     for pic, im in frames.items():
         write_bmp(os.path.join(OUT, name, pic + '.bmp'), [lidx[c] for c in pixels(im)],
-                  art.FW, art.FH, local, 8)
+                  im.width, im.height, local, 8)
         pics.append(f'picture {pic} = {{\n    path = "{name}/{pic}.bmp",\n'
-                    f'    position = {{ {-art.FW // 2}, {-art.FH} }}\n}};')
+                    f'    position = {{ {-im.width // 2}, {-im.height} }}\n}};')
     with open(os.path.join(OUT, name + '.scost'), 'w') as f:
         f.write(SCOST.format(title=title, palette=', '.join(map(str, room_idx)),
-                             pictures='\n\n'.join(pics)))
+                             pictures='\n\n'.join(pics), extra=extra))
 
 
 def build_font():
@@ -467,6 +513,8 @@ def main():
             pal.add(c)
     build_costume(pal, 'guest', 'robe', 'a guest in a bathrobe')
     build_costume(pal, 'bellhop', 'bellhop', 'the same guest in the bellhop uniform')
+    for n in art.CLOWNS:
+        build_costume(pal, n, None, 'a room-service clown', clown_frames(n), CLOWN_EXTRA)
 
     full = pal.full()
     write_bmp(os.path.join(OUT, 'room.bmp'), [pal.index[c] for c in pixels(bg)], art.W, art.H, full)

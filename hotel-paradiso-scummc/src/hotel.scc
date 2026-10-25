@@ -22,6 +22,8 @@
  */
 
 #include "hotel.sch"
+#include "guest_anim.sch"
+#include "clown1_anim.sch"
 
 room Hotel {
     image = "room.bmp";
@@ -29,7 +31,13 @@ room Hotel {
     trans = 0;
 
     sound tvSnd = "tv.soun";       // two seconds of indistinct chatter
-    sound safeSnd = "safe.soun";   // keypad beeps, a chime, the bolt motor, the door
+    sound safeSnd = "safe.soun";
+
+    // Room service. The three costumes share one set of animations, so
+    // clown1_anim_* numbers work for all of them.
+    cost clown1Cost = "clown1.cost";
+    cost clown2Cost = "clown2.cost";
+    cost clown3Cost = "clown3.cost";   // keypad beeps, a chime, the bolt motor, the door
 
     object door;
     object tv;
@@ -50,6 +58,7 @@ room Hotel {
     local script chopLines();
     local script doLine();
     local script leaveRoom();
+    local script clownService();
 
     // ------------------------------------------------------------ scripts
     // Set an inventory item down on the coffee table. Only the matchbook, the
@@ -321,8 +330,13 @@ room Hotel {
                 deskSays(); print("And the bathroom mirror comes off with a screwdriver. I've said too much."); waitForMessage();
             }
         } else {
-            egoSay("Just calling to say I feel great."); waitForMessage();
-            deskSays(); print("I can hear that, sir. The party is on the ninth floor. Good night."); waitForMessage();
+            // Fed, dressed and pre-gamed: Gustav sends up "room service"
+            egoSay("Gustav! I'm fed, I'm dressed, and I am ready. Get me to that party!"); waitForMessage();
+            deskSays(); print("Very good, sir. I'll send up room service."); waitForMessage();
+            egoSay("Room service? I didn't order any..."); waitForMessage();
+            deskSays(); print("Click."); waitForMessage();
+            clownService();
+            return;
         }
         ResRoom::showInterface(1);
     }
@@ -339,6 +353,97 @@ room Hotel {
             leaveRoom();
     }
 
+    local script partyEnding();
+
+    // One clown actor, in one of the three suits
+    local script initClown(int a, int c) {
+        loadCostume(c);
+        setCurrentActor(a);
+        initActor();
+        setActorCostume(c);
+        setActorWalkFrame(clown1_anim_walk);
+        setActorStandFrame(clown1_anim_stand);
+        setActorInitFrame(clown1_anim_init);
+        setActorTalkFrame(clown1_anim_talkStart, clown1_anim_talkStop);
+        setActorTalkColor(C_YELLOW);
+        setActorTalkPos(0, -64);
+        setActorWidth(24);
+        setActorName("clown");
+    }
+
+    // Arms up, ready to carry
+    local script clownLift(int a) {
+        setCurrentActor(a);
+        setActorWalkFrame(clown1_anim_carryWalk);
+        setActorStandFrame(clown1_anim_carryStand);
+        animateActor(a, clown1_anim_carryStand);
+    }
+
+    // "Room service": three clowns come in, hoist the player overhead and
+    // carry them out of the door, then the normal ending plays.
+    local script clownService() {
+        gameOver = 1;
+        ResRoom::showInterface(0);
+        walkActorTo(VAR_EGO, 150, 104);
+        waitForActor(VAR_EGO);
+        setCurrentActor(VAR_EGO);
+        setActorDirection(270);
+        delay(40);
+        egoSay("Someone's knocking."); waitForMessage();
+        setObjectState(door, 1);
+        initClown(clownA, clown1Cost);
+        initClown(clownB, clown2Cost);
+        initClown(clownC, clown3Cost);
+        putActorAt(clownA, 40, 102, Hotel);
+        walkActorTo(clownA, 174, 104);
+        delay(24);
+        putActorAt(clownB, 40, 102, Hotel);
+        walkActorTo(clownB, 126, 104);
+        delay(24);
+        putActorAt(clownC, 40, 102, Hotel);
+        walkActorTo(clownC, 150, 101);
+        waitForActor(clownA);
+        waitForActor(clownB);
+        waitForActor(clownC);
+        setCurrentActor(clownA); setActorDirection(270);
+        setCurrentActor(clownB); setActorDirection(90);
+        setCurrentActor(clownC); setActorDirection(180);
+        actorSay(clownC, "Room service! HONK HONK!"); waitForMessage();
+        egoSay("...I'm sorry, what?"); waitForMessage();
+        actorSay(clownA, "One guest, extra party, to go!"); waitForMessage();
+
+        // Up you go: the player lies flat and floats up to the clowns' raised
+        // hands, and keeps that pose while carried
+        clownLift(clownA);
+        clownLift(clownB);
+        clownLift(clownC);
+        setCurrentActor(VAR_EGO);
+        setActorElevation(44);
+        setActorWalkFrame(guest_anim_carried);
+        setActorStandFrame(guest_anim_carried);
+        setActorTalkFrame(guest_anim_carried, guest_anim_carried);   // talking mustn't stand you up
+        animateActor(VAR_EGO, guest_anim_carried);
+        delay(30);
+        egoSay("Whoa! Okay! This is happening!"); waitForMessage();
+
+        // Out through the door together
+        walkActorTo(clownC, 22, 101);
+        walkActorTo(VAR_EGO, 40, 104);
+        walkActorTo(clownA, 64, 104);
+        walkActorTo(clownB, 16, 106);
+        delay(40);
+        actorSay(clownB, "To the ninth floor!"); waitForMessage();
+        waitForActor(VAR_EGO);
+        putActorAt(clownC, 0, 0, 0);
+        putActorAt(VAR_EGO, 0, 0, 0);
+        waitForActor(clownA);
+        putActorAt(clownA, 0, 0, 0);
+        waitForActor(clownB);
+        putActorAt(clownB, 0, 0, 0);
+        delay(30);
+        partyEnding();
+    }
+
     local script leaveRoom() {
         gameOver = 1;
         ResRoom::showInterface(0);
@@ -348,6 +453,11 @@ room Hotel {
         walkActorTo(VAR_EGO, 40, 101);
         waitForActor(VAR_EGO);
         putActorAt(VAR_EGO, 0, 0, 0);    // room 0 = gone
+        partyEnding();
+    }
+
+    // The winning ending, whether you walked out or were carried
+    local script partyEnding() {
         delaySeconds(1);
         printBegin(); printAt(160, 40); printCenter(); printColor(C_YELLOW);
         print("You made it to the party at the Hotel Paradiso."); waitForMessage();

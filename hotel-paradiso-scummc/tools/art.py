@@ -754,6 +754,153 @@ def actor_side(step=0, talk=False, outfit='robe'):
     return im
 
 
+def actor_lying(outfit='robe'):
+    """Being carried: flat on the back, head to the east, arms folded on the
+    chest, slippers to the west. 52x14, bottom row on the actor's position."""
+    bellhop = _use(outfit)
+    im = Image.new('RGB', (52, 14), (255, 0, 255)); d = ImageDraw.Draw(im)
+    _r(d, 0, 6, 5, 12, 'slipper')                 # feet, toes up
+    _r(d, 0, 4, 3, 6, 'slipper')
+    _r(d, 5, 7, 16, 10, 'leg')                    # shins
+    _r(d, 5, 10, 16, 12, 'leg_back')
+    _r(d, 14, 4, 38, 13, 'robe')                  # body
+    _r(d, 14, 11, 38, 13, 'robe_dk')
+    _r(d, 25, 4, 27, 13, 'belt')
+    _r(d, 28, 3, 34, 6, 'robe_dk')                # folded arms
+    _r(d, 34, 3, 36, 6, 'skin')
+    _r(d, 38, 6, 41, 10, 'skin_dk')               # neck
+    _r(d, 40, 2, 51, 12, 'skin')                  # head, face up
+    _r(d, 47, 2, 51, 12, 'hair')
+    _r(d, 43, 3, 45, 4, 'eye')                    # eyes on the top of the face
+    _r(d, 43, 9, 45, 10, 'eye')
+    _r(d, 40, 5, 41, 9, 'mouth')                  # a grin
+    if bellhop:
+        for x in (17, 21, 30):
+            _r(d, x, 4, x + 1, 6, 'hat_band')      # buttons
+        _r(d, 49, 3, 52, 11, 'hat')                # pillbox hat, still on
+        _r(d, 51, 3, 52, 11, 'hat_band')
+    return im
+
+
+# --------------------------------------------------------------------------- clowns
+# "Room service": three clowns in baggy polka-dot suits, ruffs, big shoes and
+# red noses. Same 24x52 frames as the player; each suit is a different colour.
+CLOWN_BASE = {
+    'face': (246, 244, 236), 'nose': (224, 30, 40), 'eye': (20, 20, 24), 'mouth': (224, 30, 40),
+    'ruff': (236, 236, 250), 'ruff_dk': (170, 176, 210), 'shoe': (200, 30, 40), 'glove': (250, 250, 250),
+}
+CLOWNS = {
+    'clown1': dict(CLOWN_BASE, suit=(240, 200, 40), suit_dk=(190, 146, 20), dot=(40, 110, 210), hair=(250, 120, 30)),
+    'clown2': dict(CLOWN_BASE, suit=(60, 170, 80), suit_dk=(36, 120, 56), dot=(250, 230, 70), hair=(150, 60, 200)),
+    'clown3': dict(CLOWN_BASE, suit=(70, 120, 220), suit_dk=(44, 80, 170), dot=(240, 90, 160), hair=(250, 220, 60)),
+}
+K = CLOWNS['clown1']
+
+
+def _kr(d, x0, y0, x1, y1, col):
+    if x1 > x0 and y1 > y0:
+        d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=K[col])
+
+
+def _clown_body(d, x0, x1, y0=20, y1=44):
+    _kr(d, x0, y0, x1, y1, 'suit')
+    _kr(d, x1 - 2, y0, x1, y1, 'suit_dk')
+    for (dx, dy) in ((2, 4), (7, 2), (4, 11), (9, 9), (2, 17), (7, 18)):
+        if x0 + dx + 2 <= x1:
+            _kr(d, x0 + dx, y0 + dy, x0 + dx + 2, y0 + dy + 2, 'dot')
+
+
+def clown_front(name, step=0, arms_up=False, talk=False):
+    global K
+    K = CLOWNS[name]
+    im = _frame(); d = ImageDraw.Draw(im)
+    lo = [0, -2, 2][step]
+    _kr(d, 7, 44, 11, 49 + min(0, lo), 'suit_dk')          # baggy legs
+    _kr(d, 13, 44, 17, 49 - max(0, lo), 'suit_dk')
+    _kr(d, 2, 49 + min(0, lo), 11, 52 + min(0, lo), 'shoe')   # huge shoes
+    _kr(d, 13, 49 - max(0, lo), 22, 52 - max(0, lo), 'shoe')
+    _clown_body(d, 4, 20)
+    sw = [0, 1, -1][step]
+    if arms_up:
+        _kr(d, 1, 6, 5, 22, 'suit')
+        _kr(d, 19, 6, 23, 22, 'suit')
+        _kr(d, 0, 2, 5, 7, 'glove')
+        _kr(d, 19, 2, 24, 7, 'glove')
+    else:
+        _kr(d, 1, 22 + sw, 5, 36 + sw, 'suit')
+        _kr(d, 19, 22 - sw, 23, 36 - sw, 'suit')
+        _kr(d, 0, 36 + sw, 5, 40 + sw, 'glove')
+        _kr(d, 19, 36 - sw, 24, 40 - sw, 'glove')
+    _kr(d, 3, 17, 21, 21, 'ruff')                            # ruff
+    for x in range(4, 21, 3):
+        _kr(d, x, 20, x + 1, 21, 'ruff_dk')
+    _kr(d, 7, 6, 17, 18, 'face')
+    _kr(d, 3, 4, 8, 12, 'hair')                              # big tufts each side
+    _kr(d, 16, 4, 21, 12, 'hair')
+    _kr(d, 8, 4, 16, 6, 'hair')
+    _kr(d, 9, 9, 10, 11, 'eye')
+    _kr(d, 14, 9, 15, 11, 'eye')
+    _kr(d, 11, 11, 13, 13, 'nose')
+    if talk:
+        _kr(d, 9, 14, 15, 17, 'mouth')
+    else:
+        _kr(d, 9, 15, 15, 16, 'mouth')
+        _kr(d, 8, 14, 9, 15, 'mouth'); _kr(d, 15, 14, 16, 15, 'mouth')
+    return im
+
+
+def clown_back(name, step=0, arms_up=False):
+    global K
+    K = CLOWNS[name]
+    im = _frame(); d = ImageDraw.Draw(im)
+    lo = [0, -2, 2][step]
+    _kr(d, 7, 44, 11, 49 + min(0, lo), 'suit_dk')
+    _kr(d, 13, 44, 17, 49 - max(0, lo), 'suit_dk')
+    _kr(d, 3, 49 + min(0, lo), 11, 52 + min(0, lo), 'shoe')
+    _kr(d, 13, 49 - max(0, lo), 21, 52 - max(0, lo), 'shoe')
+    _clown_body(d, 4, 20)
+    if arms_up:
+        _kr(d, 1, 6, 5, 22, 'suit'); _kr(d, 19, 6, 23, 22, 'suit')
+        _kr(d, 0, 2, 5, 7, 'glove'); _kr(d, 19, 2, 24, 7, 'glove')
+    else:
+        sw = [0, 1, -1][step]
+        _kr(d, 1, 22 + sw, 5, 37 + sw, 'suit'); _kr(d, 19, 22 - sw, 23, 37 - sw, 'suit')
+    _kr(d, 3, 17, 21, 21, 'ruff')
+    _kr(d, 3, 4, 21, 18, 'hair')
+    return im
+
+
+def clown_side(name, step=0, arms_up=False, talk=False):
+    """Facing east."""
+    global K
+    K = CLOWNS[name]
+    im = _frame(); d = ImageDraw.Draw(im)
+    leg = [(0, 0), (-3, 3), (0, 0), (3, -3)][step]
+    _kr(d, 9 + leg[1], 44, 13 + leg[1], 49, 'suit_dk')
+    _kr(d, 7 + leg[1], 49, 19 + leg[1], 52, 'shoe')
+    _kr(d, 9 + leg[0], 44, 13 + leg[0], 49, 'suit_dk')
+    _kr(d, 7 + leg[0], 49, 20 + leg[0], 52, 'shoe')
+    _clown_body(d, 6, 18)
+    if arms_up:
+        _kr(d, 11, 4, 15, 22, 'suit')
+        _kr(d, 11, 0, 16, 5, 'glove')
+    else:
+        sw = [0, 2, 0, -2][step]
+        _kr(d, 10 + sw, 22, 14 + sw, 36, 'suit')
+        _kr(d, 10 + sw, 36, 15 + sw, 40, 'glove')
+    _kr(d, 5, 17, 19, 21, 'ruff')
+    _kr(d, 8, 6, 17, 18, 'face')
+    _kr(d, 17, 10, 20, 13, 'nose')                           # nose sticks out
+    _kr(d, 4, 4, 10, 13, 'hair')
+    _kr(d, 8, 3, 16, 6, 'hair')
+    _kr(d, 14, 8, 15, 10, 'eye')
+    if talk:
+        _kr(d, 13, 14, 17, 17, 'mouth')
+    else:
+        _kr(d, 14, 15, 17, 16, 'mouth')
+    return im
+
+
 def cursor_image():
     """16x16 crosshair. Index 0 (magenta) is transparent."""
     im = Image.new('RGB', (16, 16), (255, 0, 255))

@@ -78,7 +78,8 @@ The door tells you what's missing, and so does the front desk on the phone.
    6. Use the dollar bill with the three lines. One is enough. A second turns the room
       psychedelic (you can still go to the party); a third sends you to bed instead, and
       that's game over.
-4. Open the door.
+4. Open the door. Or, once you're ready, call the front desk instead: Gustav sends up
+   "room service", and three clowns carry you to the party.
 
 </details>
 
@@ -104,6 +105,12 @@ The door tells you what's missing, and so does the front desk on the phone.
   listens to the menu. **New game** swaps the menu for the verb bar and starts the
   bedroom. The ending calls `restartGame()`, which has the engine reset every variable,
   bit, object state and the inventory and run `main` again, so each new game starts clean.
+* **Room service.** Calling the desk once you're ready runs `clownService`: three clown
+  actors (`clown1`..`clown3.scost`, one suit colour each, sharing one animation set) walk
+  in through the door. They switch to `carryWalk`/`carryStand`, with their arms up. The
+  player gets the `carried` animation (a 52x14 lying-down picture, in both outfits) for
+  walking, standing and talking, plus `setActorElevation()` to lift them to the clowns'
+  hands. Everyone walks out of the door and the normal ending plays.
 * **Too many lines.** The second line starts `tripColors`, a global script that keeps
   calling `setRoomRGBIntensity()` with a new red/green/blue scale every 9 frames. Scales
   above 255 brighten a channel, so the room flips between lurid tints. It only touches
