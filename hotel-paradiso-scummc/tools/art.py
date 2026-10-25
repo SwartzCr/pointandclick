@@ -565,7 +565,7 @@ def draw_coffee_table(img, d, s):
     if s['table_mirror']:
         # the medicine cabinet's mirror door, lying flat across the middle of the
         # table: 1 bare, 2 with a pile of powder, 3 chopped into three lines,
-        # 4 with one line gone
+        # 4 two lines left, 5 one line left, 6 all gone but a smear
         m = s['table_mirror']
         x0, x1 = 138, 182
         d.polygon([(x0 + 2, 106), (x1 - 2, 106), (x1, 116), (x0, 116)], fill=C['chrome_dk'])
@@ -583,9 +583,12 @@ def draw_coffee_table(img, d, s):
             rect(d, 154, 113, 166, 114, 'porcelain_dk')
         elif m >= 3:
             for k, (ly, lx0, lx1) in enumerate(((108, 150, 172), (110, 147, 170), (112, 151, 173))):
-                if m == 4 and k == 1:
-                    continue                                  # the middle one's gone
+                if (m >= 4 and k == 1) or (m >= 5 and k == 0) or m == 6:
+                    continue                                  # middle first, then top, then bottom
                 rect(d, lx0, ly, lx1, ly + 1, 'white')
+            if m == 6:
+                for x in (152, 157, 163, 168):
+                    put(img, x, 110 + (x % 3), 'porcelain_dk')   # a few specks
 
 
 
@@ -1103,4 +1106,48 @@ def render_title():
     pixel_text_fg(img, d, title, sx, 11, 'neon', 3)
     subw = text_width(sub, 2)
     pixel_text_fg(img, d, sub, (W - subw) // 2, 28, 'cream', 2)
+    return img
+
+
+# --------------------------------------------------------------------------- game over
+GLYPHS.update({
+    'G': ['111', '100', '101', '101', '111'], 'V': ['101', '101', '101', '101', '010'],
+})
+
+
+def render_gameover():
+    """Night. The guest is in bed, staring at the ceiling, and the party goes on
+    without them. GAME OVER in red over the top."""
+    C.setdefault('skin', ROBE['skin'])
+    C.setdefault('hair', ROBE['hair'])
+    img = Image.new('RGB', (W, H))
+    d = ImageDraw.Draw(img)
+    rect(d, 0, 0, W, H, 'sky')
+    vgrad(img, 0, 90, W, H, 'sky', 'bldg')
+    # the bed, borrowed from the room and moved to the middle of the screen
+    room = Image.new('RGB', (W, H), C['sky'])
+    draw_bed(room, ImageDraw.Draw(room), 0)
+    bed = room.crop((232, 44, 320, 134))
+    bx, by = (W - bed.width) // 2, 46
+    img.paste(bed, (bx, by))
+    ox = bx - 232                                   # room x -> screen x
+    oy = by - 44
+    # the guest, tucked in up to the chin, eyes wide open
+    hx, hy = 262 + ox, 80 + oy
+    rect(d, hx, hy, hx + 12, hy + 9, 'skin')
+    rect(d, hx, hy, hx + 12, hy + 3, 'hair')
+    rect(d, hx + 3, hy + 4, hx + 5, hy + 6, 'white')
+    rect(d, hx + 7, hy + 4, hx + 9, hy + 6, 'white')
+    put(img, hx + 4, hy + 5, 'black'); put(img, hx + 8, hy + 5, 'black')
+    rect(d, hx - 6, hy + 9, hx + 30, hy + 16, 'blanket_hi')   # the lump under the covers
+    rect(d, hx - 4, hy + 8, hx + 18, hy + 10, 'sheet')
+    # little stars swirling over the head
+    for (sx, sy, c) in ((hx - 10, hy - 10, 'party_c'), (hx + 4, hy - 16, 'party_a'),
+                        (hx + 20, hy - 9, 'party_b')):
+        rect(d, sx, sy + 1, sx + 3, sy + 2, c)
+        rect(d, sx + 1, sy, sx + 2, sy + 3, c)
+    title = 'GAME OVER'
+    tw = text_width(title, 4)
+    pixel_text(img, d, title, (W - tw) // 2, 10, 'red', 4, glow='red_dk')
+    pixel_text_fg(img, d, title, (W - tw) // 2, 10, 'red_hi', 4)
     return img

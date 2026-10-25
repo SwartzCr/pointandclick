@@ -39,7 +39,9 @@ bit tookMatchbook, tookCandy;
 bit ateCandy;                       // party prep 1: something in my stomach
 bit hasScrewdriver, tookScrewdriver, hasPowder, tookPowder;
 bit hasMirror, mirrorRemoved;
-int tableMirrorState;               // 0 not on the table, 1 bare, 2 powder, 3 three lines, 4 two lines
+int tableMirrorState;               // 0 not on the table, 1 bare, 2 powder, 3..6 three, two, one, no lines
+int linesDone;                      // 1: ready to party, 2: the room goes psychedelic, 3: bed, game over
+bit tripping;                       // the colour-cycling script is running
 bit readyToParty;                   // party prep 3: pre-gamed
 bit hasWallet, tookWallet, hasDollar, bedOpen;   // wallet under the bed covers, its dollar bill
 bit wearingUniform, tookUniform, dresserOpen;
@@ -66,6 +68,7 @@ int phoneCalls;
 room Hotel;
 room Bathroom;
 room Title;
+room GameOver;
 
 // The resource room: charset, costume and all the global scripts
 room ResRoom {
@@ -74,4 +77,7 @@ room ResRoom {
     script readMatchbook();
     script showGameVerbs(int on);
     script startNewGame();
+    script startTrip();
+    script stopTrip();
+    script hideAllVerbs();
 }

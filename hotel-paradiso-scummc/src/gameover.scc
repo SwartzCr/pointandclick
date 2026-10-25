@@ -1,0 +1,32 @@
+/* Hotel Paradiso, Room 714 - the game-over screen.
+ *
+ * Reached by doing the third line: the guest goes to bed instead of the
+ * party. No interface, no actor; a few lines of text, then the engine
+ * restarts and the title screen comes back.
+ */
+
+#include "hotel.sch"
+
+room GameOver {
+    image = "gameover.bmp";
+    trans = 0;
+
+    local script caption(int col) {
+        printBegin();
+        printAt(160, 112);
+        printCenter();
+        printColor(col);
+    }
+
+    local script entry() {
+        ResRoom::showInterface(0);
+        ResRoom::hideAllVerbs();
+        delaySeconds(2);
+        caption(C_WHITE); print("You spent the night in bed, staring at the ceiling."); waitForMessage();
+        caption(C_WHITE); print("The ceiling stared back. It was a long night."); waitForMessage();
+        caption(C_YELLOW); print("The party was great, apparently."); waitForMessage();
+        caption(C_GREY); print("Minibar: $14. Missing mirror door: $85. Dignity: priceless."); waitForMessage();
+        delaySeconds(1);
+        restartGame();
+    }
+}

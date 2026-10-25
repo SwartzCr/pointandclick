@@ -140,6 +140,49 @@ room ResRoom {
         refreshInventory();
     }
 
+    // Everything off: the game-over screen has no interface at all
+    script hideAllVerbs() {
+        showGameVerbs(1);
+        showGameVerb(Open, 0);   showGameVerb(Close, 0);  showGameVerb(TalkTo, 0);
+        showGameVerb(PickUp, 0); showGameVerb(LookAt, 0); showGameVerb(Use, 0);
+        showGameVerb(Push, 0);   showGameVerb(Pull, 0);   showGameVerb(WalkTo, 0);
+        showGameVerb(SntcLine, 0);
+        showGameVerb(invMatchbook, 0);   showGameVerb(invCandy, 0);  showGameVerb(invUniform, 0);
+        showGameVerb(invTowel, 0);       showGameVerb(invSoap, 0);   showGameVerb(invShaver, 0);
+        showGameVerb(invScrewdriver, 0); showGameVerb(invPowder, 0); showGameVerb(invMirror, 0);
+        showGameVerb(invWallet, 0);      showGameVerb(invDollar, 0);
+    }
+
+    // The second line: the room's colours start cycling through lurid tints
+    // and keep at it, in every room, until the game ends. Indices 0..15 (text
+    // and verbs) are left alone so the interface stays readable.
+    script tripColors() {
+        while(tripping) {
+            setRoomRGBIntensity(420, 150, 330, 16, 255); delay(9);
+            if(!tripping) break;
+            setRoomRGBIntensity(240, 120, 460, 16, 255); delay(9);
+            if(!tripping) break;
+            setRoomRGBIntensity(130, 380, 380, 16, 255); delay(9);
+            if(!tripping) break;
+            setRoomRGBIntensity(170, 430, 150, 16, 255); delay(9);
+            if(!tripping) break;
+            setRoomRGBIntensity(430, 400, 110, 16, 255); delay(9);
+            if(!tripping) break;
+            setRoomRGBIntensity(460, 200, 130, 16, 255); delay(9);
+        }
+        setRoomRGBIntensity(255, 255, 255, 16, 255);
+    }
+
+    script startTrip() {
+        if(tripping) return;
+        tripping = 1;
+        tripColors();
+    }
+
+    script stopTrip() {
+        tripping = 0;
+    }
+
     // "New game" on the title screen. Every puzzle flag and object state is
     // still at its boot value (the ending restarts the engine), so this just
     // brings up the verb bar and goes to the bedroom.

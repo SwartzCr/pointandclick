@@ -53,9 +53,9 @@ OBJECT_STATES = {
     'bed':        ((232, 48, 88, 88), [dict(bed=1), dict(bed=2)]),
 }
 # things set down on the coffee table, one slot each
-# (the mirror has four: bare, with the powder, three lines, two lines)
+# (the mirror has six: bare, with the powder, then three, two, one and no lines)
 for _item, (_x, _w) in art.TABLE_SLOTS.items():
-    _n = 4 if _item == 'mirror' else 1
+    _n = 6 if _item == 'mirror' else 1
     OBJECT_STATES['table_' + _item] = ((_x, 104, _w, 16),
                                        [{'table_' + _item: i} for i in range(1, _n + 1)])
 
@@ -443,6 +443,7 @@ def main():
     bg = art.render()
     bath = art.render_bathroom()
     title = art.render_title()
+    gameover = art.render_gameover()
     crops = {}
     for name, ((x, y, w, h), states) in OBJECT_STATES.items():
         assert x % 8 == 0 and w % 8 == 0, name
@@ -451,7 +452,7 @@ def main():
         assert x % 8 == 0 and w % 8 == 0 and y % 8 == 0 and h % 8 == 0, name
         crops['bath_' + name] = [art.render_bathroom(st).crop((x, y, x + w, y + h)) for st in states]
     # Both rooms share one palette, so the costumes look the same in each
-    for c in pixels(bg) + pixels(bath) + pixels(title):
+    for c in pixels(bg) + pixels(bath) + pixels(title) + pixels(gameover):
         pal.add(c)
     for ims in crops.values():
         for im in ims:
@@ -468,6 +469,7 @@ def main():
     write_bmp(os.path.join(OUT, 'room.bmp'), [pal.index[c] for c in pixels(bg)], art.W, art.H, full)
     write_bmp(os.path.join(OUT, 'bathroom.bmp'), [pal.index[c] for c in pixels(bath)], art.W, art.H, full)
     write_bmp(os.path.join(OUT, 'title.bmp'), [pal.index[c] for c in pixels(title)], art.W, art.H, full)
+    write_bmp(os.path.join(OUT, 'gameover.bmp'), [pal.index[c] for c in pixels(gameover)], art.W, art.H, full)
     for name, ims in crops.items():
         for i, im in enumerate(ims):
             write_bmp(os.path.join(OUT, 'objects', f'{name}_{i + 1}.bmp'),

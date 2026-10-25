@@ -137,22 +137,44 @@ room Hotel {
         }
     }
 
-    // Do one line (mirror state 4). That's enough to be ready.
+    // Do a line. The first gets you ready for the party. The second is one
+    // too many: the room's colours start cycling. The third and you're not
+    // going anywhere: off to bed, game over. Each one takes a line off the
+    // mirror (states 4, 5, 6).
     local script doLine() {
-        if(readyToParty) {
-            egoSay("One was plenty. I'd like to remember this party."); waitForMessage();
+        ResRoom::showInterface(0);
+        linesDone++;
+        tableMirrorState = 3 + linesDone;
+        setObjectState(tableMirror, tableMirrorState);
+        if(linesDone == 1) {
+            readyToParty = 1;
+            egoSay("I roll the dollar bill up nice and tight."); waitForMessage();
+            egoSay("Here goes nothing."); waitForMessage();
+            delay(30);
+            egoSay("...!"); waitForMessage();
+            egoSay("Oh, hello. Hello, everyone. I feel great."); waitForMessage();
+            egoSay("I feel fantastic. Let's go to a party."); waitForMessage();
+        } else if(linesDone == 2) {
+            egoSay("One more for the road."); waitForMessage();
+            delay(20);
+            ResRoom::startTrip();
+            delay(40);
+            egoSay("Whoa."); waitForMessage();
+            egoSay("Did the wallpaper just... breathe?"); waitForMessage();
+            egoSay("Everything is so colourful. I can hear the carpet."); waitForMessage();
+        } else {
+            gameOver = 1;
+            egoSay("And one for the... other road."); waitForMessage();
+            delay(40);
+            egoSay("You know what? Parties are overrated."); waitForMessage();
+            egoSay("I'm just going to lie down. For a minute."); waitForMessage();
+            walkActorTo(VAR_EGO, 240, 139);
+            waitForActor(VAR_EGO);
+            delay(30);
+            ResRoom::stopTrip();
+            startRoom(GameOver);
             return;
         }
-        ResRoom::showInterface(0);
-        readyToParty = 1;
-        tableMirrorState = 4;
-        setObjectState(tableMirror, 4);
-        egoSay("I roll the dollar bill up nice and tight."); waitForMessage();
-        egoSay("Here goes nothing."); waitForMessage();
-        delay(30);
-        egoSay("...!"); waitForMessage();
-        egoSay("Oh, hello. Hello, everyone. I feel great."); waitForMessage();
-        egoSay("I feel fantastic. Let's go to a party."); waitForMessage();
         ResRoom::showInterface(1);
     }
 
@@ -935,7 +957,9 @@ room Hotel {
             { 94, 18, "objects/table_mirror_1.bmp" },
             { 94, 18, "objects/table_mirror_2.bmp" },
             { 94, 18, "objects/table_mirror_3.bmp" },
-            { 94, 18, "objects/table_mirror_4.bmp" }
+            { 94, 18, "objects/table_mirror_4.bmp" },
+            { 94, 18, "objects/table_mirror_5.bmp" },
+            { 94, 18, "objects/table_mirror_6.bmp" }
         };
         state = 0;
         verb(int vrb, int objA, int objB) {
@@ -943,7 +967,8 @@ room Hotel {
             if(tableMirrorState == 1) { egoSay("The cabinet mirror, lying flat on the table. Ready for business."); waitForMessage(); }
             else if(tableMirrorState == 2) { egoSay("A little white hill on the mirror. It needs chopping up."); waitForMessage(); }
             else if(tableMirrorState == 3) { egoSay("Three lines, neat as a barcode."); waitForMessage(); }
-            else { egoSay("Two lines left. They can stay there."); waitForMessage(); }
+            else if(tableMirrorState == 4) { egoSay("Two lines left. They can stay there."); waitForMessage(); }
+            else { egoSay("One line left. It's looking at me."); waitForMessage(); }
             return;
         case PickUp:
             if(tableMirrorState == 1) takeFromTable(invMirror);

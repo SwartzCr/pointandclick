@@ -17,7 +17,7 @@ ScummVM has no generic "SCUMM v6" entry, so the files are named and encrypted li
 that's expected.
 
 The game opens on a title screen: click **New game** (or press `n`) to start, or **Quit**.
-Finishing the game brings you back to it.
+Finishing the game, or losing it, brings you back to it.
 
 **Controls:** click a verb, then an object. Right-click an object to look at it.
 To use an inventory item on something, click **Use**, the item, then the object.
@@ -75,7 +75,9 @@ The door tells you what's missing, and so does the front desk on the phone.
       mirror, and the razor (from the medicine cabinet) with the powder.
    5. Open the bed to pull back the covers, pick up your wallet, and open the wallet to
       take out the dollar bill.
-   6. Use the dollar bill with the three lines. One is enough.
+   6. Use the dollar bill with the three lines. One is enough. A second turns the room
+      psychedelic (you can still go to the party); a third sends you to bed instead, and
+      that's game over.
 4. Open the door.
 
 </details>
@@ -89,6 +91,7 @@ The door tells you what's missing, and so does the front desk on the phone.
 | `src/hotel.scc` | `Hotel`: Room 714, its objects and their verb code, the phone call, the ending |
 | `src/bathroom.scc` | `Bathroom`: the bathroom, its objects, the flush animation |
 | `src/title.scc` | `Title`: the title screen (its menu lives in `interface.scc`) |
+| `src/gameover.scc` | `GameOver`: the screen after the third line |
 | `assets/` | Generated art and data the sources reference (committed, so Python isn't needed to build) |
 | `tools/art.py` | Procedural pixel art: the rooms in every object state, the title screen, costume frames, cursor |
 | `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, both room backgrounds, object state images, both costumes + `.scost` files, font sheet, walk boxes, the flush sound |
@@ -101,6 +104,13 @@ The door tells you what's missing, and so does the front desk on the phone.
   listens to the menu. **New game** swaps the menu for the verb bar and starts the
   bedroom. The ending calls `restartGame()`, which has the engine reset every variable,
   bit, object state and the inventory and run `main` again, so each new game starts clean.
+* **Too many lines.** The second line starts `tripColors`, a global script that keeps
+  calling `setRoomRGBIntensity()` with a new red/green/blue scale every 9 frames. Scales
+  above 255 brighten a channel, so the room flips between lurid tints. It only touches
+  palette entries 16..255, so the EGA text and verb colours stay put, and because it's
+  global it keeps going in the bathroom (a room change reloads the palette, and the next
+  tick tints it again). The third line walks you to the bed and goes to the `GameOver`
+  room, which shows a few captions and then calls `restartGame()`, like the ending.
 * **Interface.** `mouseWatch` runs every frame and rebuilds the sentence line with SCUMM's
   string codes (`%v{curVerb} %n{hoverObj}`), which the engine expands when it draws the verb.
 * **Actions.** A room click queues `doSentence(verb, object, 0, item)`. The engine then runs

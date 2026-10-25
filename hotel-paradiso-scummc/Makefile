@@ -24,7 +24,7 @@ OUT = $(B)/tentacle
 
 SCC_FLAGS = -V 6 -I $(SCUMMC_INC) -I src -I $(B) -R assets -R $(B)
 
-ROOBJS = $(B)/interface.roobj $(B)/hotel.roobj $(B)/bathroom.roobj $(B)/title.roobj
+ROOBJS = $(B)/interface.roobj $(B)/hotel.roobj $(B)/bathroom.roobj $(B)/title.roobj $(B)/gameover.roobj
 
 all: $(OUT).000
 
@@ -51,6 +51,9 @@ $(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/obj
 
 $(B)/bathroom.roobj: src/bathroom.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) \
                    assets/bathroom.box $(B)/flush.soun | $(B)
+	$(SCC) -o $@ $(SCC_FLAGS) $<
+
+$(B)/gameover.roobj: src/gameover.scc src/hotel.sch assets/gameover.bmp | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/title.roobj: src/title.scc src/hotel.sch assets/title.bmp assets/cursor.bmp | $(B)
