@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write     # to push the smoke-test screenshots to their own branch
   pages: write
   id-token: write
 
@@ -24,7 +24,7 @@ env:
   SCUMMVM_REF: 21955df19b580dad2807ec55f573b5f348690a81
   EMSDK_VERSION: "4.0.10"
   # Only the SCUMM engine (v6 is part of it), built in, no extra codecs
-  SCUMMVM_CONFIGURE: --enable-release --disable-all-engines --enable-engine=scumm --disable-plugins --disable-cloud --disable-libcurl --disable-sdlnet
+  SCUMMVM_CONFIGURE: --enable-release --disable-all-engines --enable-engine=scumm --disable-cloud --disable-libcurl --disable-sdlnet
 
 jobs:
   build:
@@ -49,8 +49,14 @@ jobs:
       - name: Build ScummVM for the web
         working-directory: scummvm
         run: |
-          dists/emscripten/build.sh configure ${SCUMMVM_CONFIGURE}
-          dists/emscripten/build.sh make dist
+          set -o pipefail
+          report() {   # on failure, surface the end of the log as an annotation
+            echo "::error title=Web build failed::$(tail -40 build.log | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')"
+            exit 1
+          }
+          dists/emscripten/build.sh configure ${SCUMMVM_CONFIGURE} 2>&1 | tee build.log || report
+          dists/emscripten/build.sh make dist 2>&1 | tee build.log | grep -v '^em++\|^emcc\|^ *C++ \|^ *CXX ' || true
+          test -f build-emscripten/scummvm.wasm || report
 
       - name: Add the game and the landing page
         run: |
@@ -75,12 +81,17 @@ jobs:
           node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/ smoke-test
           tail -50 smoke-test/console.txt
 
-      - name: Upload smoke-test screenshots
+      - name: Publish smoke-test screenshots to the smoke-test branch
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: smoke-test
-          path: smoke-test/
+        run: |
+          [ -d smoke-test ] || exit 0
+          cd smoke-test
+          git init -q -b smoke-test
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Smoke test for ${GITHUB_SHA}"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git" smoke-test
 
       - name: Upload the site
         uses: actions/upload-pages-artifact@v3
