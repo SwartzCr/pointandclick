@@ -14,9 +14,11 @@ verb TalkTo, Use, WalkTo;
 // The sentence line is a verb too ("Look at lamp")
 verb SntcLine;
 
-// Never shown: what a plain left click does to an object (open it, pick it
-// up, use it...). Each object's verb code maps it onto its usual action.
-verb Default;
+// Never shown. Running an object's DefaultVerb code sets defaultVerb to what
+// a plain left click on it should do (Open, PickUp, Use...); the sentence line
+// shows that and a click does it.
+verb DefaultVerb;
+int defaultVerb;
 
 // Title screen menu
 verb NewGame, QuitGame;
@@ -85,4 +87,5 @@ room ResRoom {
     script startTrip();
     script stopTrip();
     script hideAllVerbs();
+    script queryDefault(int obj);
 }

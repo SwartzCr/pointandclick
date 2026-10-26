@@ -21,8 +21,9 @@ Finishing the game, or losing it, brings you back to it.
 
 **Controls:** click a verb, then an object. Or just click an object without picking a
 verb, and you'll do the obvious thing with it: open (or close) doors, drawers, the minibar
-and the safe, pick items up, use the phone, lamp, TV and toilet, pull the painting. The
-sentence line shows only the object's name when a plain click will do that.
+and the safe, pick items up, use the phone, lamp, TV and toilet, pull the painting. With
+no verb chosen, the sentence line shows what a click will do ("Open minibar", "Pick up
+candy bar"), and just the item's name over the inventory.
 Right-click an object to look at it.
 To use an inventory item on something, click **Use**, the item, then the object.
 To use an item on yourself (eat the candy, put on the uniform), click **Use**, the
@@ -127,11 +128,13 @@ The door tells you what's missing, and so does the front desk on the phone.
   colours), dimmed with a dither, with stars orbiting the guest's head. Frame 0 is the
   background and the other seven are states of a full-screen `spinner` object, which a
   loop steps through every 6 ticks.
-* **Default action.** A hidden verb, `Default`, is never shown in the verb bar. When you
-  click an object with no verb chosen, the input handler sends `Default` if the object
-  has an entry for it. Each object lists `case Default:` alongside the verb it should
-  mean (`Open`, `PickUp`, `Use`...). Things that open and close queue a second sentence
-  with `doSentence(isOpen ? Close : Open, ...)`.
+* **Default action.** Each object has code for a hidden verb, `DefaultVerb`, that just
+  sets `defaultVerb` to what a plain click should do (`Open`, `PickUp`, `Use`...). Things
+  that open and close answer `isOpen ? Close : Open`. `queryDefault` runs that code with
+  `startObject()`, which the engine executes immediately. It uses the "recursive" flag so
+  it doesn't stop a script the object is already running. `mouseWatch` asks every frame
+  and shows "%v{defaultVerb} %n{hoverObj}". A click asks again and sends that verb with
+  `doSentence()`.
 * **Interface.** `mouseWatch` runs every frame and rebuilds the sentence line with SCUMM's
   string codes (`%v{curVerb} %n{hoverObj}`), which the engine expands when it draws the verb.
 * **Actions.** A room click queues `doSentence(verb, object, 0, item)`. The engine then runs

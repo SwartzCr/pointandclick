@@ -486,6 +486,9 @@ room Hotel {
         name = "bathroom";
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = WalkTo;
+            return;
         case WalkTo:
         case Open:
             goBathroom();
@@ -513,11 +516,13 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = Open;
+            return;
         case LookAt:
             if(readyToParty) { egoSay("The door to the hallway. And beyond it: the party!"); waitForMessage(); }
             else { egoSay("The door to the hallway. The party's up on the ninth floor."); waitForMessage(); }
             return;
-        case Default:
         case Open:
         case Pull:
             tryDoor();
@@ -556,10 +561,12 @@ room Hotel {
         parent_state = 1;
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("A bellhop uniform, with the little hat. Not mine. Probably."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takeUniform();
             return;
@@ -589,8 +596,8 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
-        case Default:            // a plain click: open it, or close it if it's open
-            doSentence(dresserOpen ? Close : Open, objA, 0, 0);
+        case DefaultVerb:        // what a plain click does: open it, or close it if it's open
+            defaultVerb = dresserOpen ? Close : Open;
             return;
         case LookAt:
             if(dresserOpen && !tookUniform) { egoSay("There's a bellhop uniform folded in the top drawer."); waitForMessage(); }
@@ -635,6 +642,9 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = Use;
+            return;
         case LookAt:
             if(tvOn) {
                 tvAd = !tvAd;
@@ -644,7 +654,6 @@ room Hotel {
                 egoSay("A TV the size of a suitcase. Retro, or just old."); waitForMessage();
             }
             return;
-        case Default:
         case Use:
         case Push:
             if(objB) {
@@ -681,8 +690,8 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
-        case Default:            // a plain click: open it, or close it if it's open
-            doSentence(curtainsOpen ? Close : Open, objA, 0, 0);
+        case DefaultVerb:        // what a plain click does: open it, or close it if it's open
+            defaultVerb = curtainsOpen ? Close : Open;
             return;
         case LookAt:
             if(curtainsOpen) { egoSay("The city at night. Twelve floors down, and the window is sealed."); waitForMessage(); }
@@ -720,10 +729,12 @@ room Hotel {
         parent_state = 1;
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("A Paradiso Bar. The price tag says fourteen dollars."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takeCandy();
             return;
@@ -747,8 +758,8 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
-        case Default:            // a plain click: open it, or close it if it's open
-            doSentence(minibarOpen ? Close : Open, objA, 0, 0);
+        case DefaultVerb:        // what a plain click does: open it, or close it if it's open
+            defaultVerb = minibarOpen ? Close : Open;
             return;
         case LookAt:
             if(minibarOpen && !tookCandy) { egoSay("Tiny bottles and a candy bar. All priced like jewellery."); waitForMessage(); }
@@ -788,11 +799,13 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = Use;
+            return;
         case LookAt:
             if(lampOn) { egoSay("Nice warm light. Good for reading."); waitForMessage(); }
             else { egoSay("A brass reading lamp. It's off."); waitForMessage(); }
             return;
-        case Default:
         case Use:
         case Push:
         case Pull:
@@ -822,10 +835,12 @@ room Hotel {
         name = "phone";
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = Use;
+            return;
         case LookAt:
             egoSay("A rotary phone. Zero for the front desk."); waitForMessage();
             return;
-        case Default:
         case Use:
         case TalkTo:
         case PickUp:
@@ -846,10 +861,12 @@ room Hotel {
         parent_state = 1;
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("A Hotel Paradiso matchbook. There's writing inside the cover."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takeMatchbook();
             return;
@@ -873,8 +890,8 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
-        case Default:            // a plain click: open it, or close it if it's open
-            doSentence(drawerOpen ? Close : Open, objA, 0, 0);
+        case DefaultVerb:        // what a plain click does: open it, or close it if it's open
+            defaultVerb = drawerOpen ? Close : Open;
             return;
         case LookAt:
             if(drawerOpen && !tookMatchbook) { egoSay("There's a matchbook in the drawer."); waitForMessage(); }
@@ -916,10 +933,12 @@ room Hotel {
         name = "painting";
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = Pull;
+            return;
         case LookAt:
             egoSay("A stag in a forest clearing at dusk. It hangs a little crooked."); waitForMessage();
             return;
-        case Default:
         case Pull:
         case Push:
         case PickUp:
@@ -948,10 +967,12 @@ room Hotel {
         name = "screwdriver";
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("A screwdriver with a red handle. Locked in a safe. Sure."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takeScrewdriver();
             return;
@@ -968,10 +989,12 @@ room Hotel {
         name = "little bag";
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("A little bag of white powder. I'm sure it's sugar. Party sugar."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takePowder();
             return;
@@ -998,8 +1021,8 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
-        case Default:            // a plain click: open it, or close it if it's open
-            doSentence(safeOpen ? Close : Open, objA, 0, 0);
+        case DefaultVerb:        // what a plain click does: open it, or close it if it's open
+            defaultVerb = safeOpen ? Close : Open;
             return;
         case LookAt:
             if(safeOpen && !tookScrewdriver && !tookPowder) { egoSay("A screwdriver and a little bag of white powder. Past me packed for a party."); waitForMessage(); }
@@ -1058,10 +1081,12 @@ room Hotel {
         states = { { 110, 18, "objects/table_matchbook_1.bmp" } };
         state = 0;
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("The matchbook, right where I left it."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takeFromTable(invMatchbook);
             return;
@@ -1076,10 +1101,12 @@ room Hotel {
         states = { { 30, 18, "objects/table_candy_1.bmp" } };
         state = 0;
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("Fourteen dollars of nougat, displayed with pride."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takeFromTable(invCandy);
             return;
@@ -1103,7 +1130,9 @@ room Hotel {
         };
         state = 0;
         verb(int vrb, int objA, int objB) {
-        case Default:
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = LookAt;
+            return;
         case LookAt:
             if(tableMirrorState == 1) { egoSay("The cabinet mirror, lying flat on the table. Ready for business."); waitForMessage(); }
             else if(tableMirrorState == 2) { egoSay("A little white hill on the mirror. It needs chopping up."); waitForMessage(); }
@@ -1137,7 +1166,9 @@ room Hotel {
         name = "coffee table";
 
         verb(int vrb, int objA, int objB) {
-        case Default:
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = LookAt;
+            return;
         case LookAt:
             egoSay("A low coffee table. A good place to put things down."); waitForMessage();
             return;
@@ -1171,10 +1202,12 @@ room Hotel {
         parent_state = 1;
 
         verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = PickUp;
+            return;
         case LookAt:
             egoSay("My wallet, warm and slightly flattened. There's a dollar bill sticking out."); waitForMessage();
             return;
-        case Default:
         case PickUp:
             takeWallet();
             return;
@@ -1200,8 +1233,8 @@ room Hotel {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
-        case Default:            // a plain click: open it, or close it if it's open
-            doSentence(bedOpen ? Close : Open, objA, 0, 0);
+        case DefaultVerb:        // what a plain click does: open it, or close it if it's open
+            defaultVerb = bedOpen ? Close : Open;
             return;
         case LookAt:
             if(bedOpen && !tookWallet) { egoSay("My wallet, lying right where I slept."); waitForMessage(); }

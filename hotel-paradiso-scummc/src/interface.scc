@@ -249,10 +249,18 @@ room ResRoom {
         cursorShown = show;
     }
 
+    // What a plain click on obj does: asks the object (its DefaultVerb code
+    // runs at once and sets defaultVerb), or 0 if it has no default.
+    script queryDefault(int obj) {
+        defaultVerb = 0;
+        if(obj && getObjectVerbEntrypoint(obj, DefaultVerb))
+            startObject(2, obj, DefaultVerb, [ DefaultVerb, obj, 0 ]);
+    }
+
     // ------------------------------------------------------------ sentence line
     // Runs forever: rebuilds "Verb object" whenever the cursor or verb changes.
     script mouseWatch() {
-        int obj, inv, lastObj, lastInv, lastVerb, lastWith;
+        int obj, inv, lastObj, lastInv, lastVerb, lastWith, dflt, lastDflt;
         lastObj = -1;
         while(1) {
             if(titleMode) {
@@ -268,8 +276,15 @@ room ResRoom {
                 inv = 0;
             hoverObj = obj;
             hoverInv = inv;
+            // the default can change while hovering (a drawer you just opened)
+            dflt = 0;
+            if(obj && obj != VAR_EGO && curVerb == WalkTo && !withItem) {
+                queryDefault(obj);
+                dflt = defaultVerb;
+            }
 
-            unless(obj == lastObj && inv == lastInv && curVerb == lastVerb && withItem == lastWith) {
+            unless(obj == lastObj && inv == lastInv && curVerb == lastVerb && withItem == lastWith && dflt == lastDflt) {
+                lastDflt = dflt;
                 lastObj = obj;
                 lastInv = inv;
                 lastVerb = curVerb;
@@ -280,10 +295,15 @@ room ResRoom {
                         setVerbName("Use %v{withItem} with %v{hoverInv}");
                     else
                         setVerbName("Use %v{withItem} with %n{hoverObj}");
-                } else if(inv)
+                } else if(inv && curVerb == WalkTo)
+                    setVerbName("%v{hoverInv}");      // no verb chosen: just the item
+                else if(inv)
                     setVerbName("%v{curVerb} %v{hoverInv}");
-                else if(curVerb == WalkTo && obj && getObjectVerbEntrypoint(obj, Default))
-                    setVerbName("%n{hoverObj}");     // a click will do the obvious thing
+                else if(curVerb == WalkTo && dflt) {
+                    defaultVerb = dflt;
+                    setVerbName("%v{defaultVerb} %n{hoverObj}");   // what a click will do
+                } else if(curVerb == WalkTo && obj)
+                    setVerbName("%n{hoverObj}");
                 else
                     setVerbName("%v{curVerb} %n{hoverObj}");
                 redrawVerb();
@@ -341,9 +361,12 @@ room ResRoom {
             return;
         }
         // No verb chosen: objects with a default action do it
-        if(obj && curVerb == WalkTo && getObjectVerbEntrypoint(obj, Default)) {
-            doSentence(Default, obj, 0, 0);
-            return;
+        if(obj && curVerb == WalkTo) {
+            queryDefault(obj);
+            if(defaultVerb) {
+                doSentence(defaultVerb, obj, 0, 0);
+                return;
+            }
         }
         if(!obj || curVerb == WalkTo) {
             walkActorTo(VAR_EGO, VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
