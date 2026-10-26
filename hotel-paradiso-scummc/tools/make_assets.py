@@ -862,43 +862,74 @@ def build_phone_sounds():
     write_voc('phone_hang', normalize(out, 0.85))
 
 
+def _modal(out, t0, modes, level, attack_ms=1.0, rnd=None):
+    """Strike something: add a set of decaying sine modes at t0.
+    modes: (frequency Hz, decay time s, amplitude). Each starts at a random
+    phase so repeated strikes don't sound machine-identical."""
+    import math
+    import random
+    rnd = rnd or random.Random(0)
+    i0 = int(t0 * RATE)
+    att = max(1, int(attack_ms * RATE / 1000))
+    for f, tau, a in modes:
+        ph = rnd.uniform(0, 2 * math.pi)
+        n = int(min(6 * tau, 2.0) * RATE)
+        w = 2 * math.pi * f / RATE
+        for k in range(n):
+            i = i0 + k
+            if i >= len(out):
+                break
+            out[i] += level * a * math.exp(-k / (tau * RATE)) * min(1.0, k / att) * math.sin(ph + w * k)
+
+
 def build_clown_sounds():
-    """knock: three brisk knocks on a hollow hotel door. honk: a rubber-bulb
-    bicycle horn, honk-honk, each a nasal squawk that bends up and back."""
+    """knock: three knuckle raps on a hollow hotel door, each a soft "thock"
+    exciting a handful of short wooden modes, with a little natural variation.
+    honk: a rubber-bulb clown horn squeezed twice: a buzzy reed through the
+    resonances of a brass bell, the pitch jumping up as the bulb is squeezed
+    and sagging as it empties."""
     import math
     import random
     rnd = random.Random(22)
+
+    # ---- knock
     out = [0.0] * int(RATE * 0.9)
-    door = Resonator(150, 0.9985)     # rings for ~80ms: a hollow door
-    panel = Resonator(480, 0.996)
-    for t0, a in ((0.02, 1.0), (0.22, 0.9), (0.42, 1.0)):
+    door = [(96, .060, .55), (141, .050, 1.0), (229, .034, .75), (372, .024, .5),
+            (611, .015, .35), (987, .010, .22), (1690, .006, .14)]
+    for t0, a in ((0.030, 1.0), (0.205, 0.82), (0.375, 0.95)):
+        detune = 1 + rnd.uniform(-0.03, 0.03)
+        _modal(out, t0, [(f * detune, tau, amp) for f, tau, amp in door], a, attack_ms=1.5, rnd=rnd)
+        # the knuckle itself: a few ms of muffled noise
+        lp = LowPass(0.35)
         i0 = int(t0 * RATE)
-        for k in range(int(0.012 * RATE)):
-            x = a * rnd.uniform(-1, 1) * (1 - k / (0.012 * RATE))
-            if i0 + k < len(out):
-                out[i0 + k] += x * 0.4
-        _add(out, t0, _tick(rnd, 0.5 * a, freq=1300, ms=25))
-    for i in range(len(out)):
-        x = out[i]
-        out[i] = 0.3 * x + 220 * door(x) + 45 * panel(x)
+        n = int(0.005 * RATE)
+        for k in range(n):
+            out[i0 + k] += 0.6 * a * lp(rnd.uniform(-1, 1)) * math.sin(math.pi * k / n)
     write_voc('knock', normalize(out, 0.9))
 
+    # ---- honk
     out = [0.0] * int(RATE * 0.8)
-    for t0 in (0.0, 0.38):
-        i0 = int(t0 * RATE)
-        n = int(0.3 * RATE)
+    for t0, dur, f0, lvl in ((0.0, 0.30, 340, 1.0), (0.37, 0.26, 318, 0.9)):
+        bell = [Resonator(820, 0.965), Resonator(1520, 0.96), Resonator(2650, 0.95)]
+        breath = LowPass(0.4)
+        i0, n = int(t0 * RATE), int(dur * RATE)
         ph = 0.0
-        body = Resonator(1150, 0.93)
         for k in range(n):
-            u = k / n
-            f = 330 * (1 + 0.18 * math.sin(math.pi * u))       # squeezed: up, then back down
-            ph = (ph + f / RATE) % 1.0
-            reed = 1.0 if ph < 0.18 else -0.22                  # buzzy narrow pulse
-            env = min(1.0, u / 0.06) * min(1.0, (1 - u) / 0.12)
-            v = env * (0.6 * reed + 2.4 * body(reed))
+            t, u = k / RATE, k / n
+            f = f0 * (0.84 + 0.18 * (1 - math.exp(-t / 0.025)) - 0.06 * u) * (1 + 0.004 * rnd.uniform(-1, 1))
+            ph += 2 * math.pi * f / RATE
+            # band-limited sawtooth reed: harmonics up to the 5.5kHz ceiling
+            src = 0.0
+            h = 1
+            while h * f < 5000:
+                src += math.sin(h * ph) / h
+                h += 1
+            src += 0.15 * breath(rnd.uniform(-1, 1))
+            env = min(1.0, t / 0.012) * min(1.0, (n - k) / (0.045 * RATE))
+            v = 0.25 * src + 24 * bell[0](src) + 16 * bell[1](src) + 9 * bell[2](src)
             if i0 + k < len(out):
-                out[i0 + k] += v
-    write_voc('honk', normalize(out, 0.8))
+                out[i0 + k] += lvl * env * v
+    write_voc('honk', normalize(out, 0.85))
 
 
 def build_line_sounds():
@@ -953,40 +984,48 @@ def build_line_sounds():
 
 
 def build_unscrew_sound():
-    """The mirror door coming off: two screws turned out with squeaky metal
-    chirps, one drops and tinkles on the sink, then the door comes free with a
-    glassy clink (about 2s)."""
+    """The mirror door coming off (about 2.1s): two screws backed out, each a
+    few gritty turns of thread friction (tight and crunchy at first, looser
+    after) with the click of the screwdriver re-seating between turns; one
+    screw drops and bounces on the porcelain sink; then the mirror door lifts
+    off its hinges with a bright glass tink at 1.75s."""
     import math
     import random
     rnd = random.Random(24)
-    out = [0.0] * int(RATE * 2.1)
-    for s0 in (0.0, 0.75):                                  # two screws
-        for k in range(4):                                  # four squeaky turns each
-            t0 = s0 + 0.04 + k * 0.15
-            i0 = int(t0 * RATE)
-            n = int(0.1 * RATE)
-            metal = Resonator(2300 + 150 * k, 0.975)
-            metal2 = Resonator(3700, 0.97)
-            ph = 0.0
-            for j in range(n):
-                u = j / n
-                rate = 260 + 520 * u + 80 * rnd.random()          # the slip-stick speeds up as it turns
-                ph += rate / RATE
-                x = 0.0
-                if ph >= 1.0:
-                    ph -= 1.0
-                    x = 1.0
-                env = math.sin(math.pi * u)
-                if i0 + j < len(out):
-                    out[i0 + j] += env * (9 * metal(x) + 4 * metal2(x))
-    # a screw drops onto the porcelain: three little bounces
-    for t0, a in ((1.42, 0.8), (1.52, 0.5), (1.58, 0.3)):
-        _add(out, t0, _tone(4200, 60, 0.4 * a))
-        _add(out, t0, _tick(rnd, 0.4 * a, freq=3600, ms=20))
-    # the mirror door lifts off its hinges: a glassy clink and a soft knock
-    _add(out, 1.75, _tone(2600, 260, 0.35))
-    _add(out, 1.75, _tone(3900, 180, 0.2))
-    _add(out, 1.76, _thud(rnd, 0.4, freq=240, ms=90))
+    out = [0.0] * int(RATE * 2.15)
+
+    def turn(t0, dur, tight):
+        metal = [Resonator(1250, 0.975), Resonator(2350, 0.97), Resonator(3550, 0.96)]
+        body = Resonator(460, 0.95)
+        i0, n = int(t0 * RATE), int(dur * RATE)
+        ph = 0.0
+        for k in range(n):
+            u = k / n
+            rate = (55 if tight else 85) + 110 * u                  # stick-slip speeds up as it gives
+            ph += rate * (1 + 0.25 * rnd.uniform(-1, 1)) / RATE
+            x = 0.0
+            if ph >= 1.0:
+                ph -= 1.0
+                x = rnd.uniform(0.6, 1.0)
+            x += 0.18 * rnd.uniform(-1, 1)                          # grit in the thread
+            env = math.sin(math.pi * u) ** 0.8 * (1.4 if tight and u < 0.15 else 1.0)
+            if i0 + k < len(out):
+                out[i0 + k] += env * (14 * metal[0](x) + 9 * metal[1](x) + 5 * metal[2](x) + 10 * body(x))
+        if tight:                                                    # the first crack as it breaks free
+            _add(out, t0, _tick(rnd, 0.9, freq=1800, ms=25))
+
+    for s0 in (0.04, 0.74):                                         # two screws
+        for k, (dt, dur) in enumerate(((0.0, 0.17), (0.21, 0.14), (0.39, 0.12))):
+            _add(out, s0 + dt - 0.015, _tick(rnd, 0.35, freq=2700, ms=10))   # driver re-seats
+            turn(s0 + dt, dur, tight=(k == 0))
+    # the second screw drops onto the sink: bounces closer and closer together
+    screw = [(2930, .050, 1.0), (4380, .030, .55), (1840, .040, .35)]
+    for t0, a in ((1.36, 1.0), (1.48, 0.6), (1.565, 0.38), (1.62, 0.24), (1.655, 0.15), (1.675, 0.1)):
+        _modal(out, t0, screw, 0.45 * a, attack_ms=0.3, rnd=rnd)
+    # the mirror door lifts off: a bright tink of plate glass and a soft knock of its frame
+    _modal(out, 1.75, [(1660, .22, 1.0), (2890, .16, .7), (4120, .11, .45), (4960, .07, .25)], 0.5,
+           attack_ms=0.3, rnd=rnd)
+    _add(out, 1.755, _thud(rnd, 0.25, freq=260, ms=70))
     write_voc('unscrew', normalize(out, 0.85))
 
 

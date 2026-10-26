@@ -195,8 +195,9 @@ sign on the door handle says as much).
   rustling. The phone has a rotary dial whirring back from 0, a ring and Gustav's
   pickup, then a hang-up click at the end of the call. The clowns knock at the door and
   honk a bicycle horn. The razor taps on the glass as it chops, each line gets a sniff
-  and the second a woozy swoop, and taking the mirror off has screwdriver squeaks, a
-  dropped screw and a clink.
+  and the second a woozy swoop. Taking the mirror off has gritty screw threads, a dropped
+  screw bouncing on the sink and a glass tink. The knock and the dropped screw are struck
+  "modal" sounds: a handful of decaying resonances, like the object's own.
 * **Music.** The same file has a tiny synthesiser (vibraphone, electric piano, plucked
   bass, band-organ pipes, glockenspiel, tuba and a few drums). It plays two original pieces, also stored as
   sound effects. The title screen has a lounge tune in F, which `loopTheme` restarts
