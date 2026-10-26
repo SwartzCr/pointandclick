@@ -139,8 +139,12 @@ The door tells you what's missing, and so does the front desk on the phone.
   string codes (`%v{curVerb} %n{hoverObj}`), which the engine expands when it draws the verb.
 * **Actions.** A room click queues `doSentence(verb, object, 0, item)`. The engine then runs
   `sentenceHandler`, which walks the player over and starts the object's own verb code if it
-  has an entry for that verb, or `defaultAction` if not. The inventory item rides along as
-  `objB`, so objects can tell "Use" from "Use razor with".
+  has an entry for that verb, or `defaultAction` if not. The inventory item is handed to the
+  object as `objB`, so objects can tell "Use" from "Use razor with". It travels in a global,
+  `sentenceItem`, rather than as the sentence's second object, because the engine silently
+  drops a sentence whose two objects have the same number. Inventory items are verbs,
+  numbered separately from room objects, so they can collide: the screwdriver's number is
+  the bathroom mirror's.
 * **State.** Opening things, the lamp, the TV and the safe are object states with their own
   images. The candy bar, matchbook, uniform and wallet are drawn as part of their container's
   "open" image, but they're separate objects with `parent` and `parent_state` set, so the

@@ -357,6 +357,7 @@ room ResRoom {
         stopSentence();
         // Doorways handle Walk to themselves, so walking into one changes room
         if(obj && curVerb == WalkTo && getObjectVerbEntrypoint(obj, WalkTo)) {
+            sentenceItem = 0;
             doSentence(WalkTo, obj, 0, 0);
             return;
         }
@@ -364,6 +365,7 @@ room ResRoom {
         if(obj && curVerb == WalkTo) {
             queryDefault(obj);
             if(defaultVerb) {
+                sentenceItem = 0;
                 doSentence(defaultVerb, obj, 0, 0);
                 return;
             }
@@ -375,12 +377,20 @@ room ResRoom {
             return;
         }
         // The inventory item (if any) travels as the sentence's second object
-        doSentence(curVerb, obj, 0, withItem);
+        // The item rides in sentenceItem, not the sentence itself: the engine
+        // drops any sentence whose two objects have the same number, and
+        // inventory items are verbs, numbered separately from room objects
+        // (the screwdriver's number is the bathroom mirror's).
+        sentenceItem = withItem;
+        doSentence(curVerb, obj, 0, 0);
     }
 
     // The engine runs this for every doSentence(): walk over, then let the
     // object's own verb code handle it, or fall back to a stock reply.
-    script sentenceHandler(int vrb, int objA, int objB) {
+    script sentenceHandler(int vrb, int objA, int unused) {
+        int objB;
+        objB = sentenceItem;
+        sentenceItem = 0;
         walkActorToObj(VAR_EGO, objA, 0);
         waitForActor(VAR_EGO);
         if(getObjectVerbEntrypoint(objA, vrb))

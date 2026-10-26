@@ -35,6 +35,7 @@ int curVerb;       // verb the next room click will use
 int withItem;      // inventory verb chosen for "Use X with ..."
 int hoverObj;      // room object under the cursor
 int hoverInv;      // inventory verb under the cursor
+int sentenceItem;  // the item in a "Use X with..." sentence (see sentenceHandler)
 bit gameOver;
 bit titleMode;     // on the title screen: only the menu responds
 
