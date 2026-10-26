@@ -187,7 +187,10 @@ The door tells you what's missing, and so does the front desk on the phone.
   sound effects. The title screen has a lounge tune in F, which `loopTheme` restarts
   whenever it ends; the room's `exit()` stops it when a game starts. The clowns get a
   merry-go-round waltz, in the style of a fairground band organ, that loops from the knock
-  at the door until they carry you out.
+  at the door until they carry you out. The game-over screen loops a dizzy, slightly
+  ominous 12 seconds: a low drone of detuned notes beating against each other, and a D
+  minor music box that keeps slipping down and wobbles seasickly flat. A whoosh circles
+  every 0.8s, in time with the spinning room.
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
   in after them, and the costume's 16 local colours are mapped onto room indices with

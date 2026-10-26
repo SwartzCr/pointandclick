@@ -11,6 +11,8 @@ room GameOver {
     image = "gameover.bmp";
     trans = 0;
 
+    sound gameoverSnd = "gameover.soun";   // drone, a sagging music box, a whoosh per turn
+
     // Full-screen frames of the bedroom spinning round the bed, 45 degrees
     // apart. The background is frame 0; state n shows frame n.
     object spinner {
@@ -45,11 +47,20 @@ room GameOver {
         printColor(col);
     }
 
+    // Loops for as long as the screen is up; restartGame() stops all sound
+    local script loopMusic() {
+        while(1) {
+            unless(isSoundRunning(gameoverSnd)) startSound(gameoverSnd);
+            delay(6);
+        }
+    }
+
     local script entry() {
         ResRoom::showInterface(0);
         ResRoom::hideAllVerbs();
         setObjectClass(spinner, [ SET_CLASS | UNTOUCHABLE ]);
         spin();
+        loopMusic();
         delaySeconds(2);
         caption(C_WHITE); print("You spent the night in bed, staring at the ceiling."); waitForMessage();
         caption(C_WHITE); print("The ceiling stared back. It was a long night."); waitForMessage();

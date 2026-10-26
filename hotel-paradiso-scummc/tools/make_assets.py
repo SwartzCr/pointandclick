@@ -761,6 +761,68 @@ def build_clown_music():
     write_voc('clowns', normalize(out, 0.8))
 
 
+def build_gameover_music():
+    """The game-over screen: an original, slightly ominous and dizzy loop
+    (12s). A low drone of two detuned notes beating against each other, a
+    music box in D minor whose tune keeps slipping down by semitones, a
+    seasick pitch wobble and slow sag on everything up top, and a soft whoosh
+    that circles every 0.8s, in time with the spinning room."""
+    import math
+    import random
+    rnd = random.Random(17)
+    length = 12.0
+    out = [0.0] * int(RATE * length)
+    n_s = len(out)
+
+    def wobble(t):          # semitones: a slow sag and a seasick waver
+        return -0.6 * (1 - math.cos(2 * math.pi * t / length)) / 2 + 0.25 * math.sin(2 * math.pi * 0.7 * t)
+
+    # drone: D2 and a slightly flat D2 an octave over A2, beating, with a slow swell
+    for i in range(n_s):
+        t = i / RATE
+        swell = 0.75 + 0.25 * math.sin(2 * math.pi * t / 6 - 1.2)
+        fade = min(1.0, t / 0.6)
+        v = (math.sin(2 * math.pi * 73.4 * t) + math.sin(2 * math.pi * 72.8 * t)
+             + 0.6 * math.sin(2 * math.pi * 110.0 * t) + 0.5 * math.sin(2 * math.pi * 103.8 * t))  # A2 and G#2: the tritone
+        out[i] += 0.11 * v * swell * fade
+
+    # music box: struck tines, each note's pitch follows the wobble as it rings
+    # five falling phrases, each a semitone or so below the last, then a quick
+    # tumble to the bottom: (start time, midi)
+    tune = [81, 77, 74, 69, 80, 77, 74, 68, 79, 76, 73, 69, 77, 74, 69, 65, 76, 73, 69, 67]
+    tumble = [75, 72, 69, 66, 74, 69, 65, 62]
+    sched = [(k * 0.5, n) for k, n in enumerate(tune)] + [(10.0 + k * 0.2, n) for k, n in enumerate(tumble)]
+    for t0, n in sched:
+        f0 = _midi(n)
+        i0 = int(t0 * RATE)
+        ph = 0.0
+        for k in range(int(1.6 * RATE)):
+            i = i0 + k
+            if i >= n_s:
+                break
+            t = k / RATE
+            f = f0 * 2 ** (wobble(i / RATE) / 12)
+            ph += 2 * math.pi * f / RATE
+            v = (math.sin(ph) + 0.25 * math.sin(3 * ph) * math.exp(-12 * t)) * math.exp(-2.6 * t)
+            out[i] += 0.24 * v * min(1.0, k / 20)
+
+    # the whoosh: filtered noise sweeping up and down, once per turn of the room
+    res = Resonator(600, 0.96)
+    for i in range(n_s):
+        t = i / RATE
+        cyc = (t % 0.8) / 0.8
+        f = 350 + 900 * math.sin(math.pi * cyc)
+        res.a1 = 2 * 0.96 * math.cos(2 * math.pi * f / RATE)
+        out[i] += 0.35 * res(rnd.uniform(-1, 1)) * math.sin(math.pi * cyc) ** 2
+
+    # soften the ends so the loop doesn't click
+    for k in range(int(0.05 * RATE)):
+        g = k / (0.05 * RATE)
+        out[k] *= g
+        out[-1 - k] *= g
+    write_voc('gameover', normalize(out, 0.8))
+
+
 def main():
     os.makedirs(os.path.join(OUT, 'objects'), exist_ok=True)
     pal = Palette()
@@ -817,6 +879,7 @@ def main():
     build_bed_sound()
     build_theme_music()
     build_clown_music()
+    build_gameover_music()
     print(f'assets written to {os.path.normpath(OUT)} ({len(pal.colors)} palette entries used)')
 
 
