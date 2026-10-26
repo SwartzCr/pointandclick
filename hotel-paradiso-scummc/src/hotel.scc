@@ -201,9 +201,7 @@ room Hotel {
         ResRoom::showInterface(0);
         startSound(tvSnd);
         printBegin(); printAt(160, 8); printCenter(); printColor(C_CYAN);
-        print("...and now the Paradiso Weather. Sunny and 72 down by the pool."); waitForMessage();
-        printBegin(); printAt(160, 8); printCenter(); printColor(C_CYAN);
-        print("Clear skies all week, with a hundred percent chance of late check-out fees."); waitForMessage();
+        print("Purple skies, chance of alien encounters"); waitForMessage();
         ResRoom::showInterface(1);
         egoSay("Riveting."); waitForMessage();
     }
@@ -704,7 +702,7 @@ room Hotel {
         case LookAt:
             if(tvOn) {
                 tvAd = !tvAd;
-                if(tvAd) { egoSay("The Paradiso Channel. Forecast: sunny, with a chance of late fees."); waitForMessage(); }
+                if(tvAd) { egoSay("The Paradiso Channel. Still forecasting purple skies and aliens."); waitForMessage(); }
                 else { egoSay("An ad: Paradiso safes. Hidden where nobody would ever look."); waitForMessage(); }
             } else {
                 egoSay("A TV the size of a suitcase. Retro, or just old."); waitForMessage();
