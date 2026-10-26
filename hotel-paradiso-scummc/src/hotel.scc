@@ -36,6 +36,13 @@ room Hotel {
     sound drawerSnd = "drawer.soun";   // a wooden drawer sliding out
     sound bedSnd = "bed.soun";         // covers thrown back
     sound clownSnd = "clowns.soun";    // the room-service march
+    sound dialSnd = "phone_dial.soun"; // dial whirs back from 0, one ring, Gustav picks up
+    sound hangSnd = "phone_hang.soun"; // the receiver back on its cradle
+    sound knockSnd = "knock.soun";     // room service at the door
+    sound honkSnd = "honk.soun";       // HONK HONK
+    sound chopSnd = "chop.soun";       // razor taps on the mirror
+    sound sniffSnd = "sniff.soun";     // one line
+    sound swoopSnd = "swoop.soun";     // the room starts to swim
 
     bit clownMusic;
 
@@ -141,6 +148,7 @@ room Hotel {
         if(tableMirrorState == 2) {
             tableMirrorState = 3;
             setObjectState(tableMirror, 3);
+            startSound(chopSnd);
             egoSay("Chop, chop, chop."); waitForMessage();
             egoSay("Three neat lines. The extra blades finally pay for themselves."); waitForMessage();
         } else if(tableMirrorState >= 3) {
@@ -165,13 +173,16 @@ room Hotel {
             readyToParty = 1;
             egoSay("I roll the dollar bill up nice and tight."); waitForMessage();
             egoSay("Here goes nothing."); waitForMessage();
+            startSound(sniffSnd);
             delay(30);
             egoSay("...!"); waitForMessage();
             egoSay("Oh, hello. Hello, everyone. I feel great."); waitForMessage();
             egoSay("I feel fantastic. Let's go to a party."); waitForMessage();
         } else if(linesDone == 2) {
             egoSay("One more for the road."); waitForMessage();
+            startSound(sniffSnd);
             delay(20);
+            startSound(swoopSnd);
             ResRoom::startTrip();
             delay(40);
             egoSay("Whoa."); waitForMessage();
@@ -180,6 +191,7 @@ room Hotel {
         } else {
             gameOver = 1;
             egoSay("And one for the... other road."); waitForMessage();
+            startSound(sniffSnd);
             delay(40);
             egoSay("You know what? Parties are overrated."); waitForMessage();
             egoSay("I'm just going to lie down. For a minute."); waitForMessage();
@@ -312,10 +324,14 @@ room Hotel {
         ResRoom::showInterface(0);
         phoneCalls++;
         egoSay("I dial zero."); waitForMessage();
+        startSound(dialSnd);
+        delay(165);                 // the dial runs back, it rings once, someone picks up
         if(phoneCalls > 4) {
             deskSays(); print("You have reached the front desk. Gustav is on his break."); waitForMessage();
             egoSay("Gustav is avoiding me."); waitForMessage();
             if(phoneCalls > 6) phoneCalls = 0;
+            startSound(hangSnd);
+            delay(20);
             ResRoom::showInterface(1);
             return;
         }
@@ -343,10 +359,13 @@ room Hotel {
             egoSay("Gustav! I'm fed, I'm dressed, and I am ready. Get me to that party!"); waitForMessage();
             deskSays(); print("Very good, sir. I'll send up room service."); waitForMessage();
             egoSay("Room service? I didn't order any..."); waitForMessage();
+            startSound(hangSnd);
             deskSays(); print("Click."); waitForMessage();
             clownService();
             return;
         }
+        startSound(hangSnd);
+        delay(20);
         ResRoom::showInterface(1);
     }
 
@@ -407,6 +426,8 @@ room Hotel {
         setCurrentActor(VAR_EGO);
         setActorDirection(270);
         delay(40);
+        startSound(knockSnd);
+        delay(55);
         egoSay("Someone's knocking."); waitForMessage();
         setObjectState(door, 1);
         clownMusic = 1;
@@ -428,6 +449,7 @@ room Hotel {
         setCurrentActor(clownA); setActorDirection(270);
         setCurrentActor(clownB); setActorDirection(90);
         setCurrentActor(clownC); setActorDirection(180);
+        startSound(honkSnd);
         actorSay(clownC, "Room service! HONK HONK!"); waitForMessage();
         egoSay("...I'm sorry, what?"); waitForMessage();
         actorSay(clownA, "One guest, extra party, to go!"); waitForMessage();

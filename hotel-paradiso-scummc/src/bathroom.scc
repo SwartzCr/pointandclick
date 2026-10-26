@@ -18,6 +18,7 @@ room Bathroom {
 
     sound flushSnd = "flush.soun";
     sound cabinetSnd = "cabinet.soun";   // magnet catch, then the hinge creaks
+    sound unscrewSnd = "unscrew.soun";   // squeaky screws, one drops, the door clinks free
 
     object toilet;
     object soap;
@@ -53,6 +54,8 @@ room Bathroom {
     local script removeMirror() {
         ResRoom::showInterface(0);
         egoSay("Two screws per hinge. Lefty loosey..."); waitForMessage();
+        startSound(unscrewSnd);
+        delay(105);                 // the door comes free with the clink at 1.75s
         mirrorRemoved = 1;
         cabinetOpen = 1;
         hasMirror = 1;

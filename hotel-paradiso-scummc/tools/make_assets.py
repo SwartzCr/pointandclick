@@ -822,6 +822,174 @@ def build_gameover_music():
     write_voc('gameover', normalize(out, 0.8))
 
 
+def build_phone_sounds():
+    """The rotary phone. phone_dial: the dial is wound to 0 and whirs back with
+    ten pulse clicks, one ring in the earpiece, then the click of the front
+    desk picking up (2.7s). phone_hang: the receiver going down on its cradle."""
+    import math
+    import random
+    rnd = random.Random(21)
+    out = [0.0] * int(RATE * 2.75)
+    # winding the dial round: a ratchety scrape
+    for k in range(8):
+        _add(out, 0.02 + k * 0.035, _tick(rnd, 0.25, freq=3200, ms=10))
+    # spring return: a governor whirr with ten evenly spaced pulse clicks
+    i0, i1 = int(0.34 * RATE), int(1.36 * RATE)
+    whirr = Resonator(700, 0.9)
+    for i in range(i0, i1):
+        u = (i - i0) / (i1 - i0)
+        out[i] += 0.25 * whirr(rnd.uniform(-1, 1)) * (1 - 0.3 * u) * (0.7 + 0.3 * math.sin(2 * math.pi * 55 * i / RATE))
+    for k in range(10):
+        _add(out, 0.36 + k * 0.1, _tick(rnd, 0.7, freq=1900, ms=14))
+    _add(out, 1.37, _thud(rnd, 0.35, freq=220, ms=60))        # the dial stops
+    # one ring, heard down the line: 440 + 480 Hz, faint and a little band-limited
+    lp = LowPass(0.5)
+    i0, i1 = int(1.5 * RATE), int(2.35 * RATE)
+    for i in range(i0, i1):
+        t = (i - i0) / RATE
+        env = min(1.0, t / 0.02) * min(1.0, (i1 - i) / (0.02 * RATE))
+        out[i] += 0.32 * env * lp(math.sin(2 * math.pi * 440 * t) + math.sin(2 * math.pi * 480 * t))
+    # picked up at the other end
+    _add(out, 2.5, _tick(rnd, 0.9, freq=1400, ms=30))
+    _add(out, 2.51, _thud(rnd, 0.3, freq=300, ms=50))
+    write_voc('phone_dial', normalize(out, 0.85))
+
+    out = [0.0] * int(RATE * 0.4)
+    _add(out, 0.01, _tick(rnd, 0.6, freq=2500, ms=12))       # receiver touches the cradle
+    _add(out, 0.03, _thud(rnd, 1.0, freq=160, ms=180))       # and settles with a clunk
+    _add(out, 0.035, _tick(rnd, 0.5, freq=1100, ms=40))
+    _add(out, 0.09, _tick(rnd, 0.3, freq=3000, ms=10))       # the bell inside gives a tiny ding
+    write_voc('phone_hang', normalize(out, 0.85))
+
+
+def build_clown_sounds():
+    """knock: three brisk knocks on a hollow hotel door. honk: a rubber-bulb
+    bicycle horn, honk-honk, each a nasal squawk that bends up and back."""
+    import math
+    import random
+    rnd = random.Random(22)
+    out = [0.0] * int(RATE * 0.9)
+    door = Resonator(150, 0.9985)     # rings for ~80ms: a hollow door
+    panel = Resonator(480, 0.996)
+    for t0, a in ((0.02, 1.0), (0.22, 0.9), (0.42, 1.0)):
+        i0 = int(t0 * RATE)
+        for k in range(int(0.012 * RATE)):
+            x = a * rnd.uniform(-1, 1) * (1 - k / (0.012 * RATE))
+            if i0 + k < len(out):
+                out[i0 + k] += x * 0.4
+        _add(out, t0, _tick(rnd, 0.5 * a, freq=1300, ms=25))
+    for i in range(len(out)):
+        x = out[i]
+        out[i] = 0.3 * x + 220 * door(x) + 45 * panel(x)
+    write_voc('knock', normalize(out, 0.9))
+
+    out = [0.0] * int(RATE * 0.8)
+    for t0 in (0.0, 0.38):
+        i0 = int(t0 * RATE)
+        n = int(0.3 * RATE)
+        ph = 0.0
+        body = Resonator(1150, 0.93)
+        for k in range(n):
+            u = k / n
+            f = 330 * (1 + 0.18 * math.sin(math.pi * u))       # squeezed: up, then back down
+            ph = (ph + f / RATE) % 1.0
+            reed = 1.0 if ph < 0.18 else -0.22                  # buzzy narrow pulse
+            env = min(1.0, u / 0.06) * min(1.0, (1 - u) / 0.12)
+            v = env * (0.6 * reed + 2.4 * body(reed))
+            if i0 + k < len(out):
+                out[i0 + k] += v
+    write_voc('honk', normalize(out, 0.8))
+
+
+def build_line_sounds():
+    """chop: three quick taps of a razor blade on glass, each with a little
+    scrape. sniff: a quick nasal inhale. swoop: the room tilts, a woozy slide
+    down and back up with a seasick wobble."""
+    import math
+    import random
+    rnd = random.Random(23)
+    out = [0.0] * int(RATE * 0.75)
+    glass = Resonator(3300, 0.97)
+    glass2 = Resonator(2100, 0.96)
+    for t0 in (0.02, 0.22, 0.42):
+        i0 = int(t0 * RATE)
+        for k in range(int(0.004 * RATE)):
+            x = rnd.uniform(-1, 1)
+            if i0 + k < len(out):
+                out[i0 + k] += x
+        lp = LowPass(0.7)
+        for k in range(int(0.07 * RATE)):                    # the blade drawn across
+            i = i0 + int(0.03 * RATE) + k
+            if i < len(out):
+                out[i] += 0.12 * lp(rnd.uniform(-1, 1)) * math.sin(math.pi * k / (0.07 * RATE))
+    for i in range(len(out)):
+        x = out[i]
+        out[i] = 0.5 * x + 4 * glass(x) + 2.5 * glass2(x)
+    write_voc('chop', normalize(out, 0.85))
+
+    out = [0.0] * int(RATE * 0.55)
+    nose = Resonator(1800, 0.9)
+    hiss = LowPass(0.6)
+    for i in range(len(out)):
+        u = i / len(out)
+        env = math.sin(math.pi * min(1.0, u / 0.85)) ** 0.7 if u < 0.85 else 0.0
+        env *= 0.6 + 0.4 * u                                   # gets sharper as it goes
+        nose.a1 = 2 * 0.9 * math.cos(2 * math.pi * (1300 + 1400 * u) / RATE)
+        x = rnd.uniform(-1, 1)
+        out[i] += env * (0.5 * hiss(x) + 2.5 * nose(x))
+    write_voc('sniff', normalize(out, 0.8))
+
+    out = [0.0] * int(RATE * 1.4)
+    ph = ph2 = 0.0
+    for i in range(len(out)):
+        t = i / RATE
+        u = t / 1.4
+        f = 520 * 2 ** ((-0.9 * math.sin(math.pi * u) + 0.12 * math.sin(2 * math.pi * 5 * t)))  # slide down and back
+        ph += 2 * math.pi * f / RATE
+        ph2 += 2 * math.pi * f * 1.5 / RATE
+        env = math.sin(math.pi * u) ** 0.8
+        out[i] += env * (math.sin(ph) + 0.35 * math.sin(ph2) + 0.15 * math.sin(2 * ph))
+    write_voc('swoop', normalize(out, 0.7))
+
+
+def build_unscrew_sound():
+    """The mirror door coming off: two screws turned out with squeaky metal
+    chirps, one drops and tinkles on the sink, then the door comes free with a
+    glassy clink (about 2s)."""
+    import math
+    import random
+    rnd = random.Random(24)
+    out = [0.0] * int(RATE * 2.1)
+    for s0 in (0.0, 0.75):                                  # two screws
+        for k in range(4):                                  # four squeaky turns each
+            t0 = s0 + 0.04 + k * 0.15
+            i0 = int(t0 * RATE)
+            n = int(0.1 * RATE)
+            metal = Resonator(2300 + 150 * k, 0.975)
+            metal2 = Resonator(3700, 0.97)
+            ph = 0.0
+            for j in range(n):
+                u = j / n
+                rate = 260 + 520 * u + 80 * rnd.random()          # the slip-stick speeds up as it turns
+                ph += rate / RATE
+                x = 0.0
+                if ph >= 1.0:
+                    ph -= 1.0
+                    x = 1.0
+                env = math.sin(math.pi * u)
+                if i0 + j < len(out):
+                    out[i0 + j] += env * (9 * metal(x) + 4 * metal2(x))
+    # a screw drops onto the porcelain: three little bounces
+    for t0, a in ((1.42, 0.8), (1.52, 0.5), (1.58, 0.3)):
+        _add(out, t0, _tone(4200, 60, 0.4 * a))
+        _add(out, t0, _tick(rnd, 0.4 * a, freq=3600, ms=20))
+    # the mirror door lifts off its hinges: a glassy clink and a soft knock
+    _add(out, 1.75, _tone(2600, 260, 0.35))
+    _add(out, 1.75, _tone(3900, 180, 0.2))
+    _add(out, 1.76, _thud(rnd, 0.4, freq=240, ms=90))
+    write_voc('unscrew', normalize(out, 0.85))
+
+
 def main():
     os.makedirs(os.path.join(OUT, 'objects'), exist_ok=True)
     pal = Palette()
@@ -879,6 +1047,10 @@ def main():
     build_theme_music()
     build_clown_music()
     build_gameover_music()
+    build_phone_sounds()
+    build_clown_sounds()
+    build_line_sounds()
+    build_unscrew_sound()
     print(f'assets written to {os.path.normpath(OUT)} ({len(pal.colors)} palette entries used)')
 
 
