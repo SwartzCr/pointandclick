@@ -19,3 +19,16 @@ if ('requestMIDIAccess' in navigator) {
     value: () => Promise.resolve({ inputs: new Map(), outputs: new Map(), onstatechange: null }),
   });
 }
+
+// ScummVM fetches its data from the absolute path /data/..., which only works
+// when the site is served from the root of a domain. On GitHub Pages it lives
+// under /<repo>/, so resolve /data/... relative to this page instead.
+(() => {
+  const realFetch = window.fetch.bind(window);
+  window.fetch = (input, init) => {
+    if (typeof input === 'string' && input.startsWith('/data/')) {
+      input = new URL(input.slice(1), document.baseURI).href;
+    }
+    return realFetch(input, init);
+  };
+})();

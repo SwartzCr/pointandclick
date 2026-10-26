@@ -78,24 +78,28 @@ jobs:
 
       - name: Smoke test in headless Chromium
         run: |
-          cd scummvm/build-emscripten && python3 -m http.server 8000 >/dev/null 2>&1 &
+          # serve the site under a subfolder, as GitHub Pages does (/<repo>/)
+          mkdir -p serve && ln -s "$PWD/scummvm/build-emscripten" serve/pointandclick
+          (cd serve && python3 -m http.server 8000 >/dev/null 2>&1 &)
           sleep 2
           npm install --no-save --silent playwright@1.47.2
           npx playwright install --with-deps chromium firefox >/dev/null
           sudo apt-get install -y -qq xvfb >/dev/null
           # Chromium headless; Firefox headed on a virtual display with Mesa's
           # software OpenGL, since headless Firefox gets no WebGL on the runners
-          node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/ smoke-test chromium \
+          node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/pointandclick/ smoke-test chromium \
             || echo "::warning::Chromium smoke test exited with $?"
           HEADED=1 LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1280x800x24" \
-            node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/ smoke-test firefox \
+            node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/pointandclick/ smoke-test firefox \
             || echo "::warning::Firefox smoke test exited with $?"
           for b in chromium firefox; do
             echo "::notice title=$b smoke test::$(grep -c . smoke-test/$b-console.txt 2>/dev/null) console lines; $(grep -h '^\[midi\]' smoke-test/$b-console.txt 2>/dev/null)"
           done
-          # Pass if Chromium got into the game: the data loaded and nothing reported missing files
+          # Pass if Chromium got into the game: it downloaded the game data, nothing
+          # reported missing files, and ScummVM never exited
           test -f smoke-test/chromium-2-game.png
-          ! grep -q 'Game data not found' smoke-test/chromium-console.txt
+          grep -q 'tentacle.001' smoke-test/chromium-console.txt
+          ! grep -q 'Game data not found\|ExitStatus\|Program terminated' smoke-test/chromium-console.txt
 
       - name: Publish smoke-test screenshots to the smoke-test branch
         if: always()
