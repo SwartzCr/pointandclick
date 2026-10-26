@@ -75,7 +75,8 @@ else gets a stock reply.
 
 <details><summary>Walkthrough (spoilers)</summary>
 
-The door tells you what's missing, and so does the front desk on the phone.
+The door tells you what's missing, and so does the front desk on the phone (the Do Not Disturb
+sign on the door handle says as much).
 
 1. **Eat.** Open the minibar, take the candy bar, and use it.
 2. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.

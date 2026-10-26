@@ -525,6 +525,42 @@ room Hotel {
         }
     }
 
+    // ------------------------------------------------------------ door tag
+    // The Do Not Disturb sign on the handle. Declared before the door so the
+    // cursor finds it first. Reading it is the game's standing hint: when
+    // stuck, call the front desk.
+    object doorTag {
+        x = 54; y = 56; w = 9; h = 14;
+        hs_x = -14; hs_y = 48;
+        dir = NORTH;
+        name = "Do Not Disturb sign";
+
+        verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = LookAt;
+            return;
+        case LookAt:
+            egoSay("PLEASE DO NOT DISTURB. Hotel Paradiso."); waitForMessage();
+            egoSay("On the back: Need anything at all? Just pick up the phone."); waitForMessage();
+            egoSay("Dial 0 and the front desk will be happy to help, day or night."); waitForMessage();
+            return;
+        case PickUp:
+        case Pull:
+            egoSay("It's hooked on the handle, and it's doing important work. I'm not to be disturbed."); waitForMessage();
+            return;
+        case Use:
+            if(objB) { egoSay("It's a sign. It doesn't take attachments."); waitForMessage(); }
+            else { egoSay("It's already doing its job. Nobody has disturbed me all day."); waitForMessage(); }
+            return;
+        case Open:
+            egoSay("It's a sign, not a door."); waitForMessage();
+            return;
+        case TalkTo:
+            egoSay("I'll try not to disturb you."); waitForMessage();
+            return;
+        }
+    }
+
     // ------------------------------------------------------------ door
     object door {
         x = 16; y = 16; w = 48; h = 80;
@@ -562,7 +598,7 @@ room Hotel {
             egoSay("I can hear the music from here. Faintly."); waitForMessage();
             return;
         case PickUp:
-            egoSay("The Do Not Disturb sign stays. I'm getting ready."); waitForMessage();
+            egoSay("It's a door. It stays where it is."); waitForMessage();
             return;
         }
     }
