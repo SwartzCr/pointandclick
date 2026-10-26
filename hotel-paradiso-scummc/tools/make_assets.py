@@ -619,6 +619,15 @@ def _voice(out, t0, dur, freq, level, kind):
             s = math.sin(ww) + 0.45 * math.sin(3 * ww) + 0.2 * math.sin(2 * ww)
             v = max(-1.2, min(1.2, 1.4 * s))
             a = min(1.0, k / 120)
+        elif kind == 'organ':         # fairground band organ: clean flue pipes, gentle vibrato
+            vib = 1 + 0.004 * math.sin(2 * math.pi * 5.2 * t)
+            ww = 2 * math.pi * freq * vib * t
+            v = math.sin(ww) + 0.45 * math.sin(2 * ww) + 0.12 * math.sin(3 * ww)
+            v *= 0.92 + 0.08 * math.sin(2 * math.pi * 7 * t)       # a little tremolant
+            a = min(1.0, k / 160)
+        elif kind == 'glock':         # glockenspiel: struck bar, one inharmonic partial
+            v = (math.sin(w) + 0.3 * math.sin(2.76 * w) * math.exp(-9 * t)) * math.exp(-4.5 * t)
+            a = min(1.0, k / 8)
         elif kind == 'tuba':          # oom: round low brass
             v = (math.sin(w) + 0.5 * math.sin(2 * w) + 0.2 * math.sin(3 * w)) * math.exp(-4 * t)
             a = min(1.0, k / 150)
@@ -645,6 +654,8 @@ def _drum(out, rnd, t0, kind, level):
         for k in range(n):
             if i0 + k < len(out):
                 out[i0 + k] += level * (lp(rnd.uniform(-1, 1)) * 1.5 + 0.4 * math.sin(2 * math.pi * 190 * k / RATE)) * math.exp(-28 * k / RATE)
+    elif kind == 'woodblock':
+        _add(out, t0, _tick(rnd, level, freq=1050, ms=45))
     elif kind == 'cymbal':
         n = int(0.25 * RATE)
         for k in range(n):
@@ -707,43 +718,47 @@ def build_theme_music():
 
 
 def build_clown_music():
-    """Room service arrives: an original oompah circus march for steam
-    calliope, tuba, bass drum and cymbal. 16 bars of 2/4 in C at 140bpm."""
+    """Room service arrives: an original merry-go-round waltz in the style of a
+    fairground band organ. 16 bars of 3/4 in C at 168bpm (~17s): flute pipes
+    doubled by a glockenspiel, oom-pah-pah tuba and chords, a cymbal crash at
+    each phrase and woodblock ticks. Every voice is clean sine partials kept
+    below the 5.5kHz ceiling of an 11kHz sound, with no clipping."""
     import random
     rnd = random.Random(16)
-    beat = 60 / 140
+    beat = 60 / 168
     bars = 16
-    out = [0.0] * int(RATE * (bars * 2 * beat + 0.5))
-    e, q, dq = 0.5, 1, 1.5
-    melody = [
-        (76, e), (75, e), (76, e), (79, e),   (72, q), (67, q),
-        (77, e), (76, e), (77, e), (81, e),   (74, q), (69, q),
-        (79, e), (78, e), (79, e), (83, e),   (76, e), (72, e), (67, q),
-        (69, e), (71, e), (72, e), (74, e),   (72, dq), (None, e),
-        (76, e), (75, e), (76, e), (79, e),   (72, q), (67, q),
-        (77, e), (76, e), (77, e), (81, e),   (74, q), (69, q),
-        (79, e), (81, e), (79, e), (77, e),   (76, e), (74, e), (72, q),
-        (74, e), (67, e), (71, e), (74, e),   (72, q), (None, q),
+    out = [0.0] * int(RATE * (bars * 3 * beat + 0.8))
+    melody = [  # (midi, beats), three beats a bar
+        (76, 2), (79, 1),   (84, 2), (83, 1),   (81, 1), (79, 1), (76, 1),   (74, 3),
+        (74, 2), (77, 1),   (83, 2), (81, 1),   (79, 1), (77, 1), (74, 1),   (72, 3),
+        (76, 2), (79, 1),   (84, 2), (88, 1),   (84, 1), (81, 1), (77, 1),   (81, 3),
+        (79, 2), (76, 1),   (77, 1), (76, 1), (74, 1),   (71, 1), (74, 1), (77, 1),   (72, 2), (None, 1),
     ]
     t = 0.0
     for n, d in melody:
         if n:
-            _voice(out, t, d * beat * 0.9, _midi(n), 0.30, 'calliope')
-            _voice(out, t, d * beat * 0.9, _midi(n + 12), 0.08, 'calliope')
+            _voice(out, t, d * beat * 0.92, _midi(n), 0.26, 'organ')
+            _voice(out, t, d * beat * 0.92, _midi(n - 12), 0.10, 'organ')    # a lower rank of pipes
+            _voice(out, t, min(d, 1) * beat, _midi(n), 0.16, 'glock')
         t += d * beat
-    harmony = ['C', 'C', 'F', 'Dm', 'G', 'C', 'G7', 'C'] * 2
-    roots = {'C': 36, 'F': 41, 'Dm': 38, 'G': 43, 'G7': 43}
-    pahs = {'C': (55, 60, 64), 'F': (57, 60, 65), 'Dm': (57, 62, 65), 'G': (55, 59, 62), 'G7': (53, 59, 62)}
+    harmony = ['C', 'C', 'C', 'G7', 'G7', 'G7', 'G7', 'C',
+               'C', 'C7', 'F', 'F', 'C', 'Dm', 'G7', 'C']
+    roots = {'C': 36, 'C7': 36, 'F': 41, 'Dm': 38, 'G7': 43}
+    pahs = {'C': (60, 64, 67), 'C7': (58, 60, 64), 'F': (60, 65, 69), 'Dm': (62, 65, 69), 'G7': (59, 62, 65)}
     for bar, ch in enumerate(harmony):
-        b0 = bar * 2 * beat
-        root = roots[ch] + (7 if bar % 2 else 0) - (12 if bar % 2 and roots[ch] + 7 > 45 else 0)
-        _voice(out, b0, 0.8 * beat, _midi(root), 0.5, 'tuba')                     # oom
-        for nn in pahs[ch]:
-            _voice(out, b0 + beat, 0.45 * beat, _midi(nn), 0.1, 'calliope')       # pah
-        _drum(out, rnd, b0, 'kick', 0.55)
-        _drum(out, rnd, b0 + beat, 'snare', 0.25)
-        _drum(out, rnd, b0 + beat, 'cymbal', 0.16)
-    write_voc('clowns', normalize(out, 0.9))
+        b0 = bar * 3 * beat
+        root = roots[ch] + (7 if bar % 2 else 0)
+        if root > 45:
+            root -= 12
+        _voice(out, b0, 0.9 * beat, _midi(root), 0.42, 'tuba')                  # oom
+        for p in (1, 2):                                                        # pah, pah
+            for nn in pahs[ch]:
+                _voice(out, b0 + p * beat, 0.5 * beat, _midi(nn), 0.07, 'organ')
+            _drum(out, rnd, b0 + p * beat, 'woodblock', 0.14)
+        _drum(out, rnd, b0, 'kick', 0.35)
+        if bar % 8 == 0:
+            _drum(out, rnd, b0, 'cymbal', 0.22)
+    write_voc('clowns', normalize(out, 0.8))
 
 
 def main():

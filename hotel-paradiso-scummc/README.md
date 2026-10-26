@@ -183,10 +183,11 @@ The door tells you what's missing, and so does the front desk on the phone.
   dresser), the medicine cabinet's magnet catch and hinge creak, and the bed covers
   rustling.
 * **Music.** The same file has a tiny synthesiser (vibraphone, electric piano, plucked
-  bass, steam calliope, tuba and a few drums). It plays two original pieces, also stored as
+  bass, band-organ pipes, glockenspiel, tuba and a few drums). It plays two original pieces, also stored as
   sound effects. The title screen has a lounge tune in F, which `loopTheme` restarts
-  whenever it ends; the room's `exit()` stops it when a game starts. The clowns get an
-  oompah circus march that loops from the knock at the door until they carry you out.
+  whenever it ends; the room's `exit()` stops it when a game starts. The clowns get a
+  merry-go-round waltz, in the style of a fairground band organ, that loops from the knock
+  at the door until they carry you out.
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
   in after them, and the costume's 16 local colours are mapped onto room indices with
