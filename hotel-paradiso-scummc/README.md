@@ -9,7 +9,14 @@ you're in costume, and you've pre-gamed.
 
 ## Play
 
-Prebuilt game files are in `dist/`. In ScummVM choose **Add Game...**, select the `dist/`
+**In a browser:** https://swartzcr.github.io/pointandclick/ (click **Play**). Every push to
+`main` rebuilds it: `.github/workflows/pages.yml` compiles ScummVM's WebAssembly port
+(SCUMM engine only, at a pinned commit) on GitHub's runners and adds the game files from
+`dist/` and the landing page in `web/`. It checks the result in headless Chromium and
+publishes it to GitHub Pages. Saved games stay in your browser's storage. Browsers only
+allow sound after you've clicked on the page.
+
+**In ScummVM:** prebuilt game files are in `dist/`. In ScummVM choose **Add Game...**, select the `dist/`
 folder and start it.
 
 ScummVM has no generic "SCUMM v6" entry, so the files are named and encrypted like
@@ -102,6 +109,7 @@ The door tells you what's missing, and so does the front desk on the phone.
 | `tools/art.py` | Procedural pixel art: the rooms in every object state, the title screen, costume frames, cursor |
 | `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, both room backgrounds, object state images, both costumes + `.scost` files, font sheet, walk boxes, every sound effect and both pieces of music |
 | `dist/` | Prebuilt `tentacle.000` / `tentacle.001` |
+| `web/` | The browser version's landing page and its headless-Chromium smoke test (built by `.github/workflows/pages.yml`) |
 
 ## How it works
 
