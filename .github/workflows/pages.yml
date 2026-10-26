@@ -23,8 +23,8 @@ env:
   # A pinned ScummVM commit with the current Emscripten port
   SCUMMVM_REF: 21955df19b580dad2807ec55f573b5f348690a81
   EMSDK_VERSION: "4.0.10"
-  # Only the SCUMM engine (v6 is part of it), built in, no extra codecs
-  SCUMMVM_CONFIGURE: --enable-release --disable-all-engines --enable-engine=scumm --disable-cloud --disable-libcurl --disable-sdlnet
+  # ScummVM's configure options are in .github/scummvm-configure.txt
+  CACHE_VERSION: "1"
 
 jobs:
   build:
@@ -33,20 +33,43 @@ jobs:
       - name: Check out the game
         uses: actions/checkout@v4
 
+      # ScummVM itself only needs compiling when its version, Emscripten's or the
+      # build options change. The compiled player is cached (in scummvm-web/,
+      # outside the ScummVM checkout so a checkout can't wipe it), and game-only
+      # pushes reuse it. Bump CACHE_VERSION to force a rebuild.
+      - name: Restore the compiled ScummVM
+        id: scummvm-web
+        uses: actions/cache/restore@v4
+        with:
+          path: scummvm-web
+          key: scummvm-web-${{ env.CACHE_VERSION }}-${{ env.SCUMMVM_REF }}-${{ env.EMSDK_VERSION }}-${{ hashFiles('.github/scummvm-configure.txt') }}
+
       - name: Check out ScummVM
+        if: steps.scummvm-web.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
         with:
           repository: scummvm/scummvm
           ref: ${{ env.SCUMMVM_REF }}
           path: scummvm
 
+      - name: Check out ScummVM's web packaging scripts only
+        if: steps.scummvm-web.outputs.cache-hit == 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: scummvm/scummvm
+          ref: ${{ env.SCUMMVM_REF }}
+          path: scummvm
+          sparse-checkout: dists/emscripten
+
       - name: Cache the Emscripten SDK
+        if: steps.scummvm-web.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
           path: scummvm/dists/emscripten/emsdk-*
           key: emsdk-${{ env.EMSDK_VERSION }}
 
       - name: Build ScummVM for the web
+        if: steps.scummvm-web.outputs.cache-hit != 'true'
         working-directory: scummvm
         run: |
           set -o pipefail
@@ -54,13 +77,25 @@ jobs:
             echo "::error title=Web build failed::$(tail -40 build.log | sed 's/%/%25/g' | sed ':a;N;$!ba;s/\n/%0A/g')"
             exit 1
           }
-          dists/emscripten/build.sh configure ${SCUMMVM_CONFIGURE} 2>&1 | tee build.log || report
+          configure_args=$(cat ../.github/scummvm-configure.txt)
+          dists/emscripten/build.sh configure ${configure_args} 2>&1 | tee build.log || report
           dists/emscripten/build.sh make dist 2>&1 | tee build.log | grep -v '^em++\|^emcc\|^ *C++ \|^ *CXX ' || true
           test -f build-emscripten/scummvm.wasm || report
+          cp -r build-emscripten ../scummvm-web
+
+      # saved straight away, so a failing smoke test later doesn't throw the build away
+      - name: Save the compiled ScummVM
+        if: steps.scummvm-web.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: scummvm-web
+          key: ${{ steps.scummvm-web.outputs.cache-primary-key }}
 
       - name: Add the game and the landing page
         run: |
-          site=scummvm/build-emscripten
+          # work on a copy, so the cached player stays as ScummVM built it
+          site=site
+          cp -r scummvm-web $site
           mkdir -p $site/data/games/hotel-paradiso
           cp hotel-paradiso-scummc/dist/tentacle.000 hotel-paradiso-scummc/dist/tentacle.001 \
              $site/data/games/hotel-paradiso/
@@ -79,7 +114,7 @@ jobs:
       - name: Smoke test in headless Chromium
         run: |
           # serve the site under a subfolder, as GitHub Pages does (/<repo>/)
-          mkdir -p serve && ln -s "$PWD/scummvm/build-emscripten" serve/pointandclick
+          mkdir -p serve && ln -s "$PWD/site" serve/pointandclick
           (cd serve && python3 -m http.server 8000 >/dev/null 2>&1 &)
           sleep 2
           npm install --no-save --silent playwright@1.47.2
@@ -116,7 +151,7 @@ jobs:
       - name: Upload the site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: scummvm/build-emscripten
+          path: site
 
   deploy:
     needs: build

@@ -1,0 +1,1 @@
+--enable-release --disable-all-engines --enable-engine=scumm --disable-cloud --disable-libcurl --disable-sdlnet

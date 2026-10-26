@@ -10,9 +10,11 @@ you're in costume, and you've pre-gamed.
 ## Play
 
 **In a browser:** https://swartzcr.github.io/pointandclick/ (click **Play**). Every push to
-`main` rebuilds it: `.github/workflows/pages.yml` compiles ScummVM's WebAssembly port
-(SCUMM engine only, at a pinned commit) on GitHub's runners and adds the game files from
-`dist/` and the landing page in `web/`. It checks the result in headless Chromium and
+`main` republishes it: `.github/workflows/pages.yml` adds the game files from `dist/` and
+the landing page in `web/` to ScummVM's WebAssembly port. The port is built with the
+SCUMM engine only, at a pinned commit. It's compiled once and cached, and only rebuilt
+when the pinned ScummVM, Emscripten version or `.github/scummvm-configure.txt` changes
+(or `CACHE_VERSION` in the workflow is bumped). It checks the result in headless Chromium and
 publishes it to GitHub Pages. Saved games stay in your browser's storage. Browsers only
 allow sound after you've clicked on the page.
 
