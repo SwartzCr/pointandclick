@@ -762,11 +762,10 @@ def build_clown_music():
 
 
 def build_gameover_music():
-    """The game-over screen: an original, slightly ominous and dizzy loop
-    (12s). A low drone of two detuned notes beating against each other, a
-    music box in D minor whose tune keeps slipping down by semitones, a
-    seasick pitch wobble and slow sag on everything up top, and a soft whoosh
-    that circles every 0.8s, in time with the spinning room."""
+    """The game-over screen: an original, woozy but cheerful loop (12s). A warm
+    open-fifth drone with a gentle pulse, a music box with a lilting tune in
+    D major that tumbles down and bounces back up, a light tipsy pitch wobble,
+    and a soft whoosh that circles every 0.8s, in time with the spinning room."""
     import math
     import random
     rnd = random.Random(17)
@@ -775,22 +774,22 @@ def build_gameover_music():
     n_s = len(out)
 
     def wobble(t):          # semitones: a slow sag and a seasick waver
-        return -0.6 * (1 - math.cos(2 * math.pi * t / length)) / 2 + 0.25 * math.sin(2 * math.pi * 0.7 * t)
+        return -0.25 * (1 - math.cos(2 * math.pi * t / length)) / 2 + 0.15 * math.sin(2 * math.pi * 0.7 * t)
 
-    # drone: D2 and a slightly flat D2 an octave over A2, beating, with a slow swell
+    # drone: D2 and A2, an open fifth, each doubled a hair apart for a gentle pulse
     for i in range(n_s):
         t = i / RATE
         swell = 0.75 + 0.25 * math.sin(2 * math.pi * t / 6 - 1.2)
         fade = min(1.0, t / 0.6)
-        v = (math.sin(2 * math.pi * 73.4 * t) + math.sin(2 * math.pi * 72.8 * t)
-             + 0.6 * math.sin(2 * math.pi * 110.0 * t) + 0.5 * math.sin(2 * math.pi * 103.8 * t))  # A2 and G#2: the tritone
-        out[i] += 0.11 * v * swell * fade
+        v = (math.sin(2 * math.pi * 73.4 * t) + math.sin(2 * math.pi * 73.1 * t)
+             + 0.6 * math.sin(2 * math.pi * 110.0 * t) + 0.4 * math.sin(2 * math.pi * 146.8 * t))
+        out[i] += 0.08 * v * swell * fade
 
     # music box: struck tines, each note's pitch follows the wobble as it rings
-    # five falling phrases, each a semitone or so below the last, then a quick
-    # tumble to the bottom: (start time, midi)
-    tune = [81, 77, 74, 69, 80, 77, 74, 68, 79, 76, 73, 69, 77, 74, 69, 65, 76, 73, 69, 67]
-    tumble = [75, 72, 69, 66, 74, 69, 65, 62]
+    # a lilting tune in D major, then a quick tumble down an arpeggio that
+    # bounces straight back up: (start time, midi)
+    tune = [78, 81, 86, 85, 81, 78, 76, 79, 83, 81, 78, 74, 78, 81, 86, 88, 86, 83, 81, 79]
+    tumble = [81, 78, 74, 69, 74, 78, 81, 86]
     sched = [(k * 0.5, n) for k, n in enumerate(tune)] + [(10.0 + k * 0.2, n) for k, n in enumerate(tumble)]
     for t0, n in sched:
         f0 = _midi(n)
@@ -813,7 +812,7 @@ def build_gameover_music():
         cyc = (t % 0.8) / 0.8
         f = 350 + 900 * math.sin(math.pi * cyc)
         res.a1 = 2 * 0.96 * math.cos(2 * math.pi * f / RATE)
-        out[i] += 0.35 * res(rnd.uniform(-1, 1)) * math.sin(math.pi * cyc) ** 2
+        out[i] += 0.2 * res(rnd.uniform(-1, 1)) * math.sin(math.pi * cyc) ** 2
 
     # soften the ends so the loop doesn't click
     for k in range(int(0.05 * RATE)):
