@@ -449,6 +449,12 @@ room ResRoom {
                 curVerb = WalkTo;
                 return;
             }
+            // "Use candy" just eats it; no need to pick yourself as the target
+            if(item == invCandy) {
+                useOnSelf(invCandy);
+                curVerb = WalkTo;
+                return;
+            }
             // Wait for the object to use it with
             withItem = item;
             return;

@@ -26,8 +26,8 @@ no verb chosen, the sentence line shows what a click will do ("Open minibar", "P
 candy bar"), and just the item's name over the inventory.
 Right-click an object to look at it.
 To use an inventory item on something, click **Use**, the item, then the object.
-To use an item on yourself (eat the candy, put on the uniform), click **Use**, the
-item, then either yourself or the item again.
+To eat the candy, just **Use** it. To use another item on yourself (put on the
+uniform), click **Use**, the item, then either yourself or the item again.
 F5 opens the menu, `.` skips a line of dialogue.
 
 ## The rooms
@@ -68,7 +68,7 @@ else gets a stock reply.
 
 The door tells you what's missing, and so does the front desk on the phone.
 
-1. **Eat.** Open the minibar, take the candy bar, and use it on yourself.
+1. **Eat.** Open the minibar, take the candy bar, and use it.
 2. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.
 3. **Pre-game.**
    1. Open the nightstand and take the matchbook. Turn on the lamp and look at the
