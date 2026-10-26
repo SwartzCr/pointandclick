@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hotel Paradiso, Room 714</title>
+<style>
+  :root { --bg: #12101e; --fg: #ece6da; --neon: #ff468c; --muted: #9a93a8; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--fg);
+               font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { min-height: 100%; display: flex; flex-direction: column; align-items: center;
+         justify-content: center; padding: 24px 16px; box-sizing: border-box; text-align: center; }
+  img { width: min(640px, 100%); image-rendering: pixelated; border-radius: 6px; }
+  h1 { font-size: 1.6rem; margin: 20px 0 4px; letter-spacing: .04em; color: var(--neon); }
+  p { margin: 4px 0; color: var(--muted); max-width: 36rem; }
+  a.play { display: inline-block; margin: 20px 0 12px; padding: 12px 36px; border-radius: 999px;
+           background: var(--neon); color: #1a0d14; font-weight: 700; text-decoration: none; font-size: 1.1rem; }
+  a.play:focus-visible { outline: 3px solid var(--fg); outline-offset: 3px; }
+  small { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <img src="title.png" alt="Hotel Paradiso at night under a neon sign">
+  <h1>Hotel Paradiso, Room 714</h1>
+  <p>A point-and-click adventure for the SCUMM engine. There's a party on the ninth floor,
+     and you are in no state to go. Yet.</p>
+  <a class="play" href="scummvm.html#--path=/data/games/hotel-paradiso tentacle">Play</a>
+  <p><small>Click a verb, then an object, or just click an object. Right-click to look.
+     F5 or Ctrl+F5 opens the menu. Runs in your browser with
+     <a href="https://www.scummvm.org/" style="color:inherit">ScummVM</a>.</small></p>
+</main>
+</body>
+</html>

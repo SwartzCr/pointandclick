@@ -1,0 +1,99 @@
+# Builds Hotel Paradiso into ScummVM's WebAssembly port and publishes it to
+# GitHub Pages, so the game plays in a browser.
+#
+# One-time setup: Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
+
+name: Web build (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  # A pinned ScummVM commit with the current Emscripten port
+  SCUMMVM_REF: 21955df19b580dad2807ec55f573b5f348690a81
+  EMSDK_VERSION: "4.0.10"
+  # Only the SCUMM engine (v6 is part of it), built in, no extra codecs
+  SCUMMVM_CONFIGURE: --enable-release --disable-all-engines --enable-engine=scumm --disable-plugins --disable-cloud --disable-libcurl --disable-sdlnet
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the game
+        uses: actions/checkout@v4
+
+      - name: Check out ScummVM
+        uses: actions/checkout@v4
+        with:
+          repository: scummvm/scummvm
+          ref: ${{ env.SCUMMVM_REF }}
+          path: scummvm
+
+      - name: Cache the Emscripten SDK
+        uses: actions/cache@v4
+        with:
+          path: scummvm/dists/emscripten/emsdk-*
+          key: emsdk-${{ env.EMSDK_VERSION }}
+
+      - name: Build ScummVM for the web
+        working-directory: scummvm
+        run: |
+          dists/emscripten/build.sh configure ${SCUMMVM_CONFIGURE}
+          dists/emscripten/build.sh make dist
+
+      - name: Add the game and the landing page
+        run: |
+          site=scummvm/build-emscripten
+          mkdir -p $site/data/games/hotel-paradiso
+          cp hotel-paradiso-scummc/dist/tentacle.000 hotel-paradiso-scummc/dist/tentacle.001 \
+             $site/data/games/hotel-paradiso/
+          # the data folder is served over HTTP from an index; rebuild it with the game in
+          python3 scummvm/dists/emscripten/build-make_http_index.py $site/data
+          cp hotel-paradiso-scummc/web/index.html $site/index.html
+          python3 -c "from PIL import Image" 2>/dev/null || pip install --quiet pillow
+          python3 -c "import sys; sys.path.insert(0, 'hotel-paradiso-scummc/tools'); import art; from PIL import Image; art.render_title().resize((960, 432), Image.NEAREST).save('$site/title.png')"
+          touch $site/.nojekyll
+          du -sh $site; ls -la $site
+
+      - name: Smoke test in headless Chromium
+        run: |
+          cd scummvm/build-emscripten && python3 -m http.server 8000 >/dev/null 2>&1 &
+          sleep 2
+          npm install --no-save --silent playwright@1.47.2
+          npx playwright install --with-deps chromium >/dev/null
+          node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/ smoke-test
+          tail -50 smoke-test/console.txt
+
+      - name: Upload smoke-test screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test
+          path: smoke-test/
+
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: scummvm/build-emscripten
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
