@@ -282,6 +282,8 @@ room ResRoom {
                         setVerbName("Use %v{withItem} with %n{hoverObj}");
                 } else if(inv)
                     setVerbName("%v{curVerb} %v{hoverInv}");
+                else if(curVerb == WalkTo && obj && getObjectVerbEntrypoint(obj, Default))
+                    setVerbName("%n{hoverObj}");     // a click will do the obvious thing
                 else
                     setVerbName("%v{curVerb} %n{hoverObj}");
                 redrawVerb();
@@ -336,6 +338,11 @@ room ResRoom {
         // Doorways handle Walk to themselves, so walking into one changes room
         if(obj && curVerb == WalkTo && getObjectVerbEntrypoint(obj, WalkTo)) {
             doSentence(WalkTo, obj, 0, 0);
+            return;
+        }
+        // No verb chosen: objects with a default action do it
+        if(obj && curVerb == WalkTo && getObjectVerbEntrypoint(obj, Default)) {
+            doSentence(Default, obj, 0, 0);
             return;
         }
         if(!obj || curVerb == WalkTo) {

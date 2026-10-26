@@ -114,6 +114,9 @@ room Bathroom {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
+        case Default:            // a plain click: open it, or close it if it's open
+            doSentence(bathCurtainOpen ? Close : Open, objA, 0, 0);
+            return;
         case LookAt:
             if(bathCurtainOpen) { egoSay("A shower curtain, bunched up. Patterned with tiny fish."); waitForMessage(); }
             else { egoSay("A shower curtain, patterned with tiny fish. Optimistic."); waitForMessage(); }
@@ -148,6 +151,7 @@ room Bathroom {
         name = "bathtub";
 
         verb(int vrb, int objA, int objB) {
+        case Default:
         case LookAt:
             if(bathCurtainOpen) { egoSay("A claw-foot tub. There's a rubber duck in it, judging me."); waitForMessage(); }
             else { egoSay("A claw-foot tub. The curtain's drawn."); waitForMessage(); }
@@ -179,6 +183,7 @@ room Bathroom {
         name = "bath mat";
 
         verb(int vrb, int objA, int objB) {
+        case Default:
         case LookAt:
             egoSay("A bath mat. Damp, for reasons I'd rather not think about."); waitForMessage();
             return;
@@ -216,6 +221,7 @@ room Bathroom {
         case LookAt:
             egoSay("A toilet. The lid's up. The handle is very shiny."); waitForMessage();
             return;
+        case Default:
         case Use:
             if(objB) { egoSay("That is not going down there."); waitForMessage(); }
             else flushToilet();
@@ -255,6 +261,7 @@ room Bathroom {
         case LookAt:
             egoSay("A tiny bar of soap with the hotel's crest pressed into it."); waitForMessage();
             return;
+        case Default:
         case PickUp:
             tookSoap = 1;
             hasSoap = 1;
@@ -280,6 +287,7 @@ room Bathroom {
         case LookAt:
             egoSay("A pedestal sink. Spotless, unlike me."); waitForMessage();
             return;
+        case Default:
         case Use:
             if(objB == invSoap) { egoSay("I wash my hands. Very hygienic. I feel like a new guest."); waitForMessage(); }
             else if(objB == invShaver) { egoSay("A proper wet shave at the sink. I feel like a new guest."); waitForMessage(); }
@@ -310,6 +318,7 @@ room Bathroom {
         case LookAt:
             egoSay("A razor with extra blades."); waitForMessage();
             return;
+        case Default:
         case PickUp:
             takeShaver();
             return;
@@ -337,6 +346,10 @@ room Bathroom {
         state = 0;
 
         verb(int vrb, int objA, int objB) {
+        case Default:            // a plain click: open or close the cabinet
+            if(mirrorRemoved) doSentence(LookAt, objA, 0, 0);
+            else doSentence(cabinetOpen ? Close : Open, objA, 0, 0);
+            return;
         case LookAt:
             if(cabinetOpen && !tookShaver) {
                 egoSay("Three tiny bottles, a shower cap, a sewing kit, and a shaving kit."); waitForMessage();
@@ -402,6 +415,7 @@ room Bathroom {
         case LookAt:
             egoSay("A fluffy white towel with a teal stripe."); waitForMessage();
             return;
+        case Default:
         case PickUp:
             tookTowel = 1;
             hasTowel = 1;

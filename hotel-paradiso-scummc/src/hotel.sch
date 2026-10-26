@@ -14,6 +14,10 @@ verb TalkTo, Use, WalkTo;
 // The sentence line is a verb too ("Look at lamp")
 verb SntcLine;
 
+// Never shown: what a plain left click does to an object (open it, pick it
+// up, use it...). Each object's verb code maps it onto its usual action.
+verb Default;
+
 // Title screen menu
 verb NewGame, QuitGame;
 
