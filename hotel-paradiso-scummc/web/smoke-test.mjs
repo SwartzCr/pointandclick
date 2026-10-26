@@ -8,15 +8,23 @@ const out = process.argv[3] || 'smoke-test';
 const which = process.argv[4] || 'chromium';
 mkdirSync(out, { recursive: true });
 const logs = [];
+const headless = process.env.HEADED !== '1';
 const browser = which === 'firefox'
-  ? await firefox.launch({ firefoxUserPrefs: { 'media.autoplay.default': 0 } })
-  : await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
+  ? await firefox.launch({ headless, firefoxUserPrefs: { 'media.autoplay.default': 0, 'webgl.force-enabled': true } })
+  : await chromium.launch({ headless, args: ['--autoplay-policy=no-user-gesture-required'] });
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 page.on('console', m => logs.push(`[${m.type()}] ${m.text()}`));
 page.on('pageerror', e => logs.push(`[pageerror] ${e.message}`));
 await page.goto(url);
 await page.screenshot({ path: `${out}/${which}-0-landing.png` });
 await page.click('a.play');
+await page.waitForTimeout(1000);
+// The page must survive a WebMIDI request (Firefox refuses it without an add-on)
+logs.push('[midi] ' + await page.evaluate(async () => {
+  if (!('requestMIDIAccess' in navigator)) return 'requestMIDIAccess not present';
+  try { const m = await navigator.requestMIDIAccess({ sysex: true }); return 'resolved, outputs: ' + m.outputs.size; }
+  catch (e) { return 'REJECTED: ' + e; }
+}));
 await page.waitForTimeout(25000);
 await page.screenshot({ path: `${out}/${which}-1-title.png` });
 const canvas = await page.$('canvas');
