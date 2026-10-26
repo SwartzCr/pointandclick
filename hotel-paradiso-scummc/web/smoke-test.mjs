@@ -8,6 +8,11 @@ const out = process.argv[3] || 'smoke-test';
 const which = process.argv[4] || 'chromium';
 mkdirSync(out, { recursive: true });
 const logs = [];
+// Never hang CI: whatever happens, write what we have and exit after 150s
+setTimeout(() => {
+  writeFileSync(`${out}/${which}-console.txt`, logs.join('\n') + '\n[timeout] gave up after 150s\n');
+  process.exit(3);
+}, 150000).unref();
 const headless = process.env.HEADED !== '1';
 const browser = which === 'firefox'
   ? await firefox.launch({ headless, firefoxUserPrefs: { 'media.autoplay.default': 0, 'webgl.force-enabled': true } })

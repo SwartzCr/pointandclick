@@ -112,6 +112,7 @@ jobs:
           du -sh $site; ls -la $site
 
       - name: Smoke test in headless Chromium
+        timeout-minutes: 10
         run: |
           # serve the site under a subfolder, as GitHub Pages does (/<repo>/)
           mkdir -p serve && ln -s "$PWD/site" serve/pointandclick
@@ -122,9 +123,9 @@ jobs:
           sudo apt-get install -y -qq xvfb >/dev/null
           # Chromium headless; Firefox headed on a virtual display with Mesa's
           # software OpenGL, since headless Firefox gets no WebGL on the runners
-          node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/pointandclick/ smoke-test chromium \
+          timeout -k 10 180 node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/pointandclick/ smoke-test chromium \
             || echo "::warning::Chromium smoke test exited with $?"
-          HEADED=1 LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a -s "-screen 0 1280x800x24" \
+          HEADED=1 LIBGL_ALWAYS_SOFTWARE=1 timeout -k 10 180 xvfb-run -a -s "-screen 0 1280x800x24" \
             node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/pointandclick/ smoke-test firefox \
             || echo "::warning::Firefox smoke test exited with $?"
           for b in chromium firefox; do
