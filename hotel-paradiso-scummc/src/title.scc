@@ -11,6 +11,8 @@ room Title {
     image = "title.bmp";
     trans = 0;
 
+    sound themeSnd = "theme.soun";   // the hotel's lounge tune, on a loop
+
     // Holds the mouse cursor image; never drawn and never clickable.
     object titleCursor {
         x = 0; y = 0; w = 16; h = 16;
@@ -19,11 +21,25 @@ room Title {
         state = 0;
     }
 
+    local script loopTheme() {
+        while(1) {
+            unless(isSoundRunning(themeSnd)) startSound(themeSnd);
+            delay(6);
+        }
+    }
+
+    // Leaving for the bedroom: the loop script dies with the room, but a
+    // sound that's already playing would carry on, so stop it.
+    local script exit() {
+        stopSound(themeSnd);
+    }
+
     local script entry() {
         setObjectClass(titleCursor, [ SET_CLASS | UNTOUCHABLE ]);
         setCursorImage(titleCursor, Title);
         setCursorHotspot(8, 8);
         setCursorTransparency(0);
         ResRoom::showInterface(1);
+        loopTheme();
     }
 }

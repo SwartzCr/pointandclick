@@ -17,6 +17,7 @@ room Bathroom {
     trans = 0;
 
     sound flushSnd = "flush.soun";
+    sound cabinetSnd = "cabinet.soun";   // magnet catch, then the hinge creaks
 
     object toilet;
     object soap;
@@ -383,6 +384,7 @@ room Bathroom {
             if(cabinetOpen) { egoSay("It's already open."); waitForMessage(); }
             else {
                 cabinetOpen = 1;
+                startSound(cabinetSnd);
                 showCabinet();
                 egoSay("It's a medicine cabinet behind the mirror."); waitForMessage();
             }

@@ -46,18 +46,18 @@ $(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) assets/hotel.box \
-                $(B)/tv.soun $(B)/safe.soun $(B)/guest_anim.sch \
+                $(B)/tv.soun $(B)/safe.soun $(B)/fridge.soun $(B)/drawer.soun $(B)/bed.soun $(B)/clowns.soun $(B)/guest_anim.sch \
                 $(B)/clown1.cost $(B)/clown1_anim.sch $(B)/clown2.cost $(B)/clown3.cost | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/bathroom.roobj: src/bathroom.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) \
-                   assets/bathroom.box $(B)/flush.soun | $(B)
+                   assets/bathroom.box $(B)/flush.soun $(B)/cabinet.soun | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/gameover.roobj: src/gameover.scc src/hotel.sch assets/gameover.bmp $(wildcard assets/objects/gameover_*.bmp) | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
-$(B)/title.roobj: src/title.scc src/hotel.sch assets/title.bmp assets/cursor.bmp | $(B)
+$(B)/title.roobj: src/title.scc src/hotel.sch assets/title.bmp assets/cursor.bmp $(B)/theme.soun | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 # Sound effects: 8-bit PCM .voc files wrapped into SOUN resources

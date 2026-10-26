@@ -32,6 +32,12 @@ room Hotel {
 
     sound tvSnd = "tv.soun";       // two seconds of indistinct chatter
     sound safeSnd = "safe.soun";
+    sound fridgeSnd = "fridge.soun";   // the minibar: handle, latch, seal
+    sound drawerSnd = "drawer.soun";   // a wooden drawer sliding out
+    sound bedSnd = "bed.soun";         // covers thrown back
+    sound clownSnd = "clowns.soun";    // the room-service march
+
+    bit clownMusic;
 
     // Room service. The three costumes share one set of animations, so
     // clown1_anim_* numbers work for all of them.
@@ -382,6 +388,15 @@ room Hotel {
         animateActor(a, clown1_anim_carryStand);
     }
 
+    // The march loops for as long as the clowns are in the room
+    local script loopClownMusic() {
+        while(clownMusic) {
+            unless(isSoundRunning(clownSnd)) startSound(clownSnd);
+            delay(6);
+        }
+        stopSound(clownSnd);
+    }
+
     // "Room service": three clowns come in, hoist the player overhead and
     // carry them out of the door, then the normal ending plays.
     local script clownService() {
@@ -394,6 +409,8 @@ room Hotel {
         delay(40);
         egoSay("Someone's knocking."); waitForMessage();
         setObjectState(door, 1);
+        clownMusic = 1;
+        loopClownMusic();
         initClown(clownA, clown1Cost);
         initClown(clownB, clown2Cost);
         initClown(clownC, clown3Cost);
@@ -444,6 +461,8 @@ room Hotel {
         waitForActor(clownB);
         putActorAt(clownB, 0, 0, 0);
         delay(30);
+        clownMusic = 0;
+        stopSound(clownSnd);
         partyEnding();
     }
 
@@ -609,6 +628,7 @@ room Hotel {
             if(dresserOpen) { egoSay("It's already open."); waitForMessage(); }
             else {
                 dresserOpen = 1;
+                startSound(drawerSnd);
                 if(tookUniform) setObjectState(dresser, 2);
                 else {
                     setObjectState(dresser, 1);
@@ -771,6 +791,7 @@ room Hotel {
             if(minibarOpen) { egoSay("It's open."); waitForMessage(); }
             else {
                 minibarOpen = 1;
+                startSound(fridgeSnd);
                 setObjectState(minibar, tookCandy ? 2 : 1);
             }
             return;
@@ -903,6 +924,7 @@ room Hotel {
             if(drawerOpen) { egoSay("It's already open."); waitForMessage(); }
             else {
                 drawerOpen = 1;
+                startSound(drawerSnd);
                 if(tookMatchbook) setObjectState(nightstand, 2);
                 else {
                     setObjectState(nightstand, 1);
@@ -1256,6 +1278,7 @@ room Hotel {
             if(bedOpen) { egoSay("The covers are already back."); waitForMessage(); }
             else {
                 bedOpen = 1;
+                startSound(bedSnd);
                 setObjectState(bed, tookWallet ? 2 : 1);
                 if(tookWallet) { egoSay("One sock. Not mine."); waitForMessage(); }
                 else { egoSay("I pull back the covers. There's my wallet!"); waitForMessage(); }
@@ -1264,6 +1287,7 @@ room Hotel {
         case Close:
             if(bedOpen) {
                 bedOpen = 0;
+                startSound(bedSnd);
                 setObjectState(bed, 0);
                 egoSay("I make the bed. Loosely."); waitForMessage();
             } else { egoSay("It's as made as it's going to get."); waitForMessage(); }

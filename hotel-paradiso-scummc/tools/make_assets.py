@@ -483,6 +483,269 @@ def build_safe_sound():
     write_voc('safe', normalize(out, 0.9))
 
 
+# --------------------------------------------------------------------------- more sound effects
+def _noise_burst(rnd, out, t0, ms, level, lp_a, decay):
+    import math
+    lp = LowPass(lp_a)
+    n = int(RATE * ms / 1000)
+    i0 = int(t0 * RATE)
+    for k in range(n):
+        if 0 <= i0 + k < len(out):
+            out[i0 + k] += level * lp(rnd.uniform(-1, 1)) * math.exp(-decay * k / n)
+
+
+def build_fridge_sound():
+    """The minibar door: the handle clicks, the latch lets go with a second,
+    sharper click, and the rubber seal unsticks with a soft pop."""
+    import random
+    rnd = random.Random(11)
+    out = [0.0] * int(RATE * 0.55)
+    _add(out, 0.02, _tick(rnd, 0.7, freq=2300, ms=18))      # handle
+    _add(out, 0.11, _tick(rnd, 1.0, freq=3400, ms=14))      # latch
+    _add(out, 0.115, _tick(rnd, 0.5, freq=1500, ms=30))
+    _add(out, 0.19, _thud(rnd, 0.35, freq=180, ms=90))      # the seal lets go
+    _noise_burst(rnd, out, 0.19, 160, 1.4, 0.05, 6)         # a puff of cold air
+    write_voc('fridge', normalize(out, 0.9))
+
+
+def build_drawer_sound():
+    """A wooden drawer sliding out: rough wood-on-wood friction that speeds up
+    and slows down, then a soft bump as it reaches the end of its runners."""
+    import math
+    import random
+    rnd = random.Random(12)
+    out = [0.0] * int(RATE * 0.62)
+    body = Resonator(420, 0.97)
+    body2 = Resonator(1100, 0.95)
+    lp = LowPass(0.3)
+    i0, i1 = int(0.02 * RATE), int(0.48 * RATE)
+    grain = 0.0
+    for i in range(i0, i1):
+        u = (i - i0) / (i1 - i0)
+        speed = math.sin(math.pi * u) ** 0.6                 # pull, glide, slow down
+        if rnd.random() < 0.012 + 0.02 * speed:
+            grain = 1.0                                      # stick-slip catches
+        grain *= 0.993
+        x = lp(rnd.uniform(-1, 1)) * (0.4 + grain) * speed
+        out[i] += 3.0 * body(x) + 1.6 * body2(x) + 0.25 * x
+    _add(out, 0.47, _thud(rnd, 0.9, freq=150, ms=120))       # the end stop
+    _add(out, 0.47, _tick(rnd, 0.3, freq=900, ms=30))
+    write_voc('drawer', normalize(out, 0.9))
+
+
+def build_cabinet_sound():
+    """The medicine cabinet: the magnetic catch lets go with a click, then the
+    small mirrored door swings out on a dry, rising-and-falling hinge creak."""
+    import math
+    import random
+    rnd = random.Random(13)
+    out = [0.0] * int(RATE * 0.75)
+    _add(out, 0.02, _tick(rnd, 0.5, freq=2800, ms=16))      # magnet lets go
+    _add(out, 0.025, _tick(rnd, 0.4, freq=1200, ms=25))
+    ring = Resonator(1450, 0.985)
+    ring2 = Resonator(2900, 0.98)
+    i0, i1 = int(0.10 * RATE), int(0.62 * RATE)
+    phase = 0.0
+    for i in range(i0, i1):
+        u = (i - i0) / (i1 - i0)
+        rate = 140 + 260 * math.sin(math.pi * u) + 30 * math.sin(u * 40)   # stick-slip pulses
+        phase += rate / RATE
+        x = 0.0
+        if phase >= 1.0:
+            phase -= 1.0
+            x = 1.0 + rnd.uniform(-0.3, 0.3)
+        env = min(1.0, u / 0.08) * min(1.0, (1 - u) / 0.15)
+        out[i] += env * (20 * ring(x) + 10 * ring2(x))
+    _add(out, 0.64, _tick(rnd, 0.35, freq=1800, ms=20))     # door stops against its stay
+    write_voc('cabinet', normalize(out, 0.85))
+
+
+def build_bed_sound():
+    """Covers thrown back: two quick swishes of cotton and a softer settle,
+    band-limited noise with a lumpy envelope."""
+    import math
+    import random
+    rnd = random.Random(14)
+    out = [0.0] * int(RATE * 0.85)
+    hp_prev = 0.0
+    lp = LowPass(0.45)
+    swishes = ((0.02, 0.22, 1.0), (0.18, 0.30, 0.8), (0.45, 0.35, 0.45))
+    for i in range(len(out)):
+        t = i / RATE
+        env = 0.0
+        for t0, d, a in swishes:
+            if t0 <= t < t0 + d:
+                u = (t - t0) / d
+                env += a * math.sin(math.pi * u) ** 1.5
+        x = rnd.uniform(-1, 1)
+        hp = x - hp_prev                                  # tilt toward the hiss of fabric
+        hp_prev = x * 0.6
+        crinkle = 1.0 + (0.8 if rnd.random() < 0.004 else 0.0)
+        out[i] += env * lp(hp) * crinkle
+    write_voc('bed', normalize(out, 0.8))
+
+
+# ---- a tiny synthesiser for the two pieces of music
+def _midi(n):
+    return 440.0 * 2 ** ((n - 69) / 12)
+
+
+def _voice(out, t0, dur, freq, level, kind):
+    import math
+    i0 = int(t0 * RATE)
+    n = int(dur * RATE)
+    tail = int(0.08 * RATE)
+    for k in range(n + tail):
+        i = i0 + k
+        if i >= len(out):
+            break
+        t = k / RATE
+        rel = 1.0 if k < n else 1 - (k - n) / tail
+        w = 2 * math.pi * freq * t
+        if kind == 'vibes':           # vibraphone: bright sine with tremolo, long decay
+            v = (math.sin(w) + 0.25 * math.sin(4 * w)) * math.exp(-2.2 * t) * (0.85 + 0.15 * math.sin(2 * math.pi * 5.5 * t))
+            a = min(1.0, k / 40)
+        elif kind == 'epiano':        # electric piano: sine + soft bell partial
+            v = (math.sin(w) + 0.35 * math.sin(2 * w) * math.exp(-6 * t)) * math.exp(-3.0 * t)
+            a = min(1.0, k / 60)
+        elif kind == 'bass':          # upright-ish bass: rounded triangle, plucked
+            ph = (freq * t) % 1.0
+            v = (4 * abs(ph - 0.5) - 1) * 0.7 + 0.3 * math.sin(w)
+            v *= math.exp(-2.5 * t)
+            a = min(1.0, k / 30)
+        elif kind == 'calliope':      # steam calliope: breathy square-ish pipe with wide vibrato
+            vib = 1 + 0.012 * math.sin(2 * math.pi * 6.5 * t)
+            ww = 2 * math.pi * freq * vib * t
+            s = math.sin(ww) + 0.45 * math.sin(3 * ww) + 0.2 * math.sin(2 * ww)
+            v = max(-1.2, min(1.2, 1.4 * s))
+            a = min(1.0, k / 120)
+        elif kind == 'tuba':          # oom: round low brass
+            v = (math.sin(w) + 0.5 * math.sin(2 * w) + 0.2 * math.sin(3 * w)) * math.exp(-4 * t)
+            a = min(1.0, k / 150)
+        else:
+            raise ValueError(kind)
+        out[i] += level * v * a * rel
+
+
+def _drum(out, rnd, t0, kind, level):
+    import math
+    i0 = int(t0 * RATE)
+    if kind == 'shaker':
+        n, lp = int(0.05 * RATE), LowPass(0.8)
+        for k in range(n):
+            if i0 + k < len(out):
+                x = rnd.uniform(-1, 1)
+                out[i0 + k] += level * (x - lp(x)) * math.sin(math.pi * k / n)
+    elif kind == 'rim':
+        _add(out, t0, _tick(rnd, level, freq=1700, ms=30))
+    elif kind == 'kick':
+        _add(out, t0, _thud(rnd, level, freq=70, ms=160))
+    elif kind == 'snare':
+        n, lp = int(0.12 * RATE), LowPass(0.5)
+        for k in range(n):
+            if i0 + k < len(out):
+                out[i0 + k] += level * (lp(rnd.uniform(-1, 1)) * 1.5 + 0.4 * math.sin(2 * math.pi * 190 * k / RATE)) * math.exp(-28 * k / RATE)
+    elif kind == 'cymbal':
+        n = int(0.25 * RATE)
+        for k in range(n):
+            if i0 + k < len(out):
+                x = rnd.uniform(-1, 1)
+                out[i0 + k] += level * x * 0.5 * math.exp(-12 * k / RATE)
+
+
+def build_theme_music():
+    """The title screen: an original lounge tune for the Hotel Paradiso, a
+    bossa-tinged eight bars in F at 120bpm (16s). Vibraphone melody,
+    electric piano chords, plucked bass, shaker and rim clicks."""
+    import random
+    rnd = random.Random(15)
+    beat = 0.5
+    out = [0.0] * int(RATE * (32 * beat + 0.6))
+    melody = [  # (midi, beats); None = rest
+        (69, 1), (72, .5), (76, 1.5), (74, 1),
+        (72, 1), (69, .5), (65, 1.5), (None, 1),
+        (70, 1), (74, .5), (77, 1.5), (76, 1),
+        (74, .5), (72, .5), (70, 1), (67, 2),
+        (69, 1), (72, .5), (76, 1.5), (79, 1),
+        (77, 1), (74, .5), (70, 1.5), (69, 1),
+        (67, 1), (70, 1), (76, 1), (74, .5), (72, .5),
+        (77, 3), (None, 1),
+    ]
+    t = 0.0
+    for n, d in melody:
+        if n:
+            _voice(out, t, d * beat * 0.95, _midi(n), 0.34, 'vibes')
+        t += d * beat
+    chords = [  # one per bar, bar 7 split
+        ((53, 57, 60, 64), 41), ((50, 53, 57, 60), 38), ((55, 58, 62, 65), 43), ((52, 55, 58, 60), 36),
+        ((53, 57, 60, 64), 41), ((53, 57, 58, 62), 34), ((55, 58, 62, 65), 43), ((53, 57, 60, 62), 41),
+    ]
+    for bar, (notes, root) in enumerate(chords):
+        b0 = bar * 4 * beat
+        if bar == 6:
+            parts = [((55, 58, 62, 65), 43, 0, 2), ((52, 55, 58, 60), 36, 2, 2)]
+        else:
+            parts = [(notes, root, 0, 4)]
+        for ns, r, start, length in parts:
+            s0 = b0 + start * beat
+            for hit, dur in ((0, 0.9), (1.5, 0.4), (3, 0.6)):
+                if hit < length:
+                    for nn in ns:
+                        _voice(out, s0 + hit * beat, dur * beat, _midi(nn), 0.09, 'epiano')
+            _voice(out, s0, 1.4 * beat, _midi(r), 0.42, 'bass')                 # root
+            if length > 2:
+                _voice(out, s0 + 1.5 * beat, 0.4 * beat, _midi(r + 7), 0.32, 'bass')  # fifth
+                _voice(out, s0 + 2 * beat, 1.4 * beat, _midi(r + 7), 0.38, 'bass')
+                _voice(out, s0 + 3.5 * beat, 0.4 * beat, _midi(r), 0.3, 'bass')
+            else:
+                _voice(out, s0 + 1.5 * beat, 0.4 * beat, _midi(r + 7), 0.32, 'bass')
+        for e in range(8):
+            _drum(out, rnd, b0 + e * beat / 2, 'shaker', 0.10 if e % 2 else 0.16)
+        for hit in (1.5, 3):
+            _drum(out, rnd, b0 + hit * beat, 'rim', 0.35)
+    write_voc('theme', normalize(out, 0.9))
+
+
+def build_clown_music():
+    """Room service arrives: an original oompah circus march for steam
+    calliope, tuba, bass drum and cymbal. 16 bars of 2/4 in C at 140bpm."""
+    import random
+    rnd = random.Random(16)
+    beat = 60 / 140
+    bars = 16
+    out = [0.0] * int(RATE * (bars * 2 * beat + 0.5))
+    e, q, dq = 0.5, 1, 1.5
+    melody = [
+        (76, e), (75, e), (76, e), (79, e),   (72, q), (67, q),
+        (77, e), (76, e), (77, e), (81, e),   (74, q), (69, q),
+        (79, e), (78, e), (79, e), (83, e),   (76, e), (72, e), (67, q),
+        (69, e), (71, e), (72, e), (74, e),   (72, dq), (None, e),
+        (76, e), (75, e), (76, e), (79, e),   (72, q), (67, q),
+        (77, e), (76, e), (77, e), (81, e),   (74, q), (69, q),
+        (79, e), (81, e), (79, e), (77, e),   (76, e), (74, e), (72, q),
+        (74, e), (67, e), (71, e), (74, e),   (72, q), (None, q),
+    ]
+    t = 0.0
+    for n, d in melody:
+        if n:
+            _voice(out, t, d * beat * 0.9, _midi(n), 0.30, 'calliope')
+            _voice(out, t, d * beat * 0.9, _midi(n + 12), 0.08, 'calliope')
+        t += d * beat
+    harmony = ['C', 'C', 'F', 'Dm', 'G', 'C', 'G7', 'C'] * 2
+    roots = {'C': 36, 'F': 41, 'Dm': 38, 'G': 43, 'G7': 43}
+    pahs = {'C': (55, 60, 64), 'F': (57, 60, 65), 'Dm': (57, 62, 65), 'G': (55, 59, 62), 'G7': (53, 59, 62)}
+    for bar, ch in enumerate(harmony):
+        b0 = bar * 2 * beat
+        root = roots[ch] + (7 if bar % 2 else 0) - (12 if bar % 2 and roots[ch] + 7 > 45 else 0)
+        _voice(out, b0, 0.8 * beat, _midi(root), 0.5, 'tuba')                     # oom
+        for nn in pahs[ch]:
+            _voice(out, b0 + beat, 0.45 * beat, _midi(nn), 0.1, 'calliope')       # pah
+        _drum(out, rnd, b0, 'kick', 0.55)
+        _drum(out, rnd, b0 + beat, 'snare', 0.25)
+        _drum(out, rnd, b0 + beat, 'cymbal', 0.16)
+    write_voc('clowns', normalize(out, 0.9))
+
+
 def main():
     os.makedirs(os.path.join(OUT, 'objects'), exist_ok=True)
     pal = Palette()
@@ -533,6 +796,12 @@ def main():
     build_flush_sound()
     build_tv_sound()
     build_safe_sound()
+    build_fridge_sound()
+    build_drawer_sound()
+    build_cabinet_sound()
+    build_bed_sound()
+    build_theme_music()
+    build_clown_music()
     print(f'assets written to {os.path.normpath(OUT)} ({len(pal.colors)} palette entries used)')
 
 

@@ -100,7 +100,7 @@ The door tells you what's missing, and so does the front desk on the phone.
 | `src/gameover.scc` | `GameOver`: the screen after the third line |
 | `assets/` | Generated art and data the sources reference (committed, so Python isn't needed to build) |
 | `tools/art.py` | Procedural pixel art: the rooms in every object state, the title screen, costume frames, cursor |
-| `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, both room backgrounds, object state images, both costumes + `.scost` files, font sheet, walk boxes, the flush sound |
+| `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, both room backgrounds, object state images, both costumes + `.scost` files, font sheet, walk boxes, every sound effect and both pieces of music |
 | `dist/` | Prebuilt `tentacle.000` / `tentacle.001` |
 
 ## How it works
@@ -178,7 +178,15 @@ The door tells you what's missing, and so does the front desk on the phone.
   seconds of indistinct TV chatter when the TV is switched on (with the weather report
   shown on screen), and the safe opening, as an electronic hotel safe (three keypad beeps, an
   "accepted" chime, the motor pulling the bolt back, and a puff of air as the door
-  springs open, with the door's image switching at that moment).
+  springs open, with the door's image switching at that moment). Opening things has
+  sounds too: the minibar's latch and seal, a wooden drawer sliding out (nightstand and
+  dresser), the medicine cabinet's magnet catch and hinge creak, and the bed covers
+  rustling.
+* **Music.** The same file has a tiny synthesiser (vibraphone, electric piano, plucked
+  bass, steam calliope, tuba and a few drums). It plays two original pieces, also stored as
+  sound effects. The title screen has a lounge tune in F, which `loopTheme` restarts
+  whenever it ends; the room's `exit()` stops it when a game starts. The clowns get an
+  oompah circus march that loops from the knock at the door until they carry you out.
 * **Palette.** v6 rooms share one 256-colour palette between background, objects and
   costumes. Indices 0..15 hold the EGA colours used for text and verbs; the art is packed
   in after them, and the costume's 16 local colours are mapped onto room indices with
