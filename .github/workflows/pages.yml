@@ -67,6 +67,10 @@ jobs:
           # the data folder is served over HTTP from an index; rebuild it with the game in
           python3 scummvm/dists/emscripten/build-make_http_index.py $site/data
           cp hotel-paradiso-scummc/web/index.html $site/index.html
+          # ScummVM downloads its data with Response.bytes(), which older browsers
+          # (Chrome < 132, Firefox < 128) don't have: give them a fallback
+          sed -i 's#<head>#<head><script>if(!Response.prototype.bytes){Response.prototype.bytes=async function(){return new Uint8Array(await this.arrayBuffer())}}</script>#' $site/scummvm.html
+          grep -c 'Response.prototype.bytes' $site/scummvm.html
           python3 -c "from PIL import Image" 2>/dev/null || pip install --quiet pillow
           python3 -c "import sys; sys.path.insert(0, 'hotel-paradiso-scummc/tools'); import art; from PIL import Image; art.render_title().resize((960, 432), Image.NEAREST).save('$site/title.png')"
           touch $site/.nojekyll
