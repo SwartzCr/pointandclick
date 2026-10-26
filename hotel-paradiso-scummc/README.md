@@ -47,7 +47,7 @@ with coffee table") and picked back up later: the matchbook and the candy bar at
 and the cabinet mirror across the middle. It's where the pre-game happens: the mirror goes
 on the table, the powder goes on the mirror, the razor
 chops it into three lines, and the rolled-up dollar bill from your wallet does one. The
-wallet is hidden under the bed covers; open it to take the dollar out.
+wallet is hidden under the bed covers; picking it up gets you the dollar.
 
 **The bathroom**, through the doorway on the left wall: a tub with a shower curtain that
 opens and closes, a bath mat, a toilet that flushes (animated, with a sound), a sink, a
@@ -77,8 +77,8 @@ The door tells you what's missing, and so does the front desk on the phone.
    3. In the bathroom, use the screwdriver with the mirror to take the mirror door off.
    4. Back in the bedroom, use the mirror with the coffee table, the powder with the
       mirror, and the razor (from the medicine cabinet) with the powder.
-   5. Open the bed to pull back the covers, pick up your wallet, and open the wallet to
-      take out the dollar bill.
+   5. Open the bed to pull back the covers and pick up your wallet; you take the dollar
+      bill out of it straight away.
    6. Use the dollar bill with the three lines. One is enough. A second turns the room
       psychedelic (you can still go to the party); a third sends you to bed instead, and
       that's game over.

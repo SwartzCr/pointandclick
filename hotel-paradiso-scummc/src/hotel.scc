@@ -273,12 +273,15 @@ room Hotel {
         egoSay("A screwdriver. Past me had plans. Unclear ones."); waitForMessage();
     }
 
+    // Picking up the wallet takes the dollar straight out of it: the dollar
+    // goes in the inventory and the wallet goes in my pocket.
     local script takeWallet() {
         tookWallet = 1;
-        hasWallet = 1;
+        hasDollar = 1;
         setObjectState(bed, 2);
         ResRoom::refreshInventory();
         egoSay("My wallet! I slept on it all day. That explains the bruise."); waitForMessage();
+        egoSay("Inside: one dollar bill. I'll keep that handy and the wallet in my pocket."); waitForMessage();
     }
 
     local script takePowder() {
