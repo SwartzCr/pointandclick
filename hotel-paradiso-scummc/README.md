@@ -109,7 +109,7 @@ The door tells you what's missing, and so does the front desk on the phone.
 | `tools/art.py` | Procedural pixel art: the rooms in every object state, the title screen, costume frames, cursor |
 | `tools/make_assets.py` | Writes `assets/`: one shared 256-colour palette, both room backgrounds, object state images, both costumes + `.scost` files, font sheet, walk boxes, every sound effect and both pieces of music |
 | `dist/` | Prebuilt `tentacle.000` / `tentacle.001` |
-| `web/` | The browser version's landing page and its headless-Chromium smoke test (built by `.github/workflows/pages.yml`) |
+| `web/` | The browser version's landing page, `compat.js` (browser fixes loaded before ScummVM) and the Chromium/Firefox smoke test (built by `.github/workflows/pages.yml`) |
 
 ## How it works
 

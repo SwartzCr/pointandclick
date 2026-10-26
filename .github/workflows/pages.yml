@@ -67,10 +67,10 @@ jobs:
           # the data folder is served over HTTP from an index; rebuild it with the game in
           python3 scummvm/dists/emscripten/build-make_http_index.py $site/data
           cp hotel-paradiso-scummc/web/index.html $site/index.html
-          # ScummVM downloads its data with Response.bytes(), which older browsers
-          # (Chrome < 132, Firefox < 128) don't have: give them a fallback
-          sed -i 's#<head>#<head><script>if(!Response.prototype.bytes){Response.prototype.bytes=async function(){return new Uint8Array(await this.arrayBuffer())}}</script>#' $site/scummvm.html
-          grep -c 'Response.prototype.bytes' $site/scummvm.html
+          # Browser fixes ScummVM's page needs, loaded before anything else (see web/compat.js)
+          sed -i 's#<head>#<head><script src="compat.js"></script>#' $site/scummvm.html
+          cp hotel-paradiso-scummc/web/compat.js $site/compat.js
+          grep -c 'compat.js' $site/scummvm.html
           python3 -c "from PIL import Image" 2>/dev/null || pip install --quiet pillow
           python3 -c "import sys; sys.path.insert(0, 'hotel-paradiso-scummc/tools'); import art; from PIL import Image; art.render_title().resize((960, 432), Image.NEAREST).save('$site/title.png')"
           touch $site/.nojekyll
@@ -81,9 +81,10 @@ jobs:
           cd scummvm/build-emscripten && python3 -m http.server 8000 >/dev/null 2>&1 &
           sleep 2
           npm install --no-save --silent playwright@1.47.2
-          npx playwright install --with-deps chromium >/dev/null
-          node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/ smoke-test
-          tail -50 smoke-test/console.txt
+          npx playwright install --with-deps chromium firefox >/dev/null
+          node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/ smoke-test chromium
+          node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/ smoke-test firefox || echo "::warning::Firefox smoke test failed"
+          tail -30 smoke-test/chromium-console.txt smoke-test/firefox-console.txt
 
       - name: Publish smoke-test screenshots to the smoke-test branch
         if: always()
