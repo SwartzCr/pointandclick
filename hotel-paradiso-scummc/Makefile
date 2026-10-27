@@ -42,7 +42,7 @@ $(B)/%.cost $(B)/%_anim.sch: assets/%.scost $(wildcard assets/*/*.bmp) | $(B)
 
 # The rooms reference the charset and costume by name, so build those first
 $(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.cost $(B)/guest_anim.sch \
-                    $(B)/bellhop.cost \
+                    $(B)/bellhop.cost $(B)/bellhop_dirty.cost \
                     $(B)/candy.soun $(B)/rustle.soun
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 

@@ -11,8 +11,9 @@
  *
  * Goal: get ready for the party on the ninth floor. The door won't let you
  * go until you are:
- *   1. fed:      minibar -> candy bar -> eat it
- *   2. dressed:  dresser -> bellhop uniform -> put it on (it's a costume party)
+ *   1. dressed:  dresser -> bellhop uniform -> put it on (it's a costume party)
+ *   2. fed:      minibar -> candy bar -> eat it (in the uniform, it stains it:
+ *                soap at the bathroom sink, then the towel, then back on)
  *   3. pre-gamed:
  *      nightstand -> matchbook -> lamp on to read it -> code 714
  *      painting -> wall safe -> screwdriver and bag of powder
@@ -341,14 +342,18 @@ room Hotel {
             return;
         }
         deskSays(); print("Front desk, Gustav speaking. How may I help you?"); waitForMessage();
-        if(!ateCandy) {
-            egoSay("Is room service still open? I'm starving."); waitForMessage();
-            deskSays(); print("Room service closed at ten, sir."); waitForMessage();
-            deskSays(); print("Your minibar, however, is fully stocked. Expensively. Good night."); waitForMessage();
+        if(uniformState) {
+            egoSay("I got chocolate all over my costume. Any ideas?"); waitForMessage();
+            deskSays(); print("Soap and the bathroom sink, sir. Then a good towelling."); waitForMessage();
+            deskSays(); print("Housekeeping's oldest secret. Good night."); waitForMessage();
         } else if(!wearingUniform) {
             egoSay("The party on the ninth floor. Is it fancy dress?"); waitForMessage();
             deskSays(); print("A costume party, sir. Theme: hotel staff. Hilarious, I'm told."); waitForMessage();
             deskSays(); print("Housekeeping sometimes leaves spare uniforms in the dresser. Good night."); waitForMessage();
+        } else if(!ateCandy) {
+            egoSay("Is room service still open? I'm starving."); waitForMessage();
+            deskSays(); print("Room service closed at ten, sir."); waitForMessage();
+            deskSays(); print("Your minibar, however, is fully stocked. Expensively. Good night."); waitForMessage();
         } else if(!readyToParty) {
             egoSay("I'm fed and dressed, but I'm just not feeling it."); waitForMessage();
             deskSays(); print("Many guests keep their party supplies in the room safe, sir."); waitForMessage();
@@ -375,11 +380,16 @@ room Hotel {
     }
 
     // The door lets you out once you're fed, dressed and ready
+    // In order: a clean costume on, something to eat, then the pre-game
     local script tryDoor() {
-        if(!ateCandy) {
-            egoSay("I can't go to a party on an empty stomach. I'll pass out by the punch bowl."); waitForMessage();
+        if(uniformState == 1) {
+            egoSay("There's chocolate all over the uniform. I can't go like this."); waitForMessage();
+        } else if(uniformState == 2) {
+            egoSay("The uniform's still soaking wet. I'd drip all the way to the ninth floor."); waitForMessage();
         } else if(!wearingUniform) {
             egoSay("It's a costume party. I can't show up in a bathrobe. Again."); waitForMessage();
+        } else if(!ateCandy) {
+            egoSay("I can't go to a party on an empty stomach. I'll pass out by the punch bowl."); waitForMessage();
         } else if(!readyToParty) {
             egoSay("I'm just not feeling it yet. I need to pre-game."); waitForMessage();
         } else

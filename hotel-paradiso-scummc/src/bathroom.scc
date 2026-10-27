@@ -293,6 +293,10 @@ room Bathroom {
             egoSay("Free soap. The best kind of soap."); waitForMessage();
             return;
         case Use:
+            if(objB == invUniform) {
+                ResRoom::washUniform();     // the soap on the sink works as well as one in hand
+                return;
+            }
             egoSay("I wash my hands. Very hygienic."); waitForMessage();
             return;
         }
@@ -313,6 +317,10 @@ room Bathroom {
             egoSay("A pedestal sink. Spotless, unlike me."); waitForMessage();
             return;
         case Use:
+            if(objB == invUniform) {
+                ResRoom::washUniform();
+                return;
+            }
             unless(objB == invTowel || (objB && objB != invSoap && objB != invShaver)) startSound(sinkSnd);
             if(objB == invSoap) { egoSay("I wash my hands. Very hygienic. I feel like a new guest."); waitForMessage(); }
             else if(objB == invShaver) { egoSay("A proper wet shave at the sink. I feel like a new guest."); waitForMessage(); }
@@ -456,6 +464,10 @@ room Bathroom {
             egoSay("A towel. Every traveller should have one."); waitForMessage();
             return;
         case Use:
+            if(objB == invUniform) {
+                ResRoom::dryUniform();      // the towel on the rail works as well as one in hand
+                return;
+            }
             egoSay("I dry my hands on it. Then I put it back exactly how it was."); waitForMessage();
             return;
         }

@@ -1124,37 +1124,27 @@ def build_painting_sound():
 
 
 def build_candy_sound():
-    """Eating the candy bar: the wrapper crackles open, then three crunchy
-    bites of nougat (about 1.9s)."""
+    """Eating the candy bar: the wrapper crackling as it's torn open and
+    scrunched up (no bites)."""
     import math
     import random
     rnd = random.Random(34)
-    out = [0.0] * int(RATE * 1.95)
-    # wrapper: dense little crackles, band-passed bright
-    hp = 0.0
-    lp = LowPass(0.8)
-    for k in range(int(0.55 * RATE)):
-        u = k / (0.55 * RATE)
+    out = [0.0] * int(RATE * 0.85)
+    # dense little crackles, thickest in the middle as the wrapper tears open
+    for k in range(int(0.75 * RATE)):
+        u = k / (0.75 * RATE)
         if rnd.random() < 0.06 * math.sin(math.pi * u) + 0.005:
             amp = rnd.uniform(0.3, 1.0)
             for j in range(int(rnd.uniform(4, 22))):
                 if k + j < len(out):
                     out[k + j] += amp * rnd.uniform(-1, 1) * (1 - j / 22)
+    # band-pass it bright, like thin foil and plastic
+    hp = 0.0
+    lp = LowPass(0.8)
     for i in range(len(out)):
         x = out[i]
         out[i] = lp(x) - 0.6 * hp
         hp = x * 0.5
-    # three bites: a crisp snap, then gritty chewing crunch
-    for t0 in (0.72, 1.13, 1.52):
-        _add(out, t0, _tick(rnd, 0.9, freq=1700, ms=25))
-        body = _band_noise(rnd, int(0.22 * RATE), 0.08, 0.6)
-        i0 = int(t0 * RATE)
-        for k, x in enumerate(body):
-            u = k / len(body)
-            grain = 2.5 if rnd.random() < 0.03 else 1.0
-            if i0 + k < len(out):
-                out[i0 + k] += 0.9 * x * grain * math.exp(-4 * u) * min(1.0, k / 40)
-        _add(out, t0 + 0.01, _thud(rnd, 0.35, freq=130, ms=90))
     write_voc('candy', normalize(out, 0.85))
 
 
@@ -1304,6 +1294,7 @@ def main():
             pal.add(c)
     build_costume(pal, 'guest', 'robe', 'a guest in a bathrobe')
     build_costume(pal, 'bellhop', 'bellhop', 'the same guest in the bellhop uniform')
+    build_costume(pal, 'bellhop_dirty', 'bellhop_dirty', 'the bellhop uniform with chocolate down the front')
     for n in art.CLOWNS:
         build_costume(pal, n, None, 'a room-service clown', clown_frames(n), CLOWN_EXTRA)
 
