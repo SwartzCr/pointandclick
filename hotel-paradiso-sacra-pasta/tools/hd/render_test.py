@@ -1,36 +1,47 @@
-"""Renders the 1280x800 test of the Nave (with characters and the interface)."""
-import sys, time
-from PIL import Image
-import nave, people
+"""Renders the Nave test at 1280x800 and 640x400 (with characters and the
+interface), plus a side-by-side of the two at the same screen size.
 
-def place(bg, spr, x, y, scale=1.0):
-    from PIL import ImageDraw, ImageFilter
+    python3 render_test.py [outdir]
+"""
+import os
+import sys
+import time
+from PIL import Image, ImageDraw
+import shade
+import nave
+import people
+
+OUT = sys.argv[1] if len(sys.argv) > 1 else '/tmp/claude-0'
+
+
+def place(bg, spr, x, y):
+    """Feet at design point (x, y)."""
+    s = shade.S
     sh = Image.new('RGBA', bg.size, (0, 0, 0, 0))
-    w = 70 * scale
-    ImageDraw.Draw(sh).ellipse([x - w / 2 + 8, y - 10, x + w / 2 + 14, y + 8], fill=(40, 16, 50, 110))
-    bg.alpha_composite(sh.filter(ImageFilter.GaussianBlur(3)))
-    if scale != 1.0:
-        spr = spr.resize((int(spr.width * scale), int(spr.height * scale)), Image.NEAREST)
-    bg.alpha_composite(spr, (int(x - spr.width / 2), int(y - spr.height)))
+    w = 64
+    ImageDraw.Draw(sh).ellipse([(x - w / 2 + 10) * s, (y - 8) * s, (x + w / 2 + 16) * s, (y + 6) * s],
+                               fill=(50, 20, 60, 100))
+    bg.alpha_composite(sh)
+    bg.alpha_composite(spr, (int(x * s - spr.width / 2), int(y * s - spr.height)))
 
-t = time.time()
-bg = nave.nave()
-room = bg.copy()
-place(room, people.khuc(), 1136, 452, 0.92)
-place(room, people.guest(talk=True), 820, 566, 1.0)
-nave.interface(room)
-room.save(sys.argv[1] if len(sys.argv) > 1 else '/tmp/claude-0/nave_hd.png')
-bg.save('/tmp/claude-0/nave_hd_bg.png')
-print('%.1fs' % (time.time() - t))
 
-# side by side with the current 640x400 art, same crop, the old one doubled
-old = Image.open('../../assets/rooms/nave_bg0.png').convert('RGBA')
-for name, x, y in (('guest_front_talk1', 410, 283), ('khuc_front_stand', 568, 226)):
-    spr = Image.open('../../assets/sprites/%s.png' % name)
-    old.alpha_composite(spr, (x - spr.width // 2, y - spr.height))
-old2 = old.resize((1280, 800), Image.NEAREST)
-crop = (440, 20, 1240, 580)
-cmp_ = Image.new('RGBA', (1600 + 20, 560), (20, 14, 24, 255))
-cmp_.alpha_composite(old2.crop(crop), (0, 0))
-cmp_.alpha_composite(room.crop(crop), (820, 0))
-cmp_.save('/tmp/claude-0/nave_compare.png')
+renders = {}
+for scale in (1.0, 0.5):
+    t = time.time()
+    shade.set_scale(scale)
+    room = nave.nave()
+    place(room, people.khuc(), 1136, 452)
+    place(room, people.guest(talk=True), 820, 566)
+    nave.interface(room)
+    w, h = room.size
+    path = os.path.join(OUT, 'nave_cel_%dx%d.png' % (w, h))
+    room.save(path)
+    renders[scale] = room
+    print(path, '%.1fs' % (time.time() - t))
+
+# both at the same displayed size: the 640x400 one doubled with square pixels
+lo = renders[0.5].resize((1280, 800), Image.NEAREST)
+cmp_ = Image.new('RGBA', (1280 * 2 + 20, 800), (20, 14, 24, 255))
+cmp_.alpha_composite(lo, (0, 0))
+cmp_.alpha_composite(renders[1.0], (1300, 0))
+cmp_.save(os.path.join(OUT, 'nave_cel_compare.png'))

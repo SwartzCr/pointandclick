@@ -2,14 +2,10 @@
 (big heads, big eyes, bulbous noses) and full shading."""
 import math
 from PIL import Image, ImageDraw
-from shade import Layer as _Layer, rgba, mask_of
+from shade import Layer as _Layer, rgba, mask_of, D
 
 
-class Layer(_Layer):
-    def paint(self, mask, base, **kw):
-        kw.setdefault('dither', False)
-        kw['bands'] = kw.get('bands', 6) + 1
-        super().paint(mask, base, **kw)
+Layer = _Layer
 
 SKIN = (242, 186, 144)
 HAIR = (104, 60, 36)
@@ -45,15 +41,20 @@ def _limb(d, pts, w0, w1):
 
 
 def eye(L, cx, cy, w, h, look=(2, 1), lid=0.0):
+    if lid > 0:
+        # heavy-lidded and serene: only the lower half of the eye shows
+        L.shape(WHITE, lambda d: d.chord([cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2], 0, 180, fill=255),
+                radius=4, outline=2, outline_color=INK, shadow=False)
+        d = D(L.im)
+        d.chord([cx - w * 0.22 + look[0], cy, cx + w * 0.22 + look[0], cy + h * 0.4], 0, 180, fill=rgba(INK))
+        d.line([(cx - w / 2 - 1, cy), (cx + w / 2 + 1, cy - 1)], fill=rgba(INK), width=3)
+        return
     L.shape(WHITE, lambda d: d.ellipse([cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2], fill=255),
-            radius=6, bands=4, outline=2, outline_color=INK)
-    px, py = cx + look[0], cy + look[1] + 1
-    d = ImageDraw.Draw(L.im)
-    d.ellipse([px - w * 0.22, py - h * 0.24, px + w * 0.22, py + h * 0.24], fill=rgba(INK))
-    d.ellipse([px - w * 0.12 - 1, py - h * 0.16, px - w * 0.12 + 2, py - h * 0.16 + 3], fill=rgba(WHITE))
-    if lid > 0:      # heavy lids for Khuc's serene look
-        d.chord([cx - w / 2 - 1, cy - h / 2 - 1, cx + w / 2 + 1, cy + h / 2 + 1], 180, 360, fill=rgba(SKIN_K))
-        d.line([(cx - w / 2, cy), (cx + w / 2, cy)], fill=rgba(INK), width=2)
+            radius=6, outline=2, outline_color=INK)
+    px_, py = cx + look[0], cy + look[1] + 1
+    d = D(L.im)
+    d.ellipse([px_ - w * 0.22, py - h * 0.24, px_ + w * 0.22, py + h * 0.24], fill=rgba(INK))
+    d.ellipse([px_ - w * 0.12 - 1, py - h * 0.16, px_ - w * 0.12 + 2, py - h * 0.16 + 3], fill=rgba(WHITE))
 
 
 SKIN_K = (220, 160, 110)
@@ -118,7 +119,7 @@ def guest(beads=False, pendant=False, talk=False):
                                        (cx + 4, 30), (cx - 10, 24), (cx - 20, 32), (cx - 28, 30)], fill=255),
             radius=9, bands=5)
     # pillbox hat, at a jaunty angle
-    hat = mask_of((W, H), lambda d: d.polygon([(cx + 2, 8), (cx + 30, 2), (cx + 32, 16), (cx + 4, 22)], fill=255))
+    hat = mask_of(L.size, lambda d: d.polygon([(cx + 2, 8), (cx + 30, 2), (cx + 32, 16), (cx + 4, 22)], fill=255))
     L.paint(hat, RED, radius=6, bands=5)
     L.shape(GOLD, lambda d: d.polygon([(cx + 3, 17), (cx + 31, 11), (cx + 32, 16), (cx + 4, 22)], fill=255),
             radius=2, bands=3, outline=1, spec=True)
@@ -126,7 +127,7 @@ def guest(beads=False, pendant=False, talk=False):
     # face
     eye(L, cx - 13, 48, 18, 22, look=(2, 1))
     eye(L, cx + 13, 48, 18, 22, look=(2, 1))
-    d = ImageDraw.Draw(L.im)
+    d = D(L.im)
     d.line([(cx - 22, 34), (cx - 6, 36)], fill=rgba(HAIR), width=3)
     d.line([(cx + 6, 35), (cx + 22, 32)], fill=rgba(HAIR), width=3)
     L.shape(SKIN, lambda d: d.ellipse([cx - 6, 54, cx + 10, 70], fill=255), radius=7, bands=5, spec=True)
@@ -194,7 +195,7 @@ def khuc(talk=False):
     for sx in (-1, 1):
         L.shape(METAL, lambda d, sx=sx: d.rounded_rectangle([cx + sx * 44 - 8, 30, cx + sx * 44 + 8, 36], 3, fill=255),
                 radius=3, bands=3, outline=1)
-    d = ImageDraw.Draw(L.im)
+    d = D(L.im)
     for row, y in enumerate((14, 22, 30)):
         n = 5 + row * 2
         for k in range(n):

@@ -1,34 +1,63 @@
-"""Shaded drawing toolkit for the high-resolution art.
+"""Cel-shaded cartoon drawing toolkit, resolution-independent.
 
-The look is borrowed from the LucasArts cartoon games of the early 90s:
-every shape is lit from the upper left, shaded in a handful of bands that
-shift towards cool purple in the shadows and warm yellow in the highlights,
-and finished with a dark outline in a deeper version of its own colour
-(not black). Volume comes from the shape itself: the distance from each
-pixel to the shape's edge is turned into a dome, the dome into normals, and
-the normals into light.
+The look follows the LucasArts cartoon games of the early 90s (Sam & Max,
+Day of the Tentacle): flat colour fills, a hard-edged shadow band on the side
+of each shape that faces away from the light (the upper left), a crisp
+highlight only on shiny things, and thick dark outlines. Big surfaces like
+walls and floors get banded, dithered gradients instead.
+
+All drawing code is written in "design" coordinates for a 1280x800 screen.
+Everything goes through SD, a drawing proxy that multiplies coordinates and
+line widths by the global scale S, so the same scene renders natively at
+1280x800 (S = 1) or 640x400 (S = 0.5), with no resampling.
 """
 import math
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter, ImageChops
+from PIL import Image, ImageDraw, ImageFilter, ImageChops, ImageFont
 from scipy import ndimage
 
-LIGHT = np.array([-0.55, -0.7, 0.62])
-LIGHT = LIGHT / np.linalg.norm(LIGHT)
-SHADOW_TINT = np.array([58, 30, 92], dtype=np.float32)    # shadows lean violet
-LIGHT_TINT = np.array([255, 236, 176], dtype=np.float32)  # highlights lean warm
+S = 1.0
+LIGHT2 = np.array([-0.6, -0.8])          # where the light comes from, in screen space
+SHADOW_TINT = np.array([60, 30, 96], dtype=np.float32)
+LIGHT_TINT = np.array([255, 238, 184], dtype=np.float32)
 BAYER4 = (np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]) + 0.5) / 16
+FONT = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+
+
+def set_scale(s):
+    global S
+    S = s
+
+
+def px(v):
+    """A design-space length in real pixels (at least 1)."""
+    return max(1, int(round(v * S)))
+
+
+def rsize(w, h):
+    return int(round(w * S)), int(round(h * S))
 
 
 def rgba(c, a=255):
     return tuple(int(v) for v in c[:3]) + (a,)
 
 
-def ramp(base, t):
-    """t: array in [0,1]; 0 = deep shadow, ~0.6 = base colour, 1 = highlight."""
+def tone(base, t):
+    """t in [0,1]: 0 deep shadow, 0.6 the base colour, 1 highlight."""
     base = np.asarray(base[:3], dtype=np.float32)
-    dark = base * 0.42 + SHADOW_TINT * 0.28
-    light = base * 0.62 + LIGHT_TINT * 0.38
+    dark = base * 0.5 + SHADOW_TINT * 0.24
+    light = base * 0.6 + LIGHT_TINT * 0.4
+    if t < 0.6:
+        c = dark + (base - dark) * (t / 0.6)
+    else:
+        c = base + (light - base) * ((t - 0.6) / 0.4)
+    return tuple(int(v) for v in np.clip(c, 0, 255))
+
+
+def ramp(base, t):
+    base = np.asarray(base[:3], dtype=np.float32)
+    dark = base * 0.5 + SHADOW_TINT * 0.24
+    light = base * 0.6 + LIGHT_TINT * 0.4
     t = t[..., None]
     lo = dark + (base - dark) * np.clip(t / 0.6, 0, 1)
     hi = base + (light - base) * np.clip((t - 0.6) / 0.4, 0, 1)
@@ -43,100 +72,169 @@ def quantize(t, bands, dither=True):
     return np.clip(np.round(t * bands) / bands, 0, 1)
 
 
+# ------------------------------------------------------------------ scaled drawing
+class SD:
+    """ImageDraw with design coordinates."""
+
+    def __init__(self, im):
+        self.d = ImageDraw.Draw(im)
+        self.d.fontmode = '1'
+
+    @staticmethod
+    def _pts(pts):
+        if not pts:
+            return pts
+        if isinstance(pts[0], (tuple, list)):
+            return [(x * S, y * S) for x, y in pts]
+        return [v * S for v in pts]
+
+    def _box(self, b):
+        x0, y0, x1, y1 = [v * S for v in b]
+        return [min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1)]
+
+    def polygon(self, pts, fill=None, outline=None):
+        self.d.polygon(self._pts(pts), fill=fill, outline=outline)
+
+    def rectangle(self, b, fill=None, outline=None, width=1):
+        self.d.rectangle(self._box(b), fill=fill, outline=outline, width=px(width))
+
+    def rounded_rectangle(self, b, r, fill=None):
+        self.d.rounded_rectangle(self._box(b), r * S, fill=fill)
+
+    def ellipse(self, b, fill=None, outline=None, width=1):
+        self.d.ellipse(self._box(b), fill=fill, outline=outline, width=px(width))
+
+    def chord(self, b, a0, a1, fill=None):
+        self.d.chord(self._box(b), a0, a1, fill=fill)
+
+    def pieslice(self, b, a0, a1, fill=None):
+        self.d.pieslice(self._box(b), a0, a1, fill=fill)
+
+    def arc(self, b, a0, a1, fill=None, width=1):
+        self.d.arc(self._box(b), a0, a1, fill=fill, width=px(width))
+
+    def line(self, pts, fill=None, width=1, joint=None):
+        self.d.line(self._pts(pts), fill=fill, width=px(width), joint=joint)
+
+    def point(self, xy, fill=None):
+        x, y = xy
+        if S >= 1:
+            self.d.point((x * S, y * S), fill=fill)
+        else:
+            self.d.point((x * S, y * S), fill=fill)
+
+    def text(self, xy, s, size, fill, anchor='la', shadow=None):
+        f = ImageFont.truetype(FONT, max(7, int(round(size * S))))
+        x, y = xy[0] * S, xy[1] * S
+        if shadow is not None:
+            o = max(1, int(round(2 * S)))
+            self.d.text((x + o, y + o), s, font=f, fill=rgba(shadow), anchor=anchor)
+        self.d.text((x, y), s, font=f, fill=rgba(fill), anchor=anchor)
+
+
+def D(im):
+    return SD(im)
+
+
 def mask_of(size, draw_fn):
+    """size is a real size (from rsize); draw_fn gets an SD."""
     m = Image.new('L', size, 0)
-    draw_fn(ImageDraw.Draw(m))
+    draw_fn(SD(m))
     return m
+
+
+def grow(m, width):
+    g = m
+    for _ in range(width):
+        g = g.filter(ImageFilter.MaxFilter(3))
+    return g
 
 
 def outline_mask(m, width=2):
     a = m.point(lambda v: 255 if v > 127 else 0)
-    g = a
-    for _ in range(width):
-        g = g.filter(ImageFilter.MaxFilter(3))
-    return ImageChops.subtract(g, a)
+    return ImageChops.subtract(grow(a, width), a)
 
 
-def dome_light(mask_arr, radius, flat=0.0, light=LIGHT, vert=0.25):
-    """Lambert lighting of a pillow-shaped surface filling mask_arr."""
-    d = ndimage.distance_transform_edt(mask_arr)
-    x = np.clip(d / max(radius, 1), 0, 1)
-    height = np.sqrt(1 - (1 - x) ** 2) * radius
-    height = ndimage.gaussian_filter(height, 0.8)
-    gy, gx = np.gradient(height)
-    nx, ny, nz = -gx, -gy, np.ones_like(gx) * (1.0 + flat * 6)
-    n = np.sqrt(nx * nx + ny * ny + nz * nz)
-    lam = (nx * light[0] + ny * light[1] + nz * light[2]) / n
-    lam = np.clip(lam, 0, 1)
-    # a little top-to-bottom falloff inside the shape
-    ys = np.nonzero(mask_arr)[0]
-    if len(ys):
-        y0, y1 = ys.min(), ys.max() + 1
-        rows = np.arange(mask_arr.shape[0])[:, None]
-        v = 1 - np.clip((rows - y0) / max(1, y1 - y0), 0, 1)
-        lam = lam * (1 - vert) + vert * v * lam + vert * 0.5 * v
-    return np.clip(lam, 0, 1)
+def _shift(m, dx, dy):
+    """Sample the boolean mask at (x + dx, y + dy), outside = False."""
+    out = np.zeros_like(m)
+    h, w = m.shape
+    dx, dy = int(round(dx)), int(round(dy))
+    ys = slice(max(0, -dy), min(h, h - dy))
+    yd = slice(max(0, dy), min(h, h + dy))
+    xs = slice(max(0, -dx), min(w, w - dx))
+    xd = slice(max(0, dx), min(w, w + dx))
+    out[ys, xs] = m[yd, xd]
+    return out
 
 
 class Layer:
-    """An RGBA canvas that shaded shapes are painted onto."""
+    """An RGBA canvas (design size w x h) that shaded shapes are painted onto."""
 
     def __init__(self, w, h):
-        self.w, self.h = w, h
-        self.im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+        self.size = rsize(w, h)
+        self.im = Image.new('RGBA', self.size, (0, 0, 0, 0))
 
-    def paint(self, mask, base, radius=10, bands=6, outline=2, flat=0.0, spec=False, dither=True,
-              outline_color=None, gloss=0.0, light=LIGHT, texture=None):
-        """Paint a shaded shape. mask: 'L' image of the canvas size."""
+    def paint(self, mask, base, radius=10, outline=3, spec=False, level=0.6, shadow=True,
+              outline_color=None, away=None, **_ignored):
+        """Cel-shade a shape: flat base, a shadow band `radius`*0.5 wide on
+        the side away from the light, an optional highlight, an outline."""
         m = np.asarray(mask) > 127
         if not m.any():
             return
-        ys, xs = np.nonzero(m)
-        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
-        pad = 4
-        y0p, x0p = max(0, y0 - pad), max(0, x0 - pad)
-        y1p, x1p = min(self.h, y1 + pad), min(self.w, x1 + pad)
-        sub = m[y0p:y1p, x0p:x1p]
-        lam = dome_light(sub, radius, flat, light)
-        t = 0.18 + lam * 0.82
-        if texture is not None:
-            t = np.clip(t + texture[y0p:y1p, x0p:x1p], 0, 1)
-        if spec or gloss:
-            s = np.clip((lam - 0.86) / 0.14, 0, 1) ** 2 * (gloss or 1.0)
-            t = np.clip(t + s * 0.6, 0, 1)
-        tq = quantize(t, bands, dither)
-        col = ramp(base, tq)
+        lx, ly = LIGHT2 if away is None else -np.asarray(away)
+        col = np.zeros(m.shape + (4,), dtype=np.uint8)
+        col[m, :3] = tone(base, level)
+        if shadow:
+            k = max(1.0, radius * 0.55 * S)
+            k = min(k, 22 * S)
+            # a pixel is in shadow when stepping away from the light leaves the shape
+            sh = m & ~_shift(m, -lx * k, -ly * k)
+            # soften the stair-steps of the band into a hand-drawn edge
+            sh = ndimage.binary_opening(sh, iterations=1) if k > 2 else sh
+            col[sh, :3] = tone(base, max(0.0, level - 0.32))
+            if k >= 6 * S and radius >= 14:
+                core = m & ~_shift(m, -lx * k * 0.35, -ly * k * 0.35)
+                col[core, :3] = tone(base, max(0.0, level - 0.48))
         if spec:
-            hot = lam > 0.97
-            col[hot] = np.array([255, 252, 236])
-        rgba_arr = np.zeros(sub.shape + (4,), dtype=np.uint8)
-        rgba_arr[..., :3] = np.clip(col, 0, 255).astype(np.uint8)
-        rgba_arr[..., 3] = sub * 255
-        piece = Image.fromarray(rgba_arr, 'RGBA')
-        self.im.alpha_composite(piece, (int(x0p), int(y0p)))
+            h = max(1.0, radius * 0.22 * S)
+            hl = m & ~_shift(m, lx * h, ly * h)
+            hl &= ~ndimage.binary_dilation(~m, iterations=max(1, int(h * 0.6)))
+            col[hl, :3] = tone(base, 0.95)
+            # a little glint
+            d = ndimage.distance_transform_edt(m)
+            yy, xx = np.nonzero(m)
+            if len(yy):
+                score = d[yy, xx] * 0.0 + (xx * lx + yy * ly) * -1
+                i = np.argmin(score)
+                gx, gy = xx[i] - lx * (radius * 0.5 * S) * -1, yy[i] - ly * (radius * 0.5 * S) * -1
+                gx = xx[i] + (-lx) * radius * 0.45 * S
+                gy = yy[i] + (-ly) * radius * 0.45 * S
+                r = max(1, radius * 0.12 * S)
+                ys_, xs_ = np.ogrid[:m.shape[0], :m.shape[1]]
+                dot = ((xs_ - gx) ** 2 + (ys_ - gy) ** 2 <= r * r) & m
+                col[dot, :3] = (255, 252, 240)
+        col[m, 3] = 255
+        self.im.alpha_composite(Image.fromarray(col, 'RGBA'))
         if outline:
-            oc = outline_color or tuple(np.clip(np.asarray(base[:3]) * 0.28 + np.array([20, 8, 24]), 0, 255))
-            ring = outline_mask(mask, outline)
+            oc = outline_color or tuple(np.clip(np.asarray(base[:3]) * 0.16 + np.array([18, 8, 22]), 0, 255))
+            ring = outline_mask(mask, px(outline))
             self.im.paste(Image.new('RGBA', mask.size, rgba(oc)), (0, 0), ring)
 
     def shape(self, base, draw_fn, **kw):
-        m = mask_of((self.w, self.h), draw_fn)
+        m = mask_of(self.size, draw_fn)
         self.paint(m, base, **kw)
         return m
 
-    def flat(self, color, draw_fn):
-        d = ImageDraw.Draw(self.im)
-        draw_fn(d, rgba(color))
-
     def line(self, pts, color, width=2):
-        ImageDraw.Draw(self.im).line(pts, fill=rgba(color), width=width, joint='curve')
+        SD(self.im).line(pts, fill=rgba(color), width=width, joint='curve')
 
     def over(self, other, xy=(0, 0)):
         self.im.alpha_composite(other.im if isinstance(other, Layer) else other, xy)
 
 
 def linear_shade(size, mask, base, angle=0.0, lo=0.3, hi=0.85, bands=7, dither=True, noise=0.0, seed=1):
-    """A flat surface lit by a gradient (for walls and floors)."""
+    """A flat surface with a banded gradient (walls and floors). size is real."""
     w, h = size
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     ca, sa = math.cos(angle), math.sin(angle)
@@ -148,7 +246,7 @@ def linear_shade(size, mask, base, angle=0.0, lo=0.3, hi=0.85, bands=7, dither=T
     t = lo + (hi - lo) * (1 - (proj - pmin) / max(1, pmax - pmin))
     if noise:
         rng = np.random.default_rng(seed)
-        t = t + ndimage.gaussian_filter(rng.normal(0, noise, (h, w)), 1.2)
+        t = t + ndimage.gaussian_filter(rng.normal(0, noise, (h, w)), 1.2 * S)
     tq = quantize(np.clip(t, 0, 1), bands, dither)
     col = ramp(base, tq)
     out = np.zeros((h, w, 4), dtype=np.uint8)
@@ -158,15 +256,15 @@ def linear_shade(size, mask, base, angle=0.0, lo=0.3, hi=0.85, bands=7, dither=T
 
 
 def light_pool(im, cx, cy, rx, ry, strength=0.25, color=(255, 214, 140)):
-    """Warm pool of lamplight: brightens the image inside an ellipse, banded."""
+    """A pool of light (design coordinates), banded and dithered."""
+    cx, cy, rx, ry = cx * S, cy * S, rx * S, ry * S
     a = np.asarray(im, dtype=np.float32).copy()
     h, w = a.shape[:2]
     yy, xx = np.mgrid[0:h, 0:w]
     r = np.sqrt(((xx - cx) / rx) ** 2 + ((yy - cy) / ry) ** 2)
-    k = np.clip(1 - r, 0, 1)
-    k = quantize(k, 6) * strength
+    k = quantize(np.clip(1 - r, 0, 1), 5) * strength
     c = np.array(color, dtype=np.float32)
-    a[..., :3] = a[..., :3] * (1 - k[..., None]) + (a[..., :3] * 0.5 + c * 0.5 + a[..., :3] * 0.3) * k[..., None]
+    a[..., :3] = a[..., :3] * (1 - k[..., None]) + (a[..., :3] * 0.8 + c * 0.5) * k[..., None]
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), im.mode)
 
 
@@ -175,29 +273,29 @@ def vignette(im, strength=0.35):
     h, w = a.shape[:2]
     yy, xx = np.mgrid[0:h, 0:w]
     r = np.sqrt(((xx - w / 2) / (w * 0.62)) ** 2 + ((yy - h * 0.45) / (h * 0.75)) ** 2)
-    k = quantize(np.clip(r - 0.55, 0, 1) * 1.6, 6) * strength
+    k = quantize(np.clip(r - 0.55, 0, 1) * 1.6, 5) * strength
     tint = np.array([40, 20, 60], dtype=np.float32)
     a[..., :3] = a[..., :3] * (1 - k[..., None]) + tint * k[..., None]
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), im.mode)
 
 
-def soft_shadow(im, mask, strength=0.45, blur=6, offset=(10, 6)):
-    """Darken `im` under a (blurred, offset, banded) shadow mask."""
-    s = mask.filter(ImageFilter.GaussianBlur(blur))
-    s = ImageChops.offset(s, *offset)
-    k = quantize(np.asarray(s, dtype=np.float32) / 255, 4) * strength
+def cast_shadow(im, mask, strength=0.4, offset=(14, 8)):
+    """A hard-edged cast shadow (cartoon style), offset down and right."""
+    s = ImageChops.offset(mask, px(offset[0]), px(offset[1]))
+    k = (np.asarray(s, dtype=np.float32) / 255 > 0.5) * strength
     a = np.asarray(im, dtype=np.float32).copy()
-    tint = np.array([40, 18, 60], dtype=np.float32)
-    a[..., :3] = a[..., :3] * (1 - k[..., None]) + tint * k[..., None] * 0.6
+    tint = np.array([60, 26, 80], dtype=np.float32)
+    a[..., :3] = a[..., :3] * (1 - k[..., None]) + tint * 0.5 * k[..., None]
     return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), im.mode)
 
 
 def wonky(im, lean=0.06, sway=4.0, cx=None):
-    """LucasArts-style crooked perspective: verticals lean out towards the
-    top and the whole room sways a little, like it was drawn by hand."""
+    """Crooked, hand-drawn perspective: verticals lean out towards the top
+    and the room sways a little."""
     a = np.asarray(im)
     h, w = a.shape[:2]
-    cx = w / 2 if cx is None else cx
+    cx = w / 2 if cx is None else cx * S
+    sway = sway * S
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     f = 1 + lean * (1 - yy / h) ** 1.5
     src_x = cx + (xx - cx) / f + sway * np.sin(yy / h * math.pi * 1.3)
