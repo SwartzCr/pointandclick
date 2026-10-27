@@ -38,7 +38,13 @@ const box = canvas && await canvas.boundingBox();
 if (box) {
   // "New game" sits at (160, 158) on Hotel Paradiso's 320x200 screen,
   // and at (320, 328) on Sacra Pasta's 640x400 one
-  if (sequel) await page.mouse.click(box.x + box.width * 320 / 640, box.y + box.height * 328 / 400);
+  if (sequel) {
+    // the AGS engine reads button state per frame, so hover first and hold the click
+    await page.mouse.move(box.x + box.width * 320 / 640, box.y + box.height * 328 / 400);
+    await page.waitForTimeout(500);
+    await page.mouse.click(box.x + box.width * 320 / 640, box.y + box.height * 328 / 400, { delay: 150 });
+    await page.waitForTimeout(6000);
+  }
   else await page.mouse.click(box.x + box.width * 160 / 320, box.y + box.height * 161 / 200);
   await page.waitForTimeout(8000);
   await page.screenshot({ path: `${out}/${which}-2-game.png` });
