@@ -26,7 +26,6 @@ room ResRoom {
     script wearUniform(int on);
     script useOnSelf(int item);
     script defaultAction(int vrb, int item);
-    script dryUniform();
     script openWallet();
 
     // ------------------------------------------------------------ verbs
@@ -531,14 +530,16 @@ room ResRoom {
                 egoSay("It needs to lie flat somewhere. The coffee table, maybe.");
             break;
         case invUniform:
-            if(curVerb == LookAt && uniformState == 1)
+            if(curVerb == LookAt && wearingUniform)       // the item is the robe while the uniform's on
+                egoSay("My bathrobe. I'll change back into it when the party's over.");
+            else if(curVerb == LookAt && uniformState == 1)
                 egoSay("Chocolate all down the front. Extremely unofficial.");
             else if(curVerb == LookAt && uniformState == 2)
                 egoSay("Clean, but soaking wet. It needs a towel.");
-            else if(curVerb == LookAt && wearingUniform)
-                egoSay("Red, gold buttons, a little hat. I look extremely official.");
             else if(curVerb == LookAt)
                 egoSay("A bellhop uniform. Not mine. Probably.");
+            else if(wearingUniform)
+                egoSay("I could change back into it. Use it, I mean.");
             else if(curVerb == Open || curVerb == PickUp)
                 egoSay("I could put it on. Use it, I mean.");
             else
@@ -587,6 +588,12 @@ room ResRoom {
             return;
         }
         wearingUniform = on;
+        // the inventory item is whatever you're not wearing: the robe while
+        // the uniform's on, the uniform while you're in the robe
+        setCurrentVerb(invUniform);
+        if(on) setVerbName("robe");
+        else setVerbName("uniform");
+        refreshInventory();
         startSound(rustleSnd);
         delay(30);                  // the costume changes in the middle of the rustle
         setCurrentActor(VAR_EGO);
@@ -653,7 +660,7 @@ room ResRoom {
     // Soap on the dirty uniform, at the bathroom sink: clean, but soaking wet
     script washUniform() {
         if(wearingUniform) {
-            egoSay("I'd have to take it off first."); waitForMessage();
+            egoSay("I'd have to take the uniform off first."); waitForMessage();
         } else if(uniformState == 0) {
             egoSay("It's clean. Cleaner than me, anyway."); waitForMessage();
         } else if(uniformState == 2) {
@@ -675,7 +682,7 @@ room ResRoom {
     // The towel on the washed uniform: clean and dry, ready to wear
     script dryUniform() {
         if(wearingUniform) {
-            egoSay("I'd have to take it off first."); waitForMessage();
+            egoSay("I'd have to take the uniform off first."); waitForMessage();
         } else if(uniformState == 1) {
             egoSay("Drying won't help. It's still covered in chocolate."); waitForMessage();
         } else if(uniformState == 0) {

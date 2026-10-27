@@ -87,6 +87,7 @@ room ResRoom {
     script showGameVerbs(int on);
     script startNewGame();
     script washUniform();
+    script dryUniform();
     script startTrip();
     script stopTrip();
     script hideAllVerbs();

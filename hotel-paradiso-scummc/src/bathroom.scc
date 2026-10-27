@@ -460,6 +460,10 @@ room Bathroom {
             egoSay("A towel. Every traveller should have one."); waitForMessage();
             return;
         case Use:
+            if(objB == invUniform) {
+                ResRoom::dryUniform();      // the towel on the rail works as well as one in hand
+                return;
+            }
             egoSay("I dry my hands on it. Then I put it back exactly how it was."); waitForMessage();
             return;
         }

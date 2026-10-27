@@ -82,7 +82,8 @@ sign on the door handle says as much).
 2. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.
    If you eat the candy while wearing it, you get chocolate down the front. Take the uniform
    off, use the soap on it at the bathroom sink (with the uniform, or the uniform with the
-   sink), then use the towel on it to dry it before putting it back on.
+   sink), then use the towel on it (or it on the towel rail) to dry it before putting it
+   back on. While you're wearing the uniform, the inventory item is your robe.
 3. **Pre-game.**
    1. Open the nightstand and take the matchbook. Turn on the lamp and look at the
       matchbook: the safe code is 714.
