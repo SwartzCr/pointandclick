@@ -1,5 +1,5 @@
-# Builds Hotel Paradiso into ScummVM's WebAssembly port and publishes it to
-# GitHub Pages, so the game plays in a browser.
+# Builds Hotel Paradiso (SCUMM) and its sequel Sacra Pasta (AGS) into ScummVM's
+# WebAssembly port and publishes them to GitHub Pages, so both play in a browser.
 #
 # One-time setup: Settings -> Pages -> Build and deployment -> Source: GitHub Actions.
 
@@ -99,6 +99,8 @@ jobs:
           mkdir -p $site/data/games/hotel-paradiso
           cp hotel-paradiso-scummc/dist/tentacle.000 hotel-paradiso-scummc/dist/tentacle.001 \
              $site/data/games/hotel-paradiso/
+          mkdir -p $site/data/games/sacra-pasta
+          cp hotel-paradiso-sacra-pasta/dist/sacrapasta.ags $site/data/games/sacra-pasta/
           # the data folder is served over HTTP from an index; rebuild it with the game in
           python3 scummvm/dists/emscripten/build-make_http_index.py $site/data
           cp hotel-paradiso-scummc/web/index.html $site/index.html
@@ -108,6 +110,7 @@ jobs:
           grep -c 'compat.js' $site/scummvm.html
           python3 -c "from PIL import Image" 2>/dev/null || pip install --quiet pillow
           python3 -c "import sys; sys.path.insert(0, 'hotel-paradiso-scummc/tools'); import art; from PIL import Image; art.render_title().resize((960, 432), Image.NEAREST).save('$site/title.png')"
+          python3 -c "from PIL import Image; Image.open('hotel-paradiso-sacra-pasta/assets/rooms/title_bg0.png').convert('RGB').crop((0, 0, 640, 288)).resize((960, 432), Image.NEAREST).save('$site/sacra-title.png')"
           touch $site/.nojekyll
           du -sh $site; ls -la $site
 
@@ -128,7 +131,10 @@ jobs:
           HEADED=1 LIBGL_ALWAYS_SOFTWARE=1 timeout -k 10 180 xvfb-run -a -s "-screen 0 1280x800x24" \
             node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/pointandclick/ smoke-test firefox \
             || echo "::warning::Firefox smoke test exited with $?"
-          for b in chromium firefox; do
+          # the sequel, in the AGS engine (second Play button)
+          GAME=2 timeout -k 10 180 node hotel-paradiso-scummc/web/smoke-test.mjs http://localhost:8000/pointandclick/ smoke-test chromium-sacra \
+            || echo "::warning::Sacra Pasta smoke test exited with $?"
+          for b in chromium firefox chromium-sacra; do
             echo "::notice title=$b smoke test::$(grep -c . smoke-test/$b-console.txt 2>/dev/null) console lines; $(grep -h '^\[midi\]' smoke-test/$b-console.txt 2>/dev/null)"
           done
           # Pass if Chromium got into the game: it downloaded the game data, nothing
@@ -136,6 +142,10 @@ jobs:
           test -f smoke-test/chromium-2-game.png
           grep -q 'tentacle.001' smoke-test/chromium-console.txt
           ! grep -q 'Game data not found\|ExitStatus\|Program terminated' smoke-test/chromium-console.txt
+          # and the same for the sequel
+          test -f smoke-test/chromium-sacra-2-game.png
+          grep -q 'sacrapasta.ags' smoke-test/chromium-sacra-console.txt
+          ! grep -q 'Game data not found\|ExitStatus\|Program terminated' smoke-test/chromium-sacra-console.txt
 
       - name: Publish smoke-test screenshots to the smoke-test branch
         if: always()
