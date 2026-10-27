@@ -352,8 +352,12 @@ def music_crypt():
     length = beat * len(seq)
     drone = (tone(hz('A1'), length, 'saw') * 0.15 + tone(hz('E2'), length, 'tri') * 0.15)
     drone = lp_fast(drone, 400)
-    out = mix((0, drone), *parts, length=length)
-    return out[:int(length * SR)]
+    out = mix((0, drone), *parts, length=length)[:int(length * SR)]
+    # the loop plays twice, then fades away over the second half of the second play
+    out = np.concatenate([out, out])
+    n = len(out) // 4
+    out[-n:] *= np.linspace(1, 0, n) ** 1.5
+    return out
 
 
 EFFECTS = {

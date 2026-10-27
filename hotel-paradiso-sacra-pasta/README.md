@@ -22,8 +22,9 @@ that's expected for a new game.
 thing and the obvious verb happens; the sentence line says which, and that verb lights
 up. Right-click anything (or an inventory item) to look at it. To use an item on
 something, click it (that picks **Use**), then the thing. To wear an item, click it and
-then click yourself (or click it twice); clicking it twice also reads things. Keys: O, C, T, P, L, U, W, S (push), Y (pull) pick verbs, Esc
-cancels, F5/F7 save and load.
+then click yourself; it leaves your pockets while you wear it, and **Pick up** on yourself
+takes it off again. Clicking a pamphlet twice reads it. Keys: O, C, T, P, L, U, W, S
+(push), Y (pull) pick verbs, Esc cancels, F5/F7 save and load.
 
 ## The rooms
 

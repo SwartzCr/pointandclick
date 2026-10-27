@@ -211,6 +211,7 @@ WORDS = [['THE', 'ALL', 'NO', 'SOME'],
          ['SOGGY', 'SACRED', 'BLAND', 'RAW']]
 ANSWER = [1, 2, 0, 1]          # ALL NOODLES ARE SACRED
 TILES = ['noodles', 'fork', 'string', 'counting']   # left to right on the timeline
+TILE_NAMES = {'noodles': 'noodle tile', 'fork': 'fork tile', 'string': 'string tile', 'counting': 'tally bone tile'}
 BUTTONS = ['penne', 'farfalle', 'shell']            # left to right on the puzzle box
 BUTTON_UV = ['2', '3', '1']                         # press order shown under UV light
 
@@ -656,7 +657,7 @@ def nave():
         return im
 
     for i, kind in enumerate(TILES):
-        sc.obj('oTile%d' % (i + 1), 'tile', {'off': tile_sprite(kind, False), 'on': tile_sprite(kind, True)},
+        sc.obj('oTile%d' % (i + 1), TILE_NAMES[kind], {'off': tile_sprite(kind, False), 'on': tile_sprite(kind, True)},
                370 + i * 23, 90, baseline=1)
     drawer = canvas(36, 16)
     dd = ImageDraw.Draw(drawer)

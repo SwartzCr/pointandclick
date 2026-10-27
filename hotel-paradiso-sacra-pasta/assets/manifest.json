@@ -1592,7 +1592,7 @@
     },
     {
      "script": "oTile1",
-     "name": "tile",
+     "name": "noodle tile",
      "x": 370,
      "y": 90,
      "visible": true,
@@ -1606,7 +1606,7 @@
     },
     {
      "script": "oTile2",
-     "name": "tile",
+     "name": "fork tile",
      "x": 393,
      "y": 90,
      "visible": true,
@@ -1620,7 +1620,7 @@
     },
     {
      "script": "oTile3",
-     "name": "tile",
+     "name": "string tile",
      "x": 416,
      "y": 90,
      "visible": true,
@@ -1634,7 +1634,7 @@
     },
     {
      "script": "oTile4",
-     "name": "tile",
+     "name": "tally bone tile",
      "x": 439,
      "y": 90,
      "visible": true,
