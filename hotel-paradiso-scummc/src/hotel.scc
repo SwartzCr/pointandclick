@@ -219,9 +219,7 @@ room Hotel {
         ResRoom::showInterface(0);
         startSound(tvSnd);
         printBegin(); printAt(160, 8); printCenter(); printColor(C_CYAN);
-        print("...and now the Paradiso Weather. Sunny and 72 down by the pool."); waitForMessage();
-        printBegin(); printAt(160, 8); printCenter(); printColor(C_CYAN);
-        print("Clear skies all week, with a hundred percent chance of late check-out fees."); waitForMessage();
+        print("...and now the Paradiso Weather. Sunny and 72 down by the pool. Clear skies all week, with a hundred percent chance of late check-out fees."); waitForMessage();
         ResRoom::showInterface(1);
         egoSay("Riveting."); waitForMessage();
     }

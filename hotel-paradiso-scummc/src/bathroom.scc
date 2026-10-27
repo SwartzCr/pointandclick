@@ -24,6 +24,7 @@ room Bathroom {
     sound duckSnd = "duck.soun";               // squeak squeak   // squeaky screws, one drops, the door clinks free
 
     object toilet;
+    object curtain;
     object soap;
     object towel;
     object mirror;
@@ -69,6 +70,37 @@ room Bathroom {
         egoSay("The mirror door comes right off. Nice and flat."); waitForMessage();
     }
 
+    // The duck "speaks": yellow text over the tub
+    local script duckSays() {
+        printBegin();
+        printAt(66, 40);
+        printCenter();
+        printColor(C_YELLOW);
+    }
+
+    // A squeak and a quack, unless you've had two lines: then it prophesies
+    local script talkToDuck() {
+        ResRoom::showInterface(0);
+        egoSay("Hello, duck."); waitForMessage();
+        startSound(duckSnd);
+        delay(30);
+        if(linesDone < 2) {
+            duckSays(); print("Quack quack."); waitForMessage();
+        } else {
+            duckTalks++;
+            if(duckTalks > 3) duckTalks = 1;        // three prophecies, in turn
+            if(duckTalks == 1) {
+                duckSays(); print("Hear me, guest of seven-one-four. One more line and you shall see only the ceiling."); waitForMessage();
+            } else if(duckTalks == 2) {
+                duckSays(); print("Call upon the desk, and the painted ones shall carry you to glory."); waitForMessage();
+            } else {
+                duckSays(); print("The party you seek is on the ninth floor. The party you need is within. Quack."); waitForMessage();
+            }
+            egoSay("...Did that duck just talk?"); waitForMessage();
+        }
+        ResRoom::showInterface(1);
+    }
+
     local script goBedroom() {
         startRoom(Hotel);
     }
@@ -108,6 +140,44 @@ room Bathroom {
             return;
         case LookAt:
             egoSay("Back to the bedroom."); waitForMessage();
+            return;
+        }
+    }
+
+    // ------------------------------------------------------------ rubber duck
+    // In the tub, only clickable while the curtain is open (curtain state 1,
+    // whose image shows it). Declared before the curtain and the tub so the
+    // cursor finds it first.
+    object duck {
+        x = 58; y = 58; w = 17; h = 14;
+        hs_x = 6; hs_y = 64;
+        dir = NORTH;
+        name = "rubber duck";
+        parent = curtain;
+        parent_state = 1;
+
+        verb(int vrb, int objA, int objB) {
+        case DefaultVerb:        // what a plain click does
+            defaultVerb = TalkTo;
+            return;
+        case LookAt:
+            if(linesDone >= 2) { egoSay("The duck is looking at me. Into me. Through me."); waitForMessage(); }
+            else { egoSay("A yellow rubber duck, bobbing on nothing. It's judging me."); waitForMessage(); }
+            return;
+        case TalkTo:
+            talkToDuck();
+            return;
+        case PickUp:
+            egoSay("I couldn't. This is clearly the duck's tub. I'm just visiting."); waitForMessage();
+            return;
+        case Push:
+        case Pull:
+            egoSay("I give it a nudge. It bobs back, unbothered."); waitForMessage();
+            return;
+        case Use:
+            if(objB == invSoap) { egoSay("It's clean enough. Cleaner than me, anyway."); waitForMessage(); }
+            else if(objB) { egoSay("The duck wants for nothing."); waitForMessage(); }
+            else { startSound(duckSnd); egoSay("I give it a squeeze. Squeak."); waitForMessage(); }
             return;
         }
     }
@@ -176,12 +246,8 @@ room Bathroom {
             else { egoSay("No time for a bath. Check-out was at noon."); waitForMessage(); }
             return;
         case TalkTo:
-            if(bathCurtainOpen) {
-                egoSay("Hello, duck."); waitForMessage();
-                startSound(duckSnd);
-                delay(45);
-                egoSay("Squeak. A duck of few words."); waitForMessage();
-            } else { egoSay("Anyone in there?"); waitForMessage(); }
+            if(bathCurtainOpen) talkToDuck();
+            else { egoSay("Anyone in there?"); waitForMessage(); }
             return;
         case PickUp:
         case Push:
