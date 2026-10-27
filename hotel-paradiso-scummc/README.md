@@ -198,7 +198,7 @@ sign on the door handle says as much).
   and the second a woozy swoop. Taking the mirror off has gritty screw threads, a dropped
   screw bouncing on the sink and a glass tink. Around the rooms: the lamp's switch, the
   TV's tube collapsing when it's switched off, the curtains and shower curtain on their
-  rings, the painting's frame scraping aside, the candy's wrapper and three crunchy bites,
+  rings, the painting's frame scraping aside, the candy's wrapper crackling,
   a rustle and two buttons when you change, the sink's tap, and the rubber duck's squeak.
   Walking out to the party, the music down the hall loops, muffled, under the ending. The
   knock, the dropped screw and similar sounds are struck "modal" sounds: a handful of
