@@ -21,8 +21,8 @@ that's expected for a new game.
 **Controls:** the LucasArts 3×3 verb grid. Click a verb, then a thing. Or just click a
 thing and the obvious verb happens; the sentence line says which, and that verb lights
 up. Right-click anything (or an inventory item) to look at it. To use an item on
-something, click it (that picks **Use**), then the thing. To wear or read an item,
-click it twice. Keys: O, C, T, P, L, U, W, S (push), Y (pull) pick verbs, Esc
+something, click it (that picks **Use**), then the thing. To wear an item, click it and
+then click yourself (or click it twice); clicking it twice also reads things. Keys: O, C, T, P, L, U, W, S (push), Y (pull) pick verbs, Esc
 cancels, F5/F7 save and load.
 
 ## The rooms
