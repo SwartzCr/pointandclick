@@ -15,6 +15,9 @@ room ResRoom {
     cost guestCost = "guest.cost";
     cost bellhopCost = "bellhop.cost";
 
+    sound candySnd = "candy.soun";     // wrapper, then three crunchy bites
+    sound rustleSnd = "rustle.soun";   // changing clothes, two buttons
+
     bit cursorShown;
 
     script inventoryClick(int item);
@@ -564,6 +567,8 @@ room ResRoom {
     // animations, so the actor keeps walking and talking as before.
     script wearUniform(int on) {
         wearingUniform = on;
+        startSound(rustleSnd);
+        delay(30);                  // the costume changes in the middle of the rustle
         setCurrentActor(VAR_EGO);
         if(on) {
             setActorCostume(bellhopCost);
@@ -582,6 +587,7 @@ room ResRoom {
             hasCandy = 0;
             ateCandy = 1;
             refreshInventory();
+            startSound(candySnd);
             egoSay("I wolf it down in three bites."); waitForMessage();
             egoSay("Mmm. Nougat and regret. That's going on the bill.");
         } else if(item == invPowder)

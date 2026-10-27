@@ -1029,6 +1029,251 @@ def build_unscrew_sound():
     write_voc('unscrew', normalize(out, 0.85))
 
 
+def _band_noise(rnd, n, lo_a, hi_a):
+    """n samples of noise band-limited between two one-pole filters."""
+    lp_hi, lp_lo = LowPass(hi_a), LowPass(lo_a)
+    out = []
+    for _ in range(n):
+        x = lp_hi(rnd.uniform(-1, 1))
+        out.append(x - lp_lo(x))
+    return out
+
+
+def build_switch_sounds():
+    """lamp_click: the lamp's push switch, a firm two-part click (press and
+    snap). tv_off: the TV's power knob clunks and the old tube collapses with
+    a falling zap and a fizz of static."""
+    import math
+    import random
+    rnd = random.Random(31)
+    out = [0.0] * int(RATE * 0.25)
+    _add(out, 0.01, _tick(rnd, 0.6, freq=2400, ms=12))
+    _modal(out, 0.035, [(1900, .012, 1.0), (3300, .008, .6), (820, .02, .4)], 0.6, rnd=rnd)
+    _add(out, 0.036, _tick(rnd, 0.5, freq=1500, ms=20))
+    write_voc('lamp_click', normalize(out, 0.85))
+
+    out = [0.0] * int(RATE * 0.75)
+    _add(out, 0.01, _tick(rnd, 0.8, freq=1300, ms=30))       # the knob
+    _add(out, 0.012, _thud(rnd, 0.5, freq=180, ms=60))
+    ph = 0.0
+    i0, n = int(0.03 * RATE), int(0.38 * RATE)
+    for k in range(n):
+        u = k / n
+        f = 2400 * (0.06 ** u)                                # the picture collapsing
+        ph += 2 * math.pi * f / RATE
+        buzz = math.sin(ph) + 0.4 * math.sin(2 * ph) + 0.3 * math.copysign(1, math.sin(2 * math.pi * 60 * k / RATE)) * 0.3
+        out[i0 + k] += 0.5 * buzz * (1 - u) ** 1.5
+    hiss = _band_noise(rnd, int(0.5 * RATE), 0.2, 0.9)
+    i0 = int(0.05 * RATE)
+    for k, x in enumerate(hiss):
+        u = k / len(hiss)
+        if i0 + k < len(out):
+            crackle = 3.0 if rnd.random() < 0.01 else 1.0
+            out[i0 + k] += 0.35 * x * crackle * math.exp(-5 * u)
+    write_voc('tv_off', normalize(out, 0.8))
+
+
+def build_curtain_sounds():
+    """curtains: heavy velvet drawn along the rod, a low swish with the rings
+    rattling. shower_curtain: plastic curtain and metal rings scraped along
+    the rail, a bright rattle and a crinkly swish."""
+    import math
+    import random
+    rnd = random.Random(32)
+    for name, dur, lo, hi, ring_f, n_rings, ring_lvl, swish_lvl in (
+            ('curtains', 0.75, 0.04, 0.35, (2600, 3700), 9, 0.25, 1.0),
+            ('shower_curtain', 0.6, 0.12, 0.85, (3100, 4300), 14, 0.5, 0.7)):
+        n = int(dur * RATE)
+        out = [0.0] * (n + int(0.2 * RATE))
+        noise = _band_noise(rnd, n, lo, hi)
+        for k, x in enumerate(noise):
+            u = k / n
+            env = math.sin(math.pi * u) ** 0.7 * (1 + 0.4 * math.sin(2 * math.pi * 7 * u))
+            out[k] += swish_lvl * x * env
+        # the rings: little metallic clicks, bunched as they're pulled along
+        for r in range(n_rings):
+            t0 = dur * (0.1 + 0.8 * (r / n_rings) ** 1.3) + rnd.uniform(-0.02, 0.02)
+            f1, f2 = ring_f
+            _modal(out, t0, [(f1 * rnd.uniform(.95, 1.05), .02, 1.0), (f2 * rnd.uniform(.95, 1.05), .012, .5)],
+                   ring_lvl * rnd.uniform(0.5, 1.0), attack_ms=0.2, rnd=rnd)
+        write_voc(name, normalize(out, 0.85))
+
+
+def build_painting_sound():
+    """The painting swung aside: its wooden frame scrapes across the
+    wallpaper, then taps against the wall as it settles crooked."""
+    import math
+    import random
+    rnd = random.Random(33)
+    out = [0.0] * int(RATE * 0.75)
+    wood = Resonator(700, 0.96)
+    wood2 = Resonator(1450, 0.95)
+    n = int(0.45 * RATE)
+    ph = 0.0
+    for k in range(n):
+        u = k / n
+        ph += (90 + 60 * math.sin(math.pi * u)) * (1 + 0.3 * rnd.uniform(-1, 1)) / RATE
+        x = 0.2 * rnd.uniform(-1, 1)
+        if ph >= 1.0:
+            ph -= 1.0
+            x += rnd.uniform(0.5, 1.0)
+        out[k + int(0.02 * RATE)] += math.sin(math.pi * u) * (0.3 * x + 8 * wood(x) + 4 * wood2(x))
+    _modal(out, 0.5, [(180, .05, 1.0), (390, .03, .6), (850, .015, .35)], 0.9, attack_ms=1.0, rnd=rnd)
+    _modal(out, 0.585, [(190, .04, 1.0), (410, .025, .5)], 0.4, attack_ms=1.0, rnd=rnd)
+    write_voc('painting', normalize(out, 0.85))
+
+
+def build_candy_sound():
+    """Eating the candy bar: the wrapper crackles open, then three crunchy
+    bites of nougat (about 1.9s)."""
+    import math
+    import random
+    rnd = random.Random(34)
+    out = [0.0] * int(RATE * 1.95)
+    # wrapper: dense little crackles, band-passed bright
+    hp = 0.0
+    lp = LowPass(0.8)
+    for k in range(int(0.55 * RATE)):
+        u = k / (0.55 * RATE)
+        if rnd.random() < 0.06 * math.sin(math.pi * u) + 0.005:
+            amp = rnd.uniform(0.3, 1.0)
+            for j in range(int(rnd.uniform(4, 22))):
+                if k + j < len(out):
+                    out[k + j] += amp * rnd.uniform(-1, 1) * (1 - j / 22)
+    for i in range(len(out)):
+        x = out[i]
+        out[i] = lp(x) - 0.6 * hp
+        hp = x * 0.5
+    # three bites: a crisp snap, then gritty chewing crunch
+    for t0 in (0.72, 1.13, 1.52):
+        _add(out, t0, _tick(rnd, 0.9, freq=1700, ms=25))
+        body = _band_noise(rnd, int(0.22 * RATE), 0.08, 0.6)
+        i0 = int(t0 * RATE)
+        for k, x in enumerate(body):
+            u = k / len(body)
+            grain = 2.5 if rnd.random() < 0.03 else 1.0
+            if i0 + k < len(out):
+                out[i0 + k] += 0.9 * x * grain * math.exp(-4 * u) * min(1.0, k / 40)
+        _add(out, t0 + 0.01, _thud(rnd, 0.35, freq=130, ms=90))
+    write_voc('candy', normalize(out, 0.85))
+
+
+def build_rustle_sound():
+    """Changing into or out of the uniform: a busy rustle of stiff fabric,
+    with the snap of a couple of buttons."""
+    import math
+    import random
+    rnd = random.Random(35)
+    out = [0.0] * int(RATE * 1.0)
+    lp = LowPass(0.6)
+    prev = 0.0
+    swishes = ((0.02, 0.22, 1.0), (0.2, 0.18, 0.8), (0.36, 0.25, 0.9), (0.58, 0.2, 0.6))
+    for i in range(len(out)):
+        t = i / RATE
+        env = sum(a * math.sin(math.pi * (t - t0) / d) ** 1.5 for t0, d, a in swishes if t0 <= t < t0 + d)
+        x = rnd.uniform(-1, 1)
+        hp = x - prev
+        prev = x * 0.7
+        out[i] += env * lp(hp) * (1.6 if rnd.random() < 0.003 else 1.0)
+    for t0 in (0.82, 0.9):                                    # buttons
+        _modal(out, t0, [(2200, .01, 1.0), (3600, .006, .5)], 0.5, attack_ms=0.2, rnd=rnd)
+    write_voc('rustle', normalize(out, 0.8))
+
+
+def build_sink_sound():
+    """The tap: a squeaky half-turn, a splashing gush of water into the basin,
+    and a squeak off again (1.6s)."""
+    import math
+    import random
+    rnd = random.Random(36)
+    out = [0.0] * int(RATE * 1.6)
+
+    def squeak(t0, up):
+        ph = 0.0
+        i0, n = int(t0 * RATE), int(0.09 * RATE)
+        for k in range(n):
+            u = k / n
+            f = (900 + 500 * u) if up else (1400 - 500 * u)
+            ph += 2 * math.pi * f / RATE
+            if i0 + k < len(out):
+                out[i0 + k] += 0.3 * math.sin(math.pi * u) * math.sin(ph) * (0.7 + 0.3 * rnd.random())
+    squeak(0.0, True)
+    basin = [Resonator(520, 0.97), Resonator(1250, 0.96)]
+    lp = LowPass(0.35)
+    i0, n = int(0.1 * RATE), int(1.25 * RATE)
+    for k in range(n):
+        u = k / n
+        env = min(1.0, u / 0.06) * min(1.0, (1 - u) / 0.12)
+        x = rnd.uniform(-1, 1)
+        drop = 0.0
+        if rnd.random() < 0.004:
+            drop = rnd.uniform(0.5, 1.0)                     # bubbles and splashes
+        w = lp(x) + drop
+        out[i0 + k] += env * (0.8 * w + 6 * basin[0](w) + 3 * basin[1](w))
+    squeak(1.38, False)
+    write_voc('sink', normalize(out, 0.8))
+
+
+def build_duck_sound():
+    """The rubber duck: two squeaks, each an airy whistle through the toy's
+    little reed that rises as it's squeezed and drops as it refills."""
+    import math
+    import random
+    rnd = random.Random(37)
+    out = [0.0] * int(RATE * 0.7)
+    for t0, dur, f0 in ((0.0, 0.22, 1150), (0.3, 0.3, 980)):
+        i0, n = int(t0 * RATE), int(dur * RATE)
+        ph = 0.0
+        air = LowPass(0.5)
+        for k in range(n):
+            u = k / n
+            f = f0 * (1 + 0.25 * math.sin(math.pi * min(1.0, u * 1.4)))
+            ph += 2 * math.pi * f / RATE
+            v = math.sin(ph) + 0.3 * math.sin(2 * ph) + 0.1 * math.sin(3 * ph) + 0.25 * air(rnd.uniform(-1, 1))
+            env = min(1.0, u / 0.08) * min(1.0, (1 - u) / 0.15)
+            out[i0 + k] += env * v
+    write_voc('duck', normalize(out, 0.5))
+
+
+def build_party_music():
+    """The party down the hall, heard through the open door as you leave: an
+    original 6-second loop at 120bpm (3 bars of 4/4), four-on-the-floor kick,
+    a bass line and stabby chords, a crowd murmur, all muffled as if through
+    walls (low-passed hard)."""
+    import math
+    import random
+    rnd = random.Random(38)
+    beat = 0.5
+    length = 12 * beat
+    out = [0.0] * int(RATE * length)
+    bass_notes = [45, 45, 52, 52, 50, 50, 48, 47, 45, 45, 52, 55]          # A minor-ish groove
+    chords = [(57, 60, 64), (57, 60, 64), (55, 59, 62)]
+    for b in range(12):
+        t0 = b * beat
+        _drum(out, rnd, t0, 'kick', 0.9)
+        if b % 2 == 1:
+            _drum(out, rnd, t0, 'snare', 0.35)
+        for e in (0, 0.5):
+            _voice(out, t0 + e * beat, 0.4 * beat, _midi(bass_notes[b] - 12), 0.45, 'bass')
+        if b % 2 == 0:
+            for nn in chords[(b // 4) % 3]:
+                _voice(out, t0 + 0.5 * beat, 0.3 * beat, _midi(nn), 0.12, 'epiano')
+    # crowd murmur: low noise with slow swells
+    lp = LowPass(0.05)
+    for i in range(len(out)):
+        t = i / RATE
+        out[i] += 0.35 * lp(rnd.uniform(-1, 1)) * (0.7 + 0.3 * math.sin(2 * math.pi * 0.7 * t))
+    # through the walls: two passes of a low-pass, then loop-safe ends
+    for a in (0.08, 0.12):
+        f = LowPass(a)
+        out = [f(x) for x in out]
+    for k in range(int(0.02 * RATE)):
+        g = k / (0.02 * RATE)
+        out[k] *= g
+        out[-1 - k] *= g
+    write_voc('party', normalize(out, 0.8))
+
+
 def main():
     os.makedirs(os.path.join(OUT, 'objects'), exist_ok=True)
     pal = Palette()
@@ -1090,6 +1335,14 @@ def main():
     build_clown_sounds()
     build_line_sounds()
     build_unscrew_sound()
+    build_switch_sounds()
+    build_curtain_sounds()
+    build_painting_sound()
+    build_candy_sound()
+    build_rustle_sound()
+    build_sink_sound()
+    build_duck_sound()
+    build_party_music()
     print(f'assets written to {os.path.normpath(OUT)} ({len(pal.colors)} palette entries used)')
 
 

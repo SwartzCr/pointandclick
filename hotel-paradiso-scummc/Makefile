@@ -42,16 +42,17 @@ $(B)/%.cost $(B)/%_anim.sch: assets/%.scost $(wildcard assets/*/*.bmp) | $(B)
 
 # The rooms reference the charset and costume by name, so build those first
 $(B)/interface.roobj: src/interface.scc src/hotel.sch $(B)/font.char $(B)/guest.cost $(B)/guest_anim.sch \
-                    $(B)/bellhop.cost
+                    $(B)/bellhop.cost \
+                    $(B)/candy.soun $(B)/rustle.soun
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/hotel.roobj: src/hotel.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) assets/hotel.box \
-                $(B)/tv.soun $(B)/safe.soun $(B)/fridge.soun $(B)/drawer.soun $(B)/bed.soun $(B)/clowns.soun $(B)/phone_dial.soun $(B)/phone_hang.soun $(B)/knock.soun $(B)/honk.soun $(B)/chop.soun $(B)/sniff.soun $(B)/swoop.soun $(B)/guest_anim.sch \
+                $(B)/tv.soun $(B)/safe.soun $(B)/fridge.soun $(B)/drawer.soun $(B)/bed.soun $(B)/clowns.soun $(B)/phone_dial.soun $(B)/phone_hang.soun $(B)/knock.soun $(B)/honk.soun $(B)/chop.soun $(B)/sniff.soun $(B)/swoop.soun $(B)/lamp_click.soun $(B)/tv_off.soun $(B)/curtains.soun $(B)/painting.soun $(B)/party.soun $(B)/guest_anim.sch \
                 $(B)/clown1.cost $(B)/clown1_anim.sch $(B)/clown2.cost $(B)/clown3.cost | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/bathroom.roobj: src/bathroom.scc src/hotel.sch $(wildcard assets/*.bmp assets/objects/*.bmp) \
-                   assets/bathroom.box $(B)/flush.soun $(B)/cabinet.soun $(B)/unscrew.soun | $(B)
+                   assets/bathroom.box $(B)/flush.soun $(B)/cabinet.soun $(B)/unscrew.soun $(B)/shower_curtain.soun $(B)/sink.soun $(B)/duck.soun | $(B)
 	$(SCC) -o $@ $(SCC_FLAGS) $<
 
 $(B)/gameover.roobj: src/gameover.scc src/hotel.sch assets/gameover.bmp $(wildcard assets/objects/gameover_*.bmp) \

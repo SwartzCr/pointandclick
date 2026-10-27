@@ -18,7 +18,10 @@ room Bathroom {
 
     sound flushSnd = "flush.soun";
     sound cabinetSnd = "cabinet.soun";   // magnet catch, then the hinge creaks
-    sound unscrewSnd = "unscrew.soun";   // squeaky screws, one drops, the door clinks free
+    sound unscrewSnd = "unscrew.soun";
+    sound showerSnd = "shower_curtain.soun";   // rings scraping along the rail
+    sound sinkSnd = "sink.soun";               // the tap, a gush of water, the tap
+    sound duckSnd = "duck.soun";               // squeak squeak   // squeaky screws, one drops, the door clinks free
 
     object toilet;
     object soap;
@@ -133,6 +136,7 @@ room Bathroom {
             if(bathCurtainOpen) { egoSay("It's already open."); waitForMessage(); }
             else {
                 bathCurtainOpen = 1;
+                startSound(showerSnd);
                 setObjectState(curtain, 1);
                 egoSay("A rubber duck! Someone left a rubber duck in the tub."); waitForMessage();
             }
@@ -141,6 +145,7 @@ room Bathroom {
         case Push:
             if(bathCurtainOpen) {
                 bathCurtainOpen = 0;
+                startSound(showerSnd);
                 setObjectState(curtain, 0);
             } else { egoSay("It's already closed."); waitForMessage(); }
             return;
@@ -173,7 +178,9 @@ room Bathroom {
         case TalkTo:
             if(bathCurtainOpen) {
                 egoSay("Hello, duck."); waitForMessage();
-                egoSay("The duck says nothing. Very professional."); waitForMessage();
+                startSound(duckSnd);
+                delay(45);
+                egoSay("Squeak. A duck of few words."); waitForMessage();
             } else { egoSay("Anyone in there?"); waitForMessage(); }
             return;
         case PickUp:
@@ -306,6 +313,7 @@ room Bathroom {
             egoSay("A pedestal sink. Spotless, unlike me."); waitForMessage();
             return;
         case Use:
+            unless(objB == invTowel || (objB && objB != invSoap && objB != invShaver)) startSound(sinkSnd);
             if(objB == invSoap) { egoSay("I wash my hands. Very hygienic. I feel like a new guest."); waitForMessage(); }
             else if(objB == invShaver) { egoSay("A proper wet shave at the sink. I feel like a new guest."); waitForMessage(); }
             else if(objB == invTowel) { egoSay("I dry the sink. Nobody asked me to."); waitForMessage(); }
@@ -313,6 +321,7 @@ room Bathroom {
             else { egoSay("I splash some cold water on my face. That's better."); waitForMessage(); }
             return;
         case Open:
+            startSound(sinkSnd);
             egoSay("I turn the tap on and off again. Water: confirmed."); waitForMessage();
             return;
         case PickUp:

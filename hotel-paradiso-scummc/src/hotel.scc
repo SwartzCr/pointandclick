@@ -43,6 +43,11 @@ room Hotel {
     sound chopSnd = "chop.soun";       // razor taps on the mirror
     sound sniffSnd = "sniff.soun";     // one line
     sound swoopSnd = "swoop.soun";     // the room starts to swim
+    sound lampSnd = "lamp_click.soun"; // the lamp's switch
+    sound tvOffSnd = "tv_off.soun";    // the old tube collapsing
+    sound curtainSnd = "curtains.soun";// velvet along the rod
+    sound paintingSnd = "painting.soun";   // the frame scraping aside
+    sound partySnd = "party.soun";     // the party down the hall, muffled
 
     bit clownMusic;
 
@@ -488,11 +493,20 @@ room Hotel {
         partyEnding();
     }
 
+    // The party, faintly, through the open door: loops until the game restarts
+    local script loopParty() {
+        while(1) {
+            unless(isSoundRunning(partySnd)) startSound(partySnd);
+            delay(6);
+        }
+    }
+
     local script leaveRoom() {
         gameOver = 1;
         ResRoom::showInterface(0);
         egoSay("Fed. Dressed. Absolutely buzzing."); waitForMessage();
         setObjectState(door, 1);
+        loopParty();
         egoSay("Ninth floor, here I come!"); waitForMessage();
         walkActorTo(VAR_EGO, 40, 101);
         waitForActor(VAR_EGO);
@@ -738,13 +752,14 @@ room Hotel {
                 egoSay("I don't think the TV needs that."); waitForMessage();
             } else if(tvOn) {
                 tvOn = 0;
+                startSound(tvOffSnd);
                 setObjectState(tv, 0);
                 egoSay("Click."); waitForMessage();
             } else
                 switchTvOn();
             return;
         case Close:
-            if(tvOn) { tvOn = 0; setObjectState(tv, 0); }
+            if(tvOn) { tvOn = 0; startSound(tvOffSnd); setObjectState(tv, 0); }
             else { egoSay("It's already off."); waitForMessage(); }
             return;
         case TalkTo:
@@ -780,13 +795,14 @@ room Hotel {
             if(curtainsOpen) { egoSay("They're already open."); waitForMessage(); }
             else {
                 curtainsOpen = 1;
+                startSound(curtainSnd);
                 setObjectState(curtains, 1);
                 egoSay("Night already? How long did I sleep?"); waitForMessage();
             }
             return;
         case Close:
         case Push:
-            if(curtainsOpen) { curtainsOpen = 0; setObjectState(curtains, 0); }
+            if(curtainsOpen) { curtainsOpen = 0; startSound(curtainSnd); setObjectState(curtains, 0); }
             else { egoSay("They're already closed."); waitForMessage(); }
             return;
         case Use:
@@ -892,10 +908,12 @@ room Hotel {
                 egoSay("The lamp doesn't need that."); waitForMessage();
             } else if(lampOn) {
                 lampOn = 0;
+                startSound(lampSnd);
                 setObjectState(lamp, 0);
                 egoSay("Click."); waitForMessage();
             } else {
                 lampOn = 1;
+                startSound(lampSnd);
                 setObjectState(lamp, 1);
                 egoSay("Let there be light."); waitForMessage();
             }
@@ -1028,6 +1046,7 @@ room Hotel {
             setObjectClass(painting, [ SET_CLASS | UNTOUCHABLE ]);
             setObjectClass(safe, [ UNTOUCHABLE ]);
             setObjectState(safe, 1);
+            startSound(paintingSnd);
             egoSay("Aha! A wall safe. Behind a painting. How original."); waitForMessage();
             return;
         case TalkTo:
