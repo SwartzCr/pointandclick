@@ -53,6 +53,7 @@ bit tripping;                       // the colour-cycling script is running
 bit readyToParty;                   // party prep 3: pre-gamed
 bit hasWallet, tookWallet, hasDollar, bedOpen;   // wallet under the bed covers, its dollar bill
 bit wearingUniform, tookUniform, dresserOpen;
+int uniformState;   // 0 clean, 1 chocolate down the front, 2 washed but soaking wet
 bit hasTowel, hasSoap, tookTowel, tookSoap;
 bit hasShaver, tookShaver;
 bit bathCurtainOpen, cabinetOpen;
@@ -85,6 +86,7 @@ room ResRoom {
     script readMatchbook();
     script showGameVerbs(int on);
     script startNewGame();
+    script washUniform();
     script startTrip();
     script stopTrip();
     script hideAllVerbs();

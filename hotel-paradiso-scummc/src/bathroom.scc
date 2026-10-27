@@ -313,6 +313,10 @@ room Bathroom {
             egoSay("A pedestal sink. Spotless, unlike me."); waitForMessage();
             return;
         case Use:
+            if(objB == invUniform) {
+                ResRoom::washUniform();
+                return;
+            }
             unless(objB == invTowel || (objB && objB != invSoap && objB != invShaver)) startSound(sinkSnd);
             if(objB == invSoap) { egoSay("I wash my hands. Very hygienic. I feel like a new guest."); waitForMessage(); }
             else if(objB == invShaver) { egoSay("A proper wet shave at the sink. I feel like a new guest."); waitForMessage(); }

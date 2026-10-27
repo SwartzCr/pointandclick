@@ -630,14 +630,18 @@ BELLHOP = dict(ROBE, **{
     'leg': (40, 40, 64), 'leg_back': (26, 26, 44), 'slipper': (16, 16, 20),
     'stripe': (222, 182, 70), 'hat': (176, 30, 40), 'hat_band': (222, 182, 70),
 })
-OUTFITS = {'robe': ROBE, 'bellhop': BELLHOP}
+# the uniform after eating a candy bar in it: chocolate down the front
+BELLHOP_DIRTY = dict(BELLHOP, stain=(164, 106, 58), stain_dk=(120, 72, 36))
+OUTFITS = {'robe': ROBE, 'bellhop': BELLHOP, 'bellhop_dirty': BELLHOP_DIRTY}
+DIRTY = False   # set by _use(): draw the chocolate stain
 A = ROBE   # palette used by _r(); switched per frame by _use()
 
 
 def _use(outfit):
-    global A
+    global A, DIRTY
     A = OUTFITS[outfit]
-    return outfit == 'bellhop'
+    DIRTY = outfit == 'bellhop_dirty'
+    return outfit in ('bellhop', 'bellhop_dirty')
 
 
 def _frame():
@@ -688,6 +692,13 @@ def actor_front(step=0, talk=False, outfit='robe'):
             _r(d, 11, y, 13, y + 1, 'hat_band')
         _r(d, 8, 0, 16, 4, 'hat')                # pillbox hat
         _r(d, 8, 3, 16, 4, 'hat_band')
+    if DIRTY:                                    # chocolate smeared down the jacket
+        _r(d, 7, 21, 11, 25, 'stain')
+        _r(d, 8, 25, 10, 29, 'stain')
+        _r(d, 13, 23, 16, 26, 'stain')
+        _r(d, 9, 22, 10, 24, 'stain_dk')
+        _r(d, 14, 24, 15, 25, 'stain_dk')
+        _r(d, 9, 29, 10, 31, 'stain_dk')         # a drip
     return im
 
 
@@ -751,6 +762,10 @@ def actor_side(step=0, talk=False, outfit='robe'):
             _r(d, 15, y, 17, y + 1, 'hat_band')
         _r(d, 8, 0, 15, 4, 'hat')
         _r(d, 8, 3, 15, 4, 'hat_band')
+    if DIRTY:
+        _r(d, 13, 21, 17, 25, 'stain')
+        _r(d, 14, 25, 16, 29, 'stain')
+        _r(d, 15, 22, 16, 24, 'stain_dk')
     return im
 
 
@@ -779,6 +794,10 @@ def actor_lying(outfit='robe'):
             _r(d, x, 4, x + 1, 6, 'hat_band')      # buttons
         _r(d, 49, 3, 52, 11, 'hat')                # pillbox hat, still on
         _r(d, 51, 3, 52, 11, 'hat_band')
+    if DIRTY:
+        _r(d, 18, 4, 24, 7, 'stain')
+        _r(d, 30, 6, 34, 9, 'stain')
+        _r(d, 20, 5, 22, 6, 'stain_dk')
     return im
 
 

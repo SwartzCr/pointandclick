@@ -14,9 +14,11 @@ room ResRoom {
     chset font @ 1 = "font.char";
     cost guestCost = "guest.cost";
     cost bellhopCost = "bellhop.cost";
+    cost bellhopDirtyCost = "bellhop_dirty.cost";   // after eating candy in it
 
     sound candySnd = "candy.soun";     // wrapper, then three crunchy bites
     sound rustleSnd = "rustle.soun";   // changing clothes, two buttons
+    sound washSnd = "sink.soun";       // the bathroom tap, for washing the uniform
 
     bit cursorShown;
 
@@ -24,6 +26,7 @@ room ResRoom {
     script wearUniform(int on);
     script useOnSelf(int item);
     script defaultAction(int vrb, int item);
+    script dryUniform();
     script openWallet();
 
     // ------------------------------------------------------------ verbs
@@ -470,7 +473,11 @@ room ResRoom {
             return;
         }
         if(withItem) {
-            if(isAnyOf(withItem, [ invPowder, invMirror ]) && isAnyOf(item, [ invPowder, invMirror ]))
+            if(isAnyOf(withItem, [ invSoap, invUniform ]) && isAnyOf(item, [ invSoap, invUniform ]))
+                washUniform();
+            else if(isAnyOf(withItem, [ invTowel, invUniform ]) && isAnyOf(item, [ invTowel, invUniform ]))
+                dryUniform();
+            else if(isAnyOf(withItem, [ invPowder, invMirror ]) && isAnyOf(item, [ invPowder, invMirror ]))
                 egoSay("Not in my hands. I'd lose half of it. The mirror needs to lie flat.");
             else if(isAnyOf(withItem, [ invPowder, invShaver ]) && isAnyOf(item, [ invPowder, invShaver ]))
                 egoSay("I need to pour it out on something flat first.");
@@ -524,7 +531,11 @@ room ResRoom {
                 egoSay("It needs to lie flat somewhere. The coffee table, maybe.");
             break;
         case invUniform:
-            if(curVerb == LookAt && wearingUniform)
+            if(curVerb == LookAt && uniformState == 1)
+                egoSay("Chocolate all down the front. Extremely unofficial.");
+            else if(curVerb == LookAt && uniformState == 2)
+                egoSay("Clean, but soaking wet. It needs a towel.");
+            else if(curVerb == LookAt && wearingUniform)
                 egoSay("Red, gold buttons, a little hat. I look extremely official.");
             else if(curVerb == LookAt)
                 egoSay("A bellhop uniform. Not mine. Probably.");
@@ -566,6 +577,15 @@ room ResRoom {
     // Swap the player's sprite set. Both costumes define the same
     // animations, so the actor keeps walking and talking as before.
     script wearUniform(int on) {
+        if(on && uniformState == 1) {
+            egoSay("I'm not putting it back on with chocolate all down the front."); waitForMessage();
+            egoSay("It needs a wash. Soap, water. The bathroom sink."); waitForMessage();
+            return;
+        }
+        if(on && uniformState == 2) {
+            egoSay("It's soaking wet. I'd catch my death. It needs a towel first."); waitForMessage();
+            return;
+        }
         wearingUniform = on;
         startSound(rustleSnd);
         delay(30);                  // the costume changes in the middle of the rustle
@@ -590,6 +610,15 @@ room ResRoom {
             startSound(candySnd);
             egoSay("I wolf it down in three bites."); waitForMessage();
             egoSay("Mmm. Nougat and regret. That's going on the bill.");
+            if(wearingUniform) {
+                // eaten in the uniform: half of it ends up down the front
+                waitForMessage();
+                uniformState = 1;
+                setCurrentActor(VAR_EGO);
+                setActorCostume(bellhopDirtyCost);
+                egoSay("...and half of it went down the uniform. Chocolate. Everywhere."); waitForMessage();
+                egoSay("I can't go to a party like this. I need to wash it.");
+            }
         } else if(item == invPowder)
             egoSay("Straight from the bag? I'm not an animal. I need a mirror and a flat surface.");
         else if(item == invScrewdriver)
@@ -621,6 +650,43 @@ room ResRoom {
         egoSay("I'll keep the dollar handy and the wallet in my pocket.");
     }
 
+    // Soap on the dirty uniform, at the bathroom sink: clean, but soaking wet
+    script washUniform() {
+        if(wearingUniform) {
+            egoSay("I'd have to take it off first."); waitForMessage();
+        } else if(uniformState == 0) {
+            egoSay("It's clean. Cleaner than me, anyway."); waitForMessage();
+        } else if(uniformState == 2) {
+            egoSay("It's already washed. Now it just needs drying."); waitForMessage();
+        } else if(VAR_ROOM != Bathroom) {
+            egoSay("I need a sink for this. There's one in the bathroom."); waitForMessage();
+        } else if(!hasSoap) {
+            egoSay("Water alone won't shift chocolate. I need soap."); waitForMessage();
+        } else {
+            showInterface(0);
+            startSound(washSnd);
+            egoSay("A lather of hotel soap, a good scrub under the tap..."); waitForMessage();
+            uniformState = 2;
+            showInterface(1);
+            egoSay("The chocolate's gone. The uniform is now extremely wet."); waitForMessage();
+        }
+    }
+
+    // The towel on the washed uniform: clean and dry, ready to wear
+    script dryUniform() {
+        if(wearingUniform) {
+            egoSay("I'd have to take it off first."); waitForMessage();
+        } else if(uniformState == 1) {
+            egoSay("Drying won't help. It's still covered in chocolate."); waitForMessage();
+        } else if(uniformState == 0) {
+            egoSay("It's already dry."); waitForMessage();
+        } else {
+            uniformState = 0;
+            startSound(rustleSnd);
+            egoSay("I towel it dry. Crisp, clean, and only slightly damp at the cuffs."); waitForMessage();
+        }
+    }
+
     script readMatchbook() {
         if(lampOn) {
             egoSay("Inside the cover, in my handwriting: SAFE 7 1 4."); waitForMessage();
@@ -648,6 +714,8 @@ room ResRoom {
         lockCostume(guestCost);
         loadCostume(bellhopCost);
         lockCostume(bellhopCost);
+        loadCostume(bellhopDirtyCost);
+        lockCostume(bellhopDirtyCost);
 
         // The room picture is 144 lines tall; the verb bar gets the rest
         setScreen(0, 144);

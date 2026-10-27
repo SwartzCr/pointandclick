@@ -1294,6 +1294,7 @@ def main():
             pal.add(c)
     build_costume(pal, 'guest', 'robe', 'a guest in a bathrobe')
     build_costume(pal, 'bellhop', 'bellhop', 'the same guest in the bellhop uniform')
+    build_costume(pal, 'bellhop_dirty', 'bellhop_dirty', 'the bellhop uniform with chocolate down the front')
     for n in art.CLOWNS:
         build_costume(pal, n, None, 'a room-service clown', clown_frames(n), CLOWN_EXTRA)
 

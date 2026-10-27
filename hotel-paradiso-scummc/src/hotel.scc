@@ -345,6 +345,10 @@ room Hotel {
             egoSay("Is room service still open? I'm starving."); waitForMessage();
             deskSays(); print("Room service closed at ten, sir."); waitForMessage();
             deskSays(); print("Your minibar, however, is fully stocked. Expensively. Good night."); waitForMessage();
+        } else if(uniformState) {
+            egoSay("I got chocolate all over my costume. Any ideas?"); waitForMessage();
+            deskSays(); print("Soap and the bathroom sink, sir. Then a good towelling."); waitForMessage();
+            deskSays(); print("Housekeeping's oldest secret. Good night."); waitForMessage();
         } else if(!wearingUniform) {
             egoSay("The party on the ninth floor. Is it fancy dress?"); waitForMessage();
             deskSays(); print("A costume party, sir. Theme: hotel staff. Hilarious, I'm told."); waitForMessage();
@@ -378,6 +382,10 @@ room Hotel {
     local script tryDoor() {
         if(!ateCandy) {
             egoSay("I can't go to a party on an empty stomach. I'll pass out by the punch bowl."); waitForMessage();
+        } else if(uniformState == 1) {
+            egoSay("There's chocolate all over the uniform. I can't go like this."); waitForMessage();
+        } else if(uniformState == 2) {
+            egoSay("The uniform's still soaking wet. I'd drip all the way to the ninth floor."); waitForMessage();
         } else if(!wearingUniform) {
             egoSay("It's a costume party. I can't show up in a bathrobe. Again."); waitForMessage();
         } else if(!readyToParty) {

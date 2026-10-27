@@ -80,6 +80,9 @@ sign on the door handle says as much).
 
 1. **Eat.** Open the minibar, take the candy bar, and use it.
 2. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.
+   If you eat the candy while wearing it, you get chocolate down the front. Take the uniform
+   off, use the soap on it at the bathroom sink (with the uniform, or the uniform with the
+   sink), then use the towel on it to dry it before putting it back on.
 3. **Pre-game.**
    1. Open the nightstand and take the matchbook. Turn on the lamp and look at the
       matchbook: the safe code is 714.
@@ -173,6 +176,12 @@ sign on the door handle says as much).
   wide at the ends, 64 for the mirror in the middle); it starts untouchable and is shown
   and made clickable when the item is set down. The mirror's slot has four images: bare,
   with the powder, three lines, two lines.
+* **Dirty uniform.** `uniformState` tracks the uniform: 0 clean, 1 stained, 2 washed but
+  wet. Eating the candy while wearing it swaps the player to a third costume,
+  `bellhop_dirty.scost`, the same frames with a milk-chocolate stain down the front.
+  `washUniform` (soap, at the sink, which checks `VAR_ROOM`) and `dryUniform` (towel)
+  live in `ResRoom`, so the inventory and the sink object can both call them. The door,
+  the phone and putting the uniform on all check the state.
 * **Costume swap.** `guest.scost` (bathrobe) and `bellhop.scost` (uniform) are drawn by the
   same code in `tools/art.py` with a different outfit, and declare the same animations
   (`init`, `walk`, `stand`, `talkStart`, `talkStop`). That lets `wearUniform` call
