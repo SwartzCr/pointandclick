@@ -20,7 +20,7 @@ sys.path.insert(0, HERE)
 from agsbuild import formats, gamedata as G, script as S
 
 GAME_ID = 9130714          # rooms carry this; it must match the game's unique id
-SCALING = {1: (84, 100), 2: (84, 100)}
+SCALING = {1: (78, 94), 2: (84, 100)}
 
 
 def c565(r, g, b):

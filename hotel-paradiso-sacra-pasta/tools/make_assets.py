@@ -14,6 +14,7 @@ from PIL import Image, ImageDraw, ImageFont
 sys.path.insert(0, os.path.dirname(__file__))
 import art_people as P
 import guest_sprite as G
+import nave_painted as NP
 import art_rooms as R
 import art_ui as U
 import sound as S
@@ -125,7 +126,7 @@ def main():
     for script, (name, fn) in U.ICONS.items():
         manifest['inventory'].append(dict(script=script, name=name, sprite=spr('inv_' + script, fn())))
 
-    rooms = [(1, R.nave()), (2, R.crypt()), (3, R.title())]
+    rooms = [(1, NP.nave()), (2, R.crypt()), (3, R.title())]
     for num, sc in rooms:
         bgs = [save_png(sc.bg, 'rooms/%s_bg0.png' % sc.name)]
         if sc.uv_marks:

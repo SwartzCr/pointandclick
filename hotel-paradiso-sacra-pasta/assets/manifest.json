@@ -1256,128 +1256,130 @@
    "hot": "rooms/nave_hot.png",
    "wb": "rooms/nave_wb.png",
    "wb_baselines": [
-    242,
-    287
+    288,
+    286,
+    286,
+    224
    ],
    "hotspots": [
     [
      "hWallpaper",
      "wallpaper strips",
      [
-      320,
-      160
+      420,
+      212
      ]
     ],
     [
      "hSauce",
      "Weird Sauce",
      [
-      152,
-      166
+      190,
+      205
      ]
     ],
     [
      "hGlutenous",
      "painting \"Glutenous Truth\"",
      [
-      225,
-      160
+      240,
+      210
      ]
     ],
     [
      "hFlat",
      "stained-glass flat",
      [
-      304,
-      162
+      368,
+      210
      ]
     ],
     [
      "hTimeline",
      "timeline of ancient technology",
      [
-      456,
-      172
+      440,
+      212
      ]
     ],
     [
      "hArch",
      "archway",
      [
-      566,
-      210
+      548,
+      214
      ]
     ],
     [
      "hTopology",
      "sacred topology display",
      [
-      507,
-      168
+      440,
+      212
      ]
     ],
     [
      "hCrochet",
      "crocheted pasta display",
      [
-      225,
-      162
+      240,
+      210
      ]
     ],
     [
      "hFirstTaste",
      "painting \"First Taste\"",
      [
-      112,
-      186
+      96,
+      199
      ]
     ],
     [
      "hDoor",
      "door",
      [
-      52,
-      268
+      96,
+      199
      ]
     ],
     [
      "hHandset",
      "telephone handset",
      [
-      90,
-      270
+      198,
+      206
      ]
     ],
     [
      "hSodTable",
      "sod table",
      [
-      140,
-      268
+      205,
+      207
      ]
     ],
     [
      "hSculpture",
      "spaghetti sculpture",
      [
-      320,
-      256
+      318,
+      234
      ]
     ],
     [
      "hSpinner",
      "paragraph spinner",
      [
-      404,
-      228
+      318,
+      250
      ]
     ],
     [
      "hScales",
      "scales of pasta",
      [
-      526,
-      284
+      500,
+      238
      ]
     ]
    ],
@@ -1385,8 +1387,8 @@
     {
      "script": "oArchPanel",
      "name": "wall",
-     "x": 548,
-     "y": 201,
+     "x": 537,
+     "y": 208,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1399,10 +1401,10 @@
     {
      "script": "oWardrobe",
      "name": "wardrobe",
-     "x": 596,
-     "y": 272,
+     "x": 589,
+     "y": 260,
      "visible": true,
-     "baseline": 273,
+     "baseline": 200,
      "clickable": true,
      "state": "closed",
      "sprites": {
@@ -1413,10 +1415,10 @@
     {
      "script": "oBeads",
      "name": "pasta rosary beads",
-     "x": 604,
-     "y": 180,
+     "x": 609,
+     "y": 140,
      "visible": false,
-     "baseline": 275,
+     "baseline": 201,
      "clickable": true,
      "state": "on",
      "sprites": {
@@ -1426,10 +1428,10 @@
     {
      "script": "oPamphlet",
      "name": "Spaghetti Theory pamphlet",
-     "x": 209,
-     "y": 190,
+     "x": 163,
+     "y": 208,
      "visible": true,
-     "baseline": 239,
+     "baseline": 205,
      "clickable": true,
      "state": "on",
      "sprites": {
@@ -1439,10 +1441,10 @@
     {
      "script": "oDrum1",
      "name": "drum",
-     "x": 443,
-     "y": 154,
+     "x": 349,
+     "y": 257,
      "visible": true,
-     "baseline": 225,
+     "baseline": 287,
      "clickable": true,
      "state": "w0",
      "sprites": {
@@ -1459,10 +1461,10 @@
     {
      "script": "oDrum2",
      "name": "drum",
-     "x": 443,
-     "y": 169,
+     "x": 380,
+     "y": 257,
      "visible": true,
-     "baseline": 225,
+     "baseline": 287,
      "clickable": true,
      "state": "w0",
      "sprites": {
@@ -1479,10 +1481,10 @@
     {
      "script": "oDrum3",
      "name": "drum",
-     "x": 443,
-     "y": 184,
+     "x": 411,
+     "y": 257,
      "visible": true,
-     "baseline": 225,
+     "baseline": 287,
      "clickable": true,
      "state": "w1",
      "sprites": {
@@ -1499,10 +1501,10 @@
     {
      "script": "oDrum4",
      "name": "drum",
-     "x": 443,
-     "y": 199,
+     "x": 441,
+     "y": 257,
      "visible": true,
-     "baseline": 225,
+     "baseline": 287,
      "clickable": true,
      "state": "w2",
      "sprites": {
@@ -1519,8 +1521,8 @@
     {
      "script": "oBox",
      "name": "puzzle box",
-     "x": 236,
-     "y": 256,
+     "x": 222,
+     "y": 270,
      "visible": true,
      "baseline": 287,
      "clickable": true,
@@ -1535,8 +1537,8 @@
     {
      "script": "oBtn1",
      "name": "penne button",
-     "x": 243,
-     "y": 253,
+     "x": 231,
+     "y": 254,
      "visible": true,
      "baseline": 288,
      "clickable": true,
@@ -1550,8 +1552,8 @@
     {
      "script": "oBtn2",
      "name": "farfalle button",
-     "x": 255,
-     "y": 253,
+     "x": 245,
+     "y": 254,
      "visible": true,
      "baseline": 288,
      "clickable": true,
@@ -1565,8 +1567,8 @@
     {
      "script": "oBtn3",
      "name": "shell button",
-     "x": 267,
-     "y": 253,
+     "x": 263,
+     "y": 254,
      "visible": true,
      "baseline": 288,
      "clickable": true,
@@ -1580,8 +1582,8 @@
     {
      "script": "oRigatone",
      "name": "golden rigatone",
-     "x": 252,
-     "y": 241,
+     "x": 248,
+     "y": 254,
      "visible": false,
      "baseline": 288,
      "clickable": true,
@@ -1593,8 +1595,8 @@
     {
      "script": "oTile1",
      "name": "noodle tile",
-     "x": 370,
-     "y": 90,
+     "x": 388,
+     "y": 122,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1607,8 +1609,8 @@
     {
      "script": "oTile2",
      "name": "fork tile",
-     "x": 393,
-     "y": 90,
+     "x": 417,
+     "y": 122,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1621,8 +1623,8 @@
     {
      "script": "oTile3",
      "name": "string tile",
-     "x": 416,
-     "y": 90,
+     "x": 441,
+     "y": 122,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1635,8 +1637,8 @@
     {
      "script": "oTile4",
      "name": "tally bone tile",
-     "x": 439,
-     "y": 90,
+     "x": 466,
+     "y": 122,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1649,8 +1651,8 @@
     {
      "script": "oDrawer",
      "name": "drawer",
-     "x": 395,
-     "y": 132,
+     "x": 424,
+     "y": 150,
      "visible": false,
      "baseline": 2,
      "clickable": true,
@@ -1662,8 +1664,8 @@
     {
      "script": "oPendant",
      "name": "UV pendant",
-     "x": 407,
-     "y": 124,
+     "x": 435,
+     "y": 144,
      "visible": false,
      "baseline": 3,
      "clickable": true,
@@ -1675,8 +1677,8 @@
     {
      "script": "oFork",
      "name": "painting \"Spinning Fork\"",
-     "x": 42,
-     "y": 130,
+     "x": 8,
+     "y": 182,
      "visible": true,
      "baseline": 1,
      "clickable": true,
