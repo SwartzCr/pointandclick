@@ -293,6 +293,10 @@ room Bathroom {
             egoSay("Free soap. The best kind of soap."); waitForMessage();
             return;
         case Use:
+            if(objB == invUniform) {
+                ResRoom::washUniform();     // the soap on the sink works as well as one in hand
+                return;
+            }
             egoSay("I wash my hands. Very hygienic."); waitForMessage();
             return;
         }

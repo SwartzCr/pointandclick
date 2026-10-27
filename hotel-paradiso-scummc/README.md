@@ -81,8 +81,8 @@ sign on the door handle says as much).
 1. **Eat.** Open the minibar, take the candy bar, and use it.
 2. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.
    If you eat the candy while wearing it, you get chocolate down the front. Take the uniform
-   off, use the soap on it at the bathroom sink (with the uniform, or the uniform with the
-   sink), then use the towel on it (or it on the towel rail) to dry it before putting it
+   off, wash it at the bathroom sink with the soap (the soap with the uniform, or the
+   uniform with the soap on the sink or with the sink itself), then use the towel on it (or it on the towel rail) to dry it before putting it
    back on. While you're wearing the uniform, the inventory item is your robe.
 3. **Pre-game.**
    1. Open the nightstand and take the matchbook. Turn on the lamp and look at the

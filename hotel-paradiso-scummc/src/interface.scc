@@ -667,7 +667,7 @@ room ResRoom {
             egoSay("It's already washed. Now it just needs drying."); waitForMessage();
         } else if(VAR_ROOM != Bathroom) {
             egoSay("I need a sink for this. There's one in the bathroom."); waitForMessage();
-        } else if(!hasSoap) {
+        } else if(!hasSoap && tookSoap) {    // the soap's in neither my pocket nor on the sink
             egoSay("Water alone won't shift chocolate. I need soap."); waitForMessage();
         } else {
             showInterface(0);
