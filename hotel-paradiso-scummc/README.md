@@ -78,12 +78,13 @@ else gets a stock reply.
 The door tells you what's missing, and so does the front desk on the phone (the Do Not Disturb
 sign on the door handle says as much).
 
-1. **Eat.** Open the minibar, take the candy bar, and use it.
-2. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.
-   If you eat the candy while wearing it, you get chocolate down the front. Take the uniform
-   off, wash it at the bathroom sink with the soap (the soap with the uniform, or the
-   uniform with the soap on the sink or with the sink itself), then use the towel on it (or it on the towel rail) to dry it before putting it
-   back on. While you're wearing the uniform, the inventory item is your robe.
+1. **Get in costume.** Open the dresser, take the bellhop uniform, and use it on yourself.
+   While you're wearing it, the inventory item is your robe.
+2. **Eat.** Open the minibar, take the candy bar, and use it. Eating it in the uniform gets
+   chocolate down the front, so you have to clean it. Take the uniform off, and wash it at
+   the bathroom sink with the soap: the soap with the uniform, or the uniform with the
+   soap on the sink or with the sink itself. Then dry it with the towel (the towel with
+   the uniform, or the uniform on the towel rail), and put it back on.
 3. **Pre-game.**
    1. Open the nightstand and take the matchbook. Turn on the lamp and look at the
       matchbook: the safe code is 714.
