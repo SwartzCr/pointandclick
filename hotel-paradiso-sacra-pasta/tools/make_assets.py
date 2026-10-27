@@ -13,6 +13,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, os.path.dirname(__file__))
 import art_people as P
+import guest_sprite as G
 import art_rooms as R
 import art_ui as U
 import sound as S
@@ -40,10 +41,10 @@ def guest_views():
         sfx = ('_' + tag) if tag else ''
         walk = {}
         for dr, n in (('front', 6), ('side', 8), ('back', 6)):
-            frames = [spr('guest%s_%s_stand' % (sfx, dr), P.guest_frame(dr, kind=kind))]
+            frames = [spr('guest%s_%s_stand' % (sfx, dr), G.guest_frame(dr, kind=kind))]
             for i in range(n):
                 frames.append(spr('guest%s_%s_walk%d' % (sfx, dr, i),
-                                  P.guest_frame(dr, (i + 1) / n, walking=True, kind=kind)))
+                                  G.guest_frame(dr, (i + 1) / n, walking=True, kind=kind)))
             walk[dr] = frames
         loops = [[(f, 0, False) for f in walk['front']],
                  [(f, 0, True) for f in walk['side']],
@@ -52,7 +53,7 @@ def guest_views():
         views.append(dict(name='VGUEST' + tag, loops=loops))
         talk = {}
         for dr in ('front', 'side'):
-            talk[dr] = [spr('guest%s_%s_talk%d' % (sfx, dr, k), P.guest_frame(dr, talk=bool(k), kind=kind))
+            talk[dr] = [spr('guest%s_%s_talk%d' % (sfx, dr, k), G.guest_frame(dr, talk=bool(k), kind=kind))
                         for k in range(2)]
         talk['back'] = [walk['back'][0]]
         tl = [[(f, 0, False) for f in talk['front']],

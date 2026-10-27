@@ -972,7 +972,8 @@ def crypt():
         dd.line([(104, 95), (112, 95), (112, 82)], fill=rgba((170, 170, 180)), width=3)
         dd.ellipse([108, 76, 116, 84], fill=rgba((90, 50, 30)))
         if seated:
-            g = art_people.guest_seated()
+            import guest_sprite
+            g = guest_sprite.guest_seated()
             im.alpha_composite(g, (26, 40))
         return outline(im)
 
