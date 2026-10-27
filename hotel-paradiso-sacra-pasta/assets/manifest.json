@@ -1,0 +1,2423 @@
+{
+ "views": [
+  {
+   "name": "VGUEST",
+   "loops": [
+    [
+     [
+      "guest_front_stand",
+      0,
+      false
+     ],
+     [
+      "guest_front_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_front_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_front_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_front_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_front_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_front_walk5",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_side_stand",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk0",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk1",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk2",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk3",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk4",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk5",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk6",
+      0,
+      true
+     ],
+     [
+      "guest_side_walk7",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_side_stand",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk5",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk6",
+      0,
+      false
+     ],
+     [
+      "guest_side_walk7",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_back_stand",
+      0,
+      false
+     ],
+     [
+      "guest_back_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_back_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_back_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_back_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_back_walk5",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGTALK",
+   "loops": [
+    [
+     [
+      "guest_front_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_front_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_side_talk0",
+      0,
+      true
+     ],
+     [
+      "guest_side_talk1",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_side_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_side_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_back_stand",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGUESTB",
+   "loops": [
+    [
+     [
+      "guest_B_front_stand",
+      0,
+      false
+     ],
+     [
+      "guest_B_front_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_B_front_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_B_front_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_B_front_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_B_front_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_B_front_walk5",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_B_side_stand",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk0",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk1",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk2",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk3",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk4",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk5",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk6",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_walk7",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_B_side_stand",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk5",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk6",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_walk7",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_B_back_stand",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk5",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGTALKB",
+   "loops": [
+    [
+     [
+      "guest_B_front_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_B_front_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_B_side_talk0",
+      0,
+      true
+     ],
+     [
+      "guest_B_side_talk1",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_B_side_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_B_side_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_B_back_stand",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGUESTU",
+   "loops": [
+    [
+     [
+      "guest_U_front_stand",
+      0,
+      false
+     ],
+     [
+      "guest_U_front_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_U_front_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_U_front_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_U_front_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_U_front_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_U_front_walk5",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_U_side_stand",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk0",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk1",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk2",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk3",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk4",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk5",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk6",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_walk7",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_U_side_stand",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk5",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk6",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_walk7",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_U_back_stand",
+      0,
+      false
+     ],
+     [
+      "guest_U_back_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_U_back_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_U_back_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_U_back_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_U_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_U_back_walk5",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGTALKU",
+   "loops": [
+    [
+     [
+      "guest_U_front_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_U_front_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_U_side_talk0",
+      0,
+      true
+     ],
+     [
+      "guest_U_side_talk1",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_U_side_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_U_side_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_U_back_stand",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGUESTBU",
+   "loops": [
+    [
+     [
+      "guest_BU_front_stand",
+      0,
+      false
+     ],
+     [
+      "guest_BU_front_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_BU_front_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_BU_front_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_BU_front_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_BU_front_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_BU_front_walk5",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_BU_side_stand",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk0",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk1",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk2",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk3",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk4",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk5",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk6",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_walk7",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_BU_side_stand",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk5",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk6",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_walk7",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_BU_back_stand",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk0",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk1",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk2",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk5",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGTALKBU",
+   "loops": [
+    [
+     [
+      "guest_BU_front_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_BU_front_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_BU_side_talk0",
+      0,
+      true
+     ],
+     [
+      "guest_BU_side_talk1",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_BU_side_talk0",
+      0,
+      false
+     ],
+     [
+      "guest_BU_side_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_BU_back_stand",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VKHUC",
+   "loops": [
+    [
+     [
+      "khuc_front_stand",
+      0,
+      false
+     ],
+     [
+      "khuc_front_walk0",
+      0,
+      false
+     ],
+     [
+      "khuc_front_walk1",
+      0,
+      false
+     ],
+     [
+      "khuc_front_walk2",
+      0,
+      false
+     ],
+     [
+      "khuc_front_walk3",
+      0,
+      false
+     ],
+     [
+      "khuc_front_walk4",
+      0,
+      false
+     ],
+     [
+      "khuc_front_walk5",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_side_stand",
+      0,
+      true
+     ],
+     [
+      "khuc_side_walk0",
+      0,
+      true
+     ],
+     [
+      "khuc_side_walk1",
+      0,
+      true
+     ],
+     [
+      "khuc_side_walk2",
+      0,
+      true
+     ],
+     [
+      "khuc_side_walk3",
+      0,
+      true
+     ],
+     [
+      "khuc_side_walk4",
+      0,
+      true
+     ],
+     [
+      "khuc_side_walk5",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "khuc_side_stand",
+      0,
+      false
+     ],
+     [
+      "khuc_side_walk0",
+      0,
+      false
+     ],
+     [
+      "khuc_side_walk1",
+      0,
+      false
+     ],
+     [
+      "khuc_side_walk2",
+      0,
+      false
+     ],
+     [
+      "khuc_side_walk3",
+      0,
+      false
+     ],
+     [
+      "khuc_side_walk4",
+      0,
+      false
+     ],
+     [
+      "khuc_side_walk5",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_back_stand",
+      0,
+      false
+     ],
+     [
+      "khuc_back_walk0",
+      0,
+      false
+     ],
+     [
+      "khuc_back_walk1",
+      0,
+      false
+     ],
+     [
+      "khuc_back_walk2",
+      0,
+      false
+     ],
+     [
+      "khuc_back_walk3",
+      0,
+      false
+     ],
+     [
+      "khuc_back_walk4",
+      0,
+      false
+     ],
+     [
+      "khuc_back_walk5",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VKTALK",
+   "loops": [
+    [
+     [
+      "khuc_front_talk0",
+      0,
+      false
+     ],
+     [
+      "khuc_front_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_side_talk0",
+      0,
+      true
+     ],
+     [
+      "khuc_side_talk1",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "khuc_side_talk0",
+      0,
+      false
+     ],
+     [
+      "khuc_side_talk1",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_back_stand",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VKPLAY",
+   "loops": [
+    [
+     [
+      "khuc_play0",
+      2,
+      false
+     ],
+     [
+      "khuc_play1",
+      2,
+      false
+     ],
+     [
+      "khuc_play2",
+      2,
+      false
+     ],
+     [
+      "khuc_play3",
+      2,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_play0",
+      2,
+      false
+     ],
+     [
+      "khuc_play1",
+      2,
+      false
+     ],
+     [
+      "khuc_play2",
+      2,
+      false
+     ],
+     [
+      "khuc_play3",
+      2,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_play0",
+      2,
+      false
+     ],
+     [
+      "khuc_play1",
+      2,
+      false
+     ],
+     [
+      "khuc_play2",
+      2,
+      false
+     ],
+     [
+      "khuc_play3",
+      2,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_play0",
+      2,
+      false
+     ],
+     [
+      "khuc_play1",
+      2,
+      false
+     ],
+     [
+      "khuc_play2",
+      2,
+      false
+     ],
+     [
+      "khuc_play3",
+      2,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VKRAISE",
+   "loops": [
+    [
+     [
+      "khuc_raise",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_raise",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_raise",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_raise",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VBLANK",
+   "loops": [
+    [
+     [
+      "blank_char",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "blank_char",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "blank_char",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "blank_char",
+      0,
+      false
+     ]
+    ]
+   ]
+  }
+ ],
+ "rooms": {
+  "1": {
+   "name": "nave",
+   "bg": [
+    "rooms/nave_bg0.png",
+    "rooms/nave_bg1.png"
+   ],
+   "walk": "rooms/nave_walk.png",
+   "hot": "rooms/nave_hot.png",
+   "wb": "rooms/nave_wb.png",
+   "wb_baselines": [
+    242,
+    287
+   ],
+   "hotspots": [
+    [
+     "hWallpaper",
+     "wallpaper strips",
+     [
+      320,
+      160
+     ]
+    ],
+    [
+     "hSauce",
+     "Weird Sauce",
+     [
+      152,
+      166
+     ]
+    ],
+    [
+     "hGlutenous",
+     "painting \"Glutenous Truth\"",
+     [
+      225,
+      160
+     ]
+    ],
+    [
+     "hFlat",
+     "stained-glass flat",
+     [
+      304,
+      162
+     ]
+    ],
+    [
+     "hTimeline",
+     "timeline of ancient technology",
+     [
+      456,
+      172
+     ]
+    ],
+    [
+     "hArch",
+     "archway",
+     [
+      566,
+      210
+     ]
+    ],
+    [
+     "hTopology",
+     "sacred topology display",
+     [
+      507,
+      168
+     ]
+    ],
+    [
+     "hCrochet",
+     "crocheted pasta display",
+     [
+      225,
+      162
+     ]
+    ],
+    [
+     "hFirstTaste",
+     "painting \"First Taste\"",
+     [
+      112,
+      186
+     ]
+    ],
+    [
+     "hDoor",
+     "door",
+     [
+      52,
+      268
+     ]
+    ],
+    [
+     "hHandset",
+     "telephone handset",
+     [
+      90,
+      270
+     ]
+    ],
+    [
+     "hSodTable",
+     "sod table",
+     [
+      140,
+      268
+     ]
+    ],
+    [
+     "hSculpture",
+     "spaghetti sculpture",
+     [
+      320,
+      256
+     ]
+    ],
+    [
+     "hSpinner",
+     "paragraph spinner",
+     [
+      404,
+      228
+     ]
+    ],
+    [
+     "hScales",
+     "scales of pasta",
+     [
+      526,
+      284
+     ]
+    ]
+   ],
+   "objects": [
+    {
+     "script": "oArchPanel",
+     "name": "wall",
+     "x": 548,
+     "y": 201,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "closed",
+     "sprites": {
+      "closed": "nave_oArchPanel_closed",
+      "uv": "nave_oArchPanel_uv"
+     }
+    },
+    {
+     "script": "oWardrobe",
+     "name": "wardrobe",
+     "x": 596,
+     "y": 272,
+     "visible": true,
+     "baseline": 273,
+     "clickable": true,
+     "state": "closed",
+     "sprites": {
+      "closed": "nave_oWardrobe_closed",
+      "open": "nave_oWardrobe_open"
+     }
+    },
+    {
+     "script": "oBeads",
+     "name": "pasta rosary beads",
+     "x": 604,
+     "y": 180,
+     "visible": false,
+     "baseline": 275,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "nave_oBeads_on"
+     }
+    },
+    {
+     "script": "oPamphlet",
+     "name": "Spaghetti Theory pamphlet",
+     "x": 209,
+     "y": 190,
+     "visible": true,
+     "baseline": 239,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "nave_oPamphlet_on"
+     }
+    },
+    {
+     "script": "oDrum1",
+     "name": "drum",
+     "x": 443,
+     "y": 154,
+     "visible": true,
+     "baseline": 225,
+     "clickable": true,
+     "state": "w0",
+     "sprites": {
+      "w0": "nave_oDrum1_w0",
+      "u0": "nave_oDrum1_u0",
+      "w1": "nave_oDrum1_w1",
+      "u1": "nave_oDrum1_u1",
+      "w2": "nave_oDrum1_w2",
+      "u2": "nave_oDrum1_u2",
+      "w3": "nave_oDrum1_w3",
+      "u3": "nave_oDrum1_u3"
+     }
+    },
+    {
+     "script": "oDrum2",
+     "name": "drum",
+     "x": 443,
+     "y": 169,
+     "visible": true,
+     "baseline": 225,
+     "clickable": true,
+     "state": "w0",
+     "sprites": {
+      "w0": "nave_oDrum2_w0",
+      "u0": "nave_oDrum2_u0",
+      "w1": "nave_oDrum2_w1",
+      "u1": "nave_oDrum2_u1",
+      "w2": "nave_oDrum2_w2",
+      "u2": "nave_oDrum2_u2",
+      "w3": "nave_oDrum2_w3",
+      "u3": "nave_oDrum2_u3"
+     }
+    },
+    {
+     "script": "oDrum3",
+     "name": "drum",
+     "x": 443,
+     "y": 184,
+     "visible": true,
+     "baseline": 225,
+     "clickable": true,
+     "state": "w1",
+     "sprites": {
+      "w0": "nave_oDrum3_w0",
+      "u0": "nave_oDrum3_u0",
+      "w1": "nave_oDrum3_w1",
+      "u1": "nave_oDrum3_u1",
+      "w2": "nave_oDrum3_w2",
+      "u2": "nave_oDrum3_u2",
+      "w3": "nave_oDrum3_w3",
+      "u3": "nave_oDrum3_u3"
+     }
+    },
+    {
+     "script": "oDrum4",
+     "name": "drum",
+     "x": 443,
+     "y": 199,
+     "visible": true,
+     "baseline": 225,
+     "clickable": true,
+     "state": "w2",
+     "sprites": {
+      "w0": "nave_oDrum4_w0",
+      "u0": "nave_oDrum4_u0",
+      "w1": "nave_oDrum4_w1",
+      "u1": "nave_oDrum4_u1",
+      "w2": "nave_oDrum4_w2",
+      "u2": "nave_oDrum4_u2",
+      "w3": "nave_oDrum4_w3",
+      "u3": "nave_oDrum4_u3"
+     }
+    },
+    {
+     "script": "oBox",
+     "name": "puzzle box",
+     "x": 236,
+     "y": 256,
+     "visible": true,
+     "baseline": 287,
+     "clickable": true,
+     "state": "closed",
+     "sprites": {
+      "closed": "nave_oBox_closed",
+      "open": "nave_oBox_open",
+      "uvclosed": "nave_oBox_uvclosed",
+      "uvopen": "nave_oBox_uvopen"
+     }
+    },
+    {
+     "script": "oBtn1",
+     "name": "penne button",
+     "x": 243,
+     "y": 253,
+     "visible": true,
+     "baseline": 288,
+     "clickable": true,
+     "state": "up",
+     "sprites": {
+      "up": "nave_oBtn1_up",
+      "down": "nave_oBtn1_down",
+      "uv": "nave_oBtn1_uv"
+     }
+    },
+    {
+     "script": "oBtn2",
+     "name": "farfalle button",
+     "x": 255,
+     "y": 253,
+     "visible": true,
+     "baseline": 288,
+     "clickable": true,
+     "state": "up",
+     "sprites": {
+      "up": "nave_oBtn2_up",
+      "down": "nave_oBtn2_down",
+      "uv": "nave_oBtn2_uv"
+     }
+    },
+    {
+     "script": "oBtn3",
+     "name": "shell button",
+     "x": 267,
+     "y": 253,
+     "visible": true,
+     "baseline": 288,
+     "clickable": true,
+     "state": "up",
+     "sprites": {
+      "up": "nave_oBtn3_up",
+      "down": "nave_oBtn3_down",
+      "uv": "nave_oBtn3_uv"
+     }
+    },
+    {
+     "script": "oRigatone",
+     "name": "golden rigatone",
+     "x": 252,
+     "y": 241,
+     "visible": false,
+     "baseline": 288,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "nave_oRigatone_on"
+     }
+    },
+    {
+     "script": "oTile1",
+     "name": "tile",
+     "x": 370,
+     "y": 90,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "off",
+     "sprites": {
+      "off": "nave_oTile1_off",
+      "on": "nave_oTile1_on"
+     }
+    },
+    {
+     "script": "oTile2",
+     "name": "tile",
+     "x": 393,
+     "y": 90,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "off",
+     "sprites": {
+      "off": "nave_oTile2_off",
+      "on": "nave_oTile2_on"
+     }
+    },
+    {
+     "script": "oTile3",
+     "name": "tile",
+     "x": 416,
+     "y": 90,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "off",
+     "sprites": {
+      "off": "nave_oTile3_off",
+      "on": "nave_oTile3_on"
+     }
+    },
+    {
+     "script": "oTile4",
+     "name": "tile",
+     "x": 439,
+     "y": 90,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "off",
+     "sprites": {
+      "off": "nave_oTile4_off",
+      "on": "nave_oTile4_on"
+     }
+    },
+    {
+     "script": "oDrawer",
+     "name": "drawer",
+     "x": 395,
+     "y": 132,
+     "visible": false,
+     "baseline": 2,
+     "clickable": true,
+     "state": "open",
+     "sprites": {
+      "open": "nave_oDrawer_open"
+     }
+    },
+    {
+     "script": "oPendant",
+     "name": "UV pendant",
+     "x": 407,
+     "y": 124,
+     "visible": false,
+     "baseline": 3,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "nave_oPendant_on"
+     }
+    },
+    {
+     "script": "oFork",
+     "name": "painting \"Spinning Fork\"",
+     "x": 42,
+     "y": 130,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "f0",
+     "sprites": {
+      "f0": "nave_oFork_f0",
+      "f1": "nave_oFork_f1",
+      "f2": "nave_oFork_f2",
+      "f3": "nave_oFork_f3",
+      "f4": "nave_oFork_f4",
+      "f5": "nave_oFork_f5",
+      "f6": "nave_oFork_f6",
+      "f7": "nave_oFork_f7"
+     }
+    }
+   ]
+  },
+  "2": {
+   "name": "crypt",
+   "bg": [
+    "rooms/crypt_bg0.png",
+    "rooms/crypt_bg1.png"
+   ],
+   "walk": "rooms/crypt_walk.png",
+   "hot": "rooms/crypt_hot.png",
+   "wb": "rooms/crypt_wb.png",
+   "wb_baselines": [
+    214
+   ],
+   "hotspots": [
+    [
+     "hArch",
+     "archway",
+     [
+      135,
+      158
+     ]
+    ],
+    [
+     "hYarn",
+     "yarn monster",
+     [
+      236,
+      170
+     ]
+    ],
+    [
+     "hPastaWall",
+     "Pasta Identification",
+     [
+      365,
+      162
+     ]
+    ],
+    [
+     "hStaff",
+     "staff area",
+     [
+      498,
+      160
+     ]
+    ],
+    [
+     "h3Button",
+     "3Button cabinet",
+     [
+      106,
+      194
+     ]
+    ],
+    [
+     "hTrackball",
+     "Trackball cabinet",
+     [
+      536,
+      202
+     ]
+    ],
+    [
+     "hComputer",
+     "Classic Computer",
+     [
+      222,
+      240
+     ]
+    ],
+    [
+     "hRex",
+     "Rex Seat",
+     [
+      216,
+      272
+     ]
+    ]
+   ],
+   "objects": [
+    {
+     "script": "oLabel1",
+     "name": "label",
+     "x": 277,
+     "y": 102,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "n0",
+     "sprites": {
+      "n0": "crypt_oLabel1_n0",
+      "n1": "crypt_oLabel1_n1",
+      "n2": "crypt_oLabel1_n2",
+      "n3": "crypt_oLabel1_n3",
+      "l0": "crypt_oLabel1_l0",
+      "l1": "crypt_oLabel1_l1",
+      "l2": "crypt_oLabel1_l2",
+      "l3": "crypt_oLabel1_l3"
+     }
+    },
+    {
+     "script": "oLabel2",
+     "name": "label",
+     "x": 323,
+     "y": 102,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "n1",
+     "sprites": {
+      "n0": "crypt_oLabel2_n0",
+      "n1": "crypt_oLabel2_n1",
+      "n2": "crypt_oLabel2_n2",
+      "n3": "crypt_oLabel2_n3",
+      "l0": "crypt_oLabel2_l0",
+      "l1": "crypt_oLabel2_l1",
+      "l2": "crypt_oLabel2_l2",
+      "l3": "crypt_oLabel2_l3"
+     }
+    },
+    {
+     "script": "oLabel3",
+     "name": "label",
+     "x": 369,
+     "y": 102,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "n2",
+     "sprites": {
+      "n0": "crypt_oLabel3_n0",
+      "n1": "crypt_oLabel3_n1",
+      "n2": "crypt_oLabel3_n2",
+      "n3": "crypt_oLabel3_n3",
+      "l0": "crypt_oLabel3_l0",
+      "l1": "crypt_oLabel3_l1",
+      "l2": "crypt_oLabel3_l2",
+      "l3": "crypt_oLabel3_l3"
+     }
+    },
+    {
+     "script": "oLabel4",
+     "name": "label",
+     "x": 415,
+     "y": 102,
+     "visible": true,
+     "baseline": 1,
+     "clickable": true,
+     "state": "n3",
+     "sprites": {
+      "n0": "crypt_oLabel4_n0",
+      "n1": "crypt_oLabel4_n1",
+      "n2": "crypt_oLabel4_n2",
+      "n3": "crypt_oLabel4_n3",
+      "l0": "crypt_oLabel4_l0",
+      "l1": "crypt_oLabel4_l1",
+      "l2": "crypt_oLabel4_l2",
+      "l3": "crypt_oLabel4_l3"
+     }
+    },
+    {
+     "script": "oWorthy",
+     "name": "WORTHY sign",
+     "x": 335,
+     "y": 136,
+     "visible": false,
+     "baseline": 1,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oWorthy_on"
+     }
+    },
+    {
+     "script": "oCurtain",
+     "name": "curtain",
+     "x": 468,
+     "y": 148,
+     "visible": true,
+     "baseline": 2,
+     "clickable": true,
+     "state": "closed",
+     "sprites": {
+      "closed": "crypt_oCurtain_closed",
+      "open": "crypt_oCurtain_open"
+     }
+    },
+    {
+     "script": "oToken",
+     "name": "arcade token",
+     "x": 52,
+     "y": 213,
+     "visible": false,
+     "baseline": 240,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oToken_on"
+     }
+    },
+    {
+     "script": "oSeat",
+     "name": "Pope Seat",
+     "x": 450,
+     "y": 286,
+     "visible": true,
+     "baseline": 270,
+     "clickable": true,
+     "state": "empty",
+     "sprites": {
+      "empty": "crypt_oSeat_empty",
+      "credit": "crypt_oSeat_credit",
+      "seated": "crypt_oSeat_seated"
+     }
+    },
+    {
+     "script": "oHat",
+     "name": "pasta pope hat",
+     "x": 489,
+     "y": 70,
+     "visible": true,
+     "baseline": 271,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oHat_on"
+     }
+    }
+   ]
+  },
+  "3": {
+   "name": "title",
+   "bg": [
+    "rooms/title_bg0.png"
+   ],
+   "walk": "rooms/title_walk.png",
+   "hot": "rooms/title_hot.png",
+   "wb": "rooms/title_wb.png",
+   "wb_baselines": [],
+   "hotspots": [],
+   "objects": []
+  }
+ },
+ "inventory": [
+  {
+   "script": "iBeads",
+   "name": "pasta rosary beads",
+   "sprite": "inv_iBeads"
+  },
+  {
+   "script": "iPamphlet",
+   "name": "pamphlet",
+   "sprite": "inv_iPamphlet"
+  },
+  {
+   "script": "iPendant",
+   "name": "UV pendant",
+   "sprite": "inv_iPendant"
+  },
+  {
+   "script": "iRigatone",
+   "name": "golden rigatone",
+   "sprite": "inv_iRigatone"
+  },
+  {
+   "script": "iSauced",
+   "name": "sauced rigatone",
+   "sprite": "inv_iSauced"
+  },
+  {
+   "script": "iToken",
+   "name": "arcade token",
+   "sprite": "inv_iToken"
+  }
+ ],
+ "fonts": [
+  {
+   "file": "fonts/font0.wfn",
+   "outline": "none"
+  },
+  {
+   "file": "fonts/font1.wfn",
+   "outline": "auto"
+  },
+  {
+   "file": "fonts/font2.wfn",
+   "outline": "none"
+  },
+  {
+   "file": "fonts/font3.wfn",
+   "outline": "none"
+  }
+ ],
+ "audio": [
+  {
+   "script": "aWardOpen",
+   "file": "audio/aWardOpen.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aWardClose",
+   "file": "audio/aWardClose.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aClack",
+   "file": "audio/aClack.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aRatchet",
+   "file": "audio/aRatchet.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aReset",
+   "file": "audio/aReset.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aDrawer",
+   "file": "audio/aDrawer.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aChime",
+   "file": "audio/aChime.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aBuzz",
+   "file": "audio/aBuzz.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aButton",
+   "file": "audio/aButton.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aBoxOpen",
+   "file": "audio/aBoxOpen.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aSquirt",
+   "file": "audio/aSquirt.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aShimmer",
+   "file": "audio/aShimmer.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aRattle",
+   "file": "audio/aRattle.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aPaper",
+   "file": "audio/aPaper.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aStone",
+   "file": "audio/aStone.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aClink",
+   "file": "audio/aClink.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aCoinIn",
+   "file": "audio/aCoinIn.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aCrank",
+   "file": "audio/aCrank.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aWhoosh",
+   "file": "audio/aWhoosh.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aBleeps",
+   "file": "audio/aBleeps.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aSad",
+   "file": "audio/aSad.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aFanfare",
+   "file": "audio/aFanfare.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aSlurp",
+   "file": "audio/aSlurp.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aPhone",
+   "file": "audio/aPhone.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aMusTitle",
+   "file": "audio/aMusTitle.wav",
+   "type": 1,
+   "repeat": true
+  },
+  {
+   "script": "aMusCrypt",
+   "file": "audio/aMusCrypt.wav",
+   "type": 1,
+   "repeat": true
+  },
+  {
+   "script": "aMusEnding",
+   "file": "audio/aMusEnding.wav",
+   "type": 1,
+   "repeat": true
+  }
+ ],
+ "sprites": [
+  "cursor",
+  "blank",
+  "guest_front_stand",
+  "guest_front_walk0",
+  "guest_front_walk1",
+  "guest_front_walk2",
+  "guest_front_walk3",
+  "guest_front_walk4",
+  "guest_front_walk5",
+  "guest_side_stand",
+  "guest_side_walk0",
+  "guest_side_walk1",
+  "guest_side_walk2",
+  "guest_side_walk3",
+  "guest_side_walk4",
+  "guest_side_walk5",
+  "guest_side_walk6",
+  "guest_side_walk7",
+  "guest_back_stand",
+  "guest_back_walk0",
+  "guest_back_walk1",
+  "guest_back_walk2",
+  "guest_back_walk3",
+  "guest_back_walk4",
+  "guest_back_walk5",
+  "guest_front_talk0",
+  "guest_front_talk1",
+  "guest_side_talk0",
+  "guest_side_talk1",
+  "guest_B_front_stand",
+  "guest_B_front_walk0",
+  "guest_B_front_walk1",
+  "guest_B_front_walk2",
+  "guest_B_front_walk3",
+  "guest_B_front_walk4",
+  "guest_B_front_walk5",
+  "guest_B_side_stand",
+  "guest_B_side_walk0",
+  "guest_B_side_walk1",
+  "guest_B_side_walk2",
+  "guest_B_side_walk3",
+  "guest_B_side_walk4",
+  "guest_B_side_walk5",
+  "guest_B_side_walk6",
+  "guest_B_side_walk7",
+  "guest_B_back_stand",
+  "guest_B_back_walk0",
+  "guest_B_back_walk1",
+  "guest_B_back_walk2",
+  "guest_B_back_walk3",
+  "guest_B_back_walk4",
+  "guest_B_back_walk5",
+  "guest_B_front_talk0",
+  "guest_B_front_talk1",
+  "guest_B_side_talk0",
+  "guest_B_side_talk1",
+  "guest_U_front_stand",
+  "guest_U_front_walk0",
+  "guest_U_front_walk1",
+  "guest_U_front_walk2",
+  "guest_U_front_walk3",
+  "guest_U_front_walk4",
+  "guest_U_front_walk5",
+  "guest_U_side_stand",
+  "guest_U_side_walk0",
+  "guest_U_side_walk1",
+  "guest_U_side_walk2",
+  "guest_U_side_walk3",
+  "guest_U_side_walk4",
+  "guest_U_side_walk5",
+  "guest_U_side_walk6",
+  "guest_U_side_walk7",
+  "guest_U_back_stand",
+  "guest_U_back_walk0",
+  "guest_U_back_walk1",
+  "guest_U_back_walk2",
+  "guest_U_back_walk3",
+  "guest_U_back_walk4",
+  "guest_U_back_walk5",
+  "guest_U_front_talk0",
+  "guest_U_front_talk1",
+  "guest_U_side_talk0",
+  "guest_U_side_talk1",
+  "guest_BU_front_stand",
+  "guest_BU_front_walk0",
+  "guest_BU_front_walk1",
+  "guest_BU_front_walk2",
+  "guest_BU_front_walk3",
+  "guest_BU_front_walk4",
+  "guest_BU_front_walk5",
+  "guest_BU_side_stand",
+  "guest_BU_side_walk0",
+  "guest_BU_side_walk1",
+  "guest_BU_side_walk2",
+  "guest_BU_side_walk3",
+  "guest_BU_side_walk4",
+  "guest_BU_side_walk5",
+  "guest_BU_side_walk6",
+  "guest_BU_side_walk7",
+  "guest_BU_back_stand",
+  "guest_BU_back_walk0",
+  "guest_BU_back_walk1",
+  "guest_BU_back_walk2",
+  "guest_BU_back_walk3",
+  "guest_BU_back_walk4",
+  "guest_BU_back_walk5",
+  "guest_BU_front_talk0",
+  "guest_BU_front_talk1",
+  "guest_BU_side_talk0",
+  "guest_BU_side_talk1",
+  "khuc_front_stand",
+  "khuc_front_walk0",
+  "khuc_front_walk1",
+  "khuc_front_walk2",
+  "khuc_front_walk3",
+  "khuc_front_walk4",
+  "khuc_front_walk5",
+  "khuc_side_stand",
+  "khuc_side_walk0",
+  "khuc_side_walk1",
+  "khuc_side_walk2",
+  "khuc_side_walk3",
+  "khuc_side_walk4",
+  "khuc_side_walk5",
+  "khuc_back_stand",
+  "khuc_back_walk0",
+  "khuc_back_walk1",
+  "khuc_back_walk2",
+  "khuc_back_walk3",
+  "khuc_back_walk4",
+  "khuc_back_walk5",
+  "khuc_front_talk0",
+  "khuc_front_talk1",
+  "khuc_side_talk0",
+  "khuc_side_talk1",
+  "khuc_play0",
+  "khuc_play1",
+  "khuc_play2",
+  "khuc_play3",
+  "khuc_raise",
+  "blank_char",
+  "inv_iBeads",
+  "inv_iPamphlet",
+  "inv_iPendant",
+  "inv_iRigatone",
+  "inv_iSauced",
+  "inv_iToken",
+  "nave_oArchPanel_closed",
+  "nave_oArchPanel_uv",
+  "nave_oWardrobe_closed",
+  "nave_oWardrobe_open",
+  "nave_oBeads_on",
+  "nave_oPamphlet_on",
+  "nave_oDrum1_w0",
+  "nave_oDrum1_u0",
+  "nave_oDrum1_w1",
+  "nave_oDrum1_u1",
+  "nave_oDrum1_w2",
+  "nave_oDrum1_u2",
+  "nave_oDrum1_w3",
+  "nave_oDrum1_u3",
+  "nave_oDrum2_w0",
+  "nave_oDrum2_u0",
+  "nave_oDrum2_w1",
+  "nave_oDrum2_u1",
+  "nave_oDrum2_w2",
+  "nave_oDrum2_u2",
+  "nave_oDrum2_w3",
+  "nave_oDrum2_u3",
+  "nave_oDrum3_w0",
+  "nave_oDrum3_u0",
+  "nave_oDrum3_w1",
+  "nave_oDrum3_u1",
+  "nave_oDrum3_w2",
+  "nave_oDrum3_u2",
+  "nave_oDrum3_w3",
+  "nave_oDrum3_u3",
+  "nave_oDrum4_w0",
+  "nave_oDrum4_u0",
+  "nave_oDrum4_w1",
+  "nave_oDrum4_u1",
+  "nave_oDrum4_w2",
+  "nave_oDrum4_u2",
+  "nave_oDrum4_w3",
+  "nave_oDrum4_u3",
+  "nave_oBox_closed",
+  "nave_oBox_open",
+  "nave_oBox_uvclosed",
+  "nave_oBox_uvopen",
+  "nave_oBtn1_up",
+  "nave_oBtn1_down",
+  "nave_oBtn1_uv",
+  "nave_oBtn2_up",
+  "nave_oBtn2_down",
+  "nave_oBtn2_uv",
+  "nave_oBtn3_up",
+  "nave_oBtn3_down",
+  "nave_oBtn3_uv",
+  "nave_oRigatone_on",
+  "nave_oTile1_off",
+  "nave_oTile1_on",
+  "nave_oTile2_off",
+  "nave_oTile2_on",
+  "nave_oTile3_off",
+  "nave_oTile3_on",
+  "nave_oTile4_off",
+  "nave_oTile4_on",
+  "nave_oDrawer_open",
+  "nave_oPendant_on",
+  "nave_oFork_f0",
+  "nave_oFork_f1",
+  "nave_oFork_f2",
+  "nave_oFork_f3",
+  "nave_oFork_f4",
+  "nave_oFork_f5",
+  "nave_oFork_f6",
+  "nave_oFork_f7",
+  "crypt_oLabel1_n0",
+  "crypt_oLabel1_n1",
+  "crypt_oLabel1_n2",
+  "crypt_oLabel1_n3",
+  "crypt_oLabel1_l0",
+  "crypt_oLabel1_l1",
+  "crypt_oLabel1_l2",
+  "crypt_oLabel1_l3",
+  "crypt_oLabel2_n0",
+  "crypt_oLabel2_n1",
+  "crypt_oLabel2_n2",
+  "crypt_oLabel2_n3",
+  "crypt_oLabel2_l0",
+  "crypt_oLabel2_l1",
+  "crypt_oLabel2_l2",
+  "crypt_oLabel2_l3",
+  "crypt_oLabel3_n0",
+  "crypt_oLabel3_n1",
+  "crypt_oLabel3_n2",
+  "crypt_oLabel3_n3",
+  "crypt_oLabel3_l0",
+  "crypt_oLabel3_l1",
+  "crypt_oLabel3_l2",
+  "crypt_oLabel3_l3",
+  "crypt_oLabel4_n0",
+  "crypt_oLabel4_n1",
+  "crypt_oLabel4_n2",
+  "crypt_oLabel4_n3",
+  "crypt_oLabel4_l0",
+  "crypt_oLabel4_l1",
+  "crypt_oLabel4_l2",
+  "crypt_oLabel4_l3",
+  "crypt_oWorthy_on",
+  "crypt_oCurtain_closed",
+  "crypt_oCurtain_open",
+  "crypt_oToken_on",
+  "crypt_oSeat_empty",
+  "crypt_oSeat_credit",
+  "crypt_oSeat_seated",
+  "crypt_oHat_on",
+  "plate"
+ ],
+ "fork_frames": [
+  "nave_oFork_f0",
+  "nave_oFork_f1",
+  "nave_oFork_f2",
+  "nave_oFork_f3",
+  "nave_oFork_f4",
+  "nave_oFork_f5",
+  "nave_oFork_f6",
+  "nave_oFork_f7"
+ ]
+}
