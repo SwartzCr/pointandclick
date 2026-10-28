@@ -912,16 +912,6 @@
       "khuc_front_walk3",
       0,
       false
-     ],
-     [
-      "khuc_front_walk4",
-      0,
-      false
-     ],
-     [
-      "khuc_front_walk5",
-      0,
-      false
      ]
     ],
     [
@@ -949,16 +939,6 @@
       "khuc_side_walk3",
       0,
       true
-     ],
-     [
-      "khuc_side_walk4",
-      0,
-      true
-     ],
-     [
-      "khuc_side_walk5",
-      0,
-      true
      ]
     ],
     [
@@ -984,16 +964,6 @@
      ],
      [
       "khuc_side_walk3",
-      0,
-      false
-     ],
-     [
-      "khuc_side_walk4",
-      0,
-      false
-     ],
-     [
-      "khuc_side_walk5",
       0,
       false
      ]
@@ -1023,16 +993,6 @@
       "khuc_back_walk3",
       0,
       false
-     ],
-     [
-      "khuc_back_walk4",
-      0,
-      false
-     ],
-     [
-      "khuc_back_walk5",
-      0,
-      false
      ]
     ]
    ]
@@ -1042,7 +1002,7 @@
    "loops": [
     [
      [
-      "khuc_front_talk0",
+      "khuc_front_stand",
       0,
       false
      ],
@@ -1054,7 +1014,7 @@
     ],
     [
      [
-      "khuc_side_talk0",
+      "khuc_side_stand",
       0,
       true
      ],
@@ -1066,7 +1026,7 @@
     ],
     [
      [
-      "khuc_side_talk0",
+      "khuc_side_stand",
       0,
       false
      ],
@@ -1205,6 +1165,39 @@
     [
      [
       "khuc_raise",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VKCRANK",
+   "loops": [
+    [
+     [
+      "khuc_crank",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_crank",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "khuc_crank",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "khuc_crank",
       0,
       false
      ]
@@ -2300,31 +2293,24 @@
   "khuc_front_walk1",
   "khuc_front_walk2",
   "khuc_front_walk3",
-  "khuc_front_walk4",
-  "khuc_front_walk5",
   "khuc_side_stand",
   "khuc_side_walk0",
   "khuc_side_walk1",
   "khuc_side_walk2",
   "khuc_side_walk3",
-  "khuc_side_walk4",
-  "khuc_side_walk5",
   "khuc_back_stand",
   "khuc_back_walk0",
   "khuc_back_walk1",
   "khuc_back_walk2",
   "khuc_back_walk3",
-  "khuc_back_walk4",
-  "khuc_back_walk5",
-  "khuc_front_talk0",
   "khuc_front_talk1",
-  "khuc_side_talk0",
   "khuc_side_talk1",
   "khuc_play0",
   "khuc_play1",
   "khuc_play2",
   "khuc_play3",
   "khuc_raise",
+  "khuc_crank",
   "blank_char",
   "inv_iBeads",
   "inv_iPamphlet",

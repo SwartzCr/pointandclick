@@ -67,25 +67,28 @@ def guest_views():
 
 
 def khuc_views():
-    walk = {}
-    for dr in ('front', 'side', 'back'):
-        walk[dr] = [spr('khuc_%s_stand' % dr, P.khuc_frame(dr, pose='hands' if dr == 'front' else None))]
-        for i in range(6):
-            walk[dr].append(spr('khuc_%s_walk%d' % (dr, i), P.khuc_frame(dr, (i + 1) / 6, walking=True)))
+    import khuc_sprite as K
+    v = K.views()
+    st = v['stand']
+    walk = {'front': [spr('khuc_front_stand', st['front'])] + [spr('khuc_front_walk%d' % i, f) for i, f in enumerate(v['walk_front'])],
+            'side': [spr('khuc_side_stand', st['side'])] + [spr('khuc_side_walk%d' % i, f) for i, f in enumerate(v['walk_side'])],
+            'back': [spr('khuc_back_stand', st['back'])] + [spr('khuc_back_walk%d' % i, f) for i, f in enumerate(v['walk_back'])]}
     loops = [[(f, 0, False) for f in walk['front']],
              [(f, 0, True) for f in walk['side']],
              [(f, 0, False) for f in walk['side']],
              [(f, 0, False) for f in walk['back']]]
-    talkf = [spr('khuc_front_talk%d' % k, P.khuc_frame('front', talk=bool(k), pose='hands')) for k in range(2)]
-    talks = [spr('khuc_side_talk%d' % k, P.khuc_frame('side', talk=bool(k))) for k in range(2)]
+    talkf = [walk['front'][0], spr('khuc_front_talk1', v['talk_front'][1])]
+    talks = [walk['side'][0], spr('khuc_side_talk1', v['talk_side'][1])]
     tl = [[(f, 0, False) for f in talkf], [(f, 0, True) for f in talks], [(f, 0, False) for f in talks],
           [(walk['back'][0], 0, False)]]
-    play = [spr('khuc_play%d' % k, P.khuc_playing(k)) for k in range(4)]
-    raise_ = spr('khuc_raise', P.khuc_frame('front', pose='raise'))
+    play = [spr('khuc_play%d' % k, f) for k, f in enumerate(v['play'])]
+    raise_ = spr('khuc_raise', v['raise_'])
+    crank = spr('khuc_crank', v['crank'])
     blank = spr('blank_char', Image.new('RGBA', (2, 2), (0, 0, 0, 0)))
     return [dict(name='VKHUC', loops=loops), dict(name='VKTALK', loops=tl),
             dict(name='VKPLAY', loops=[[(f, 2, False) for f in play]] * 4),
             dict(name='VKRAISE', loops=[[(raise_, 0, False)]] * 4),
+            dict(name='VKCRANK', loops=[[(crank, 0, False)], [(crank, 0, True)], [(crank, 0, False)], [(crank, 0, False)]]),
             dict(name='VBLANK', loops=[[(blank, 0, False)]] * 4)]
 
 
