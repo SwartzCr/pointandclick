@@ -104,6 +104,8 @@ def main():
     spr('blank', U.blank())
     manifest['views'] += guest_views()
     manifest['views'] += khuc_views()
+    import hotel_mini as HM
+    manifest['views'] += HM.views(spr)
 
     painted_icons = NM.icons()
     import guest_sheet
@@ -112,7 +114,7 @@ def main():
         icon = painted_icons[script] if script in painted_icons else fn()
         manifest['inventory'].append(dict(script=script, name=name, sprite=spr('inv_' + script, icon)))
 
-    rooms = [(1, NB.nave()), (2, CN.crypt()), (3, R.title())]
+    rooms = [(1, NB.nave()), (2, CN.crypt()), (3, R.title()), (4, HM.hotel())]
     for num, sc in rooms:
         bgs = [save_png(sc.bg, 'rooms/%s_bg0.png' % sc.name)]
         if sc.uv_marks:

@@ -1,0 +1,132 @@
+"""HOTEL.EXE: a tiny Hotel Paradiso playable on the Crypt's Classic Computer.
+
+Room 714 is drawn with the first game's own art code (hotel-paradiso-scummc/
+tools/art.py) at exactly twice its 320x144 size, so it fills the 640x288 room
+view, with a CRT edge round it. The guest appears as he was then, in his
+bathrobe (cMini, frames from the same art code at 2x). A newspaper lies on the
+floor; reading it gives the answer to the Crypt's Pasta Identification wall.
+"""
+import os
+import sys
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
+
+from art_rooms import Scene, W, H, VIEW_H
+from art_common import canvas, rgba, outline
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+HP = os.path.join(HERE, '..', '..', 'hotel-paradiso-scummc', 'tools')
+_art = None
+
+
+def hp_art():
+    global _art
+    if _art is None:
+        sys.path.insert(0, HP)
+        keep = sys.dont_write_bytecode
+        sys.dont_write_bytecode = True      # don't touch the first game's tracked __pycache__
+        try:
+            import importlib
+            _art = importlib.import_module('art')
+        finally:
+            sys.path.remove(HP)
+            sys.dont_write_bytecode = keep
+    return _art
+
+
+def x2(im):
+    return im.resize((im.width * 2, im.height * 2), Image.NEAREST)
+
+
+def keyed(im):
+    a = np.asarray(im.convert('RGBA')).copy()
+    mag = (a[..., 0] == 255) & (a[..., 1] == 0) & (a[..., 2] == 255)
+    a[mag, 3] = 0
+    return Image.fromarray(a, 'RGBA')
+
+
+def newspaper():
+    """A folded newspaper lying on the carpet (20x9 at 1x, drawn 2x)."""
+    im = canvas(22, 10)
+    d = ImageDraw.Draw(im)
+    d.polygon([(1, 8), (3, 1), (20, 0), (21, 7)], fill=rgba((232, 226, 206)))
+    d.polygon([(1, 8), (21, 7), (20, 9), (2, 9)], fill=rgba((186, 180, 160)))
+    d.line([(4, 2), (12, 2)], fill=rgba((40, 36, 40)))               # masthead
+    for y in (4, 6):
+        d.line([(4, y), (18, y - 0.5)], fill=rgba((130, 126, 120)))
+    d.rectangle([14, 2, 18, 4], fill=rgba((150, 140, 120)))          # a little photo
+    return x2(outline(im, (40, 24, 30, 255)))
+
+
+def hotel():
+    art = hp_art()
+    sc = Scene('hotel')
+    room = x2(art.render().convert('RGB')).convert('RGBA')
+    # a CRT: faint scanlines, darkened rounded corners
+    a = np.asarray(room).astype(float)
+    a[1::2, :, :3] *= 0.86
+    yy, xx = np.mgrid[0:VIEW_H, 0:W]
+    dx = np.clip(np.abs(xx - W / 2) - (W / 2 - 40), 0, None) / 40
+    dy = np.clip(np.abs(yy - VIEW_H / 2) - (VIEW_H / 2 - 40), 0, None) / 40
+    corner = np.clip(np.sqrt(dx ** 2 + dy ** 2), 0, 1) ** 2
+    a[..., :3] *= (1 - 0.85 * corner)[..., None]
+    room = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGBA')
+    sc.bg = Image.new('RGBA', (W, H), (0, 0, 0, 255))
+    sc.bg.paste(room, (0, 0))
+    sc.d = ImageDraw.Draw(sc.bg)
+    d = sc.d
+    # a LOG OFF button in the top-right corner, and the program's name
+    f = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 10)
+    d.rectangle([556, 6, 628, 22], fill=rgba((214, 204, 172)), outline=rgba((90, 80, 64)))
+    d.text((592, 14), 'LOG OFF', font=f, fill=rgba((60, 40, 30)), anchor='mm')
+    d.text((14, 14), 'HOTEL.EXE', font=f, fill=rgba((200, 255, 200)), anchor='lm')
+
+    # hotspots (Room 714 at 2x)
+    sc.hotspot('hDoor', 'door', (90, 210), [('rect', [30, 36, 130, 190])])
+    sc.hotspot('hTv', 'TV', (200, 210), [('rect', [164, 70, 236, 136])])
+    sc.hotspot('hDresser', 'dresser', (200, 210), [('rect', [144, 130, 256, 190])])
+    sc.hotspot('hCurtains', 'curtains', (330, 210), [('rect', [266, 12, 390, 148])])
+    sc.hotspot('hMinibar', 'minibar', (320, 210), [('rect', [286, 148, 352, 190])])
+    sc.hotspot('hLamp', 'lamp', (430, 210), [('rect', [398, 80, 436, 140])])
+    sc.hotspot('hPhone', 'phone', (440, 210), [('rect', [436, 122, 464, 140])])
+    sc.hotspot('hNightstand', 'nightstand', (430, 210), [('rect', [400, 140, 464, 192])])
+    sc.hotspot('hPainting', 'painting', (520, 210), [('rect', [496, 32, 592, 80])])
+    sc.hotspot('hBed', 'bed', (450, 250), [('rect', [470, 90, 640, 264])])
+    sc.hotspot('hTable', 'coffee table', (320, 270), [('rect', [224, 206, 416, 258])])
+    sc.hotspot('hLogoff', 'LOG OFF', (520, 210), [('rect', [556, 6, 628, 22])])
+
+    sc.obj('oNewspaper', 'newspaper', {'on': newspaper()}, 120, 262, baseline=262)
+
+    sc.wd.polygon([(20, 196), (466, 196), (466, 286), (20, 286)], fill=1)
+    sc.wd.rectangle([220, 206, 420, 258], fill=0)                 # coffee table
+    return sc
+
+
+def views(spr):
+    """VMINI / VMINITALK: the guest in his bathrobe, from Hotel Paradiso's art at 2x."""
+    art = hp_art()
+    k = lambda im: x2(keyed(im))
+    front = [spr('mini_front%d' % s, k(art.actor_front(s, outfit='robe'))) for s in range(3)]
+    back = [spr('mini_back%d' % s, k(art.actor_back(s, outfit='robe'))) for s in range(3)]
+    side = [spr('mini_side%d' % s, k(art.actor_side(s, outfit='robe'))) for s in range(4)]
+    tf = spr('mini_front_talk', k(art.actor_front(0, talk=True, outfit='robe')))
+    ts = spr('mini_side_talk', k(art.actor_side(0, talk=True, outfit='robe')))
+    walk_fb = lambda fr: [fr[0], fr[1], fr[0], fr[2], fr[0]]
+    loops = [[(f, 0, False) for f in walk_fb(front)],
+             [(f, 0, True) for f in [side[0]] + side],
+             [(f, 0, False) for f in [side[0]] + side],
+             [(f, 0, False) for f in walk_fb(back)]]
+    talk = [[(front[0], 0, False), (tf, 0, False)],
+            [(side[0], 0, True), (ts, 0, True)],
+            [(side[0], 0, False), (ts, 0, False)],
+            [(back[0], 0, False)]]
+    return [dict(name='VMINI', loops=loops), dict(name='VMINITALK', loops=talk)]
+
+
+if __name__ == '__main__':
+    sc = hotel()
+    im = sc.bg.copy()
+    for o in sc.objects:
+        s = o['sprites'][o['state']]
+        im.alpha_composite(s, (o['x'], o['y'] - s.height))
+    im.save('/tmp/claude-0/nb/hotel_mini.png')
