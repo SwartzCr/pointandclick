@@ -49,7 +49,9 @@ the answer.
 1. Talk to Chuk. To be ordained you need to **wear the beads**, **speak the Word** and
    **bring a sauced golden offering**. If you're stuck, tell him so: he gives a nudge
    for the next step.
-2. **Beads:** open the wardrobe, take the pasta rosary beads and use them on yourself.
+2. **Beads:** open the wardrobe and pull the loose thread on the purple robe. Use the
+   string on the Scales of Pasta to thread its elbow macaroni into rosary beads, and
+   use them on yourself.
 3. Pick up the pamphlet from the sod table and read it: string came first, then
    counting, then noodles, then the fork; the Word shows itself under UV light.
 4. **Timeline:** press the tiles oldest first: string, counting (the tally bone),

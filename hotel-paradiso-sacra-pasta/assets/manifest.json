@@ -1907,6 +1907,11 @@
    "script": "iWhipit",
    "name": "whip-it canister",
    "sprite": "inv_iWhipit"
+  },
+  {
+   "script": "iString",
+   "name": "loose string",
+   "sprite": "inv_iString"
   }
  ],
  "fonts": [
@@ -2204,6 +2209,7 @@
   "inv_iSauced",
   "inv_iToken",
   "inv_iWhipit",
+  "inv_iString",
   "nave_oArchPanel_closed",
   "nave_oArchPanel_uv",
   "nave_oWardrobe_closed",
