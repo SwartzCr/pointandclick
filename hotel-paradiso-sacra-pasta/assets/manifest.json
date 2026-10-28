@@ -1727,72 +1727,70 @@
    "walk": "rooms/crypt_walk.png",
    "hot": "rooms/crypt_hot.png",
    "wb": "rooms/crypt_wb.png",
-   "wb_baselines": [
-    214
-   ],
+   "wb_baselines": [],
    "hotspots": [
     [
      "hArch",
      "archway",
      [
-      135,
-      158
+      160,
+      226
      ]
     ],
     [
      "hYarn",
      "yarn monster",
      [
-      236,
-      170
+      232,
+      262
      ]
     ],
     [
      "hPastaWall",
      "Pasta Identification",
      [
-      365,
-      162
+      335,
+      240
      ]
     ],
     [
      "hStaff",
      "staff area",
      [
-      498,
-      160
+      446,
+      236
      ]
     ],
     [
      "h3Button",
      "3Button cabinet",
      [
-      106,
-      194
+      120,
+      252
      ]
     ],
     [
      "hTrackball",
      "Trackball cabinet",
      [
-      536,
-      202
+      548,
+      266
      ]
     ],
     [
      "hComputer",
      "Classic Computer",
      [
-      222,
-      240
+      365,
+      242
      ]
     ],
     [
      "hRex",
      "Rex Seat",
      [
-      216,
-      272
+      300,
+      262
      ]
     ]
    ],
@@ -1800,8 +1798,8 @@
     {
      "script": "oLabel1",
      "name": "label",
-     "x": 277,
-     "y": 102,
+     "x": 270,
+     "y": 129,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1820,8 +1818,8 @@
     {
      "script": "oLabel2",
      "name": "label",
-     "x": 323,
-     "y": 102,
+     "x": 302,
+     "y": 129,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1840,8 +1838,8 @@
     {
      "script": "oLabel3",
      "name": "label",
-     "x": 369,
-     "y": 102,
+     "x": 333,
+     "y": 129,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1860,8 +1858,8 @@
     {
      "script": "oLabel4",
      "name": "label",
-     "x": 415,
-     "y": 102,
+     "x": 365,
+     "y": 129,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -1880,8 +1878,8 @@
     {
      "script": "oWorthy",
      "name": "WORTHY sign",
-     "x": 335,
-     "y": 136,
+     "x": 296,
+     "y": 147,
      "visible": false,
      "baseline": 1,
      "clickable": false,
@@ -1893,8 +1891,8 @@
     {
      "script": "oCurtain",
      "name": "curtain",
-     "x": 468,
-     "y": 148,
+     "x": 413,
+     "y": 222,
      "visible": true,
      "baseline": 2,
      "clickable": true,
@@ -1907,10 +1905,10 @@
     {
      "script": "oToken",
      "name": "arcade token",
-     "x": 52,
-     "y": 213,
+     "x": 110,
+     "y": 258,
      "visible": false,
-     "baseline": 240,
+     "baseline": 258,
      "clickable": true,
      "state": "on",
      "sprites": {
@@ -1920,10 +1918,10 @@
     {
      "script": "oSeat",
      "name": "Pope Seat",
-     "x": 450,
-     "y": 286,
+     "x": 466,
+     "y": 252,
      "visible": true,
-     "baseline": 270,
+     "baseline": 250,
      "clickable": true,
      "state": "empty",
      "sprites": {
@@ -1935,10 +1933,10 @@
     {
      "script": "oHat",
      "name": "pasta pope hat",
-     "x": 489,
-     "y": 70,
+     "x": 507,
+     "y": 121,
      "visible": true,
-     "baseline": 271,
+     "baseline": 251,
      "clickable": true,
      "state": "on",
      "sprites": {

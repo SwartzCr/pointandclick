@@ -17,6 +17,7 @@ import guest_sprite as G
 import nave_painted as NP
 import nave_muse as NM
 import nave_nb as NB
+import crypt_nb as CN
 import art_rooms as R
 import art_ui as U
 import sound as S
@@ -133,7 +134,7 @@ def main():
         icon = painted_icons[script] if script in painted_icons else fn()
         manifest['inventory'].append(dict(script=script, name=name, sprite=spr('inv_' + script, icon)))
 
-    rooms = [(1, NB.nave()), (2, R.crypt()), (3, R.title())]
+    rooms = [(1, NB.nave()), (2, CN.crypt()), (3, R.title())]
     for num, sc in rooms:
         bgs = [save_png(sc.bg, 'rooms/%s_bg0.png' % sc.name)]
         if sc.uv_marks:
