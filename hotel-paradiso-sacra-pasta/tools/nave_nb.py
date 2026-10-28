@@ -22,9 +22,41 @@ NB = os.path.join(HERE, '..', 'art_src', 'nave-nb')
 INK = (46, 30, 24)
 
 
-def room_image(name):
+def _load(name):
     im = Image.open(os.path.join(NB, name)).convert('RGB')
-    return im.resize((W, VIEW_H), Image.LANCZOS)
+    im = im.resize((W, VIEW_H), Image.LANCZOS)
+    return im.filter(ImageFilter.UnsharpMask(radius=1.0, percent=70, threshold=2))
+
+
+HR = '01-archway-closed-hr.jpg'      # the same room, archway closed, at 6144x2752
+_rooms = {}
+
+
+def room_image(name):
+    """The room at 640x288. When the high-resolution closed-arch picture is there,
+    everything comes from it (crisper), except the open archway itself, which only
+    the original base shows; the '1.' label in its corner is painted out."""
+    if name in _rooms:
+        return _rooms[name].copy()
+    if not os.path.exists(os.path.join(NB, HR)):
+        _rooms[name] = _load(name)
+        return _rooms[name].copy()
+    hr = _load(HR)
+    # paint out the label in the bottom-left corner with the floor next to it
+    hr.paste(hr.crop((22, 262, 40, 288)), (0, 262))
+    if name == '01-archway-closed.jpg':
+        _rooms[name] = hr
+    elif name == 'base.jpg':
+        old_base, old_closed = _load('base.jpg'), _load('01-archway-closed.jpg')
+        m = changed(old_base, old_closed, ARCH_BOX).filter(ImageFilter.MaxFilter(5))
+        full = Image.new('L', (W, VIEW_H), 0)
+        full.paste(m, ARCH_BOX[:2])
+        out = hr.copy()
+        out.paste(old_base, (0, 0), full)
+        _rooms[name] = out
+    else:
+        _rooms[name] = _load(name)
+    return _rooms[name].copy()
 
 
 _room_pal = None

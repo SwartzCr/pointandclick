@@ -1322,7 +1322,7 @@
     {
      "script": "oArchPanel",
      "name": "wall",
-     "x": 516,
+     "x": 512,
      "y": 222,
      "visible": true,
      "baseline": 1,
