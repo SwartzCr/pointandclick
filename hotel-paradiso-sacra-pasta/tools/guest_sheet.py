@@ -49,6 +49,10 @@ def _sheet(name):
             l2, _ = ndimage.label(cm)
             edge = set(np.unique(np.concatenate([l2[0], l2[-1], l2[:, 0], l2[:, -1]]))) - {0}
             alpha = ~np.isin(l2, list(edge))
+            # enclosed gaps (between an arm and the body) are background too
+            sizes2 = ndimage.sum(cm, l2, range(1, l2.max() + 1)) if l2.max() else []
+            holes = [k + 1 for k, sz in enumerate(sizes2) if sz >= 15]
+            alpha &= ~np.isin(l2, holes)
             alpha = ndimage.binary_erosion(alpha, iterations=1)
             rgba = np.dstack([crop, alpha * 255]).astype(np.uint8)
             figs.append((y0, x0, Image.fromarray(rgba, 'RGBA')))
@@ -93,7 +97,54 @@ GOLD, GOLD_DK, GOLD_HI = (232, 178, 52, 255), (150, 98, 24, 255), (255, 230, 130
 SILVER, VIOLET, VIOLET_HI = (225, 222, 235, 255), (150, 70, 230, 255), (230, 200, 255, 255)
 
 
-def _wear(fig, view, kind):
+STAND_H['bellhop_necklaces.jpg'] = 336
+_necks = None
+
+
+def necklace_overlays():
+    """{(kind, view): (overlay at game scale, hat top, hat cx)}: the necklaces lifted
+    off the 'wearing' figures by comparing them with the matching plain figure."""
+    global _necks
+    if _necks is None:
+        _necks = {}
+        neck = _sheet('bellhop_necklaces.jpg')
+        plain = _sheet('bellhop_walk_side.jpg')[0]
+        for row, kind in ((0, 'beads'), (1, 'uv')):
+            for i, view in enumerate(('front', 'back', 'side')):
+                w, p = neck[row][i], plain[i]
+                a = np.asarray(w.resize(p.size, Image.LANCZOS)).astype(int)
+                b = np.asarray(p).astype(int)
+                r, g, bb = a[..., 0], a[..., 1], a[..., 2]
+                diff = np.abs(a[..., :3] - b[..., :3]).sum(-1)
+                if kind == 'beads':
+                    col = (r > 140) & (g > 95) & (bb < 120) & (r - bb > 60)
+                    m = (diff > 90) & col
+                    minsz = 40
+                else:
+                    mn = np.minimum(np.minimum(r, g), bb)
+                    mx = np.maximum(np.maximum(r, g), bb)
+                    col = ((mn > 140) & (mx - mn < 80)) | ((bb > 140) & (bb - g > 40))
+                    m = (diff > 50) & col
+                    minsz = 6
+                m &= a[..., 3] > 0
+                lab, n = ndimage.label(ndimage.binary_dilation(m, iterations=2))
+                if n:
+                    sizes = ndimage.sum(m, lab, range(1, n + 1))
+                    m &= np.isin(lab, [k + 1 for k, sz in enumerate(sizes) if sz >= minsz])
+                k = ART_H / STAND_H['bellhop_walk_side.jpg']
+                W2, H2 = max(1, round(p.width * k)), max(1, round(p.height * k))
+                rgb = np.where(m[..., None], a[..., :3], 0).astype(np.uint8)
+                cov = np.asarray(Image.fromarray((m * 255).astype(np.uint8)).resize((W2, H2), Image.BOX)).astype(float) / 255
+                pre = np.asarray(Image.fromarray(rgb).resize((W2, H2), Image.BOX)).astype(float)
+                colr = np.clip(pre / np.maximum(cov, 1e-3)[..., None], 0, 255).astype(np.uint8)
+                ov = Image.fromarray(np.dstack([colr, np.where(cov > (0.25 if kind == 'beads' else 0.12), 255, 0).astype(np.uint8)]), 'RGBA')
+                ref = _scale(p, 'bellhop_walk_side.jpg')
+                top, cx = _hat(ref)
+                _necks[(kind, view)] = (ov, top, cx)
+    return _necks
+
+
+def _wear_drawn(fig, view, kind):
     """Draw the beads (a gold macaroni chain with a medallion) and the UV pendant
     (a silver chain with a violet crystal) at the neck, in the style of the
     generated necklaces."""
@@ -144,6 +195,19 @@ def _wear(fig, view, kind):
                 d.ellipse([x - 1.4, y - 1.1, x + 1.4, y + 1.1], fill=GOLD, outline=GOLD_DK)
         elif kind.get('uv'):
             d.arc([cx - 6, neck - 3, cx + 6, neck + 2], 20, 160, fill=SILVER)
+    return fig
+
+
+def _wear(fig, view, kind):
+    """Lay the generated necklaces over a frame, lined up on the hat."""
+    if not kind:
+        return fig
+    fig = fig.copy()
+    top, cx = _hat(fig)
+    for k in ('uv', 'beads'):
+        if kind.get(k):
+            ov, otop, ocx = necklace_overlays()[(k, view)]
+            fig.alpha_composite(ov, (int(round(cx - ocx)), int(round(top - otop))))
     return fig
 
 
