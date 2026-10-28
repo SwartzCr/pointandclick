@@ -20,7 +20,7 @@ sys.path.insert(0, HERE)
 from agsbuild import formats, gamedata as G, script as S
 
 GAME_ID = 9130714          # rooms carry this; it must match the game's unique id
-SCALING = {1: (80, 100), 2: (56, 67)}   # characters are drawn 150 px tall; the Crypt is drawn smaller
+SCALING = {1: (60, 80), 2: (56, 67)}   # characters are drawn 150 px tall; the Crypt is drawn smaller
 
 
 def c565(r, g, b):
