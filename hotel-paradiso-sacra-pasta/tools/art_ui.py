@@ -81,6 +81,18 @@ def icon_token():
     return outline(im)
 
 
+def icon_whipit():
+    """A whip-it: a small steel cream charger."""
+    im = canvas(ICON_W, ICON_H)
+    d = ImageDraw.Draw(im)
+    d.rounded_rectangle([10, 13, 34, 27], 7, fill=rgba((176, 182, 194)))
+    d.polygon([(34, 15), (40, 18), (40, 22), (34, 25)], fill=rgba((150, 156, 168)))
+    d.rectangle([40, 18, 43, 22], fill=rgba((120, 126, 138)))
+    d.line([(14, 16), (31, 16)], fill=rgba((236, 240, 248)), width=2)
+    d.line([(14, 24), (31, 24)], fill=rgba((120, 126, 138)))
+    return outline(im)
+
+
 ICONS = {
     'iBeads': ('pasta rosary beads', icon_beads),
     'iPamphlet': ('pamphlet', icon_pamphlet),
@@ -88,4 +100,5 @@ ICONS = {
     'iRigatone': ('golden rigatone', lambda: icon_rigatone(False)),
     'iSauced': ('sauced rigatone', lambda: icon_rigatone(True)),
     'iToken': ('arcade token', icon_token),
+    'iWhipit': ('whip-it canister', icon_whipit),
 }

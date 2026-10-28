@@ -1902,6 +1902,11 @@
    "script": "iToken",
    "name": "arcade token",
    "sprite": "inv_iToken"
+  },
+  {
+   "script": "iWhipit",
+   "name": "whip-it canister",
+   "sprite": "inv_iWhipit"
   }
  ],
  "fonts": [
@@ -2198,6 +2203,7 @@
   "inv_iRigatone",
   "inv_iSauced",
   "inv_iToken",
+  "inv_iWhipit",
   "nave_oArchPanel_closed",
   "nave_oArchPanel_uv",
   "nave_oWardrobe_closed",

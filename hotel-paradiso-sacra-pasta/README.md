@@ -49,23 +49,28 @@ the answer.
 1. Talk to Khuc. To be ordained you need to **wear the beads**, **speak the Word** and
    **bring a sauced golden offering**. If you're stuck, tell him so: he gives a nudge
    for the next step.
-2. Pick up the pamphlet from the sod table and read it: string came first, then
+2. **Beads:** open the wardrobe, take the pasta rosary beads and use them on yourself.
+3. Pick up the pamphlet from the sod table and read it: string came first, then
    counting, then noodles, then the fork; the Word shows itself under UV light.
-3. **Timeline:** press the tiles oldest first: string, counting (the tally bone),
-   noodles, fork. A drawer opens; take the UV pendant and put it on (use it on yourself).
-4. **The Word:** under UV, pull the lever by each window of the Paragraph Spinner until its word
-   glows: ALL PASTA IS HOLY.
-5. **The rigatone:** under UV the puzzle box buttons are numbered: press the shell, the
-   penne, then the farfalle. Take the golden rigatone.
-6. **The sauce:** pick up the telephone on the sod table a few times to hear its three
-   audio stories. The First Supper gives the recipe: a pump of red for each of the
-   Noodly One's eyes (two), green for each of his noses (none), and one yellow. Push the
-   red dispenser twice and the yellow once, then use the rigatone on the bowl. (Khuc
-   tastes a wrong mix, says what's off, licks it clean and gives it back.)
-7. **The beads:** they're on loan to the tiny folk on the sod table, whose prophecy is
-   the third story. Use the sod table to play God and show the three signs in order:
-   raise a mountain, part the marinara river, then (wearing the pendant) make a purple
-   star shine. They hand over the beads; put them on.
+4. **Timeline:** press the tiles oldest first: string, counting (the tally bone),
+   noodles, fork. A drawer opens; take the UV pendant and put it on.
+5. **The Word:** under UV, pull the lever by each window of the Paragraph Spinner
+   until its word glows: ALL PASTA IS HOLY.
+6. **The telephone:** pick it up a few times to hear its three stories: the Creation,
+   the First Supper (the sauce recipe) and the Prophecy of the Tiny Folk.
+7. **A whip-it:** use the sod table to play God and show the tiny folk the prophecy's
+   signs in order: raise a mountain, part the marinara river, then (wearing the
+   pendant) make a purple star shine. They're yours to command: you send them digging,
+   and they bring you a whip-it canister.
+8. **The puzzle box:** it's Khuc's, and the combination is written on its bottom in
+   writing too small to read. Fiddle with it and he offers to read it for a whip-it.
+   Give him the canister and he reads it as a riddle: "First the sea, then the tube,
+   and last the bow". Press the shell, the penne, then the farfalle, and take the
+   golden rigatone.
+9. **The sauce:** the First Supper says a pump of red for each of the Noodly One's eyes
+   (two), green for each of his noses (none) and one yellow. Push the red dispenser
+   twice and the yellow once, then use the rigatone on the bowl. (Khuc tastes a wrong
+   mix, says what's off, licks it clean and gives it back.)
    Then talk to Khuc, say "ALL PASTA IS HOLY", and give him the sauced rigatone.
    The wall opens and he goes to play T. rex in the Crypt.
 8. In the Crypt, use the Classic Computer to read PASTA.DB, then turn the labels on the

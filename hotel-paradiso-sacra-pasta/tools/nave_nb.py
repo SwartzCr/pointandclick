@@ -224,10 +224,7 @@ def nave():
             base_.alpha_composite(dark, (1, 0))
             im = base_
         if uv:
-            im = uv_of(im)
-            lay = canvas(*im.size)
-            tiny(lay, im.width / 2, im.height / 2, uv, (255, 255, 120))
-            glow_layer(lay, im, 2.0, 0.5, crisp=True)
+            im = uv_of(im)          # no numbers any more: Khuc knows the order
         return im
 
     for i, kind in enumerate(BUTTONS):
@@ -270,6 +267,7 @@ def nave():
     sc.fork_frames = ['f%d' % k for k in range(8)]
 
     # ---------- writing that only ultraviolet light shows
+    sc.uv(lambda im, dd: glow_text(im, (256, 142), 'THE KEEPER KNOWS', 8, (255, 200, 120)))
     sc.uv(lambda im, dd: glow_text(im, (115, 172), 'SAUCE THY OFFERING', 8, (120, 255, 160)))
     sc.uv(lambda im, dd: glow_text(im, (330, 40), 'THE WORD IS SPUN', 9, (255, 240, 120)))
     sc.uv(lambda im, dd: glow_text(im, (157, 250), 'FIRST CAME THE STRING', 8, (120, 230, 255)))
