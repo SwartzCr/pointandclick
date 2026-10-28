@@ -137,18 +137,9 @@ def crypt():
     # ---------- the STAFF curtain: closed as painted; open shows a little storeroom
     cx0, cy0, cx1, cy1 = CURTAIN
     closed = orig.crop(CURTAIN)
-    opened = closed.copy()
-    d = ImageDraw.Draw(opened)
-    w, h = opened.size
-    d.rectangle([10, 4, w - 6, h - 1], fill=rgba((26, 18, 30)))
-    for y in (30, 62, 94):                                       # shelves of pasta boxes
-        d.rectangle([12, y, w - 8, y + 2], fill=rgba((90, 60, 40)))
-        for k, x in enumerate(range(14, w - 12, 9)):
-            col = [(220, 180, 70), (200, 60, 50), (70, 120, 190)][k % 3]
-            d.rectangle([x, y - 12, x + 6, y - 1], fill=rgba(col))
-    gathered = closed.crop((0, 0, 12, h))                        # the curtain bunched to the left
-    opened.alpha_composite(gathered, (0, 0))
-    opened.alpha_composite(closed.crop((w - 8, 0, w, h)), (w - 8, 0))
+    # open: the same doorway from the curtain-open variant of the room
+    var = Image.open(os.path.join(os.path.dirname(SRC), '01-curtain-open.jpg')).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
+    opened = var.crop(CURTAIN).convert('RGBA')
     sc.obj('oCurtain', 'curtain', {'closed': closed, 'open': _pal(opened)}, cx0, cy1, baseline=2)
 
     # ---------- the arcade token, on the floor by the CONFESS cabinet
@@ -162,6 +153,13 @@ def crypt():
     # ---------- the Pope Seat: as painted, with a credit light, and with the guest in it
     sx0, sy0, sx1, sy1 = SEAT
     empty = orig.crop(SEAT)
+    # the seat's box overlaps the curtain's edge; leave that to the curtain
+    ImageDraw.Draw(empty).rectangle([0, 0, CURTAIN[2] - sx0, 183 - sy0], fill=(0, 0, 0, 0))
+    ea = np.asarray(empty).copy()
+    zone = ea[183 - sy0:CURTAIN[3] - sy0, :CURTAIN[2] - sx0 + 1]
+    red = (zone[..., 0].astype(int) - zone[..., 1] > 50) & (zone[..., 0] < 200)
+    zone[red] = 0
+    empty = Image.fromarray(ea, 'RGBA')
     credit = empty.copy()
     cxl, cyl = COIN[0] - sx0, COIN[1] - sy0
     cd = ImageDraw.Draw(credit)
