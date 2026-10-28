@@ -14,12 +14,16 @@ HP = os.path.join(HERE, '..', '..', 'hotel-paradiso-scummc', 'tools')
 
 
 def _hp_art():
+    # don't touch the first game's tracked __pycache__
     sys.path.insert(0, HP)
+    keep = sys.dont_write_bytecode
+    sys.dont_write_bytecode = True
     try:
         import importlib
         return importlib.import_module('art')
     finally:
         sys.path.remove(HP)
+        sys.dont_write_bytecode = keep
 
 
 def game_frame():
