@@ -1274,8 +1274,40 @@
      "hSauce",
      "Weird Sauce",
      [
-      225,
-      203
+      252,
+      204
+     ]
+    ],
+    [
+     "hRedSauce",
+     "red dispenser",
+     [
+      252,
+      204
+     ]
+    ],
+    [
+     "hGreenSauce",
+     "green dispenser",
+     [
+      252,
+      204
+     ]
+    ],
+    [
+     "hYellowSauce",
+     "yellow dispenser",
+     [
+      252,
+      204
+     ]
+    ],
+    [
+     "hBowl",
+     "sauce bowl",
+     [
+      252,
+      204
      ]
     ],
     [

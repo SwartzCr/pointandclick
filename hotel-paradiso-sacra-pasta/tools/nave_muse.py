@@ -148,7 +148,11 @@ def nave():
 
     # ---------- hotspots (later ones are drawn over earlier ones)
     sc.hotspot('hWallpaper', 'wallpaper strips', (420, 205), [('rect', [100, 18, 520, 194])])
-    sc.hotspot('hSauce', 'Weird Sauce', (225, 203), [('rect', [186, 48, 246, 172])])
+    sc.hotspot('hSauce', 'Weird Sauce', (252, 204), [('rect', [186, 48, 246, 172])])
+    sc.hotspot('hRedSauce', 'red dispenser', (252, 204), [('rect', [189, 70, 204, 110])])
+    sc.hotspot('hGreenSauce', 'green dispenser', (252, 204), [('rect', [206, 70, 222, 110])])
+    sc.hotspot('hYellowSauce', 'yellow dispenser', (252, 204), [('rect', [223, 70, 239, 110])])
+    sc.hotspot('hBowl', 'sauce bowl', (252, 204), [('rect', [203, 159, 228, 174])])
     sc.hotspot('hGlutenous', 'painting "Glutenous Truth"', (400, 203), [('rect', [372, 50, 433, 113])])
     flat = [(255, 162), (255, 60), (268, 38), (290, 24), (310, 20), (332, 24), (352, 38), (365, 60), (365, 162)]
     sc.hotspot('hFlat', 'stained-glass flat', (350, 206), [('poly', flat)])
