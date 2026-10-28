@@ -28,16 +28,6 @@
       "guest_front_walk3",
       0,
       false
-     ],
-     [
-      "guest_front_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_front_walk5",
-      0,
-      false
      ]
     ],
     [
@@ -75,16 +65,6 @@
       "guest_side_walk5",
       0,
       true
-     ],
-     [
-      "guest_side_walk6",
-      0,
-      true
-     ],
-     [
-      "guest_side_walk7",
-      0,
-      true
      ]
     ],
     [
@@ -120,16 +100,6 @@
      ],
      [
       "guest_side_walk5",
-      0,
-      false
-     ],
-     [
-      "guest_side_walk6",
-      0,
-      false
-     ],
-     [
-      "guest_side_walk7",
       0,
       false
      ]
@@ -159,16 +129,6 @@
       "guest_back_walk3",
       0,
       false
-     ],
-     [
-      "guest_back_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_back_walk5",
-      0,
-      false
      ]
     ]
    ]
@@ -178,7 +138,7 @@
    "loops": [
     [
      [
-      "guest_front_talk0",
+      "guest_front_stand",
       0,
       false
      ],
@@ -190,7 +150,7 @@
     ],
     [
      [
-      "guest_side_talk0",
+      "guest_side_stand",
       0,
       true
      ],
@@ -202,7 +162,7 @@
     ],
     [
      [
-      "guest_side_talk0",
+      "guest_side_stand",
       0,
       false
      ],
@@ -249,16 +209,6 @@
       "guest_B_front_walk3",
       0,
       false
-     ],
-     [
-      "guest_B_front_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_B_front_walk5",
-      0,
-      false
      ]
     ],
     [
@@ -296,16 +246,6 @@
       "guest_B_side_walk5",
       0,
       true
-     ],
-     [
-      "guest_B_side_walk6",
-      0,
-      true
-     ],
-     [
-      "guest_B_side_walk7",
-      0,
-      true
      ]
     ],
     [
@@ -341,16 +281,6 @@
      ],
      [
       "guest_B_side_walk5",
-      0,
-      false
-     ],
-     [
-      "guest_B_side_walk6",
-      0,
-      false
-     ],
-     [
-      "guest_B_side_walk7",
       0,
       false
      ]
@@ -380,16 +310,6 @@
       "guest_B_back_walk3",
       0,
       false
-     ],
-     [
-      "guest_B_back_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_B_back_walk5",
-      0,
-      false
      ]
     ]
    ]
@@ -399,7 +319,7 @@
    "loops": [
     [
      [
-      "guest_B_front_talk0",
+      "guest_B_front_stand",
       0,
       false
      ],
@@ -411,7 +331,7 @@
     ],
     [
      [
-      "guest_B_side_talk0",
+      "guest_B_side_stand",
       0,
       true
      ],
@@ -423,7 +343,7 @@
     ],
     [
      [
-      "guest_B_side_talk0",
+      "guest_B_side_stand",
       0,
       false
      ],
@@ -470,16 +390,6 @@
       "guest_U_front_walk3",
       0,
       false
-     ],
-     [
-      "guest_U_front_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_U_front_walk5",
-      0,
-      false
      ]
     ],
     [
@@ -517,16 +427,6 @@
       "guest_U_side_walk5",
       0,
       true
-     ],
-     [
-      "guest_U_side_walk6",
-      0,
-      true
-     ],
-     [
-      "guest_U_side_walk7",
-      0,
-      true
      ]
     ],
     [
@@ -562,16 +462,6 @@
      ],
      [
       "guest_U_side_walk5",
-      0,
-      false
-     ],
-     [
-      "guest_U_side_walk6",
-      0,
-      false
-     ],
-     [
-      "guest_U_side_walk7",
       0,
       false
      ]
@@ -601,16 +491,6 @@
       "guest_U_back_walk3",
       0,
       false
-     ],
-     [
-      "guest_U_back_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_U_back_walk5",
-      0,
-      false
      ]
     ]
    ]
@@ -620,7 +500,7 @@
    "loops": [
     [
      [
-      "guest_U_front_talk0",
+      "guest_U_front_stand",
       0,
       false
      ],
@@ -632,7 +512,7 @@
     ],
     [
      [
-      "guest_U_side_talk0",
+      "guest_U_side_stand",
       0,
       true
      ],
@@ -644,7 +524,7 @@
     ],
     [
      [
-      "guest_U_side_talk0",
+      "guest_U_side_stand",
       0,
       false
      ],
@@ -691,16 +571,6 @@
       "guest_BU_front_walk3",
       0,
       false
-     ],
-     [
-      "guest_BU_front_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_BU_front_walk5",
-      0,
-      false
      ]
     ],
     [
@@ -738,16 +608,6 @@
       "guest_BU_side_walk5",
       0,
       true
-     ],
-     [
-      "guest_BU_side_walk6",
-      0,
-      true
-     ],
-     [
-      "guest_BU_side_walk7",
-      0,
-      true
      ]
     ],
     [
@@ -783,16 +643,6 @@
      ],
      [
       "guest_BU_side_walk5",
-      0,
-      false
-     ],
-     [
-      "guest_BU_side_walk6",
-      0,
-      false
-     ],
-     [
-      "guest_BU_side_walk7",
       0,
       false
      ]
@@ -822,16 +672,6 @@
       "guest_BU_back_walk3",
       0,
       false
-     ],
-     [
-      "guest_BU_back_walk4",
-      0,
-      false
-     ],
-     [
-      "guest_BU_back_walk5",
-      0,
-      false
      ]
     ]
    ]
@@ -841,7 +681,7 @@
    "loops": [
     [
      [
-      "guest_BU_front_talk0",
+      "guest_BU_front_stand",
       0,
       false
      ],
@@ -853,7 +693,7 @@
     ],
     [
      [
-      "guest_BU_side_talk0",
+      "guest_BU_side_stand",
       0,
       true
      ],
@@ -865,7 +705,7 @@
     ],
     [
      [
-      "guest_BU_side_talk0",
+      "guest_BU_side_stand",
       0,
       false
      ],
@@ -878,6 +718,79 @@
     [
      [
       "guest_BU_back_stand",
+      0,
+      false
+     ]
+    ]
+   ]
+  },
+  {
+   "name": "VGESTURE",
+   "loops": [
+    [
+     [
+      "guest_gesture0",
+      0,
+      false
+     ],
+     [
+      "guest_gesture1",
+      0,
+      false
+     ],
+     [
+      "guest_gesture2",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_gesture0",
+      0,
+      true
+     ],
+     [
+      "guest_gesture1",
+      0,
+      true
+     ],
+     [
+      "guest_gesture2",
+      0,
+      true
+     ]
+    ],
+    [
+     [
+      "guest_gesture0",
+      0,
+      false
+     ],
+     [
+      "guest_gesture1",
+      0,
+      false
+     ],
+     [
+      "guest_gesture2",
+      0,
+      false
+     ]
+    ],
+    [
+     [
+      "guest_gesture0",
+      0,
+      false
+     ],
+     [
+      "guest_gesture1",
+      0,
+      false
+     ],
+     [
+      "guest_gesture2",
       0,
       false
      ]
@@ -1927,7 +1840,8 @@
      "sprites": {
       "empty": "crypt_oSeat_empty",
       "credit": "crypt_oSeat_credit",
-      "seated": "crypt_oSeat_seated"
+      "seated": "crypt_oSeat_seated",
+      "decree": "crypt_oSeat_decree"
      }
     },
     {
@@ -2180,8 +2094,6 @@
   "guest_front_walk1",
   "guest_front_walk2",
   "guest_front_walk3",
-  "guest_front_walk4",
-  "guest_front_walk5",
   "guest_side_stand",
   "guest_side_walk0",
   "guest_side_walk1",
@@ -2189,26 +2101,18 @@
   "guest_side_walk3",
   "guest_side_walk4",
   "guest_side_walk5",
-  "guest_side_walk6",
-  "guest_side_walk7",
   "guest_back_stand",
   "guest_back_walk0",
   "guest_back_walk1",
   "guest_back_walk2",
   "guest_back_walk3",
-  "guest_back_walk4",
-  "guest_back_walk5",
-  "guest_front_talk0",
   "guest_front_talk1",
-  "guest_side_talk0",
   "guest_side_talk1",
   "guest_B_front_stand",
   "guest_B_front_walk0",
   "guest_B_front_walk1",
   "guest_B_front_walk2",
   "guest_B_front_walk3",
-  "guest_B_front_walk4",
-  "guest_B_front_walk5",
   "guest_B_side_stand",
   "guest_B_side_walk0",
   "guest_B_side_walk1",
@@ -2216,26 +2120,18 @@
   "guest_B_side_walk3",
   "guest_B_side_walk4",
   "guest_B_side_walk5",
-  "guest_B_side_walk6",
-  "guest_B_side_walk7",
   "guest_B_back_stand",
   "guest_B_back_walk0",
   "guest_B_back_walk1",
   "guest_B_back_walk2",
   "guest_B_back_walk3",
-  "guest_B_back_walk4",
-  "guest_B_back_walk5",
-  "guest_B_front_talk0",
   "guest_B_front_talk1",
-  "guest_B_side_talk0",
   "guest_B_side_talk1",
   "guest_U_front_stand",
   "guest_U_front_walk0",
   "guest_U_front_walk1",
   "guest_U_front_walk2",
   "guest_U_front_walk3",
-  "guest_U_front_walk4",
-  "guest_U_front_walk5",
   "guest_U_side_stand",
   "guest_U_side_walk0",
   "guest_U_side_walk1",
@@ -2243,26 +2139,18 @@
   "guest_U_side_walk3",
   "guest_U_side_walk4",
   "guest_U_side_walk5",
-  "guest_U_side_walk6",
-  "guest_U_side_walk7",
   "guest_U_back_stand",
   "guest_U_back_walk0",
   "guest_U_back_walk1",
   "guest_U_back_walk2",
   "guest_U_back_walk3",
-  "guest_U_back_walk4",
-  "guest_U_back_walk5",
-  "guest_U_front_talk0",
   "guest_U_front_talk1",
-  "guest_U_side_talk0",
   "guest_U_side_talk1",
   "guest_BU_front_stand",
   "guest_BU_front_walk0",
   "guest_BU_front_walk1",
   "guest_BU_front_walk2",
   "guest_BU_front_walk3",
-  "guest_BU_front_walk4",
-  "guest_BU_front_walk5",
   "guest_BU_side_stand",
   "guest_BU_side_walk0",
   "guest_BU_side_walk1",
@@ -2270,19 +2158,16 @@
   "guest_BU_side_walk3",
   "guest_BU_side_walk4",
   "guest_BU_side_walk5",
-  "guest_BU_side_walk6",
-  "guest_BU_side_walk7",
   "guest_BU_back_stand",
   "guest_BU_back_walk0",
   "guest_BU_back_walk1",
   "guest_BU_back_walk2",
   "guest_BU_back_walk3",
-  "guest_BU_back_walk4",
-  "guest_BU_back_walk5",
-  "guest_BU_front_talk0",
   "guest_BU_front_talk1",
-  "guest_BU_side_talk0",
   "guest_BU_side_talk1",
+  "guest_gesture0",
+  "guest_gesture1",
+  "guest_gesture2",
   "khuc_front_stand",
   "khuc_front_walk0",
   "khuc_front_walk1",
@@ -2422,6 +2307,7 @@
   "crypt_oSeat_empty",
   "crypt_oSeat_credit",
   "crypt_oSeat_seated",
+  "crypt_oSeat_decree",
   "crypt_oHat_on",
   "plate"
  ],

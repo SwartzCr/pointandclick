@@ -165,11 +165,12 @@ def crypt():
     cd = ImageDraw.Draw(credit)
     cd.ellipse([cxl - 3, cyl - 3, cxl + 3, cyl + 3], fill=rgba((80, 250, 120)))
     cd.point((cxl - 1, cyl - 1), fill=rgba((220, 255, 220)))
-    import guest_sprite
-    g = guest_sprite.guest_seated()
+    import guest_sheet
     seated = credit.copy()
-    seated.alpha_composite(g, ((empty.width - g.width) // 2 - 4, 112 - g.height))
-    sc.obj('oSeat', 'Pope Seat', {'empty': empty, 'credit': credit, 'seated': seated}, sx0, sy1, baseline=250)
+    decree = credit.copy()
+    for im_, pose in ((seated, guest_sheet.seated()), (decree, guest_sheet.seated(decree=True))):
+        im_.alpha_composite(pose, ((empty.width - pose.width) // 2 - 2, 122 - pose.height))
+    sc.obj('oSeat', 'Pope Seat', {'empty': empty, 'credit': credit, 'seated': seated, 'decree': decree}, sx0, sy1, baseline=250)
     sc.obj('oHat', 'pasta pope hat', {'on': hat}, hbx0, hby0 + hat.height, baseline=251)
 
     sc.uv(lambda im, dd: glow_text(im, (512, 262), 'THE CRANK NEEDS', 8, (255, 160, 80)))

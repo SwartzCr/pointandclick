@@ -40,32 +40,8 @@ NECK = {'': {}, 'B': {'beads': True}, 'U': {'uv': True}, 'BU': {'beads': True, '
 
 
 def guest_views():
-    views = []
-    for tag, kind in NECK.items():
-        sfx = ('_' + tag) if tag else ''
-        walk = {}
-        for dr, n in (('front', 6), ('side', 8), ('back', 6)):
-            frames = [spr('guest%s_%s_stand' % (sfx, dr), G.guest_frame(dr, kind=kind))]
-            for i in range(n):
-                frames.append(spr('guest%s_%s_walk%d' % (sfx, dr, i),
-                                  G.guest_frame(dr, (i + 1) / n, walking=True, kind=kind)))
-            walk[dr] = frames
-        loops = [[(f, 0, False) for f in walk['front']],
-                 [(f, 0, True) for f in walk['side']],
-                 [(f, 0, False) for f in walk['side']],
-                 [(f, 0, False) for f in walk['back']]]
-        views.append(dict(name='VGUEST' + tag, loops=loops))
-        talk = {}
-        for dr in ('front', 'side'):
-            talk[dr] = [spr('guest%s_%s_talk%d' % (sfx, dr, k), G.guest_frame(dr, talk=bool(k), kind=kind))
-                        for k in range(2)]
-        talk['back'] = [walk['back'][0]]
-        tl = [[(f, 0, False) for f in talk['front']],
-              [(f, 0, True) for f in talk['side']],
-              [(f, 0, False) for f in talk['side']],
-              [(f, 0, False) for f in talk['back']]]
-        views.append(dict(name='VGTALK' + tag, loops=tl))
-    return views
+    import guest_sheet
+    return guest_sheet.guest_views(spr)
 
 
 def khuc_views():
@@ -130,6 +106,8 @@ def main():
     manifest['views'] += khuc_views()
 
     painted_icons = NM.icons()
+    import guest_sheet
+    painted_icons.update(guest_sheet.icons())
     for script, (name, fn) in U.ICONS.items():
         icon = painted_icons[script] if script in painted_icons else fn()
         manifest['inventory'].append(dict(script=script, name=name, sprite=spr('inv_' + script, icon)))
