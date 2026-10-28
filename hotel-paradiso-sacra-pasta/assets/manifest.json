@@ -2309,7 +2309,8 @@
   "crypt_oSeat_seated",
   "crypt_oSeat_decree",
   "crypt_oHat_on",
-  "plate"
+  "plate",
+  "hp_screen"
  ],
  "fork_frames": [
   "nave_oFork_f0",

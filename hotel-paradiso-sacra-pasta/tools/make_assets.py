@@ -133,6 +133,8 @@ def main():
             hotspots=[[s, n, list(w)] for s, n, w in sc.hotspots],
             objects=objs)
     spr('plate', R.ending_plate())
+    import hp_screen
+    spr('hp_screen', hp_screen.screen())
 
     fonts = [('font0.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'none'),
              ('font1.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'auto'),
