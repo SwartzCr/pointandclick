@@ -1,115 +1,125 @@
-"""The guest, from a single piece of pixel art (art_src/bellhop.png).
+"""The guest, from a turnaround sheet of pixel art.
 
-The source is an upscaled pixel-art picture (about 7.2 screen pixels per art
-pixel, not quite on an even grid), so it is first sampled back down to its
-native 40x100 pixels and its palette tidied. Every frame the game needs is
-then made from that one picture:
+art_src/bellhop_front_back.jpg holds the front and back views and
+art_src/bellhop_sides.jpg the two side views, all on magenta. Each view is
+keyed, scaled to 100 px tall, reduced to a small palette and given a hard
+edge. Every frame the game needs comes from those views:
 
-- side (facing east) is the picture itself; west is the mirror, done by AGS
-- walking swings the two legs from the hip and bobs the body
-- talking opens the mouth
-- front reuses the three-quarter view; back paints the face over with hair
-  and drops the frogging from the chest
-- the beads and the UV pendant are drawn on top, as before
+- standing: the view itself (west is AGS's mirror of the east-facing view)
+- walking: front/back lift each leg in turn; the side view scissors the legs
+  (a darker copy swings back as the far leg) and the body bobs
+- talking: the mouth opens
+- the beads and the UV pendant are drawn on at the collar
 """
 import math
 import os
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter, ImageEnhance
+from scipy import ndimage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(HERE, '..', 'art_src', 'bellhop.png')
+ART = os.path.join(HERE, '..', 'art_src')
 
 FW, FH = 48, 104          # the AGS frame, feet on the bottom row
-OX, OY = 4, 4             # where the 40x100 art sits in the frame
+ART_H = 100               # the views are scaled to this height
+INK = (20, 12, 16, 255)
 
-# landmarks in the native art (x, y)
-HIP_Y = 74                # legs start here
-LEG_SPLIT = 24            # columns < this are the far leg, >= the near leg
-BELL = (17, 87)           # left of x and above y (below the hip) is the hand and bell
-MOUTH = (27, 33)          # left end of the smile
-COLLAR = (22, 40)         # centre of the collar
+# landmarks in each 100 px tall view (x, y)
+LAND = {
+    'front': dict(hip=61, legs=(9, 31), split=20, mouth=(20, 21), collar=(19, 27)),
+    'back': dict(hip=61, legs=(9, 31), split=20, mouth=None, collar=(19, 27)),
+    'side': dict(hip=62, legs=(0, 25), split=None, mouth=(17, 21), collar=(13, 27)),
+}
 
-_native = None
+_views = None
 
 
-def _merge_palette(a, tol=14):
-    """Snap colours within tol of a more common colour onto it."""
-    flat = a[..., :3].reshape(-1, 3)
-    op = a[..., 3].reshape(-1) > 0
-    cols, counts = np.unique(flat[op], axis=0, return_counts=True)
-    order = np.argsort(-counts)
-    keep = []
-    remap = {}
-    for k in order:
-        c = cols[k].astype(int)
-        for kc in keep:
-            if np.abs(c - kc).max() <= tol:
-                remap[tuple(c)] = kc
-                break
-        else:
-            keep.append(c)
-            remap[tuple(c)] = c
-    out = a.copy()
-    for idx in np.nonzero(op)[0]:
-        out.reshape(-1, 4)[idx, :3] = remap[tuple(flat[idx].astype(int))]
+def _figures(name):
+    """The figures on one sheet, left to right, keyed off the magenta."""
+    a = np.asarray(Image.open(os.path.join(ART, name)).convert('RGB')).astype(int)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    # magenta (and the JPEG's pinkish fringe) is background
+    mag = (r - g > 70) & (b - g > 70) & (r > 120) & (b > 120)
+    fg = ndimage.binary_opening(~mag, iterations=2)
+    lab, n = ndimage.label(fg)
+    objs = ndimage.find_objects(lab)
+    sizes = ndimage.sum(fg, lab, range(1, n + 1))
+    figs = []
+    for i in range(n):
+        if sizes[i] < 20000:
+            continue
+        sl = objs[i]
+        m = ndimage.binary_erosion(lab[sl] == i + 1, iterations=2)   # drop the fringe
+        rgba = np.dstack([a[sl], m * 255]).astype(np.uint8)
+        figs.append((sl[1].start, Image.fromarray(rgba, 'RGBA')))
+    return [f for _, f in sorted(figs, key=lambda t: t[0])]
+
+
+def _shrink(im):
+    w = round(im.width * ART_H / im.height)
+    # scale colour and alpha separately so the background doesn't bleed in
+    a = np.asarray(im).astype(float)
+    alpha = a[..., 3:] / 255
+    pre = Image.fromarray((a[..., :3] * alpha).astype(np.uint8))
+    cov = Image.fromarray((alpha[..., 0] * 255).astype(np.uint8))
+    pre = np.asarray(pre.resize((w, ART_H), Image.LANCZOS)).astype(float)
+    cov = np.asarray(cov.resize((w, ART_H), Image.LANCZOS)).astype(float) / 255
+    rgb = np.clip(pre / np.maximum(cov, 1e-3)[..., None], 0, 255).astype(np.uint8)
+    out = Image.fromarray(rgb).quantize(28, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).convert('RGBA')
+    out.putalpha(Image.fromarray(np.where(cov >= 0.5, 255, 0).astype(np.uint8)))
     return out
 
 
-def native():
-    """The art at its own resolution: 40x100 RGBA, hard alpha, tidy palette."""
-    global _native
-    if _native is not None:
-        return _native.copy()
-    im = np.asarray(Image.open(SRC).convert('RGBA')).astype(float)
-    H, W = im.shape[:2]
-    px, py = 7.22, 7.32              # measured pitch of the art pixels
-    ox, oy = 6.25 - px, 6.25 - py    # and where the grid starts
-    xs, ys = np.arange(ox, W, px), np.arange(oy, H, py)
-    out = np.zeros((len(ys), len(xs), 4))
-    for j, y0 in enumerate(ys):
-        for i, x0 in enumerate(xs):
-            a, b = max(0, int(round(y0 + 1.8))), int(round(y0 + py - 1.8))
-            c, d = max(0, int(round(x0 + 1.8))), int(round(x0 + px - 1.8))
-            blk = im[a:b, c:d].reshape(-1, 4)
-            if len(blk):
-                out[j, i] = np.median(blk, 0)
-    out[..., 3] = np.where(out[..., 3] > 128, 255, 0)
-    out[out[..., 3] == 0] = 0
-    img = Image.fromarray(out.astype(np.uint8), 'RGBA')
-    img = img.crop(img.getbbox())
-    arr = _merge_palette(np.asarray(img).copy())
-    # near-black → one black
-    dark = (arr[..., :3].astype(int).sum(-1) < 40) & (arr[..., 3] > 0)
-    arr[dark, :3] = (12, 8, 16)
-    _native = Image.fromarray(arr, 'RGBA')
-    return _native.copy()
+def views():
+    global _views
+    if _views is None:
+        front, back = _figures('bellhop_front_back.jpg')
+        left, right = _figures('bellhop_sides.jpg')
+        _views = {'front': _shrink(front), 'back': _shrink(back), 'side': _shrink(right)}
+    return {k: v.copy() for k, v in _views.items()}
 
 
 # ---------------------------------------------------------------- pieces
-def _split(art):
-    """Torso (with arms and bell), far leg, near leg."""
+def _skin(a):
+    r, g, b = a[..., 0].astype(int), a[..., 1].astype(int), a[..., 2].astype(int)
+    return (r > 150) & (g > 95) & (b > 60) & (r - b > 40)
+
+
+def _split(art, view):
+    """Torso (with arms and hands) and the leg layer(s)."""
+    L = LAND[view]
     a = np.asarray(art).copy()
     h, w = a.shape[:2]
     yy, xx = np.mgrid[0:h, 0:w]
-    legs = (yy >= HIP_Y) & ~((xx < BELL[0]) & (yy < BELL[1]))
-    far = legs & (xx < LEG_SPLIT)
-    near = legs & (xx >= LEG_SPLIT)
+    op = a[..., 3] > 0
+    x0, x1 = L['legs']
+    legs = op & (yy >= L['hip']) & (xx >= x0) & (xx < x1)
+    if view == 'side':
+        # the hand and cuff hang in front of the thigh: keep them on the torso
+        dark = a[..., :3].astype(int).sum(-1) < 120
+        legs &= ~_skin(a) & ~((yy < 70) & dark)
+        hand = ndimage.binary_dilation(op & (yy >= L['hip']) & (yy < 74) & _skin(a), iterations=1)
+        legs &= ~hand
+
     def layer(m):
         b = np.zeros_like(a)
         b[m] = a[m]
         return Image.fromarray(b, 'RGBA')
-    return layer(~legs), layer(far), layer(near)
+
+    torso = layer(op & ~legs)
+    if L['split'] is None:
+        return torso, [layer(legs)]
+    return torso, [layer(legs & (xx < L['split'])), layer(legs & (xx >= L['split']))]
 
 
-def _swing(leg, amount, lift):
-    """Swing a leg from the hip: rows shift sideways in proportion to their
-    distance below the hip, and the foot lifts."""
+def _swing(leg, hip, amount, lift):
+    """Swing a leg from the hip: rows shift sideways more the lower they are,
+    and the foot lifts."""
     a = np.asarray(leg)
     out = np.zeros_like(a)
     h = a.shape[0]
-    for y in range(HIP_Y, h):
-        t = (y - HIP_Y) / (h - HIP_Y)
+    for y in range(hip, h):
+        t = (y - hip) / max(1, h - 1 - hip)
         dx = int(round(amount * t))
         ny = y - int(round(lift * t))
         row = np.roll(a[y], dx, axis=0)
@@ -119,102 +129,87 @@ def _swing(leg, amount, lift):
             row[dx:] = 0
         m = row[:, 3] > 0
         out[ny][m] = row[m]
-    # keep the thigh tops joined to the hip
     return Image.fromarray(out, 'RGBA')
 
 
-def _talk(art):
+def _talk(art, view):
+    x, y = LAND[view]['mouth']
     d = ImageDraw.Draw(art)
-    x, y = MOUTH
-    d.rectangle([x + 1, y, x + 5, y + 2], fill=(12, 8, 16, 255))
-    d.rectangle([x + 2, y + 1, x + 4, y + 1], fill=(170, 40, 46, 255))
+    if view == 'front':
+        d.rectangle([x - 2, y, x + 1, y + 1], fill=(70, 20, 24, 255))
+        d.point((x - 1, y + 1), fill=(170, 60, 60, 255))
+    else:
+        d.rectangle([x, y, x + 2, y + 1], fill=(70, 20, 24, 255))
     return art
-
-
-def _back(art):
-    """Turn him round: hair over the face, a plain back to the jacket."""
-    a = np.asarray(art).copy()
-    h, w = a.shape[:2]
-    op = a[..., 3] > 0
-    hair = np.array([121, 44, 22])
-    hair_dk = np.array([90, 30, 14])
-    red = np.array([213, 34, 27])
-    border = np.zeros_like(op)
-    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-        border |= op & ~np.roll(np.roll(op, dy, 0), dx, 1)
-    for y in range(18, 38):
-        for x in range(0, w):
-            if not op[y, x] or border[y, x]:
-                continue
-            a[y, x, :3] = hair_dk if (x % 6 == 0 and y > 22) else hair
-    # frogging and buttons on the chest become plain jacket
-    for y in range(40, 70):
-        for x in range(14, 36):
-            r, g, b = a[y, x, :3].astype(int)
-            if op[y, x] and not border[y, x] and r > 200 and g > 120:
-                a[y, x, :3] = red
-    # a strip of neck under the hair
-    a[37:39, 18:30][op[37:39, 18:30] & ~border[37:39, 18:30], :3] = (230, 160, 125)
-    return Image.fromarray(a, 'RGBA')
 
 
 def _neck(art, kind, view):
-    """Beads and pendant, drawn the same way as the old sprite did."""
+    """Beads and pendant, drawn as on the old sprite."""
     import art_people
     P = {k: art_people._P(v) for k, v in art_people.GUEST.items()}
     d = ImageDraw.Draw(art)
-    cx, y = COLLAR
-    art_people._neckwear(d, P, cx, y, kind, 'back' if view == 'back' else 'front')
+    cx, y = LAND[view]['collar']
+    art_people._neckwear(d, P, cx, y, kind, view)
     return art
+
+
+def _outline(im):
+    a = im.getchannel('A')
+    ring = Image.eval(a.filter(ImageFilter.MaxFilter(3)), lambda v: v)
+    out = Image.new('RGBA', im.size, (0, 0, 0, 0))
+    out.paste(Image.new('RGBA', im.size, INK), (0, 0), ring)
+    out.alpha_composite(im)
+    return out
 
 
 # ---------------------------------------------------------------- frames
 def guest_frame(direction, phase=0.0, walking=False, talk=False, kind=None, blink=False):
-    """Same signature as art_people.guest_frame. direction: front, side, back."""
-    art = native()
-    if direction == 'back':
-        art = _back(art)
-    torso, far, near = _split(art)
+    """direction: front, side (facing east) or back. Same signature as before."""
+    art = views()[direction]
+    L = LAND[direction]
+    torso, legs = _split(art, direction)
     bob = 0
     if walking:
         s = math.sin(phase * 2 * math.pi)
         bob = int(round(abs(s)))
         if direction == 'side':
-            far = _swing(far, -4 * s, max(0, s) * 2)
-            near = _swing(near, 4 * s, max(0, -s) * 2)
+            leg = legs[0]
+            near = _swing(leg, L['hip'], 5 * s, max(0, -s) * 2)
+            far = _swing(leg, L['hip'], -5 * s, max(0, s) * 2)
+            far = ImageEnhance.Brightness(far).enhance(0.62)
+            legs = [far, near]
         else:
-            far = _swing(far, 0, max(0, s) * 3)
-            near = _swing(near, 0, max(0, -s) * 3)
-    from art_common import outline
-    legs = Image.new('RGBA', art.size, (0, 0, 0, 0))
-    legs.alpha_composite(far)
-    legs.alpha_composite(near)
+            legs = [_swing(legs[0], L['hip'], 0, max(0, s) * 3), _swing(legs[1], L['hip'], 0, max(0, -s) * 3)]
+    lay = Image.new('RGBA', art.size, (0, 0, 0, 0))
+    for leg in legs:
+        lay.alpha_composite(leg)
     if walking:
-        legs = outline(legs, color=(12, 8, 16, 255))   # close the steps the swing opens
+        lay = _outline(lay)
     body = Image.new('RGBA', art.size, (0, 0, 0, 0))
-    body.alpha_composite(legs)
+    body.alpha_composite(lay)
     body.alpha_composite(torso)
-    if talk and direction != 'back':
-        body = _talk(body)
+    if talk and L['mouth']:
+        body = _talk(body, direction)
     if kind:
         body = _neck(body, kind, direction)
     frame = Image.new('RGBA', (FW, FH), (0, 0, 0, 0))
-    frame.alpha_composite(body, (OX, OY - bob))
+    frame.alpha_composite(body, ((FW - art.width) // 2, FH - ART_H - bob))
     return frame
 
 
 def guest_seated():
-    """For the Pope Seat: the upper body over a pair of short seated legs (48x80)."""
-    art = native()
-    upper = art.crop((0, 0, art.width, HIP_Y))
-    # the bell hangs below the hip; sitting, it rests in his lap
+    """For the Pope Seat: the front view's upper body over short seated legs (48x80)."""
+    art = views()['front']
+    hip = LAND['front']['hip']
+    upper = art.crop((0, 0, art.width, hip + 10))
     im = Image.new('RGBA', (FW, 80), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    for x in (OX + 14, OX + 26):
-        d.rectangle([x - 1, 70, x + 9, 79], fill=(12, 8, 16, 255))
-        d.rectangle([x, 70, x + 8, 75], fill=(18, 3, 72, 255))
-        d.rectangle([x, 76, x + 8, 78], fill=(115, 21, 13, 255))
-    im.alpha_composite(upper, (OX, 80 - HIP_Y - 8))
+    ox = (FW - art.width) // 2
+    for x in (ox + 10, ox + 21):
+        d.rectangle([x - 1, 68, x + 9, 79], fill=INK)
+        d.rectangle([x, 68, x + 8, 75], fill=(170, 26, 24, 255))
+        d.rectangle([x, 76, x + 8, 78], fill=(40, 26, 22, 255))
+    im.alpha_composite(upper, (ox, 80 - (hip + 10) - 6))
     return im
 
 
@@ -228,4 +223,5 @@ if __name__ == '__main__':
         for k, f in enumerate(frames):
             sheet.alpha_composite(f, (k * FW, r * FH))
     sheet.alpha_composite(guest_seated(), (11 * FW, 0))
-    sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save('/tmp/claude-0/sprite/sheet.png')
+    out = sys.argv[1] if len(sys.argv) > 1 else '/tmp/claude-0/bh/sheet.png'
+    sheet.resize((sheet.width * 3, sheet.height * 3), Image.NEAREST).save(out)
