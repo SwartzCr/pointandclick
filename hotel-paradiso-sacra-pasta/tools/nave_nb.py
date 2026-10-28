@@ -33,6 +33,10 @@ _rooms = {}
 
 
 def room_image(name):
+    if os.environ.get('NAVE_TEST') and name in ('base.jpg', '01-archway-closed.jpg'):
+        # a trial room: shown as it is, with no puzzle pieces cut from it
+        return Image.open(os.environ['NAVE_TEST']).convert('RGB').resize((W, VIEW_H), Image.LANCZOS).filter(
+            ImageFilter.UnsharpMask(radius=1.0, percent=70, threshold=2))
     """The room at 640x288. When the high-resolution closed-arch picture is there,
     everything comes from it (crisper), except the open archway itself, which only
     the original base shows; the '1.' label in its corner is painted out."""
@@ -134,7 +138,12 @@ def nave():
 
     # ---------- A1: the archway, closed by the variant with the arch filled in
     closed = room_image('01-archway-closed.jpg')
-    m = changed(base, closed, ARCH_BOX)
+    if os.environ.get('NAVE_TEST'):
+        closed = _load('01-archway-closed.jpg')
+        base_for_arch = _load('base.jpg')
+    else:
+        base_for_arch = base
+    m = changed(base_for_arch, closed, ARCH_BOX)
     piece = quantized(closed.crop(ARCH_BOX)).convert('RGBA')
     piece.putalpha(m)
     panel = piece.crop(m.getbbox())
@@ -266,6 +275,12 @@ def nave():
     sc.uv(lambda im, dd: glow_text(im, (157, 250), 'FIRST CAME THE STRING', 8, (120, 230, 255)))
 
     # ---------- walkable floor and walk-behinds
+    if os.environ.get('NAVE_TEST'):
+        blank = Image.new('RGBA', (1, 1), (0, 0, 0, 0))
+        for o in sc.objects:
+            o['sprites'] = {k: blank for k in o['sprites']}
+        sc.wd.polygon([(40, 288), (150, 245), (640, 245), (640, 288)], fill=1)
+        return sc
     sc.wd.polygon([(20, 288), (40, 272), (90, 244), (220, 240), (232, 224), (300, 224), (352, 226),
                    (358, 232), (516, 232), (540, 216), (570, 216), (560, 254), (612, 258), (628, 288)], fill=1)
     sc.walkbehind('poly', SCALES, 252)
