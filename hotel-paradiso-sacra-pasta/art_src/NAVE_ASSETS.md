@@ -184,5 +184,5 @@ Where: left wall, under "First Taste" (8–50, 126–182), 42×56.
 - **The ultraviolet look** of the room and every piece, and the glowing writing ("SAUCE THY
   OFFERING", "THE WORD IS SPUN", "FIRST CAME THE STRING", "SPIN UNTIL IT GLOWS", "NOT A WALL"):
   I make these.
-- **Characters** (the bellhop and Khuc): separate sprites. The room only needs open floor for them.
+- **Characters** (the bellhop and Chuk): separate sprites. The room only needs open floor for them.
 - **The Crypt:** a list like this one can follow if you want it.

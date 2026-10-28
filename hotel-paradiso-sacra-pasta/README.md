@@ -6,7 +6,7 @@ runs in ScummVM (2.9 or newer), where it was tested, and should also run in the 
 
 The clowns finally carried you up to the party on the ninth floor. Room 913 has been
 turned into **the Nave**, a workshop of string, noodles and old inventions, kept by
-Khuc, Keeper of the Archway, who wears a colander. The real party is in **the Crypt**
+Chuk, Keeper of the Archway, who wears a colander. The real party is in **the Crypt**
 behind the wall: an arcade, a crocheted Flying Spaghetti Monster, and a Pope Seat that
 nobody has sat in all night. Dinner is served when the Pope decrees it. There is no Pope.
 
@@ -46,7 +46,7 @@ the answer.
 
 <details><summary>Walkthrough (spoilers)</summary>
 
-1. Talk to Khuc. To be ordained you need to **wear the beads**, **speak the Word** and
+1. Talk to Chuk. To be ordained you need to **wear the beads**, **speak the Word** and
    **bring a sauced golden offering**. If you're stuck, tell him so: he gives a nudge
    for the next step.
 2. **Beads:** open the wardrobe, take the pasta rosary beads and use them on yourself.
@@ -62,23 +62,23 @@ the answer.
    signs in order: raise a mountain, part the marinara river, then (wearing the
    pendant) make a purple star shine. They're yours to command: you send them digging,
    and they bring you a whip-it canister.
-8. **The puzzle box:** it's Khuc's, and the combination is written on its bottom in
+8. **The puzzle box:** it's Chuk's, and the combination is written on its bottom in
    writing too small to read. Fiddle with it and he offers to read it for a whip-it.
    Give him the canister and he reads it as a riddle: "First the sea, then the tube,
    and last the bow". Press the shell, the penne, then the farfalle, and take the
    golden rigatone.
 9. **The sauce:** the First Supper says a pump of red for each of the Noodly One's eyes
    (two), green for each of his noses (none) and one yellow. Push the red dispenser
-   twice and the yellow once, then use the rigatone on the bowl. (Khuc tastes a wrong
+   twice and the yellow once, then use the rigatone on the bowl. (Chuk tastes a wrong
    mix, says what's off, licks it clean and gives it back.)
-   Then talk to Khuc, say "ALL PASTA IS HOLY", and give him the sauced rigatone.
+   Then talk to Chuk, say "ALL PASTA IS HOLY", and give him the sauced rigatone.
    The wall opens and he goes to play T. rex in the Crypt.
 8. In the Crypt, use the Classic Computer to read PASTA.DB, then turn the labels on the
    Pasta Identification wall to FUSILLI, ORECCHIETTE, FARFALLE, RIGATONI. WORTHY lights
-   up and Khuc goes to the Pope Seat's crank.
+   up and Chuk goes to the Pope Seat's crank.
 9. Play CONFESS (the 3Button cabinet) and confess three sins from Room 714. Don't
    confess the pineapple. Pick up the token.
-10. Put the token in the Pope Seat and sit in it. Khuc cranks the hat down; decree
+10. Put the token in the Pope Seat and sit in it. Chuk cranks the hat down; decree
     "Let there be dinner!"
 
 </details>
@@ -95,7 +95,7 @@ by `agscc`, the command-line AGS script compiler that ships in the AGS source tr
 | Path | Contents |
 |---|---|
 | `src/game.asc`, `src/game.ash` | The whole game script: the verb interface, the conversation picker, both rooms' puzzles, the intro and the ending |
-| `tools/art_people.py` | The guest (in the bellhop uniform from Room 714, with or without the beads and pendant) and Khuc, drawn procedurally |
+| `tools/art_people.py` | The guest (in the bellhop uniform from Room 714, with or without the beads and pendant) and Chuk, drawn procedurally |
 | `tools/art_rooms.py` | Both rooms, their UV versions, the title screen, and every object, plus the hotspot, walkable and walk-behind masks painted alongside |
 | `tools/art_ui.py` | Cursor and inventory icons |
 | `tools/sound.py` | All sound effects and the three pieces of music, synthesised with numpy |

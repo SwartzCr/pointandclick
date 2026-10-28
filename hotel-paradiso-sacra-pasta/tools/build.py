@@ -61,7 +61,7 @@ def main():
     chars = [
         G.Character('cGuest', 'yourself', vnum['VGUEST'], speech_view=vnum['VGTALK'], room=3, x=-100, y=300,
                     speech_color=c565(250, 250, 250), walk_x=4, walk_y=3, anim_delay=3, clickable=True),
-        G.Character('cKhuc', 'Khuc', vnum['VKHUC'], speech_view=vnum['VKTALK'], room=1, x=572, y=198,
+        G.Character('cKhuc', 'Chuk', vnum['VKHUC'], speech_view=vnum['VKTALK'], room=1, x=572, y=198,
                     speech_color=c565(255, 176, 80), walk_x=3, walk_y=2, anim_delay=4),
         G.Character('cVoice', 'voice', vnum['VBLANK'], room=-1, x=-50, y=-50,
                     speech_color=c565(250, 250, 250), clickable=False),
