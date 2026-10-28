@@ -14,7 +14,7 @@ from guest_sprite import _shrink
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, '..', 'art_src', 'khuc_sheet.jpg')
-KH = 110                       # standing height in game pixels (the bellhop is 100)
+KH = 165                       # standing height in game pixels (the bellhop is 150)
 TOP_H, BOTTOM_H = 395, 310     # a standing Khuc's height on each row of the sheet
 
 _cut = None

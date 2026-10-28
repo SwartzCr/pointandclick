@@ -20,16 +20,30 @@ from scipy import ndimage
 HERE = os.path.dirname(os.path.abspath(__file__))
 ART = os.path.join(HERE, '..', 'art_src')
 
-FW, FH = 48, 104          # the AGS frame, feet on the bottom row
-ART_H = 100               # the views are scaled to this height
+ART_H = 150               # the views are scaled to this height (the painted Nave is drawn big)
+FW, FH = 72, ART_H + 4    # the AGS frame, feet on the bottom row
 INK = (20, 12, 16, 255)
 
-# landmarks in each 100 px tall view (x, y)
-LAND = {
+# landmarks in each view, measured at 100 px tall (x, y); scaled to ART_H below
+LAND100 = {
     'front': dict(hip=61, legs=(9, 31), split=20, mouth=(20, 21), collar=(19, 27)),
     'back': dict(hip=61, legs=(9, 31), split=20, mouth=None, collar=(19, 27)),
     'side': dict(hip=62, legs=(0, 25), split=None, mouth=(17, 21), collar=(13, 27)),
 }
+
+
+
+def _sc(v):
+    k = ART_H / 100
+    if v is None:
+        return None
+    if isinstance(v, tuple):
+        return tuple(int(round(t * k)) for t in v)
+    return int(round(v * k))
+
+
+LAND = {view: {key: (val if key == 'split' and val is None else _sc(val)) for key, val in d.items()}
+        for view, d in LAND100.items()}
 
 _views = None
 
@@ -97,8 +111,8 @@ def _split(art, view):
     if view == 'side':
         # the hand and cuff hang in front of the thigh: keep them on the torso
         dark = a[..., :3].astype(int).sum(-1) < 120
-        legs &= ~_skin(a) & ~((yy < 70) & dark)
-        hand = ndimage.binary_dilation(op & (yy >= L['hip']) & (yy < 74) & _skin(a), iterations=1)
+        legs &= ~_skin(a) & ~((yy < _sc(70)) & dark)
+        hand = ndimage.binary_dilation(op & (yy >= L['hip']) & (yy < _sc(74)) & _skin(a), iterations=1)
         legs &= ~hand
 
     def layer(m):
@@ -136,10 +150,10 @@ def _talk(art, view):
     x, y = LAND[view]['mouth']
     d = ImageDraw.Draw(art)
     if view == 'front':
-        d.rectangle([x - 2, y, x + 1, y + 1], fill=(70, 20, 24, 255))
-        d.point((x - 1, y + 1), fill=(170, 60, 60, 255))
+        d.rectangle([x - 3, y, x + 2, y + 2], fill=(70, 20, 24, 255))
+        d.rectangle([x - 2, y + 2, x + 1, y + 2], fill=(170, 60, 60, 255))
     else:
-        d.rectangle([x, y, x + 2, y + 1], fill=(70, 20, 24, 255))
+        d.rectangle([x, y, x + 3, y + 2], fill=(70, 20, 24, 255))
     return art
 
 
@@ -147,9 +161,12 @@ def _neck(art, kind, view):
     """Beads and pendant, drawn as on the old sprite."""
     import art_people
     P = {k: art_people._P(v) for k, v in art_people.GUEST.items()}
-    d = ImageDraw.Draw(art)
-    cx, y = LAND[view]['collar']
-    art_people._neckwear(d, P, cx, y, kind, view)
+    k = ART_H / 100
+    lay = Image.new('RGBA', (int(art.width / k) + 2, int(art.height / k) + 2), (0, 0, 0, 0))
+    cx, y = LAND100[view]['collar']
+    art_people._neckwear(ImageDraw.Draw(lay), P, cx, y, kind, view)
+    lay = lay.resize((int(lay.width * k), int(lay.height * k)), Image.NEAREST)
+    art.alpha_composite(lay.crop((0, 0, art.width, art.height)))
     return art
 
 
@@ -174,12 +191,12 @@ def guest_frame(direction, phase=0.0, walking=False, talk=False, kind=None, blin
         bob = int(round(abs(s)))
         if direction == 'side':
             leg = legs[0]
-            near = _swing(leg, L['hip'], 5 * s, max(0, -s) * 2)
-            far = _swing(leg, L['hip'], -5 * s, max(0, s) * 2)
+            near = _swing(leg, L['hip'], 7 * s, max(0, -s) * 3)
+            far = _swing(leg, L['hip'], -7 * s, max(0, s) * 3)
             far = ImageEnhance.Brightness(far).enhance(0.62)
             legs = [far, near]
         else:
-            legs = [_swing(legs[0], L['hip'], 0, max(0, s) * 3), _swing(legs[1], L['hip'], 0, max(0, -s) * 3)]
+            legs = [_swing(legs[0], L['hip'], 0, max(0, s) * 4), _swing(legs[1], L['hip'], 0, max(0, -s) * 4)]
     lay = Image.new('RGBA', art.size, (0, 0, 0, 0))
     for leg in legs:
         lay.alpha_composite(leg)
@@ -200,7 +217,10 @@ def guest_frame(direction, phase=0.0, walking=False, talk=False, kind=None, blin
 def guest_seated():
     """For the Pope Seat: the front view's upper body over short seated legs (48x80)."""
     art = views()['front']
-    hip = LAND['front']['hip']
+    art = art.resize((round(art.width * 100 / ART_H), 100), Image.LANCZOS)
+    art.putalpha(art.getchannel('A').point(lambda v: 255 if v >= 128 else 0))
+    hip = LAND100['front']['hip']
+    FW = 48
     upper = art.crop((0, 0, art.width, hip + 10))
     im = Image.new('RGBA', (FW, 80), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)

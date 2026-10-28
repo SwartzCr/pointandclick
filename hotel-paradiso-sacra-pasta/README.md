@@ -53,8 +53,8 @@ the answer.
    counting, then noodles, then the fork; the Word shows itself under UV light.
 3. **Timeline:** press the tiles oldest first: string, counting (the tally bone),
    noodles, fork. A drawer opens; take the UV pendant and put it on (use it on yourself).
-4. **The Word:** under UV, turn each barrel of the Paragraph Spinner until its word
-   glows: ALL NOODLES ARE SACRED.
+4. **The Word:** under UV, pull the lever by each window of the Paragraph Spinner until its word
+   glows: ALL PASTA IS HOLY.
 5. **The rigatone:** under UV the puzzle box buttons are numbered: press the shell, the
    penne, then the farfalle. Take the golden rigatone.
 6. **The sauce:** pick up the telephone on the sod table a few times to hear its three
@@ -66,7 +66,7 @@ the answer.
    the third story. Use the sod table to play God and show the three signs in order:
    raise a mountain, part the marinara river, then (wearing the pendant) make a purple
    star shine. They hand over the beads; put them on.
-   Then talk to Khuc, say "ALL NOODLES ARE SACRED", and give him the sauced rigatone.
+   Then talk to Khuc, say "ALL PASTA IS HOLY", and give him the sauced rigatone.
    The wall opens and he goes to play T. rex in the Crypt.
 8. In the Crypt, use the Classic Computer to read PASTA.DB, then turn the labels on the
    Pasta Identification wall to FUSILLI, ORECCHIETTE, FARFALLE, RIGATONI. WORTHY lights

@@ -206,10 +206,10 @@ def walkable_floor(sc, margin_top=158, front=286, inset=14):
 NAVE_WALL = (236, 214, 168)
 NAVE_WALL_DK = (196, 168, 120)
 WORDS = [['THE', 'ALL', 'NO', 'SOME'],
-         ['FORKS', 'SAUCES', 'NOODLES', 'CHEESES'],
-         ['ARE', 'SEEM', 'LOOK', 'TASTE'],
-         ['SOGGY', 'SACRED', 'BLAND', 'RAW']]
-ANSWER = [1, 2, 0, 1]          # ALL NOODLES ARE SACRED
+         ['FORKS', 'SAUCE', 'PASTA', 'BREAD'],
+         ['IS', 'SEEM', 'LOOK', 'FEEL'],
+         ['SOGGY', 'HOLY', 'BLAND', 'RAW']]
+ANSWER = [1, 2, 0, 1]          # ALL PASTA IS HOLY (short words: the windows are 20 px wide)
 TILES = ['noodles', 'fork', 'string', 'counting']   # left to right on the timeline
 TILE_NAMES = {'noodles': 'noodle tile', 'fork': 'fork tile', 'string': 'string tile', 'counting': 'tally bone tile'}
 BUTTONS = ['penne', 'farfalle', 'shell']            # left to right on the puzzle box
