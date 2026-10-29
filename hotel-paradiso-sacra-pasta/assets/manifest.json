@@ -1522,6 +1522,32 @@
      }
     },
     {
+     "script": "oRobe",
+     "name": "purple robe",
+     "x": 623,
+     "y": 184,
+     "visible": false,
+     "baseline": 202,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "nave_oRobe_on"
+     }
+    },
+    {
+     "script": "oGoldRobe",
+     "name": "gold robe",
+     "x": 612,
+     "y": 213,
+     "visible": false,
+     "baseline": 202,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "nave_oGoldRobe_on"
+     }
+    },
+    {
      "script": "oPamphlet",
      "name": "Spaghetti Theory pamphlet",
      "x": 195,
@@ -2628,6 +2654,8 @@
   "nave_oWardrobe_closed",
   "nave_oWardrobe_open",
   "nave_oBeads_on",
+  "nave_oRobe_on",
+  "nave_oGoldRobe_on",
   "nave_oPamphlet_on",
   "nave_oDrum1_w0",
   "nave_oDrum1_u0",

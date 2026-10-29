@@ -166,6 +166,11 @@ def nave():
     sc.obj('oWardrobe', 'wardrobe', {'closed': ward, 'open': ward_open}, wx0, wy1, baseline=200)
     beads = to_pal(fit(keyed('A7-rosary-beads.png'), 12, 30))
     sc.obj('oBeads', 'pasta rosary beads', {'on': beads}, 612, 130, visible=False, baseline=201)
+    # the robes inside, cut from the open wardrobe so they can be pointed at
+    for script, name, (x0, y0, x1, y1) in (('oRobe', 'purple robe', (623, 112, 630, 184)),
+                                           ('oGoldRobe', 'gold robe', (612, 126, 623, 213))):
+        sc.obj(script, name, {'on': ward_open.crop((x0 - wx0, y0 - wy0, x1 - wx0, y1 - wy0))},
+               x0, y1, visible=False, baseline=202)
 
     # ---------- A3: pamphlets in the holder next to the telephone
     pam = to_pal(fit(keyed('A3-pamphlets.png'), 15, 17))
