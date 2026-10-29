@@ -138,7 +138,8 @@ def main():
     import hp_screen
     spr('hp_screen', hp_screen.screen())
     import hotel_mini
-    spr('hp_loading', hotel_mini.loading_screen())
+    for k, im in enumerate(hotel_mini.loading_screens()):
+        spr('hp_loading%d' % k, im)
 
     fonts = [('font0.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'none'),
              ('font1.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'auto'),

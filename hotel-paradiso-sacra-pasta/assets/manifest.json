@@ -2628,7 +2628,12 @@
   "hotel_oNewspaper_on",
   "plate",
   "hp_screen",
-  "hp_loading"
+  "hp_loading0",
+  "hp_loading1",
+  "hp_loading2",
+  "hp_loading3",
+  "hp_loading4",
+  "hp_loading5"
  ],
  "fork_frames": [
   "nave_oFork_f0",

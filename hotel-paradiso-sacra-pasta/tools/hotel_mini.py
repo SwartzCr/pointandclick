@@ -103,24 +103,30 @@ def hotel():
     return sc
 
 
-def loading_screen():
-    """640x400: Hotel Paradiso's own title picture on the CRT, with a loading bar."""
+def loading_screens():
+    """640x400 frames: Hotel Paradiso's title on the CRT, with a loading bar filling up."""
     art = hp_art()
     title = x2(art.render_title().convert('RGB')).convert('RGBA')
-    im = Image.new('RGBA', (W, H), (0, 0, 0, 255))
-    im.paste(title, (0, 0))
-    a = np.asarray(im).astype(float)
+    base = Image.new('RGBA', (W, H), (0, 0, 0, 255))
+    base.paste(title, (0, 0))
+    a = np.asarray(base).astype(float)
     a[1:VIEW_H:2, :, :3] *= 0.86
-    im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGBA')
-    d = ImageDraw.Draw(im)
+    base = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGBA')
     f = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 14)
     g = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 10)
-    d.text((W // 2, 318), 'HOTEL PARADISO - ROOM 714', font=f, fill=rgba((255, 120, 170)), anchor='mm')
-    d.text((W // 2, 342), 'LOADING...', font=g, fill=rgba((200, 255, 200)), anchor='mm')
-    d.rectangle([200, 356, 440, 366], outline=rgba((200, 255, 200)))
-    d.rectangle([203, 359, 360, 363], fill=rgba((200, 255, 200)))
-    d.text((W // 2, 388), 'C:\\GAMES\\HOTEL.EXE', font=g, fill=rgba((120, 160, 120)), anchor='mm')
-    return im
+    out = []
+    for frac, label in ((0.0, 'LOADING...'), (0.2, 'LOADING...'), (0.45, 'LOADING CLOWNS...'),
+                        (0.6, 'LOADING CLOWNS...'), (0.85, 'LOADING DUCK...'), (1.0, 'READY.')):
+        im = base.copy()
+        d = ImageDraw.Draw(im)
+        d.text((W // 2, 318), 'HOTEL PARADISO - ROOM 714', font=f, fill=rgba((255, 120, 170)), anchor='mm')
+        d.text((W // 2, 342), label, font=g, fill=rgba((200, 255, 200)), anchor='mm')
+        d.rectangle([200, 356, 440, 366], outline=rgba((200, 255, 200)))
+        if frac > 0:
+            d.rectangle([203, 359, 203 + int(234 * frac), 363], fill=rgba((200, 255, 200)))
+        d.text((W // 2, 388), 'C:\\GAMES\\HOTEL.EXE', font=g, fill=rgba((120, 160, 120)), anchor='mm')
+        out.append(im)
+    return out
 
 
 def views(spr):
