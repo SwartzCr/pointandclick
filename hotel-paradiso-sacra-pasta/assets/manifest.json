@@ -2449,6 +2449,24 @@
    "repeat": false
   },
   {
+   "script": "aTvClick",
+   "file": "audio/aTvClick.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aLampClick",
+   "file": "audio/aLampClick.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aFridge",
+   "file": "audio/aFridge.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
    "script": "aMusTitle",
    "file": "audio/aMusTitle.wav",
    "type": 1,

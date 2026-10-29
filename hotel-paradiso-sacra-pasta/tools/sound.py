@@ -2,6 +2,7 @@
 written as 16-bit mono WAV files (22050 Hz)."""
 import io
 import math
+import os
 import wave
 import numpy as np
 from scipy.signal import lfilter
@@ -370,3 +371,40 @@ EFFECTS = {
     'aPhone': sfx_phone,
 }
 MUSIC = {'aMusTitle': music_title, 'aMusCrypt': music_crypt, 'aMusEnding': music_ending}
+
+
+# ------------------------------------------------------------------ sounds from the first game
+HP_ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'hotel-paradiso-scummc', 'assets')
+
+
+def read_voc(name):
+    """An 8-bit unsigned Creative VOC (block type 1) from Hotel Paradiso, resampled to SR."""
+    b = open(os.path.join(HP_ASSETS, name), 'rb').read()
+    p = int.from_bytes(b[20:22], 'little')
+    out, rate = [], None
+    while p < len(b) and b[p] != 0:
+        t = b[p]; n = int.from_bytes(b[p + 1:p + 4], 'little'); body = b[p + 4:p + 4 + n]
+        if t == 1:
+            rate = 1000000 / (256 - body[0])
+            out.append(np.frombuffer(body[2:], dtype=np.uint8))
+        elif t == 2:
+            out.append(np.frombuffer(body, dtype=np.uint8))
+        p += 4 + n
+    x = (np.concatenate(out).astype(float) - 128) / 128
+    m = int(len(x) * SR / rate)
+    return np.interp(np.linspace(0, len(x) - 1, m), np.arange(len(x)), x)
+
+
+def tv_click():
+    """The first game's click, then a quick burst of static as the channel changes."""
+    c = read_voc('lamp_click.voc')
+    n = int(0.18 * SR)
+    st = np.random.default_rng(3).uniform(-1, 1, n) * np.linspace(0.5, 0, n)
+    return np.concatenate([c[:int(0.08 * SR)], st])
+
+
+EFFECTS.update({
+    'aTvClick': lambda: tv_click(),
+    'aLampClick': lambda: read_voc('lamp_click.voc'),
+    'aFridge': lambda: read_voc('fridge.voc'),
+})
