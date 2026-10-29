@@ -407,4 +407,6 @@ EFFECTS.update({
     'aTvClick': lambda: tv_click(),
     'aLampClick': lambda: read_voc('lamp_click.voc'),
     'aFridge': lambda: read_voc('fridge.voc'),
+    'aPhoneDial': lambda: read_voc('phone_dial.voc'),
+    'aPhoneHang': lambda: read_voc('phone_hang.voc'),
 })

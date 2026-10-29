@@ -2467,6 +2467,18 @@
    "repeat": false
   },
   {
+   "script": "aPhoneDial",
+   "file": "audio/aPhoneDial.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aPhoneHang",
+   "file": "audio/aPhoneHang.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
    "script": "aMusTitle",
    "file": "audio/aMusTitle.wav",
    "type": 1,
