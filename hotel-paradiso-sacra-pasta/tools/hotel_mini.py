@@ -126,7 +126,7 @@ def hotel():
     sc.hotspot('hTv', 'TV', (200, 210), [('rect', [164, 70, 236, 136])])
     sc.hotspot('hDresser', 'dresser', (200, 210), [('rect', [144, 130, 256, 190])])
     sc.hotspot('hCurtains', 'curtains', (330, 210), [('rect', [266, 12, 390, 148])])
-    sc.hotspot('hMinibar', 'minibar', (320, 210), [('rect', [286, 148, 352, 190])])
+    sc.hotspot('hMinibar', 'minibar', (378, 214), [('rect', [286, 148, 352, 190])])
     sc.hotspot('hLamp', 'lamp', (430, 210), [('rect', [398, 80, 436, 140])])
     sc.hotspot('hPhone', 'phone', (440, 210), [('rect', [436, 122, 464, 140])])
     sc.hotspot('hNightstand', 'nightstand', (430, 210), [('rect', [400, 140, 464, 192])])
@@ -162,6 +162,12 @@ def hotel():
     face.putalpha(Image.fromarray((np.asarray(face.getchannel('A')).astype(int) * np.asarray(glass) // 255).astype(np.uint8)))
     with_face = opened.copy()
     with_face.alpha_composite(face)
+    mb_box = (142, 72, 178, 97)
+    sc.obj('oMinibar', 'minibar', {'closed': region({}, mb_box), 'open': region({'minibar': 2}, mb_box)},
+           mb_box[0] * 2, mb_box[3] * 2, baseline=1, clickable=False, state='closed')
+    candy_box = (151, 87, 167, 93)
+    sc.obj('oCandy', 'candy bar', {'on': region({'minibar': 1}, candy_box)},
+           candy_box[0] * 2, candy_box[3] * 2, baseline=200, visible=False)
     sc.obj('oCurtains', 'curtains', {'closed': region({}, cur_box), 'open': with_face},
            cur_box[0] * 2, cur_box[3] * 2, baseline=1, clickable=False, state='closed')
 

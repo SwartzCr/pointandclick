@@ -75,7 +75,7 @@ the answer.
    mix, says what's off, licks it clean and gives it back.)
    Then talk to Chuk, say "ALL PASTA IS HOLY", and give him the sauced rigatone.
    The wall opens and he goes to play T. rex in the Crypt.
-8. In the Crypt, use the Classic Computer and run HOTEL.EXE: a tiny Hotel Paradiso,
+8. In the Crypt, use the Classic Computer; it boots HOTEL.EXE, a tiny Hotel Paradiso,
    with the guest back in his bathrobe in Room 714. Read the newspaper on the floor
    (LOG OFF, top right, or Esc, to leave). Then turn the labels on the
    Pasta Identification wall to FUSILLI, ORECCHIETTE, FARFALLE, RIGATONI. WORTHY lights

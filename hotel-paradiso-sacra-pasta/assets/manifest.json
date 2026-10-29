@@ -2086,8 +2086,8 @@
      "hMinibar",
      "minibar",
      [
-      320,
-      210
+      378,
+      214
      ]
     ],
     [
@@ -2189,6 +2189,33 @@
      "sprites": {
       "off": "hotel_oLamp_off",
       "on": "hotel_oLamp_on"
+     }
+    },
+    {
+     "script": "oMinibar",
+     "name": "minibar",
+     "x": 284,
+     "y": 194,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "closed",
+     "sprites": {
+      "closed": "hotel_oMinibar_closed",
+      "open": "hotel_oMinibar_open"
+     }
+    },
+    {
+     "script": "oCandy",
+     "name": "candy bar",
+     "x": 302,
+     "y": 186,
+     "visible": false,
+     "baseline": 200,
+     "clickable": true,
+     "state": "on",
+     "sprites": {
+      "on": "hotel_oCandy_on"
      }
     },
     {
@@ -2684,6 +2711,9 @@
   "hotel_oTv_c3",
   "hotel_oLamp_off",
   "hotel_oLamp_on",
+  "hotel_oMinibar_closed",
+  "hotel_oMinibar_open",
+  "hotel_oCandy_on",
   "hotel_oCurtains_closed",
   "hotel_oCurtains_open",
   "plate",
