@@ -145,30 +145,16 @@ def hotel():
         return crt(x2(art.render(dict({'tv': 1}, **state)).convert('RGB').crop(box)), y0 * 2)
     lamp_box = (198, 30, 218, 70)
     sc.obj('oLamp', 'lamp', {'off': region({}, lamp_box), 'on': region({'lamp': 1}, lamp_box)},
-           lamp_box[0] * 2, lamp_box[3] * 2, baseline=1, clickable=False, state='off')
+           lamp_box[0] * 2, lamp_box[3] * 2, baseline=1, clickable=False, state='on')   # stuck on
     cur_box = (132, 6, 196, 74)
     opened = region({'curtains': 1}, cur_box)
-    # a huge purple face looking in through the window: the player, outside the game
-    face = Image.new('RGBA', opened.size, (0, 0, 0, 0))
-    fd = ImageDraw.Draw(face)
-    cx, cy = opened.width // 2, opened.height // 2 + 6
-    fd.ellipse([cx - 30, cy - 38, cx + 30, cy + 40], fill=(150, 90, 220, 70))
-    for ex in (cx - 12, cx + 12):
-        fd.ellipse([ex - 6, cy - 14, ex + 6, cy - 6], fill=(230, 220, 255, 150))
-        fd.ellipse([ex - 2, cy - 12, ex + 2, cy - 8], fill=(30, 20, 50, 200))
-    fd.arc([cx - 14, cy + 6, cx + 14, cy + 22], 20, 160, fill=(230, 220, 255, 140), width=3)
-    glass = Image.new('L', opened.size, 0)
-    ImageDraw.Draw(glass).rectangle([24, 8, opened.width - 26, 132], fill=255)
-    face.putalpha(Image.fromarray((np.asarray(face.getchannel('A')).astype(int) * np.asarray(glass) // 255).astype(np.uint8)))
-    with_face = opened.copy()
-    with_face.alpha_composite(face)
     mb_box = (142, 72, 178, 97)
     sc.obj('oMinibar', 'minibar', {'closed': region({}, mb_box), 'open': region({'minibar': 2}, mb_box)},
            mb_box[0] * 2, mb_box[3] * 2, baseline=1, clickable=False, state='closed')
     candy_box = (151, 87, 167, 93)
     sc.obj('oCandy', 'candy bar', {'on': region({'minibar': 1}, candy_box)},
            candy_box[0] * 2, candy_box[3] * 2, baseline=200, visible=False)
-    sc.obj('oCurtains', 'curtains', {'closed': region({}, cur_box), 'open': with_face},
+    sc.obj('oCurtains', 'curtains', {'closed': region({}, cur_box), 'open': opened},
            cur_box[0] * 2, cur_box[3] * 2, baseline=1, clickable=False, state='closed')
 
     sc.wd.polygon([(20, 196), (466, 196), (466, 286), (20, 286)], fill=1)

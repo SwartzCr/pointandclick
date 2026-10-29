@@ -2185,7 +2185,7 @@
      "visible": true,
      "baseline": 1,
      "clickable": false,
-     "state": "off",
+     "state": "on",
      "sprites": {
       "off": "hotel_oLamp_off",
       "on": "hotel_oLamp_on"
