@@ -350,7 +350,7 @@ room Hotel {
             deskSays(); print("Housekeeping sometimes leaves spare uniforms in the dresser. Good night."); waitForMessage();
         } else if(!ateCandy) {
             egoSay("Is room service still open? I'm starving."); waitForMessage();
-            deskSays(); print("Room service closed at ten, sir."); waitForMessage();
+            deskSays(); print("Room service is closed, sir."); waitForMessage();
             deskSays(); print("Your minibar, however, is fully stocked. Expensively. Good night."); waitForMessage();
         } else if(!readyToParty) {
             egoSay("I'm fed and dressed, but I'm just not feeling it."); waitForMessage();
