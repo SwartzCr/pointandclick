@@ -61,7 +61,7 @@ def newspaper():
 def hotel():
     art = hp_art()
     sc = Scene('hotel')
-    room = x2(art.render().convert('RGB')).convert('RGBA')
+    room = x2(art.render({'tv': 1}).convert('RGB')).convert('RGBA')   # the TV on, showing the weather
     # a CRT: faint scanlines, darkened rounded corners
     a = np.asarray(room).astype(float)
     a[1::2, :, :3] *= 0.86
@@ -82,7 +82,8 @@ def hotel():
     d.text((14, 14), 'HOTEL.EXE', font=f, fill=rgba((200, 255, 200)), anchor='lm')
 
     # hotspots (Room 714 at 2x)
-    sc.hotspot('hDoor', 'door', (90, 210), [('rect', [30, 36, 130, 190])])
+    sc.hotspot('hDoor', 'door', (100, 226), [('rect', [30, 36, 130, 190])])
+    sc.hotspot('hBathroom', 'bathroom', (60, 226), [('poly', [(0, 20), (28, 34), (28, 210), (0, 224)])])
     sc.hotspot('hTv', 'TV', (200, 210), [('rect', [164, 70, 236, 136])])
     sc.hotspot('hDresser', 'dresser', (200, 210), [('rect', [144, 130, 256, 190])])
     sc.hotspot('hCurtains', 'curtains', (330, 210), [('rect', [266, 12, 390, 148])])
@@ -95,11 +96,31 @@ def hotel():
     sc.hotspot('hTable', 'coffee table', (320, 270), [('rect', [224, 206, 416, 258])])
     sc.hotspot('hLogoff', 'LOG OFF', (520, 210), [('rect', [556, 6, 628, 22])])
 
-    sc.obj('oNewspaper', 'newspaper', {'on': newspaper()}, 120, 262, baseline=262)
+    sc.obj('oNewspaper', 'newspaper', {'on': newspaper()}, 66, 214, baseline=214)   # slid under the door
 
     sc.wd.polygon([(20, 196), (466, 196), (466, 286), (20, 286)], fill=1)
     sc.wd.rectangle([220, 206, 420, 258], fill=0)                 # coffee table
     return sc
+
+
+def loading_screen():
+    """640x400: Hotel Paradiso's own title picture on the CRT, with a loading bar."""
+    art = hp_art()
+    title = x2(art.render_title().convert('RGB')).convert('RGBA')
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 255))
+    im.paste(title, (0, 0))
+    a = np.asarray(im).astype(float)
+    a[1:VIEW_H:2, :, :3] *= 0.86
+    im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGBA')
+    d = ImageDraw.Draw(im)
+    f = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 14)
+    g = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 10)
+    d.text((W // 2, 318), 'HOTEL PARADISO - ROOM 714', font=f, fill=rgba((255, 120, 170)), anchor='mm')
+    d.text((W // 2, 342), 'LOADING...', font=g, fill=rgba((200, 255, 200)), anchor='mm')
+    d.rectangle([200, 356, 440, 366], outline=rgba((200, 255, 200)))
+    d.rectangle([203, 359, 360, 363], fill=rgba((200, 255, 200)))
+    d.text((W // 2, 388), 'C:\\GAMES\\HOTEL.EXE', font=g, fill=rgba((120, 160, 120)), anchor='mm')
+    return im
 
 
 def views(spr):

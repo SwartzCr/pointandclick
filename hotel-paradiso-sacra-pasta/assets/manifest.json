@@ -2046,8 +2046,16 @@
      "hDoor",
      "door",
      [
-      90,
-      210
+      100,
+      226
+     ]
+    ],
+    [
+     "hBathroom",
+     "bathroom",
+     [
+      60,
+      226
      ]
     ],
     [
@@ -2143,10 +2151,10 @@
     {
      "script": "oNewspaper",
      "name": "newspaper",
-     "x": 120,
-     "y": 262,
+     "x": 66,
+     "y": 214,
      "visible": true,
-     "baseline": 262,
+     "baseline": 214,
      "clickable": true,
      "state": "on",
      "sprites": {
@@ -2619,7 +2627,8 @@
   "crypt_oHat_on",
   "hotel_oNewspaper_on",
   "plate",
-  "hp_screen"
+  "hp_screen",
+  "hp_loading"
  ],
  "fork_frames": [
   "nave_oFork_f0",

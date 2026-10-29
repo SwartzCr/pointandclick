@@ -137,6 +137,8 @@ def main():
     spr('plate', R.ending_plate())
     import hp_screen
     spr('hp_screen', hp_screen.screen())
+    import hotel_mini
+    spr('hp_loading', hotel_mini.loading_screen())
 
     fonts = [('font0.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'none'),
              ('font1.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'auto'),

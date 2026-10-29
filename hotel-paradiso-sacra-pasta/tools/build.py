@@ -111,6 +111,7 @@ def main():
                 things.append('#define S_%s_%s_%s %d' % (rname, oname, cname(state), num[sname]))
     things.append('#define SPR_PLATE %d' % num['plate'])
     things.append('#define SPR_HP_SCREEN %d' % num['hp_screen'])
+    things.append('#define SPR_HP_LOADING %d' % num['hp_loading'])
     things.append('#define SPR_CURSOR %d' % num['cursor'])
     things_h = '\n'.join(things) + '\n'
 
