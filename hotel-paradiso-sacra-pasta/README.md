@@ -64,11 +64,9 @@ the answer.
    signs in order: raise a mountain, part the marinara river, then (wearing the
    pendant) make a purple star shine. They're yours to command: you send them digging,
    and they bring you a whip-it canister.
-8. **The puzzle box:** it's Chuk's, and the combination is written on its bottom in
-   writing too small to read. Fiddle with it and he offers to read it for a whip-it.
-   Give him the canister and he reads it as a riddle: "First the sea, then the tube,
-   and last the bow". Press the shell, the penne, then the farfalle, and take the
-   golden rigatone.
+8. **The puzzle box:** it's Chuk's, and he won't let you touch its buttons. Try, and he
+   asks for a whip-it. Give him the canister and he says "Oh fine, I'll do it myself",
+   walks over and opens it. Take the golden rigatone.
 9. **The sauce:** the First Supper says a pump of red for each of the Noodly One's eyes
    (two), green for each of his noses (none) and one yellow. Push the red dispenser
    twice and the yellow once, then use the rigatone on the bowl. (Chuk tastes a wrong
