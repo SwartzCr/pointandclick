@@ -144,7 +144,9 @@ def main():
     fonts = [('font0.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'none'),
              ('font1.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'auto'),
              ('font2.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12, 'none'),
-             ('font3.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 12, 'none')]
+             ('font3.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 12, 'none'),
+             ('font4.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf', 22, 'none'),   # newspaper masthead
+             ('font5.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSerifCondensed.ttf', 12, 'none')]   # newsprint
     os.makedirs(os.path.join(ROOT, 'fonts'))
     for fname, path, size, outl in fonts:
         with open(os.path.join(ROOT, 'fonts', fname), 'wb') as f:

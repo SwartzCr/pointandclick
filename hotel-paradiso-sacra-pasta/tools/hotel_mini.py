@@ -58,6 +58,45 @@ def newspaper():
     return x2(outline(im, (40, 24, 30, 255)))
 
 
+def crt(im, top=0):
+    """The CRT's scanlines (odd screen rows darker), for a sprite placed at screen row top."""
+    a = np.asarray(im.convert('RGBA')).astype(float)
+    start = 1 - (top % 2)
+    a[start::2, :, :3] *= 0.86
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), 'RGBA')
+
+
+def tv_channel(k):
+    """The TV screen (29x21 at 1x): 0 weather, 1 cooking show, 2 tiny bellhop, 3 static."""
+    art = hp_art()
+    if k == 0:
+        return art.render({'tv': 1}).convert('RGB').crop((85, 39, 114, 60))
+    im = Image.new('RGB', (29, 21), (20, 24, 40))
+    d = ImageDraw.Draw(im)
+    if k == 1:          # a cooking show: a man in a colander over a pot
+        d.rectangle([0, 0, 28, 20], fill=(150, 90, 60))
+        d.rectangle([0, 14, 28, 20], fill=(90, 60, 40))
+        d.ellipse([9, 3, 17, 11], fill=(232, 180, 140))
+        d.pieslice([8, 0, 18, 8], 180, 360, fill=(200, 205, 215))
+        d.rectangle([9, 11, 17, 17], fill=(240, 232, 210))
+        d.rectangle([18, 11, 26, 16], fill=(60, 60, 70))
+        d.line([(19, 10), (21, 8), (23, 10)], fill=(250, 220, 120))
+        d.rectangle([0, 18, 28, 20], fill=(200, 40, 40))
+    elif k == 2:        # a tiny bellhop at a tiny computer, in a tiny purple crypt
+        d.rectangle([0, 0, 28, 20], fill=(60, 40, 90))
+        d.rectangle([0, 15, 28, 20], fill=(40, 30, 60))
+        d.rectangle([17, 8, 25, 14], fill=(200, 190, 160))
+        d.rectangle([18, 9, 24, 12], fill=(60, 180, 90))
+        d.rectangle([8, 7, 11, 15], fill=(190, 30, 30))
+        d.rectangle([8, 4, 11, 7], fill=(232, 180, 140))
+        d.rectangle([8, 3, 11, 4], fill=(190, 30, 30))
+    else:               # static
+        rng = np.random.default_rng(7)
+        a = (rng.random((21, 29)) * 200 + 30).astype(np.uint8)
+        im = Image.fromarray(np.stack([a, a, a], -1))
+    return im
+
+
 def hotel():
     art = hp_art()
     sc = Scene('hotel')
@@ -97,6 +136,34 @@ def hotel():
     sc.hotspot('hLogoff', 'LOG OFF', (520, 210), [('rect', [556, 6, 628, 22])])
 
     sc.obj('oNewspaper', 'newspaper', {'on': newspaper()}, 66, 214, baseline=214)   # slid under the door
+
+    # things that change: the TV's channels, the lamp, the curtains (cut from the first game's art)
+    sc.obj('oTv', 'TV', {('c%d' % k): crt(x2(tv_channel(k)), 78) for k in range(4)}, 170, 120, baseline=1,
+           clickable=False, state='c0')
+    def region(state, box):
+        x0, y0, x1, y1 = box
+        return crt(x2(art.render(dict({'tv': 1}, **state)).convert('RGB').crop(box)), y0 * 2)
+    lamp_box = (198, 30, 218, 70)
+    sc.obj('oLamp', 'lamp', {'off': region({}, lamp_box), 'on': region({'lamp': 1}, lamp_box)},
+           lamp_box[0] * 2, lamp_box[3] * 2, baseline=1, clickable=False, state='off')
+    cur_box = (132, 6, 196, 74)
+    opened = region({'curtains': 1}, cur_box)
+    # a huge purple face looking in through the window: the player, outside the game
+    face = Image.new('RGBA', opened.size, (0, 0, 0, 0))
+    fd = ImageDraw.Draw(face)
+    cx, cy = opened.width // 2, opened.height // 2 + 6
+    fd.ellipse([cx - 30, cy - 38, cx + 30, cy + 40], fill=(150, 90, 220, 70))
+    for ex in (cx - 12, cx + 12):
+        fd.ellipse([ex - 6, cy - 14, ex + 6, cy - 6], fill=(230, 220, 255, 150))
+        fd.ellipse([ex - 2, cy - 12, ex + 2, cy - 8], fill=(30, 20, 50, 200))
+    fd.arc([cx - 14, cy + 6, cx + 14, cy + 22], 20, 160, fill=(230, 220, 255, 140), width=3)
+    glass = Image.new('L', opened.size, 0)
+    ImageDraw.Draw(glass).rectangle([24, 8, opened.width - 26, 132], fill=255)
+    face.putalpha(Image.fromarray((np.asarray(face.getchannel('A')).astype(int) * np.asarray(glass) // 255).astype(np.uint8)))
+    with_face = opened.copy()
+    with_face.alpha_composite(face)
+    sc.obj('oCurtains', 'curtains', {'closed': region({}, cur_box), 'open': with_face},
+           cur_box[0] * 2, cur_box[3] * 2, baseline=1, clickable=False, state='closed')
 
     sc.wd.polygon([(20, 196), (466, 196), (466, 286), (20, 286)], fill=1)
     sc.wd.rectangle([220, 206, 420, 258], fill=0)                 # coffee table

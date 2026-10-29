@@ -2160,6 +2160,50 @@
      "sprites": {
       "on": "hotel_oNewspaper_on"
      }
+    },
+    {
+     "script": "oTv",
+     "name": "TV",
+     "x": 170,
+     "y": 120,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "c0",
+     "sprites": {
+      "c0": "hotel_oTv_c0",
+      "c1": "hotel_oTv_c1",
+      "c2": "hotel_oTv_c2",
+      "c3": "hotel_oTv_c3"
+     }
+    },
+    {
+     "script": "oLamp",
+     "name": "lamp",
+     "x": 396,
+     "y": 140,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "off",
+     "sprites": {
+      "off": "hotel_oLamp_off",
+      "on": "hotel_oLamp_on"
+     }
+    },
+    {
+     "script": "oCurtains",
+     "name": "curtains",
+     "x": 264,
+     "y": 148,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "closed",
+     "sprites": {
+      "closed": "hotel_oCurtains_closed",
+      "open": "hotel_oCurtains_open"
+     }
     }
    ]
   }
@@ -2221,6 +2265,14 @@
   },
   {
    "file": "fonts/font3.wfn",
+   "outline": "none"
+  },
+  {
+   "file": "fonts/font4.wfn",
+   "outline": "none"
+  },
+  {
+   "file": "fonts/font5.wfn",
    "outline": "none"
   }
  ],
@@ -2626,6 +2678,14 @@
   "crypt_oSeat_decree",
   "crypt_oHat_on",
   "hotel_oNewspaper_on",
+  "hotel_oTv_c0",
+  "hotel_oTv_c1",
+  "hotel_oTv_c2",
+  "hotel_oTv_c3",
+  "hotel_oLamp_off",
+  "hotel_oLamp_on",
+  "hotel_oCurtains_closed",
+  "hotel_oCurtains_open",
   "plate",
   "hp_screen",
   "hp_loading0",
