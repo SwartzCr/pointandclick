@@ -1631,7 +1631,7 @@
     {
      "script": "oBox",
      "name": "puzzle box",
-     "x": 14,
+     "x": 6,
      "y": 242,
      "visible": true,
      "baseline": 2,
@@ -1692,14 +1692,27 @@
     {
      "script": "oRigatone",
      "name": "golden rigatone",
-     "x": 40,
-     "y": 222,
+     "x": 27,
+     "y": 224,
      "visible": false,
      "baseline": 3,
      "clickable": true,
      "state": "on",
      "sprites": {
       "on": "nave_oRigatone_on"
+     }
+    },
+    {
+     "script": "oScales",
+     "name": "scales of pasta",
+     "x": 352,
+     "y": 213,
+     "visible": false,
+     "baseline": 1,
+     "clickable": false,
+     "state": "empty",
+     "sprites": {
+      "empty": "nave_oScales_empty"
      }
     },
     {
@@ -2691,6 +2704,7 @@
   "nave_oBtn3_down",
   "nave_oBtn3_uv",
   "nave_oRigatone_on",
+  "nave_oScales_empty",
   "nave_oTile1_off",
   "nave_oTile1_on",
   "nave_oTile2_off",

@@ -66,6 +66,8 @@ VARIANTS = {
     'A': ('v3-A-fork-box-tiles.png', [[0.9913, 0.0007, -1.2742], [0.0002, 1.0012, 2.0247]]),   # fork painting, box table, lit tiles, open drawer, closed arch
     'B': ('v3-B-pendant.png', [[0.991, -0.0005, -0.6506], [-0.0001, 0.9998, 2.0197]]),          # the same with the pendant in the drawer
     'C': ('v3-C-ruins.png', [[0.99, -0.0002, -0.0663], [0.0, 0.9911, 2.599]]),                  # village dug up, tapestry ruined
+    'D': ('v3-D-box-open-scales-empty.png', [[0.998, 0.0007, -6.6169], [-0.0004, 1.0084, 0.1291]]),  # box open and empty, scales empty
+    'E': ('v3-E-rigatone.png', [[0.9984, 0.0, -6.8929], [-0.0002, 1.0076, 0.0263]]),             # box open, golden rigatone inside
 }
 _var = {}
 
@@ -335,17 +337,17 @@ def nave():
     ImageDraw.Draw(bmask).polygon([(16, 196), (44, 186), (80, 188), (80, 232), (56, 240), (16, 236)], fill=255)
     box_closed = orig_with_table.crop(BOXR)
     box_closed.putalpha(bmask.crop(BOXR))
-    bw = BOXR[2] - BOXR[0]
-    open_spr = to_pal(fit(keyed('A6-puzzle-box-open.png'), bw, 60))
-    ch = max(box_closed.height, open_spr.height)
-    box_open = canvas(bw, ch)
-    box_open.alpha_composite(box_closed, (0, ch - box_closed.height))
-    box_open.alpha_composite(open_spr, (0, ch - open_spr.height))
-    box_closed_c = canvas(bw, ch)
-    box_closed_c.alpha_composite(box_closed, (0, ch - box_closed.height))
+    D, E = variant('D'), variant('E')
+    opened, ox, oy = cut(orig_with_table, D, (0, 140, 110, 248))
+    x0, y0 = min(BOXR[0], ox), min(BOXR[1], oy)
+    x1, y1 = max(BOXR[2], ox + opened.width), BOXR[3]
+    box_closed_c = canvas(x1 - x0, y1 - y0)
+    box_closed_c.alpha_composite(box_closed, (BOXR[0] - x0, BOXR[1] - y0))
+    box_open = canvas(x1 - x0, y1 - y0)
+    box_open.alpha_composite(opened.crop((0, 0, opened.width, min(opened.height, y1 - oy))), (ox - x0, oy - y0))
     sc.obj('oBox', 'puzzle box', {'closed': box_closed_c, 'open': box_open,
                                    'uvclosed': uv_of(box_closed_c), 'uvopen': uv_of(box_open)},
-           BOXR[0], BOXR[3], baseline=2)
+           x0, y1, baseline=2)
     BTNS = [(29, 193, 41, 201), (41, 187, 54, 196), (57, 188, 70, 198)]       # penne, bow, shell on the lid
 
     def button_sprite(i, pressed=False, uv=False):
@@ -364,8 +366,11 @@ def nave():
         sc.obj('oBtn%d' % (i + 1), '%s button' % kind,
                {'up': button_sprite(i), 'down': button_sprite(i, pressed=True), 'uv': button_sprite(i, uv=True)},
                b[0], b[3], baseline=3)
-    rig = to_pal(fit(keyed('A6-golden-rigatone.png'), 18, 10))
-    sc.obj('oRigatone', 'golden rigatone', {'on': rig}, 40, 222, visible=False, baseline=3)
+    rig, rx, ry = cut(D, E, (0, 140, 110, 248), thresh=80)          # the rigatone, glowing, in the open box
+    sc.obj('oRigatone', 'golden rigatone', {'on': rig}, rx, ry + rig.height, visible=False, baseline=3)
+    # the Scales of Pasta with their macaroni gone (made into beads), from D
+    emp, ex, ey = cut(orig, D, (350, 150, 416, 215))
+    sc.obj('oScales', 'scales of pasta', {'empty': emp}, ex, ey + emp.height, visible=False, baseline=1, clickable=False)
 
     # ---------- A5: Timeline tiles (lit, from A; unlit = the same pictures, dimmed), drawer, pendant
     def tile_sprite(i, on):
