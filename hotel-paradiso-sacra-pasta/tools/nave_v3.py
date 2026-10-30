@@ -38,11 +38,17 @@ FORK_QUAD = [(73, 55), (100, 59), (100, 107), (73, 110)]
 SCULPTURE = [(296, 268), (296, 196), (306, 160), (330, 150), (352, 160), (354, 268)]
 
 
-def tone(bgr):
+SPIN_WORDS = {'F1': ('SOME', 'FORKS', 'LOOK', 'RAW'), 'F2': ('NO', 'BREAD', 'SEEM', 'BLAND'),
+              'F3': ('ALL', 'PASTA', 'IS', 'HOLY'), 'F4': ('THE', 'SAUCE', 'FEEL', 'SOGGY')}
+WINDOW_BOXES = [(426, 182, 441, 203), (442, 182, 457, 203), (459, 182, 474, 203), (475, 182, 491, 203)]
+
+
+def tone(bgr, smooth=True):
     """Shared look for the room and its state pictures: smooth the generator's speckle at full
     size, shrink, then lift the shadows and brighten a little."""
     import cv2
-    bgr = cv2.bilateralFilter(bgr, 7, 28, 5)
+    if smooth:
+        bgr = cv2.bilateralFilter(bgr, 7, 28, 5)
     im = Image.fromarray(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)).resize((W, VIEW_H), Image.LANCZOS)
     a = np.asarray(im).astype(np.float32) / 255
     a = a ** 0.8                                   # lift the darks
@@ -68,8 +74,23 @@ VARIANTS = {
     'C': ('v3-C-ruins.png', [[0.99, -0.0002, -0.0663], [0.0, 0.9911, 2.599]]),                  # village dug up, tapestry ruined
     'D': ('v3-D-box-open-scales-empty.png', [[0.998, 0.0007, -6.6169], [-0.0004, 1.0084, 0.1291]]),  # box open and empty, scales empty
     'E': ('v3-E-rigatone.png', [[0.9984, 0.0, -6.8929], [-0.0002, 1.0076, 0.0263]]),             # box open, golden rigatone inside
+    # the Paragraph Spinner's words, four to a picture (and no little table by the sculpture)
+    'F1': ('v3-F1-some-forks-look-raw.png', [[0.9999, -0.0018, -6.9143], [0.0006, 1.0093, -0.7931]]),
+    'F2': ('v3-F2-no-bread-seem-bland.png', [[0.9989, -0.0007, -7.0147], [0.0003, 1.0118, 0.6126]]),
+    'F3': ('v3-F3-all-pasta-is-holy.png', [[0.998, -0.0013, -6.0896], [0.0007, 1.0095, -0.8741]]),
+    'F4': ('v3-F4-the-sauce-feel-soggy.png', [[0.9989, 0.001, -7.4198], [-0.0005, 1.0103, -0.4606]]),
 }
 _var = {}
+
+
+def sharp_variant(k):
+    """A state picture shrunk without smoothing, for small lettering."""
+    import cv2
+    name, M = VARIANTS[k]
+    im = cv2.imread(os.path.join(os.path.dirname(SRC), name))
+    w = cv2.warpAffine(im, np.array(M, np.float32), (1536, 688), flags=cv2.INTER_LANCZOS4,
+                       borderMode=cv2.BORDER_REPLICATE)
+    return tone(w, smooth=False).convert('RGBA')
 
 
 def variant(k, full_colour=False):
@@ -240,6 +261,12 @@ def nave():
     m = Image.new('L', A.size, 0)
     ImageDraw.Draw(m).polygon(BOX_TABLE, fill=255)
     room.paste(A, (0, 0), m)
+    # the little empty table by the sculpture goes (the F pictures don't have it)
+    TB = (258, 186, 314, 252)
+    fm = Image.new('L', A.size, 0)
+    ImageDraw.Draw(fm).rectangle([TB[0] + 3, TB[1] + 3, TB[2] - 1, TB[3] - 3], fill=255)
+    fm = fm.filter(ImageFilter.GaussianBlur(2))
+    room.paste(variant('F1'), (0, 0), fm)
     orig_with_table = room.copy()
     sc.bg = room
     sc.d = ImageDraw.Draw(room)
@@ -296,38 +323,34 @@ def nave():
     # ---------- A3: the pamphlets on the sod table
     sc.obj('oPamphlet', 'Spaghetti Theory pamphlet', {'on': pam}, LEAFLETS[0], LEAFLETS[3], baseline=1)
 
-    # ---------- A4: the Paragraph Spinner: four windows across the cabinet, each showing a word
-    sx0, sy0, sx1, sy1 = SPIN
-    ww = (sx1 - sx0 - 3) // 4
+    # ---------- A4: the Paragraph Spinner's four windows, each word painted (from the F pictures)
+    sharp = {k: sharp_variant(k) for k in SPIN_WORDS}
 
-    def drum_sprite(i, word, uv=False, correct=False):
-        im = canvas(ww, sy1 - sy0)
-        dd = ImageDraw.Draw(im)
-        dd.rectangle([0, 0, ww - 1, im.height - 1], fill=rgba((150, 112, 50)))          # brass frame
-        dd.rectangle([1, 1, ww - 2, im.height - 2], fill=rgba((90, 60, 34)))
-        dd.rectangle([1, 5, ww - 2, im.height - 6], fill=rgba((240, 226, 190)))         # the barrel face
-        dd.line([(1, im.height - 6), (ww - 2, im.height - 6)], fill=rgba((170, 140, 100)))
-        dd.line([(1, 5), (ww - 2, 5)], fill=rgba((255, 246, 220)))
-        sp = 1 if tiny_width(word) <= ww - 3 else 0
-        cy = im.height / 2
-        if uv:
-            im = uv_of(im)
-            if correct:
-                lay = canvas(*im.size)
-                tiny(lay, ww / 2, cy, word, (200, 255, 140), sp)
-                glow_layer(lay, im, 2.0, 0.5, crisp=True)
-            else:
-                tiny(im, ww / 2, cy, word, (120, 90, 160), sp)
-        else:
-            tiny(im, ww / 2, cy, word, INK, sp)
-        return im
+    def window(k, i, uv=False, correct=False):
+        im = sharp[k].crop(WINDOW_BOXES[i])
+        if not uv:
+            return im
+        u = uv_of(im)
+        if correct:
+            a = np.asarray(im.convert('L')).astype(int)
+            inner = np.zeros_like(a, bool)
+            inner[3:-3, 3:-3] = True
+            ink = (a < a[inner].mean() - 35) & inner          # the dark letters on the pale barrel
+            lay = canvas(*im.size)
+            px = lay.load()
+            for y, x in zip(*np.nonzero(ink)):
+                px[int(x), int(y)] = (200, 255, 140, 255)
+            glow_layer(lay, u, 2.0, 0.5, crisp=True)
+        return u
 
     for i in range(4):
         sprites = {}
-        for j, wtxt in enumerate(WORDS[i]):
-            sprites['w%d' % j] = drum_sprite(i, wtxt)
-            sprites['u%d' % j] = drum_sprite(i, wtxt, uv=True, correct=(j == ANSWER[i]))
-        sc.obj('oDrum%d' % (i + 1), 'window', sprites, sx0 + i * (ww + 1), sy1, baseline=1,
+        for k, words in SPIN_WORDS.items():
+            j = WORDS[i].index(words[i])
+            sprites['w%d' % j] = window(k, i)
+            sprites['u%d' % j] = window(k, i, uv=True, correct=(j == ANSWER[i]))
+        b = WINDOW_BOXES[i]
+        sc.obj('oDrum%d' % (i + 1), 'window', sprites, b[0], b[3], baseline=1,
                state={0: 'w0', 1: 'w0', 2: 'w1', 3: 'w2'}[i])
     sc.uv(lambda im, dd: glow_text(im, (453, 210), 'SPIN UNTIL IT GLOWS', 8, (180, 255, 120)))
 
