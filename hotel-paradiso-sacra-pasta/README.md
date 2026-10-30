@@ -28,7 +28,7 @@ takes it off again. Clicking a pamphlet twice reads it. Keys: O, C, T, P, L, U, 
 
 ## The rooms
 
-**The Nave** (room 913). A wardrobe, a sod table you can play God on (with an old
+**The Nave** (room 913). A tapestry, a sod table you can play God on (with an old
 handset playing audio stories and a pamphlet of Spaghetti Theory), the Weird Sauce
 wall piece, the paintings *Glutenous Truth*, *First Taste* and the *Spinning Fork*
 (which spins), a crocheted pasta display, a stained-glass painted flat, the Timeline
@@ -49,7 +49,7 @@ the answer.
 1. Talk to Chuk. To be ordained you need to **wear the beads**, **speak the Word** and
    **bring a sauced golden offering**. If you're stuck, tell him so: he gives a nudge
    for the next step.
-2. **Beads:** open the wardrobe and pull the loose thread on the purple robe. Use the
+2. **Beads:** pull the loose thread on the tapestry (which ruins it). Use the
    string on the Scales of Pasta to thread its elbow macaroni into rosary beads, and
    use them on yourself.
 3. Pick up the pamphlet from the sod table and read it: string came first, then
@@ -63,7 +63,7 @@ the answer.
 7. **A whip-it:** use the sod table to play God and show the tiny folk the prophecy's
    signs in order: raise a mountain, part the marinara river, then (wearing the
    pendant) make a purple star shine. They're yours to command: you send them digging,
-   and they bring you a whip-it canister.
+   and they bring you a whip-it canister, digging up their whole village to find it.
 8. **The puzzle box:** it's Chuk's, and he won't let you touch its buttons. Try, and he
    asks for a whip-it. Give him the canister and he says "Oh fine, I'll do it myself",
    walks over and opens it. Take the golden rigatone.

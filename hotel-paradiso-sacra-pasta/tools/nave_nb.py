@@ -99,6 +99,72 @@ FORK_QUAD = [(240, 86), (277, 86), (277, 138), (240, 138)]
 SCALES = [(545, 160), (612, 160), (612, 252), (545, 252)]
 
 
+def tapestry(orig):
+    """Stand-in art: a woven tapestry of the Noodly One hung over the wardrobe, intact and
+    with its thread pulled out. Returns (intact, ruined, x0, y0, y1) for the patch."""
+    x0, y0, x1, y1 = 586, 50, 640, 288
+    patch = orig.crop((x0, y0, x1, y1))
+    wx = 590                                               # just left of the wardrobe
+    # floor where the wardrobe stood, copied from just left of it
+    patch.paste(orig.crop((wx - (x1 - wx) - 40, 254, wx - 40, y1)), (wx - x0, 254 - y0))
+    # wallpaper: a clean strip from above the wardrobe, repeated down the wall
+    strip = orig.crop((wx, 36, x1, 56))
+    for y in range(y0, 206, strip.height):
+        patch.paste(strip.crop((0, 0, strip.width, min(strip.height, 206 - y))), (wx - x0, y - y0))
+    # the wainscot under the tapestry: dark wood
+    d = ImageDraw.Draw(patch)
+    d.rectangle([wx - x0, 205 - y0, x1 - x0, 254 - y0], fill=(74, 44, 30, 255))
+    d.line([(wx - x0, 205 - y0), (x1 - x0, 205 - y0)], fill=(110, 70, 44, 255), width=2)
+
+    def weave(ruined):
+        im = patch.copy()
+        d = ImageDraw.Draw(im)
+        L, R = 594 - x0, 638 - x0
+        top = lambda x: int(70 - y0 - (x - L) * 0.2)
+        bot = 236 - y0
+        red, red_dk, gold, gold_dk = (150, 34, 40, 255), (110, 22, 30, 255), (226, 180, 70, 255), (170, 120, 40, 255)
+        for x in range(L, R + 1):
+            d.line([(x, top(x)), (x, bot)], fill=red if (x // 2) % 2 else red_dk)
+        for x in range(L, R + 1):                      # gold border
+            d.point([(x, top(x) + 1), (x, top(x) + 2), (x, bot - 1), (x, bot - 2)], fill=gold)
+        d.line([(L, top(L)), (L, bot)], fill=gold, width=2)
+        d.line([(R - 1, top(R)), (R - 1, bot)], fill=gold, width=2)
+        # the Noodly One: a tangle of noodles, two meatballs, two eyes on stalks
+        cx, cy = (L + R) // 2, 140 - y0
+        for k in range(7):
+            pts = [(cx - 14 + k * 4 + int(3 * np.sin(t / 3 + k)), cy - 10 + t) for t in range(0, 44, 2)]
+            d.line(pts, fill=gold if k % 2 else (240, 210, 120, 255))
+        d.ellipse([cx - 11, cy - 6, cx - 3, cy + 2], fill=(120, 60, 36, 255))
+        d.ellipse([cx + 3, cy - 6, cx + 11, cy + 2], fill=(120, 60, 36, 255))
+        for ex in (cx - 5, cx + 5):
+            d.line([(ex, cy - 8), (ex + (ex - cx) // 2, cy - 20)], fill=gold)
+            d.ellipse([ex + (ex - cx) // 2 - 3, cy - 25, ex + (ex - cx) // 2 + 3, cy - 19], fill=(250, 250, 240, 255))
+            d.point((ex + (ex - cx) // 2, cy - 22), fill=(20, 20, 20, 255))
+        d.text((L + 6, bot - 22), 'R\'AMEN', fill=gold_dk)
+        # the rod, and the fringe
+        d.line([(L - 3, top(L) - 2), (R + 2, top(R) - 2)], fill=(90, 70, 40, 255), width=3)
+        for x in range(L, R + 1, 2):
+            d.line([(x, bot), (x, bot + 5)], fill=gold_dk)
+        if not ruined:
+            d.line([(cx + 6, bot), (cx + 7, bot + 12)], fill=gold)      # one loose thread
+            return im
+        # unravelled: a long ragged gap up the middle, threads hanging out of it
+        a = np.asarray(im).copy()
+        pa = np.asarray(patch)
+        rng = np.random.default_rng(5)
+        for y in range(cy - 4, bot + 6):
+            half = int(3 + (y - cy) * 0.22 + rng.integers(0, 3))
+            a[y, cx - half + 2:cx + half + 4] = pa[y, cx - half + 2:cx + half + 4]
+        im = Image.fromarray(a, 'RGBA')
+        d = ImageDraw.Draw(im)
+        for k in range(6):
+            x = cx - 8 + k * 4 + int(rng.integers(-1, 2))
+            y = cy + 4 + int(rng.integers(0, 30))
+            d.line([(x, y), (x + int(rng.integers(-2, 3)), y + 10 + int(rng.integers(0, 12)))], fill=red if k % 2 else gold)
+        return im
+    return weave(False), weave(True), x0, y0, y1
+
+
 def nave():
     sc = Scene('nave')
     base = room_image('base.jpg')
@@ -156,21 +222,33 @@ def nave():
     panel_uv.putalpha(panel.getchannel('A'))
     sc.obj('oArchPanel', 'wall', {'closed': panel, 'uv': panel_uv}, ax0, ay0 + panel.height, baseline=1)
 
-    # ---------- A2: the wardrobe (open = Muse's open wardrobe warped onto its front)
-    wx0, wy0 = min(p[0] for p in WARDROBE), min(p[1] for p in WARDROBE)
-    wy1 = max(p[1] for p in WARDROBE)
-    ward = orig.crop((wx0, wy0, W, wy1))
-    opened, ox, oy = warp(keyed('A2-wardrobe-open-room-consistent.png'), WARDROBE)
-    ward_open = ward.copy()
-    ward_open.alpha_composite(to_pal(opened), (ox - wx0, oy - wy0))
-    sc.obj('oWardrobe', 'wardrobe', {'closed': ward, 'open': ward_open}, wx0, wy1, baseline=200)
+    # ---------- A2: a tapestry where the wardrobe was (stand-in art, to be replaced)
+    tap_closed, tap_ruined, tx0, ty0, ty1 = tapestry(orig)
+    sc.obj('oTapestry', 'tapestry', {'closed': tap_closed, 'ruined': tap_ruined}, tx0, ty1, baseline=200)
     beads = to_pal(fit(keyed('A7-rosary-beads.png'), 12, 30))
     sc.obj('oBeads', 'pasta rosary beads', {'on': beads}, 612, 130, visible=False, baseline=201)
-    # the robes inside, cut from the open wardrobe so they can be pointed at
-    for script, name, (x0, y0, x1, y1) in (('oRobe', 'purple robe', (623, 112, 630, 184)),
-                                           ('oGoldRobe', 'gold robe', (612, 126, 623, 213))):
-        sc.obj(script, name, {'on': ward_open.crop((x0 - wx0, y0 - wy0, x1 - wx0, y1 - wy0))},
-               x0, y1, visible=False, baseline=202)
+    # ---------- the tiny village after the whip-it dig (stand-in art, to be replaced)
+    vx0, vy0, vx1, vy1 = 95, 164, 190, 200
+    ruin = orig.crop((vx0, vy0, vx1, vy1))
+    rd = ImageDraw.Draw(ruin)
+    dirt, dirt_hi, hole = (112, 74, 44, 255), (150, 104, 62, 255), (46, 28, 18, 255)
+    for hx, hy, r in ((112, 179, 5), (126, 188, 4), (147, 175, 4), (163, 187, 5), (178, 181, 4), (141, 191, 3), (156, 180, 3)):
+        x, y = hx - vx0, hy - vy0
+        rd.ellipse([x - r - 2, y - r // 2 - 2, x + r + 2, y + r // 2 + 2], fill=dirt)      # spoil heap
+        rd.ellipse([x - r, y - r // 2, x + r, y + r // 2], fill=hole)                      # the hole
+        rd.point([(x - r - 1, y - r // 2 - 2), (x + r, y - r // 2 - 1), (x + 1, y - r // 2 - 3)], fill=dirt_hi)
+    # toppled houses: little white blocks lying on their sides, roofs knocked off
+    for hx, hy, w, h, roof in ((152, 184, 5, 3, (170, 50, 40, 255)), (168, 177, 4, 3, (150, 60, 40, 255)),
+                               (120, 183, 5, 3, (170, 50, 40, 255)), (172, 190, 4, 2, (150, 60, 40, 255))):
+        x, y = hx - vx0, hy - vy0
+        rd.rectangle([x, y, x + w, y + h], fill=(230, 226, 214, 255))
+        rd.line([(x, y + h), (x + w, y + h)], fill=(140, 130, 120, 255))
+        rd.polygon([(x + w + 2, y - 1), (x + w + 5, y + 1), (x + w + 3, y + 3)], fill=roof)
+    # the temple, leaning
+    tx, ty = 134 - vx0, 182 - vy0
+    rd.polygon([(tx, ty), (tx + 6, ty - 1), (tx + 9, ty - 9), (tx + 3, ty - 8)], fill=(214, 214, 220, 255))
+    rd.line([(tx + 6, ty - 9), (tx + 9, ty - 14)], fill=(200, 200, 210, 255))
+    sc.obj('oRuins', 'tiny village', {'on': ruin, 'uv': uv_of(ruin)}, vx0, vy1, visible=False, baseline=1, clickable=False)
 
     # ---------- A3: pamphlets in the holder next to the telephone
     pam = to_pal(fit(keyed('A3-pamphlets.png'), 15, 17))

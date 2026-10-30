@@ -1495,17 +1495,17 @@
      }
     },
     {
-     "script": "oWardrobe",
-     "name": "wardrobe",
-     "x": 596,
+     "script": "oTapestry",
+     "name": "tapestry",
+     "x": 586,
      "y": 288,
      "visible": true,
      "baseline": 200,
      "clickable": true,
      "state": "closed",
      "sprites": {
-      "closed": "nave_oWardrobe_closed",
-      "open": "nave_oWardrobe_open"
+      "closed": "nave_oTapestry_closed",
+      "ruined": "nave_oTapestry_ruined"
      }
     },
     {
@@ -1522,29 +1522,17 @@
      }
     },
     {
-     "script": "oRobe",
-     "name": "purple robe",
-     "x": 623,
-     "y": 184,
+     "script": "oRuins",
+     "name": "tiny village",
+     "x": 95,
+     "y": 200,
      "visible": false,
-     "baseline": 202,
-     "clickable": true,
+     "baseline": 1,
+     "clickable": false,
      "state": "on",
      "sprites": {
-      "on": "nave_oRobe_on"
-     }
-    },
-    {
-     "script": "oGoldRobe",
-     "name": "gold robe",
-     "x": 612,
-     "y": 213,
-     "visible": false,
-     "baseline": 202,
-     "clickable": true,
-     "state": "on",
-     "sprites": {
-      "on": "nave_oGoldRobe_on"
+      "on": "nave_oRuins_on",
+      "uv": "nave_oRuins_uv"
      }
     },
     {
@@ -2651,11 +2639,11 @@
   "inv_iString",
   "nave_oArchPanel_closed",
   "nave_oArchPanel_uv",
-  "nave_oWardrobe_closed",
-  "nave_oWardrobe_open",
+  "nave_oTapestry_closed",
+  "nave_oTapestry_ruined",
   "nave_oBeads_on",
-  "nave_oRobe_on",
-  "nave_oGoldRobe_on",
+  "nave_oRuins_on",
+  "nave_oRuins_uv",
   "nave_oPamphlet_on",
   "nave_oDrum1_w0",
   "nave_oDrum1_u0",
