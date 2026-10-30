@@ -38,9 +38,23 @@ FORK_QUAD = [(73, 55), (100, 59), (100, 107), (73, 110)]
 SCULPTURE = [(296, 268), (296, 196), (306, 160), (330, 150), (352, 160), (354, 268)]
 
 
+def tone(bgr):
+    """Shared look for the room and its state pictures: smooth the generator's speckle at full
+    size, shrink, then lift the shadows and brighten a little."""
+    import cv2
+    bgr = cv2.bilateralFilter(bgr, 7, 28, 5)
+    im = Image.fromarray(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)).resize((W, VIEW_H), Image.LANCZOS)
+    a = np.asarray(im).astype(np.float32) / 255
+    a = a ** 0.8                                   # lift the darks
+    a = np.clip(a * 1.06, 0, 1)
+    im = Image.fromarray((a * 255 + 0.5).astype(np.uint8))
+    im = ImageEnhance.Color(im).enhance(1.05)
+    return im.filter(ImageFilter.UnsharpMask(radius=0.8, percent=35, threshold=3))
+
+
 def load():
-    im = Image.open(SRC).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
-    im = im.filter(ImageFilter.UnsharpMask(radius=1.0, percent=60, threshold=2))
+    import cv2
+    im = tone(cv2.imread(SRC))
     # paint out the generator's sparkle in the bottom-right corner with the floor beside it
     im.paste(im.crop((582, 258, 608, 288)), (608, 258))
     im.paste(im.crop((582, 258, 590, 288)), (632, 258))
@@ -68,8 +82,7 @@ def variant(k, full_colour=False):
         im = cv2.imread(os.path.join(os.path.dirname(SRC), name))
         w = cv2.warpAffine(im, np.array(M, np.float32), (1536, 688), flags=cv2.INTER_LANCZOS4,
                            borderMode=cv2.BORDER_REPLICATE)
-        im = Image.fromarray(cv2.cvtColor(w, cv2.COLOR_BGR2RGB)).resize((W, VIEW_H), Image.LANCZOS)
-        im = im.filter(ImageFilter.UnsharpMask(radius=1.0, percent=60, threshold=2))
+        im = tone(w)
         _var[k + '*'] = im.convert('RGBA')
         _var[k] = quantized(im).convert('RGBA')
     return _var[k].copy()
@@ -94,6 +107,11 @@ _pal = None
 
 
 def quantized(im):
+    """The game is 32-bit, so the room keeps its full colour (no 256-colour palette)."""
+    return im.convert('RGB')
+
+
+def _old_quantized(im):
     global _pal
     if _pal is None:
         q = load().quantize(256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
@@ -227,11 +245,11 @@ def nave():
     # ---------- hotspots (later ones are drawn over earlier ones)
     F = 262                                        # where people stand: the front of the floor
     sc.hotspot('hWallpaper', 'wallpaper strips', (420, F), [('rect', [0, 30, 640, 244])])
-    sc.hotspot('hSauce', 'Weird Sauce', (182, F), [('rect', [140, 82, 225, 171])])
-    sc.hotspot('hRedSauce', 'red dispenser', (182, F), [('rect', [149, 99, 166, 131])])
-    sc.hotspot('hGreenSauce', 'green dispenser', (182, F), [('rect', [171, 99, 188, 131])])
-    sc.hotspot('hYellowSauce', 'yellow dispenser', (182, F), [('rect', [194, 99, 211, 131])])
-    sc.hotspot('hBowl', 'sauce bowl', (182, F), [('rect', [165, 151, 195, 168])])
+    sc.hotspot('hSauce', 'Weird Sauce', (222, F), [('rect', [140, 82, 225, 171])])
+    sc.hotspot('hRedSauce', 'red dispenser', (222, F), [('rect', [149, 99, 166, 131])])
+    sc.hotspot('hGreenSauce', 'green dispenser', (222, F), [('rect', [171, 99, 188, 131])])
+    sc.hotspot('hYellowSauce', 'yellow dispenser', (222, F), [('rect', [194, 99, 211, 131])])
+    sc.hotspot('hBowl', 'sauce bowl', (222, F), [('rect', [165, 151, 195, 168])])
     sc.hotspot('hGlutenous', 'painting "Glutenous Truth"', (256, F), [('rect', [233, 90, 278, 129])])
     flat = [(287, 172), (287, 100), (295, 82), (308, 70), (322, 65), (336, 70), (349, 82), (357, 100), (357, 172)]
     sc.hotspot('hFlat', 'stained-glass flat', (322, F), [('poly', flat)])
