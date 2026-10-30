@@ -30,10 +30,12 @@ takes it off again. Clicking a pamphlet twice reads it. Keys: O, C, T, P, L, U, 
 
 **The Nave** (room 913). A tapestry, a sod table you can play God on (with an old
 handset playing audio stories and a pamphlet of Spaghetti Theory), the Weird Sauce
-wall piece, the paintings *Glutenous Truth*, *First Taste* and the *Spinning Fork*
-(which spins), a crocheted pasta display, a stained-glass painted flat, the Timeline
-of Ancient Technology, the Sacred Topology display, the spaghetti sculpture, the
-Paragraph Spinner, the Scales of Pasta, a puzzle box, and a wall that isn't one.
+wall piece, the paintings *Glutenous Truth*, *First Taste* and the *Spinning Fork*,
+a crocheted pasta display, a stained-glass window, the Timeline of Ancient Technology,
+the spaghetti sculpture, the Paragraph Spinner, the Scales of Pasta, Chuk's puzzle box
+on its little table by the door, and a wall that isn't one. (Built by
+`tools/nave_v3.py` from `art_src/nave-nb/v3*.png`: the room, plus three pictures of it
+with the puzzles' other states, lined up on it and cut apart.)
 
 **The Crypt.** The CONFESS 3Button cabinet, the Classic Computer, the Trackball
 cabinet (the ball is a meatball), the Rex Seat with its T. rex game, the Pasta

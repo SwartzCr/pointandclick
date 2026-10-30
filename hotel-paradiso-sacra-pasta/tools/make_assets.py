@@ -16,7 +16,7 @@ import art_people as P
 import guest_sprite as G
 import nave_painted as NP
 import nave_muse as NM
-import nave_nb as NB
+import nave_v3 as NB
 import crypt_nb as CN
 import art_rooms as R
 import art_ui as U
