@@ -278,7 +278,12 @@ def crypt():
 
     # ---------- the staff room: an open doorway (no curtain any more)
     door = orig.crop((426, 54, 500, 236))
-    sc.obj('oCurtain', 'staff room', {'closed': door, 'open': door}, 426, 236, baseline=2, clickable=False)
+    # its red curtain, from the first Crypt picture, hung in the doorway
+    shut = door.copy()
+    old = Image.open(os.path.join(DIR, 'base.jpg')).convert('RGB')
+    cur = old.crop((1001, 227, 1124, 525)).resize((496 - 431, 220 - 62), Image.LANCZOS)
+    shut.paste(cur, (431 - 426, 62 - 54))
+    sc.obj('oCurtain', 'staff room', {'closed': shut, 'open': door}, 426, 236, baseline=2, clickable=False)
 
     # ---------- the token CONFESS pays out, on the floor (C)
     msk = diff_mask(A, C, COIN, thresh=70, grow=1)
