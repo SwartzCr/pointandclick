@@ -83,6 +83,20 @@ def rgba_of(im, mask=None):
     return out
 
 
+def shape_src(shape, full=False):
+    """The picture each shape is cut from: the Möbius strip from pose picture 3 (a smoother
+    one than picture C's braided twist), the rest from picture C."""
+    if shape != 'mobius':
+        return pic('C', full)
+    if not full:
+        return pose_pic(3)
+    key = ('pose3full',)
+    if key not in _cache:
+        im = Image.open(os.path.join(HERE, '..', 'art_src', 'crypt-poses', POSES[3])).convert('RGB')
+        _cache[key] = im.resize((1376, 768), Image.LANCZOS)
+    return _cache[key]
+
+
 def shape_icons():
     """Inventory icons for the four shapes, cut from picture C's board at full size."""
     from art_ui import ICON_W, ICON_H
@@ -91,8 +105,9 @@ def shape_icons():
     out = {}
     for k, shape in enumerate(SHAPE_ORDER):
         box = full_box(SLOTS[k])
-        m = diff_mask(A, C, box, thresh=80, grow=1)
-        spr = rgba_of(C.crop(box), m)
+        src = shape_src(shape, True)
+        m = diff_mask(A, src, box, thresh=80, grow=1)
+        spr = rgba_of(src.crop(box), m)
         spr = spr.crop(spr.getbbox())
         s = min((ICON_W - 4) / spr.width, (ICON_H - 4) / spr.height)
         spr = spr.resize((round(spr.width * s), round(spr.height * s)), Image.LANCZOS)
@@ -218,8 +233,9 @@ def crypt():
     # ---------- the Pasta Identification board: empty recesses (A), shapes cut from C
     shapes = {}
     for k, shape in enumerate(SHAPE_ORDER):
-        msk = diff_mask(A, C, SLOTS[k], thresh=80, grow=1)
-        shapes[shape] = rgba_of(C.crop(SLOTS[k]), msk)
+        src = shape_src(shape)
+        msk = diff_mask(A, src, SLOTS[k], thresh=80, grow=1)
+        shapes[shape] = rgba_of(src.crop(SLOTS[k]), msk)
     for k in range(4):
         empty = orig.crop(SLOTS[k])
         sprites = {'empty': empty}
