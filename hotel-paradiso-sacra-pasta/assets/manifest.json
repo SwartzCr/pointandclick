@@ -1006,19 +1006,11 @@
       "khuc_play0",
       2,
       false
-     ],
+     ]
+    ],
+    [
      [
-      "khuc_play1",
-      2,
-      false
-     ],
-     [
-      "khuc_play2",
-      2,
-      false
-     ],
-     [
-      "khuc_play3",
+      "khuc_play0",
       2,
       false
      ]
@@ -1028,63 +1020,11 @@
       "khuc_play0",
       2,
       false
-     ],
-     [
-      "khuc_play1",
-      2,
-      false
-     ],
-     [
-      "khuc_play2",
-      2,
-      false
-     ],
-     [
-      "khuc_play3",
-      2,
-      false
      ]
     ],
     [
      [
       "khuc_play0",
-      2,
-      false
-     ],
-     [
-      "khuc_play1",
-      2,
-      false
-     ],
-     [
-      "khuc_play2",
-      2,
-      false
-     ],
-     [
-      "khuc_play3",
-      2,
-      false
-     ]
-    ],
-    [
-     [
-      "khuc_play0",
-      2,
-      false
-     ],
-     [
-      "khuc_play1",
-      2,
-      false
-     ],
-     [
-      "khuc_play2",
-      2,
-      false
-     ],
-     [
-      "khuc_play3",
       2,
       false
      ]
@@ -1137,24 +1077,14 @@
     [
      [
       "khuc_crank0",
-      3,
-      true
-     ],
-     [
-      "khuc_crank1",
-      3,
-      true
+      0,
+      false
      ]
     ],
     [
      [
       "khuc_crank0",
-      3,
-      false
-     ],
-     [
-      "khuc_crank1",
-      3,
+      0,
       false
      ]
     ],
@@ -2579,6 +2509,33 @@
       "coin": "crypt_oMeatScreen_coin",
       "game": "crypt_oMeatScreen_game"
      }
+    },
+    {
+     "script": "oPoseConfess",
+     "name": "yourself",
+     "x": 58,
+     "y": 286,
+     "visible": false,
+     "baseline": 287,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oPoseConfess_on"
+     }
+    },
+    {
+     "script": "oPoseRex",
+     "name": "yourself",
+     "x": 222,
+     "y": 234,
+     "visible": false,
+     "baseline": 240,
+     "clickable": false,
+     "state": "r1",
+     "sprites": {
+      "r1": "crypt_oPoseRex_r1",
+      "r2": "crypt_oPoseRex_r2"
+     }
     }
    ]
   },
@@ -3192,12 +3149,8 @@
   "khuc_front_talk1",
   "khuc_side_talk1",
   "khuc_play0",
-  "khuc_play1",
-  "khuc_play2",
-  "khuc_play3",
   "khuc_raise",
   "khuc_crank0",
-  "khuc_crank1",
   "blank_char",
   "mini_front0",
   "mini_front1",
@@ -3382,6 +3335,9 @@
   "crypt_oRexScreen_scores",
   "crypt_oMeatScreen_coin",
   "crypt_oMeatScreen_game",
+  "crypt_oPoseConfess_on",
+  "crypt_oPoseRex_r1",
+  "crypt_oPoseRex_r2",
   "hotel_oNewspaper_on",
   "hotel_oTv_c0",
   "hotel_oTv_c1",

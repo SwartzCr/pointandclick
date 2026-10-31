@@ -105,6 +105,62 @@ def shape_icons():
     return out
 
 
+# ----------------------------------------------------------------- the characters' poses
+# Pictures of the room with the characters in it (art_src/crypt-poses, exactly twice the size of
+# the room pictures). Each pose is what differs from every empty-room picture, so it lands at the
+# right place and scale, and things in front of it (the skull's teeth) stay in front.
+POSES = {1: 'P1-chuk-rex-guest-throne.png', 2: 'P2-guest-rex-chuk-crank-cheer.png', 3: 'P3-guest-confess-rex.png'}
+POSE_BOX = {'chuk_rex': (1, (224, 110, 304, 236)), 'guest_seated': (1, (474, 104, 556, 250)),
+            'guest_rex1': (2, (224, 138, 304, 236)), 'guest_rex2': (3, (220, 138, 304, 236)),
+            'guest_cheer': (2, (476, 100, 556, 254)), 'chuk_crank': (2, (410, 120, 500, 254)),
+            'guest_confess': (3, (56, 120, 146, 288))}
+
+
+def pose_pic(k):
+    key = ('pose', k)
+    if key not in _cache:
+        im = Image.open(os.path.join(HERE, '..', 'art_src', 'crypt-poses', POSES[k])).convert('RGB')
+        im = im.resize((W, round(im.height * W / im.width)), Image.LANCZOS)
+        im = im.filter(ImageFilter.UnsharpMask(radius=0.8, percent=40, threshold=3))
+        _cache[key] = im.crop((0, TOP, W, TOP + VIEW_H))
+    return _cache[key]
+
+
+def pose(name):
+    """(sprite, x0, y0) for a named pose, cropped to its pixels."""
+    k, box = POSE_BOX[name]
+    x0, y0, x1, y1 = box
+    p = np.asarray(pose_pic(k).crop(box)).astype(int)
+    diff = np.min([np.abs(p - np.asarray(pic(b).crop(box)).astype(int)).sum(-1) for b in 'ABCDEF'], 0)
+    strong = ndimage.binary_opening(diff > 60, iterations=1)
+    weak = diff > 22
+    # grow the clear parts of the figure into the faint ones (dark hair on a dark screen)
+    d = ndimage.binary_propagation(strong, mask=ndimage.binary_closing(weak, iterations=1))
+    lab, n = ndimage.label(ndimage.binary_closing(d, iterations=2))
+    if n:
+        sizes = ndimage.sum(d, lab, range(1, n + 1))
+        d = np.isin(lab, [j + 1 for j, sz in enumerate(sizes) if sz >= 80])
+    d = ndimage.binary_fill_holes(ndimage.binary_closing(d, iterations=2))
+    d = ndimage.binary_opening(d, iterations=1)
+    yy, xx = np.mgrid[y0:y1, x0:x1]
+    if name == 'chuk_crank':            # P2 has Chuk and the bellhop touching: Chuk is the left one
+        d &= np.where(yy < 200, xx <= 486, xx <= 478)
+    if name == 'guest_confess':        # not the booth's curtain, nor the token by his feet
+        purple = (p[..., 2] > p[..., 0] + 10) & (p[..., 2] > p[..., 1] + 25)
+        d &= ~purple & ~((xx >= 118) & (yy >= 270))
+    if name == 'guest_cheer':
+        d &= np.where(yy < 200, xx > 486, xx > 478)
+    im = Image.fromarray(np.dstack([p, d * 255]).astype(np.uint8), 'RGBA')
+    bb = im.getbbox()
+    return im.crop(bb), x0 + bb[0], y0 + bb[1]
+
+
+def anchor(name):
+    """(x, y) to put a character at so a view frame of this pose lands where it was painted."""
+    im, x0, y0 = pose(name)
+    return x0 + im.width // 2, y0 + im.height
+
+
 def crypt():
     sc = Scene('crypt')
     A, B, C = pic('A'), pic('B'), pic('C')
@@ -240,8 +296,13 @@ def crypt():
         pose = Image.fromarray(a, 'RGBA')
         im.alpha_composite(pose, (522 - sx0 - pose.width // 2, 246 - sy0 - pose.height))
         return im
-    sc.obj('oSeat', 'Pope Seat', {'empty': empty, 'crank': with_crank, 'seated': sit(with_crank),
-                                  'decree': sit(with_crank, True), 'seatednc': sit(empty)},
+    def sit_pose(base, name):
+        im = base.copy()
+        g, gx, gy = pose(name)
+        im.alpha_composite(g, (gx - sx0, gy - sy0))
+        return im
+    sc.obj('oSeat', 'Pope Seat', {'empty': empty, 'crank': with_crank, 'seated': sit_pose(with_crank, 'guest_seated'),
+                                  'decree': sit_pose(with_crank, 'guest_cheer'), 'seatednc': sit_pose(empty, 'guest_seated')},
            sx0, sy1, baseline=250)
 
     # ---------- the computer: off as in the room; on (B), once Chuk plugs it in
@@ -272,6 +333,19 @@ def crypt():
     sc.wd.polygon([(108, 288), (108, 240), (122, 228), (186, 228), (196, 240), (204, 258), (302, 258),
                    (310, 246), (420, 246), (428, 238), (500, 238), (500, 246), (476, 262), (580, 262),
                    (570, 288)], fill=1)
+    # ---------- the bellhop at the cabinets (shown while he plays; he's hidden meanwhile)
+    g, gx, gy = pose('guest_confess')
+    sc.obj('oPoseConfess', 'yourself', {'on': g}, gx, gy + g.height, visible=False, baseline=287, clickable=False)
+    r1, rx1, ry1 = pose('guest_rex1')
+    r2, rx2, ry2 = pose('guest_rex2')
+    x0, y0 = min(rx1, rx2), min(ry1, ry2)
+    w, h = max(rx1 + r1.width, rx2 + r2.width) - x0, max(ry1 + r1.height, ry2 + r2.height) - y0
+    fr = []
+    for r, rx, ry in ((r1, rx1, ry1), (r2, rx2, ry2)):
+        c = canvas(w, h)
+        c.alpha_composite(r, (rx - x0, ry - y0))
+        fr.append(c)
+    sc.obj('oPoseRex', 'yourself', {'r1': fr[0], 'r2': fr[1]}, x0, y0 + h, visible=False, baseline=240, clickable=False)
     return sc
 
 

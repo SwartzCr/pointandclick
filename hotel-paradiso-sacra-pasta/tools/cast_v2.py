@@ -202,3 +202,23 @@ def chuk():
                     horror=shrink(act[1][2], ka), cheer=shrink(act[1][3], ka), cup=shrink(act[1][4], ka),
                     lying=shrink(act[1][5], ka), seat=[shrink(f, ka) for f in act[0][0:2]]),
     )
+
+
+def talk_frame(stand, talk, head=0.25):
+    """The standing figure with the talking figure's head on it (sized to match), so only the
+    face changes when a character speaks."""
+    def hat(im):
+        a = np.asarray(im)[..., 3] > 0
+        ys = np.nonzero(a.any(1))[0]
+        t, h = ys[0], ys[-1] - ys[0]
+        xs = np.nonzero(a[t + max(1, int(h * 0.04))])[0]
+        return t, xs[0], xs[-1], h
+    st, sx0, sx1, sh = hat(stand)
+    tt, tx0, tx1, th = hat(talk)
+    hd = talk.crop((0, tt, talk.width, tt + int(th * head)))
+    k = (sx1 - sx0 + 1) / (tx1 - tx0 + 1)
+    hd = shrink(hd, k)
+    out = stand.copy()
+    cx_s, cx_t = (sx0 + sx1) / 2, (tx0 + tx1) / 2 * k
+    out.alpha_composite(hd, (int(round(cx_s - cx_t)), st))
+    return out
