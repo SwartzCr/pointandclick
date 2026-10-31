@@ -358,8 +358,8 @@ def crypt():
     sc.obj('oRexScreen', 'screen', {k: im.crop(REX_SCREEN).convert('RGBA') for k, im in
                                     (('play', A), ('off', E), ('high', D), ('scores', F))},
            REX_SCREEN[0], REX_SCREEN[3], baseline=1, clickable=False)
-    sc.obj('oMeatScreen', 'screen', {'coin': D.crop(MEAT_SCREEN).convert('RGBA'),
-                                     'game': orig.crop(MEAT_SCREEN)},
+    sc.obj('oMeatScreen', 'screen', dict({'coin': D.crop(MEAT_SCREEN).convert('RGBA'),
+                                          'game': orig.crop(MEAT_SCREEN)}, **attract_screens(C, D, orig)),
            MEAT_SCREEN[0], MEAT_SCREEN[3], baseline=1, clickable=False)
 
     sc.uv(lambda im, dd: glow_text(im, (526, 268), 'THE CRANK NEEDS', 8, (255, 160, 80)))
@@ -405,6 +405,86 @@ def crypt():
         sc.obj('oClownPlay%d' % (k + 1), 'clown', {'on': g}, gx, gy + g.height, visible=False,
                baseline=min(287, gy + g.height), clickable=False)
     return sc
+
+
+# a 3x5 pixel font for the arcade's tiny high-score screen
+TINY = {'0': '111101101101111', '1': '010110010010111', '2': '111001111100111', '3': '111001111001111',
+        '7': '111001010010010', '8': '111101111101111', '9': '111101111001111', 'H': '101101111101101',
+        'I': '111010010010111', 'S': '111100111001111', 'C': '111100100100111', 'O': '111101101101111',
+        'R': '110101110101101', 'E': '111100110100111', 'K': '101101110101101', 'U': '101101101101111',
+        'P': '110101110100100', 'B': '110101110101110', 'Y': '101101010010010', ' ': '000000000000000',
+        '-': '000000111000000', '.': '000000000000010', '4': '101101111001001', 'M': '1000111011101011000110001', 'A': '010101111101101',
+        'T': '111010010010010', 'L': '100100100100111', 'D': '110101101101110', 'N': '110101101101101'}
+
+
+def tiny_text(im, xy, s, col):
+    px = im.load()
+    x, y = xy
+    for ch in s:
+        g = TINY[ch]
+        w = len(g) // 5
+        for k, bit in enumerate(g):
+            if bit == '1':
+                xx, yy = x + k % w, y + k // w
+                if 0 <= xx < im.width and 0 <= yy < im.height:
+                    px[xx, yy] = col
+        x += w + 1
+
+
+def attract_screens(C, D, orig):
+    """MEATBALL MADNESS's attract mode, cycled until someone plays: a title screen, the game
+    mirrored (another moment of play) and a high-score table, on the cabinet's glass."""
+    m = diff_mask(C, D, MEAT_SCREEN, thresh=60, grow=1)
+    lab, n = ndimage.label(m)
+    if n:
+        m = lab == 1 + int(np.argmax(ndimage.sum(m, lab, range(1, n + 1))))
+    m = ndimage.binary_fill_holes(m)
+    ys, xs = np.nonzero(m)
+    gx0, gy0, gx1, gy1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
+    gw, gh = gx1 - gx0, gy1 - gy0
+    base = orig.crop(MEAT_SCREEN).convert('RGB')
+    game = np.asarray(base)[gy0:gy1, gx0:gx1]
+
+    def on_glass(content):
+        out = np.asarray(base).copy()
+        reg = out[gy0:gy1, gx0:gx1]
+        c = np.asarray(content.convert('RGB').resize((gw, gh), Image.NEAREST))
+        mm = m[gy0:gy1, gx0:gx1]
+        reg[mm] = c[mm]
+        return Image.fromarray(out).convert('RGBA')
+
+    # the game's top meatball, for the title screen
+    ball = Image.fromarray(game[:gh // 2, :])
+    bm = np.asarray(ball).astype(int)
+    brown = (bm[..., 0] > bm[..., 2] + 30) & (bm[..., 0] < 200) & (bm[..., 1] < 120)
+    lab, n = ndimage.label(brown)
+    bb = None
+    if n:
+        k = 1 + int(np.argmax(ndimage.sum(brown, lab, range(1, n + 1))))
+        sl = ndimage.find_objects(lab)[k - 1]
+        bb = (sl[1].start, sl[0].start, sl[1].stop, sl[0].stop)
+    title = Image.new('RGB', (gw, gh), (34, 18, 60))
+    def centre(img, y, txt, col):
+        tw = sum(len(TINY[ch]) // 5 + 1 for ch in txt) - 1
+        tiny_text(img, ((gw - tw) // 2, y), txt, col)
+    centre(title, 6, 'MEAT', (255, 200, 80))
+    centre(title, 12, 'BALL', (255, 200, 80))
+    centre(title, 18, 'MADNESS', (255, 120, 90))
+    if bb:
+        b = ball.crop(bb)
+        bmask = Image.fromarray((brown[bb[1]:bb[3], bb[0]:bb[2]] * 255).astype(np.uint8))
+        title.paste(b, ((gw - b.width) // 2, 26), bmask)
+    centre(title, gh - 10, 'PUSH', (255, 230, 120))
+
+    flipped = Image.fromarray(game[:, ::-1])
+
+    scores = Image.new('RGB', (gw, gh), (14, 10, 34))
+    centre(scores, 6, 'HI', (255, 220, 90))
+    rows = [('KHC 999', (250, 250, 250)), ('KHC 998', (120, 220, 255)),
+            ('KHC 997', (255, 140, 200)), ('KHC 980', (140, 240, 140))]
+    for k, (txt, col) in enumerate(rows):
+        centre(scores, 15 + k * 8, txt, col)
+    return {'title': on_glass(title), 'game2': on_glass(flipped), 'scores': on_glass(scores)}
 
 
 def cutout(base, im, box):
