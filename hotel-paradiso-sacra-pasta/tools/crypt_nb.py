@@ -58,9 +58,49 @@ def _pal(im):
     return out
 
 
+OLD_CABINET = [(561, 100), (640, 90), (640, 288), (570, 288), (570, 219), (558, 214), (557, 198)]
+# the MEATBALL MADNESS cabinet in the old picture, with the bit of wall beside its screen
+
+
+def compose(old):
+    """The second picture (stretched 2% wider and 10% shorter to line up with the first) over
+    the first. Where it doesn't reach, at the far left and right, the first picture shows: the
+    strip left of the confessional is repainted as wall, and the old MEATBALL MADNESS cabinet
+    is pasted back in front of the new picture's cabinet (hiding its sparkle mark too)."""
+    nw = cv2.imread(os.path.join(os.path.dirname(SRC), V2[0]))
+    M = np.array(V2[1], np.float32)
+    nw = cv2.warpAffine(nw, M, (1536, 688), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REPLICATE)
+    cov = cv2.warpAffine(np.full((768, 1376), 255, np.uint8), M, (1536, 688))
+    nw = Image.fromarray(cv2.cvtColor(nw, cv2.COLOR_BGR2RGB)).resize((W, VIEW_H), Image.LANCZOS)
+    cov = Image.fromarray(cv2.erode(cov, np.ones((9, 9), np.uint8))).resize((W, VIEW_H), Image.LANCZOS)
+    out = old.copy()
+    out.paste(nw, (0, 0), cov.filter(ImageFilter.GaussianBlur(1.5)))
+    # left: the old cabinet's edge shows behind the confessional; wall there instead,
+    # the stones above it repeated down
+    wall = old.crop((0, 18, 27, 96))
+    for y in range(96, VIEW_H, wall.height):
+        out.paste(wall.crop((0, 0, 27, min(wall.height, VIEW_H - y))), (0, y))
+    lm = Image.new('L', (W, VIEW_H), 0)
+    ImageDraw.Draw(lm).rectangle([0, 0, 26, VIEW_H], fill=255)
+    out.paste(nw, (0, 0), Image.fromarray(np.minimum(np.asarray(cov), 255 - np.asarray(lm)).astype(np.uint8)))
+    # right: the old cabinet, in front, stretched a little wider so it hides all of the new one
+    x0 = min(p[0] for p in OLD_CABINET)
+    k = (W - 546) / (W - x0)
+    cab = old.crop((x0, 0, W, VIEW_H))
+    cm = Image.new('L', (W, VIEW_H), 0)
+    ImageDraw.Draw(cm).polygon(OLD_CABINET, fill=255)
+    cm = cm.crop((x0, 0, W, VIEW_H))
+    nwid = round(cab.width * k)
+    cab = cab.resize((nwid, VIEW_H), Image.LANCZOS)
+    cm = cm.resize((nwid, VIEW_H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.6))
+    out.paste(cab, (W - nwid, 0), cm)
+    return out
+
+
 def crypt():
     sc = Scene('crypt')
-    base = Image.open(SRC).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
+    old_base = Image.open(SRC).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
+    base = compose(old_base)
 
     # lift the hat out: inpaint the wall behind it, keep the cut-out as a sprite
     hx0, hy0, hx1, hy1 = HAT
@@ -93,44 +133,6 @@ def crypt():
     hat = _pal(hat.crop(hat.getbbox()))
     hbx0, hby0 = hx0 + Image.fromarray((m * 255).astype(np.uint8)).getbbox()[0], hy0 + Image.fromarray((m * 255).astype(np.uint8)).getbbox()[1]
 
-    # ---------- the second picture's pieces, pasted over the first
-    nw = cv2.imread(os.path.join(os.path.dirname(SRC), V2[0]))
-    nw = cv2.warpAffine(nw, np.array(V2[1], np.float32), (1536, 688), flags=cv2.INTER_LANCZOS4,
-                        borderMode=cv2.BORDER_REPLICATE)
-    nw = Image.fromarray(cv2.cvtColor(nw, cv2.COLOR_BGR2RGB)).resize((W, VIEW_H), Image.LANCZOS)
-    sc.v2 = nw
-
-    def paste(src_box, at, cut_out=None, feather=2):
-        x0, y0, x1, y1 = src_box
-        piece = nw.crop(src_box)
-        m = Image.new('L', piece.size, 0)
-        ImageDraw.Draw(m).rectangle([feather, feather, piece.width - 1 - feather, piece.height - 1], fill=255)
-        if cut_out:
-            for bx in cut_out:
-                ImageDraw.Draw(m).rectangle([bx[0] - x0, bx[1] - y0, bx[2] - x0, bx[3] - y0], fill=0)
-        m = m.filter(ImageFilter.GaussianBlur(feather))
-        filled.paste(piece, at, m)
-    # the confessional: moved left a little so it covers all of the old CONFESS cabinet
-    paste((25, 86, 127, 288), (10, 86))
-    edge = nw.crop((25, 100, 26, 288))
-    for x in (8, 9):
-        filled.paste(edge, (x, 100))
-    paste((194, 118, 308, 288), (194, 118))                    # the T. Rex skull cabinet
-    paste((266, 70, 406, 154), (266, 70), feather=1)           # the Pasta Identification board
-    # first, paint out what's left of the old, wider throne (its gold side and crank)
-    fa_ = np.asarray(filled).copy()
-    strip = fa_[150:264, 540:561].astype(int)
-    gold = (strip[..., 0] > 110) & (strip[..., 0] > strip[..., 2] + 30)
-    grey = (np.abs(strip[..., 0] - strip[..., 2]) < 25) & (strip.sum(-1) > 150) & (strip.sum(-1) < 420)
-    tm = np.zeros(fa_.shape[:2], np.uint8)
-    tm[150:264, 540:561] = (gold | grey) * 255
-    tm = cv2.dilate(tm, np.ones((5, 5), np.uint8))
-    fill_ = cv2.inpaint(cv2.cvtColor(fa_, cv2.COLOR_RGB2BGR), tm, 5, cv2.INPAINT_TELEA)
-    fill_ = cv2.cvtColor(fill_, cv2.COLOR_BGR2RGB).astype(float)
-    tex = np.random.default_rng(9).normal(0, 3, fill_.shape[:2] + (1,))
-    fa_ = np.where((tm > 0)[..., None], np.clip(fill_ + tex, 0, 255), fa_).astype(np.uint8)
-    filled = Image.fromarray(fa_)
-    paste((455, 112, 547, 262), (455, 112), cut_out=[(455, 112, 482, 180), (455, 180, 465, 205)])   # the throne, socket and all
     room_rgb = _pal(filled.convert('RGBA'))
     room = Image.new('RGBA', (W, H), (0, 0, 0, 255))
     room.paste(room_rgb, (0, 0))
@@ -184,9 +186,8 @@ def crypt():
     cx0, cy0, cx1, cy1 = CURTAIN
     closed = orig.crop(CURTAIN)
     # open: the same doorway from the curtain-open variant of the room
-    var = Image.open(os.path.join(os.path.dirname(SRC), '01-curtain-open.jpg')).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
-    opened = var.crop(CURTAIN).convert('RGBA')
-    sc.obj('oCurtain', 'curtain', {'closed': closed, 'open': _pal(opened)}, cx0, cy1, baseline=2)
+    # the new picture has no curtain: the staff room's doorway just stands open
+    sc.obj('oCurtain', 'staff doorway', {'closed': closed, 'open': closed}, cx0, cy1, baseline=2, clickable=False)
 
     # ---------- the arcade token, on the floor by the CONFESS cabinet
     tk = canvas(9, 6)
@@ -207,7 +208,7 @@ def crypt():
     zone[red] = 0
     empty = Image.fromarray(ea, 'RGBA')          # the new throne: a socket, no crank
     # with the crank: the old picture's crank, moved onto the new socket
-    old = np.asarray(base.convert('RGB')).astype(int)
+    old = np.asarray(old_base.convert('RGB')).astype(int)
     kx0, ky0, kx1, ky1 = CRANK_BOX
     reg = old[ky0:ky1, kx0:kx1]
     iron = (np.abs(reg[..., 2] - reg[..., 0]) < 40) & (reg.sum(-1) < 400)          # grey, not gold
@@ -225,8 +226,9 @@ def crypt():
     sc.obj('oSeat', 'Pope Seat', {'empty': empty, 'crank': with_crank, 'seated': seated, 'decree': decree,
                                   'seatednc': seated_nc}, sx0, sy1, baseline=250)
     # the computer, dark until Chuk plugs it in
-    scr = nw.crop(SCREEN).convert('RGBA')
-    sc.obj('oScreen', 'screen', {'off': scr}, SCREEN[0], SCREEN[3], baseline=1, clickable=False)
+    # the room shows the computer switched off; this is it on, once Chuk plugs it in
+    scr = old_base.crop(SCREEN).convert('RGBA')
+    sc.obj('oScreen', 'screen', {'on': scr}, SCREEN[0], SCREEN[3], baseline=1, clickable=False, visible=False)
     sc.obj('oHat', 'pasta pope hat', {'on': hat}, hbx0, hby0 + hat.height, baseline=251)
 
     sc.uv(lambda im, dd: glow_text(im, (512, 262), 'THE CRANK NEEDS', 8, (255, 160, 80)))

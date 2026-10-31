@@ -2417,12 +2417,12 @@
     },
     {
      "script": "oCurtain",
-     "name": "curtain",
+     "name": "staff doorway",
      "x": 413,
      "y": 222,
      "visible": true,
      "baseline": 2,
-     "clickable": true,
+     "clickable": false,
      "state": "closed",
      "sprites": {
       "closed": "crypt_oCurtain_closed",
@@ -2464,12 +2464,12 @@
      "name": "screen",
      "x": 352,
      "y": 179,
-     "visible": true,
+     "visible": false,
      "baseline": 1,
      "clickable": false,
-     "state": "off",
+     "state": "on",
      "sprites": {
-      "off": "crypt_oScreen_off"
+      "on": "crypt_oScreen_on"
      }
     },
     {
@@ -3267,7 +3267,7 @@
   "crypt_oSeat_seated",
   "crypt_oSeat_decree",
   "crypt_oSeat_seatednc",
-  "crypt_oScreen_off",
+  "crypt_oScreen_on",
   "crypt_oHat_on",
   "hotel_oNewspaper_on",
   "hotel_oTv_c0",
