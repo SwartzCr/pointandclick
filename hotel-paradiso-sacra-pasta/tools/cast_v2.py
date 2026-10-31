@@ -222,3 +222,54 @@ def talk_frame(stand, talk, head=0.25):
     cx_s, cx_t = (sx0 + sx1) / 2, (tx0 + tx1) / 2 * k
     out.alpha_composite(hd, (int(round(cx_s - cx_t)), st))
     return out
+
+
+# ------------------------------------------------------------------ the clowns
+CLOWN_H = 140                    # a standing clown, in game pixels (the Crypt shows them at 100%)
+# (suit hue, dot hue, hair hue) in degrees; clown 1 keeps the sheet's yellow, blue and orange
+CLOWN_COLOURS = {1: None, 2: (125, 52, 285), 3: (218, 325, 52)}
+
+
+def recolour(im, cols):
+    """Swap the suit, polka dots and hair to new hues, keeping each pixel's shading."""
+    if cols is None:
+        return im
+    import colorsys
+    a = np.asarray(im).astype(float) / 255
+    rgb = a[..., :3]
+    mx, mn = rgb.max(-1), rgb.min(-1)
+    hsv = np.asarray(Image.fromarray((rgb * 255).astype(np.uint8)).convert('HSV')).astype(float)
+    h = hsv[..., 0] * 360 / 255
+    sat = (mx - mn) / np.maximum(mx, 1e-3)
+    vivid = (sat > 0.35) & (a[..., 3] > 0) & (mx > 0.25)
+    # by hue: the orange hair (about 10-27 degrees) sits between the red shoes and nose
+    # (below 10) and the yellow suit with its shadows (27-75)
+    hair = vivid & (h >= 10) & (h < 27)
+    suit = vivid & (h >= 27) & (h < 75)
+    dots = vivid & (h >= 190) & (h < 260)
+    out = hsv.copy()
+    for m, hue in ((suit, cols[0]), (dots, cols[1]), (hair, cols[2])):
+        out[..., 0] = np.where(m, hue * 255 / 360, out[..., 0])
+    # a vivid green or blue reads as neon: tone the suit down a little
+    out[..., 1] = np.where(suit, out[..., 1] * 0.8, out[..., 1])
+    out[..., 2] = np.where(suit, out[..., 2] * 0.88, out[..., 2])
+    res = np.asarray(Image.fromarray(out.astype(np.uint8), 'HSV').convert('RGB'))
+    res = np.where((suit | dots | hair)[..., None], res, (rgb * 255).astype(np.uint8))
+    return Image.fromarray(np.dstack([res, (a[..., 3] * 255).astype(np.uint8)]).astype(np.uint8), 'RGBA')
+
+
+def clown(n):
+    """Clown n's frames at game scale: stand (front back right left), walk side (6),
+    walk front (4), walk back (4), and actions (tray, arms up, arms up walking, shout, horn)."""
+    wk = figures('clown_walk.png', min_size=3000)
+    ac = figures('clown_actions.png', min_size=3000)
+    cols = CLOWN_COLOURS[n]
+    k1 = CLOWN_H / wk[0][0].height
+    k2 = CLOWN_H / wk[1][0].height * (wk[1][0].height / wk[0][0].height)
+    S = lambda f, k: shrink(recolour(f, cols), k)
+    kw2 = CLOWN_H * 0.95 / wk[1][0].height
+    kfb = CLOWN_H * 0.92 / wk[2][0].height
+    ka = CLOWN_H * 1.15 / ac[0][1].height
+    return dict(stand=[S(f, k1) for f in wk[0]], walk_side=[S(f, kw2) for f in wk[1]],
+                walk_front=[S(f, kfb) for f in wk[2][:4]], walk_back=[S(f, kfb) for f in wk[2][4:]],
+                actions=[S(f, ka) for f in ac[0]])

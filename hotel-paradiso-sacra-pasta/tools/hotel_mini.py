@@ -210,26 +210,26 @@ def views(spr):
 
 
 def clown_views(spr):
-    """VCLOWN1..3: the first game's three room-service clowns, at 2x. Loop 4 is arms up
-    (whisking people away, or playing an arcade cabinet)."""
-    art = hp_art()
-    k = lambda im: x2(keyed(im))
+    """VCLOWN1..3: the room-service clowns (art_src/cast_v2/clown_*.png), recoloured into three.
+    Loop 4 is arms up (whisking people away, or cheering at the cabinets)."""
+    import cast_v2 as CV
+    from khuc_sprite import _frame as F
     out = []
     for n in (1, 2, 3):
+        c = CV.clown(n)
         name = 'clown%d' % n
-        front = [spr('%s_front%d' % (name, s), k(art.clown_front(name, s))) for s in range(3)]
-        back = [spr('%s_back%d' % (name, s), k(art.clown_back(name, s))) for s in range(3)]
-        side = [spr('%s_side%d' % (name, s), k(art.clown_side(name, s))) for s in range(4)]
-        up = [spr('%s_up%d' % (name, s), k(art.clown_front(name, s, arms_up=True))) for s in range(3)]
-        walk_fb = lambda fr: [fr[0], fr[1], fr[0], fr[2], fr[0]]
-        loops = [[(f, 0, False) for f in walk_fb(front)],
-                 [(f, 0, True) for f in [side[0]] + side],
-                 [(f, 0, False) for f in [side[0]] + side],
-                 [(f, 0, False) for f in walk_fb(back)],
-                 [(f, 2, False) for f in walk_fb(up)]]
+        reg = lambda tag, im: spr('%s_%s' % (name, tag), F(im))
+        front = [reg('front', c['stand'][0])] + [reg('front%d' % i, f) for i, f in enumerate(c['walk_front'])]
+        back = [reg('back', c['stand'][1])] + [reg('back%d' % i, f) for i, f in enumerate(c['walk_back'])]
+        side = [reg('side', c['stand'][2])] + [reg('side%d' % i, f) for i, f in enumerate(c['walk_side'])]
+        up = [reg('up0', c['actions'][1]), reg('up1', c['actions'][2])]
+        loops = [[(f, 0, False) for f in front],
+                 [(f, 0, True) for f in side],
+                 [(f, 0, False) for f in side],
+                 [(f, 0, False) for f in back],
+                 [(f, 3, False) for f in up]]
         out.append(dict(name='VCLOWN%d' % n, loops=loops))
     return out
-
 
 if __name__ == '__main__':
     sc = hotel()

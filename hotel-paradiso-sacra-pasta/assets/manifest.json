@@ -1296,6 +1296,11 @@
    "loops": [
     [
      [
+      "clown1_front",
+      0,
+      false
+     ],
+     [
       "clown1_front0",
       0,
       false
@@ -1306,24 +1311,19 @@
       false
      ],
      [
-      "clown1_front0",
-      0,
-      false
-     ],
-     [
       "clown1_front2",
       0,
       false
      ],
      [
-      "clown1_front0",
+      "clown1_front3",
       0,
       false
      ]
     ],
     [
      [
-      "clown1_side0",
+      "clown1_side",
       0,
       true
      ],
@@ -1346,11 +1346,21 @@
       "clown1_side3",
       0,
       true
+     ],
+     [
+      "clown1_side4",
+      0,
+      true
+     ],
+     [
+      "clown1_side5",
+      0,
+      true
      ]
     ],
     [
      [
-      "clown1_side0",
+      "clown1_side",
       0,
       false
      ],
@@ -1373,9 +1383,24 @@
       "clown1_side3",
       0,
       false
+     ],
+     [
+      "clown1_side4",
+      0,
+      false
+     ],
+     [
+      "clown1_side5",
+      0,
+      false
      ]
     ],
     [
+     [
+      "clown1_back",
+      0,
+      false
+     ],
      [
       "clown1_back0",
       0,
@@ -1387,17 +1412,12 @@
       false
      ],
      [
-      "clown1_back0",
-      0,
-      false
-     ],
-     [
       "clown1_back2",
       0,
       false
      ],
      [
-      "clown1_back0",
+      "clown1_back3",
       0,
       false
      ]
@@ -1405,27 +1425,12 @@
     [
      [
       "clown1_up0",
-      2,
+      3,
       false
      ],
      [
       "clown1_up1",
-      2,
-      false
-     ],
-     [
-      "clown1_up0",
-      2,
-      false
-     ],
-     [
-      "clown1_up2",
-      2,
-      false
-     ],
-     [
-      "clown1_up0",
-      2,
+      3,
       false
      ]
     ]
@@ -1435,6 +1440,11 @@
    "name": "VCLOWN2",
    "loops": [
     [
+     [
+      "clown2_front",
+      0,
+      false
+     ],
      [
       "clown2_front0",
       0,
@@ -1446,24 +1456,19 @@
       false
      ],
      [
-      "clown2_front0",
-      0,
-      false
-     ],
-     [
       "clown2_front2",
       0,
       false
      ],
      [
-      "clown2_front0",
+      "clown2_front3",
       0,
       false
      ]
     ],
     [
      [
-      "clown2_side0",
+      "clown2_side",
       0,
       true
      ],
@@ -1486,11 +1491,21 @@
       "clown2_side3",
       0,
       true
+     ],
+     [
+      "clown2_side4",
+      0,
+      true
+     ],
+     [
+      "clown2_side5",
+      0,
+      true
      ]
     ],
     [
      [
-      "clown2_side0",
+      "clown2_side",
       0,
       false
      ],
@@ -1513,9 +1528,24 @@
       "clown2_side3",
       0,
       false
+     ],
+     [
+      "clown2_side4",
+      0,
+      false
+     ],
+     [
+      "clown2_side5",
+      0,
+      false
      ]
     ],
     [
+     [
+      "clown2_back",
+      0,
+      false
+     ],
      [
       "clown2_back0",
       0,
@@ -1527,17 +1557,12 @@
       false
      ],
      [
-      "clown2_back0",
-      0,
-      false
-     ],
-     [
       "clown2_back2",
       0,
       false
      ],
      [
-      "clown2_back0",
+      "clown2_back3",
       0,
       false
      ]
@@ -1545,27 +1570,12 @@
     [
      [
       "clown2_up0",
-      2,
+      3,
       false
      ],
      [
       "clown2_up1",
-      2,
-      false
-     ],
-     [
-      "clown2_up0",
-      2,
-      false
-     ],
-     [
-      "clown2_up2",
-      2,
-      false
-     ],
-     [
-      "clown2_up0",
-      2,
+      3,
       false
      ]
     ]
@@ -1575,6 +1585,11 @@
    "name": "VCLOWN3",
    "loops": [
     [
+     [
+      "clown3_front",
+      0,
+      false
+     ],
      [
       "clown3_front0",
       0,
@@ -1586,24 +1601,19 @@
       false
      ],
      [
-      "clown3_front0",
-      0,
-      false
-     ],
-     [
       "clown3_front2",
       0,
       false
      ],
      [
-      "clown3_front0",
+      "clown3_front3",
       0,
       false
      ]
     ],
     [
      [
-      "clown3_side0",
+      "clown3_side",
       0,
       true
      ],
@@ -1626,11 +1636,21 @@
       "clown3_side3",
       0,
       true
+     ],
+     [
+      "clown3_side4",
+      0,
+      true
+     ],
+     [
+      "clown3_side5",
+      0,
+      true
      ]
     ],
     [
      [
-      "clown3_side0",
+      "clown3_side",
       0,
       false
      ],
@@ -1653,9 +1673,24 @@
       "clown3_side3",
       0,
       false
+     ],
+     [
+      "clown3_side4",
+      0,
+      false
+     ],
+     [
+      "clown3_side5",
+      0,
+      false
      ]
     ],
     [
+     [
+      "clown3_back",
+      0,
+      false
+     ],
      [
       "clown3_back0",
       0,
@@ -1667,17 +1702,12 @@
       false
      ],
      [
-      "clown3_back0",
-      0,
-      false
-     ],
-     [
       "clown3_back2",
       0,
       false
      ],
      [
-      "clown3_back0",
+      "clown3_back3",
       0,
       false
      ]
@@ -1685,27 +1715,12 @@
     [
      [
       "clown3_up0",
-      2,
+      3,
       false
      ],
      [
       "clown3_up1",
-      2,
-      false
-     ],
-     [
-      "clown3_up0",
-      2,
-      false
-     ],
-     [
-      "clown3_up2",
-      2,
-      false
-     ],
-     [
-      "clown3_up0",
-      2,
+      3,
       false
      ]
     ]
@@ -3164,45 +3179,63 @@
   "mini_side3",
   "mini_front_talk",
   "mini_side_talk",
+  "clown1_front",
   "clown1_front0",
   "clown1_front1",
   "clown1_front2",
+  "clown1_front3",
+  "clown1_back",
   "clown1_back0",
   "clown1_back1",
   "clown1_back2",
+  "clown1_back3",
+  "clown1_side",
   "clown1_side0",
   "clown1_side1",
   "clown1_side2",
   "clown1_side3",
+  "clown1_side4",
+  "clown1_side5",
   "clown1_up0",
   "clown1_up1",
-  "clown1_up2",
+  "clown2_front",
   "clown2_front0",
   "clown2_front1",
   "clown2_front2",
+  "clown2_front3",
+  "clown2_back",
   "clown2_back0",
   "clown2_back1",
   "clown2_back2",
+  "clown2_back3",
+  "clown2_side",
   "clown2_side0",
   "clown2_side1",
   "clown2_side2",
   "clown2_side3",
+  "clown2_side4",
+  "clown2_side5",
   "clown2_up0",
   "clown2_up1",
-  "clown2_up2",
+  "clown3_front",
   "clown3_front0",
   "clown3_front1",
   "clown3_front2",
+  "clown3_front3",
+  "clown3_back",
   "clown3_back0",
   "clown3_back1",
   "clown3_back2",
+  "clown3_back3",
+  "clown3_side",
   "clown3_side0",
   "clown3_side1",
   "clown3_side2",
   "clown3_side3",
+  "clown3_side4",
+  "clown3_side5",
   "clown3_up0",
   "clown3_up1",
-  "clown3_up2",
   "inv_iBeads",
   "inv_iPamphlet",
   "inv_iPendant",
