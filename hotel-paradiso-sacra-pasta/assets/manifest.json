@@ -2390,9 +2390,9 @@
     },
     {
      "script": "oCompartment",
-     "name": "brass plate",
-     "x": 302,
-     "y": 146,
+     "name": "drawer",
+     "x": 296,
+     "y": 155,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -2405,14 +2405,28 @@
     {
      "script": "oCrank",
      "name": "crank",
-     "x": 324,
-     "y": 145,
+     "x": 296,
+     "y": 155,
      "visible": false,
      "baseline": 2,
      "clickable": true,
      "state": "on",
      "sprites": {
       "on": "crypt_oCrank_on"
+     }
+    },
+    {
+     "script": "oBooth",
+     "name": "CONFESS booth",
+     "x": 6,
+     "y": 288,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "shut",
+     "sprites": {
+      "shut": "crypt_oBooth_shut",
+      "ajar": "crypt_oBooth_ajar"
      }
     },
     {
@@ -3259,6 +3273,8 @@
   "crypt_oCompartment_shut",
   "crypt_oCompartment_open",
   "crypt_oCrank_on",
+  "crypt_oBooth_shut",
+  "crypt_oBooth_ajar",
   "crypt_oCurtain_closed",
   "crypt_oCurtain_open",
   "crypt_oToken_on",
