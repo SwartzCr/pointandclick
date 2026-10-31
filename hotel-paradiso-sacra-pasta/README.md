@@ -90,8 +90,15 @@ the answer.
 15. Put the shapes in the recesses: OTTINI the figure-eight loop, TORTINI the twisted
     band, ANELLI the stone ring, NODINI the three-lobed knot. (A wrong set
     pops back out once all four are in.) The brass plate opens: take the crank.
-16. Give the crank to Chuk; he fits it to the Pope Seat. Sit in the seat, he cranks the
-    hat down; decree "Let there be dinner!"
+16. Give the crank to Chuk; he fits it to the Pope Seat. Sit in the seat and he cranks
+    the hat down. Delighted that someone beat his high score *and* solved his puzzles,
+    he makes you Pope, with one papal request. Three endings:
+    - **"Room service for all!"** Chuk: "What have you done!" The clowns arrive and
+      whisk you both away.
+    - **"All games are free play!"** The cabinets flash, and the clowns come in to play.
+    - **"Let's party!"** Chuk points out that's what you've been doing all along; it's
+      nearly strike, so it's one drink in the staff room first. The morning after, the
+      Nave is wrecked, and they regret their choices.
 
 </details>
 

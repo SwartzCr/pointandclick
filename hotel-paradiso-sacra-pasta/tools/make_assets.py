@@ -106,6 +106,7 @@ def main():
     manifest['views'] += khuc_views()
     import hotel_mini as HM
     manifest['views'] += HM.views(spr)
+    manifest['views'] += HM.clown_views(spr)
 
     painted_icons = NM.icons()
     import guest_sheet
@@ -137,6 +138,7 @@ def main():
     spr('plate', R.ending_plate())
     import hp_screen
     spr('hp_screen', hp_screen.screen())
+    spr('nave_wrecked', NB.wrecked(rooms[0][1]))
     import hotel_mini
     for k, im in enumerate(hotel_mini.loading_screens()):
         spr('hp_loading%d' % k, im)

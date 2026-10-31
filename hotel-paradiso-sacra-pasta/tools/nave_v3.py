@@ -435,3 +435,53 @@ def nave():
                    (358, 270), (358, 248), (560, 248), (566, 264), (612, 264), (640, 272), (640, 288)], fill=1)
     sc.walkbehind('poly', SCULPTURE, 268)
     return sc
+
+
+def wrecked(sc):
+    """The morning after the party (stand-in): the Nave with every puzzle in its final
+    state, grey morning light, and party debris everywhere."""
+    final = {'oTapestry': 'ruined', 'oBox': 'open', 'oRuins': 'on', 'oScales': 'empty', 'oDrawer': 'open'}
+    hide = {'oArchPanel', 'oPamphlet', 'oPendant', 'oRigatone', 'oBeads', 'oBtn1', 'oBtn2', 'oBtn3'}
+    im = sc.bg.copy()
+    for o in sc.objects:
+        if o['script'] in hide:
+            continue
+        if not o['visible'] and o['script'] not in final:
+            continue
+        st = final.get(o['script'], o['state'])
+        if o['script'].startswith('oTile'):
+            st = 'on'
+        spr = o['sprites'][st]
+        im.alpha_composite(spr.convert('RGBA'), (o['x'], o['y'] - spr.height))
+    im = im.crop((0, 0, W, VIEW_H)).convert('RGB')
+    a = np.asarray(im).astype(float) / 255
+    a = a * np.array([0.78, 0.82, 0.92]) + 0.04            # cold morning light
+    im = Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)).convert('RGBA')
+    d = ImageDraw.Draw(im)
+    rng = np.random.default_rng(42)
+    cols = [(220, 60, 70), (250, 200, 60), (80, 170, 230), (120, 210, 110), (230, 120, 220)]
+    # streamers hanging off the beams and the lamps
+    for k in range(9):
+        x = int(rng.integers(30, 610)); y = int(rng.integers(20, 60))
+        pts = [(x + int(4 * np.sin(t / 4 + k)), y + t) for t in range(0, int(rng.integers(30, 90)), 3)]
+        d.line(pts, fill=cols[k % 5], width=2)
+    # red party cups on the floor and the tables
+    for k in range(22):
+        x = int(rng.integers(20, 620)); y = int(rng.integers(236, 284)) if k < 16 else int(rng.integers(186, 200))
+        if rng.random() < 0.5:
+            d.polygon([(x, y), (x + 5, y), (x + 4, y + 7), (x + 1, y + 7)], fill=(200, 40, 40))
+            d.line([(x, y + 1), (x + 5, y + 1)], fill=(240, 240, 240))
+        else:
+            d.polygon([(x, y + 4), (x + 7, y + 2), (x + 8, y + 6), (x + 1, y + 8)], fill=(200, 40, 40))
+    # spilled spaghetti and confetti
+    for k in range(40):
+        x = int(rng.integers(10, 630)); y = int(rng.integers(240, 286))
+        d.arc([x, y, x + int(rng.integers(6, 16)), y + 5], 0, int(rng.integers(120, 300)), fill=(236, 200, 120))
+    for k in range(260):
+        x = int(rng.integers(0, W)); y = int(rng.integers(150, VIEW_H))
+        d.point((x, y), fill=cols[int(rng.integers(0, 5))])
+    # empty bottles
+    for x, y in ((150, 196), (238, 240), (402, 196), (520, 270), (95, 250)):
+        d.rectangle([x, y - 10, x + 3, y], fill=(70, 120, 60))
+        d.rectangle([x + 1, y - 13, x + 2, y - 10], fill=(70, 120, 60))
+    return im.convert('RGBA')

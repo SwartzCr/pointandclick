@@ -67,6 +67,13 @@ def main():
                     speech_color=c565(200, 255, 200), walk_x=4, walk_y=3, anim_delay=3, clickable=False),
         G.Character('cVoice', 'voice', vnum['VBLANK'], room=-1, x=-50, y=-50,
                     speech_color=c565(250, 250, 250), clickable=False),
+        # the room-service clowns from the first game, for the endings
+        G.Character('cClown1', 'clown', vnum['VCLOWN1'], room=-1, x=-50, y=-50,
+                    speech_color=c565(250, 200, 40), walk_x=4, walk_y=3, anim_delay=3, clickable=False),
+        G.Character('cClown2', 'clown', vnum['VCLOWN2'], room=-1, x=-50, y=-50,
+                    speech_color=c565(60, 200, 90), walk_x=4, walk_y=3, anim_delay=3, clickable=False),
+        G.Character('cClown3', 'clown', vnum['VCLOWN3'], room=-1, x=-50, y=-50,
+                    speech_color=c565(90, 140, 240), walk_x=4, walk_y=3, anim_delay=3, clickable=False),
     ]
 
     cursor = num['cursor']
@@ -111,6 +118,7 @@ def main():
                 things.append('#define S_%s_%s_%s %d' % (rname, oname, cname(state), num[sname]))
     things.append('#define SPR_PLATE %d' % num['plate'])
     things.append('#define SPR_HP_SCREEN %d' % num['hp_screen'])
+    things.append('#define SPR_NAVE_WRECKED %d' % num['nave_wrecked'])
     for k in range(6):
         things.append('#define SPR_HP_LOAD%d %d' % (k, num['hp_loading%d' % k]))
     things.append('#define SPR_CURSOR %d' % num['cursor'])

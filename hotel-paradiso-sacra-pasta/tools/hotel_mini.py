@@ -209,6 +209,28 @@ def views(spr):
     return [dict(name='VMINI', loops=loops), dict(name='VMINITALK', loops=talk)]
 
 
+def clown_views(spr):
+    """VCLOWN1..3: the first game's three room-service clowns, at 2x. Loop 4 is arms up
+    (whisking people away, or playing an arcade cabinet)."""
+    art = hp_art()
+    k = lambda im: x2(keyed(im))
+    out = []
+    for n in (1, 2, 3):
+        name = 'clown%d' % n
+        front = [spr('%s_front%d' % (name, s), k(art.clown_front(name, s))) for s in range(3)]
+        back = [spr('%s_back%d' % (name, s), k(art.clown_back(name, s))) for s in range(3)]
+        side = [spr('%s_side%d' % (name, s), k(art.clown_side(name, s))) for s in range(4)]
+        up = [spr('%s_up%d' % (name, s), k(art.clown_front(name, s, arms_up=True))) for s in range(3)]
+        walk_fb = lambda fr: [fr[0], fr[1], fr[0], fr[2], fr[0]]
+        loops = [[(f, 0, False) for f in walk_fb(front)],
+                 [(f, 0, True) for f in [side[0]] + side],
+                 [(f, 0, False) for f in [side[0]] + side],
+                 [(f, 0, False) for f in walk_fb(back)],
+                 [(f, 2, False) for f in walk_fb(up)]]
+        out.append(dict(name='VCLOWN%d' % n, loops=loops))
+    return out
+
+
 if __name__ == '__main__':
     sc = hotel()
     im = sc.bg.copy()
