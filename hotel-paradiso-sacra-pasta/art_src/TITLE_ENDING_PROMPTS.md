@@ -1,7 +1,8 @@
 # The title card and the ending cards
 
-Each picture fills the top of the screen (640×288 in the game, so about 20:9). Generate it wide,
-e.g. 1536×688 like the Nave. The game writes the captions underneath, so no captions in the pictures.
+The cards in the game are 16:9 (1376×768 shrunk to 640×358, with the captions in the strip
+below), saved in `art_src/cards/` and built by `tools/cards.py`. The wrecked Nave is the Nave's
+own 20:9 shape. No captions in the pictures.
 
 **Style line** (paste first in every prompt; attach the Nave or the Crypt picture as the reference):
 

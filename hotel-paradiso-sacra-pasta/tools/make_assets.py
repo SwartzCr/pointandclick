@@ -19,6 +19,7 @@ import nave_muse as NM
 import nave_v3 as NB
 import crypt_v3 as CN
 import art_rooms as R
+import cards as CARDS
 import art_ui as U
 import sound as S
 from agsbuild import formats
@@ -120,7 +121,7 @@ def main():
         icon = painted_icons[script] if script in painted_icons else fn()
         manifest['inventory'].append(dict(script=script, name=name, sprite=spr('inv_' + script, icon)))
 
-    rooms = [(1, NB.nave()), (2, CN.crypt()), (3, R.title()), (4, HM.hotel())]
+    rooms = [(1, NB.nave()), (2, CN.crypt()), (3, CARDS.title()), (4, HM.hotel())]
     for num, sc in rooms:
         bgs = [save_png(sc.bg, 'rooms/%s_bg0.png' % sc.name)]
         if sc.uv_marks:
@@ -144,6 +145,8 @@ def main():
     import hp_screen
     spr('hp_screen', hp_screen.screen())
     spr('nave_wrecked', NB.wrecked(rooms[0][1]))
+    for name, im in CARDS.cards().items():
+        spr(name, im)
     import hotel_mini
     for k, im in enumerate(hotel_mini.loading_screens()):
         spr('hp_loading%d' % k, im)
