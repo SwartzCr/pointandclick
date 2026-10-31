@@ -27,7 +27,8 @@ PICS = {'A': 'v2-A-confess-computer-trex-board-throne.png', 'B': 'v2-B-booth-ope
         'F': 'v3-F-trex-scores-toothgenius.png',
         'G': 'v4-G-freeplay.png',               # every cabinet flashing FREE PLAY
         'H': 'v4-H-freeplay-clowns.png',        # the same with the three clowns playing
-        'I': 'v4-I-throne-crank.png'}           # the crank in the throne's side socket
+        'I': 'v4-I-throne-crank.png',
+        'S': 'v1-shark-screen.png'}            # an older version: the arcade showing boxing sharks           # the crank in the throne's side socket
 REX_SCREEN = (222, 149, 254, 178)      # the T. Rex cabinet's screen
 MEAT_SCREEN = (590, 114, 640, 192)     # the arcade cabinet's screen and controls
 K = W / 1376                           # 1376 -> 640
@@ -381,6 +382,22 @@ def crypt():
     coin = (r_ > 140) & (g_ > 110) & (b_ < 120) & (r_ - b_ > 60) & (xx >= COIN[0]) & (yy >= COIN[1] - 4)
     coin = ndimage.binary_dilation(coin, iterations=1)
     g[coin] = bb[coin]
+    # the lit CONFESS! screen (C) in the dark gap between the curtain and his head
+    sx0, sy0, sx1, sy1 = 54, 115, 82, 167            # the screen behind the curtains
+    pg = np.asarray(pose_pic(3)).astype(int)
+    scr = np.zeros(pg.shape[:2], bool)
+    scr[sy0:sy1, sx0:sx1] = ((pg.mean(-1) < 75) & (pg[..., 2] >= pg[..., 0]) & (pg[..., 0] < 70))[sy0:sy1, sx0:sx1]
+    scr = ndimage.binary_opening(scr, iterations=1)
+    lab, n = ndimage.label(scr)
+    if n:
+        scr = ndimage.binary_fill_holes(lab == 1 + int(np.argmax(ndimage.sum(scr, lab, range(1, n + 1)))))
+    lit = np.asarray(C.crop((50, 120, 84, 172)).resize((sx1 - sx0, sy1 - sy0), Image.LANCZOS))
+    full = np.asarray(pose_pic(3)).copy()
+    reg = full[sy0:sy1, sx0:sx1]
+    mm = scr[sy0:sy1, sx0:sx1]
+    reg[mm] = lit[mm]
+    scr_c = scr[cb[1]:cb[3], cb[0]:cb[2]]
+    g[scr_c] = full[cb[1]:cb[3], cb[0]:cb[2]][scr_c]
     g = Image.fromarray(g).convert('RGBA')
     sc.obj('oPoseConfess', 'yourself', {'on': g}, cb[0], cb[3], visible=False, baseline=287, clickable=False)
     r1, rx1, ry1 = pose('guest_rex1')
@@ -484,7 +501,15 @@ def attract_screens(C, D, orig):
             ('KHC 997', (255, 140, 200)), ('KHC 980', (140, 240, 140))]
     for k, (txt, col) in enumerate(rows):
         centre(scores, 15 + k * 8, txt, col)
-    return {'title': on_glass(title), 'game2': on_glass(flipped), 'scores': on_glass(scores)}
+    out = {'title': on_glass(title), 'game2': on_glass(flipped), 'scores': on_glass(scores)}
+    # two other games from the older pictures, on the same glass: the Lorax (A) and the boxing sharks
+    for name, k in (('lorax', 'A'), ('shark', 'S')):
+        src = np.asarray(pic(k).crop(MEAT_SCREEN).convert('RGB'))
+        o = np.asarray(base).copy()
+        mm = ndimage.binary_erosion(m, iterations=1)
+        o[mm] = src[mm]
+        out[name] = Image.fromarray(o).convert('RGBA')
+    return out
 
 
 def cutout(base, im, box):

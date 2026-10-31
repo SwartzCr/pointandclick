@@ -2525,7 +2525,9 @@
       "game": "crypt_oMeatScreen_game",
       "title": "crypt_oMeatScreen_title",
       "game2": "crypt_oMeatScreen_game2",
-      "scores": "crypt_oMeatScreen_scores"
+      "scores": "crypt_oMeatScreen_scores",
+      "lorax": "crypt_oMeatScreen_lorax",
+      "shark": "crypt_oMeatScreen_shark"
      }
     },
     {
@@ -3452,6 +3454,8 @@
   "crypt_oMeatScreen_title",
   "crypt_oMeatScreen_game2",
   "crypt_oMeatScreen_scores",
+  "crypt_oMeatScreen_lorax",
+  "crypt_oMeatScreen_shark",
   "crypt_oPoseConfess_on",
   "crypt_oPoseRex_r1",
   "crypt_oPoseRex_r2",
