@@ -26,7 +26,7 @@ INK = (46, 30, 24)
 # ----------------------------------------------------------------- layout (640x288)
 ARCH_OPEN = (563, 100, 610, 262)                  # the dark opening inside the arch
 TAPESTRY = (464, 68, 538, 200)                    # rod, cloth, fringe and the loose thread
-VILLAGE = (112, 170, 224, 254)                    # the model village on its tray, and the dug-up earth
+VILLAGE = (112, 166, 238, 254)                    # the model village on its tray, and the dug-up earth
 BOX_TABLE = [(16, 196), (44, 186), (80, 188), (80, 224), (92, 226), (92, 236), (88, 240), (88, 278), (80, 280),
              (64, 288), (4, 288), (4, 236), (16, 232)]
 LEAFLETS = (224, 202, 264, 216)
@@ -344,11 +344,13 @@ def nave():
         return u
 
     for i in range(4):
-        sprites = {}
+        found = {}
         for k, words in SPIN_WORDS.items():
-            j = WORDS[i].index(words[i])
-            sprites['w%d' % j] = window(k, i)
-            sprites['u%d' % j] = window(k, i, uv=True, correct=(j == ANSWER[i]))
+            found[WORDS[i].index(words[i])] = k
+        sprites = {}                    # the script counts on the order w0 u0 w1 u1 w2 u2 w3 u3
+        for j in range(4):
+            sprites['w%d' % j] = window(found[j], i)
+            sprites['u%d' % j] = window(found[j], i, uv=True, correct=(j == ANSWER[i]))
         b = WINDOW_BOXES[i]
         sc.obj('oDrum%d' % (i + 1), 'window', sprites, b[0], b[3], baseline=1,
                state={0: 'w0', 1: 'w0', 2: 'w1', 3: 'w2'}[i])
