@@ -2417,12 +2417,12 @@
     },
     {
      "script": "oCurtain",
-     "name": "staff doorway",
+     "name": "curtain",
      "x": 413,
      "y": 222,
      "visible": true,
      "baseline": 2,
-     "clickable": false,
+     "clickable": true,
      "state": "closed",
      "sprites": {
       "closed": "crypt_oCurtain_closed",
