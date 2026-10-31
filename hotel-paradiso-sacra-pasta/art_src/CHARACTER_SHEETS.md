@@ -94,6 +94,9 @@ Two rows. Top row: 1) and 2) a two-frame animation, seen from behind, of him sit
 
 ## The clowns
 
+For high-resolution clowns that match the bellhop and Chuk, use the complete prompts in
+`CLOWN_PROMPTS.md`. The pieces below are the same content, to assemble by hand.
+
 The three room-service clowns from Hotel Paradiso, who arrive in two of the endings. They're
 the same three people in different colours, so generate **one set of sheets per clown**:
 paste the clown line, then the line for that clown's colours, then the sheet. Attach
