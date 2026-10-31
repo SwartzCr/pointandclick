@@ -288,8 +288,8 @@ def guest_views(spr):
         loops = [[(f, 0, False) for f in w['front']], [(f, 0, True) for f in w['side']],
                  [(f, 0, False) for f in w['side']], [(f, 0, False) for f in w['back']]]
         views.append(dict(name='VGUEST' + tag, loops=loops))
-        tf = [w['front'][0], spr('guest%s_front_talk1' % sfx, _frame(_wear(cast_v2.talk_frame(stand['front'], talk['front']), 'front', kind)))]
-        ts = [w['side'][0], spr('guest%s_side_talk1' % sfx, _frame(_wear(cast_v2.talk_frame(stand['side'], talk['side']), 'side', kind)))]
+        tf = [w['front'][0], spr('guest%s_front_talk1' % sfx, _frame(_wear(cast_v2.talk_mouth(stand['front'], 'bellhop', 'front'), 'front', kind)))]
+        ts = [w['side'][0], spr('guest%s_side_talk1' % sfx, _frame(_wear(cast_v2.talk_mouth(stand['side'], 'bellhop', 'side'), 'side', kind)))]
         tl = [[(f, 0, False) for f in tf], [(f, 0, True) for f in ts], [(f, 0, False) for f in ts],
               [(w['back'][0], 0, False)]]
         views.append(dict(name='VGTALK' + tag, loops=tl))

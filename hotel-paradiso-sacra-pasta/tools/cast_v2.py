@@ -273,3 +273,64 @@ def clown(n):
     return dict(stand=[S(f, k1) for f in wk[0]], walk_side=[S(f, kw2) for f in wk[1]],
                 walk_front=[S(f, kfb) for f in wk[2][:4]], walk_back=[S(f, kfb) for f in wk[2][4:]],
                 actions=[S(f, ka) for f in ac[0]])
+
+
+def open_mouth(im, view, top_frac=0.3, w=None):
+    """The same frame with its mouth opened: the mouth line (the darkest row in the lower
+    face) becomes a small dark opening, so the talking frame matches the standing one exactly."""
+    im = im.copy()
+    a = np.asarray(im).astype(int)
+    r, g, b, al = a[..., 0], a[..., 1], a[..., 2], a[..., 3]
+    skin = (r > 140) & (g > 85) & (b > 55) & (r - b > 35) & (al > 0)
+    lim = int(im.height * top_frac)
+    rows = np.nonzero(skin[:lim].sum(1) >= 3)[0]
+    if not len(rows):
+        return im
+    fy0, fy1 = rows[0], rows[-1]
+    ys, xs = np.nonzero(skin[fy0:fy1 + 1])
+    if view == 'front':
+        cx = int(round(np.median(xs)))
+        hw = w or 2
+    else:
+        lower = skin[fy0 + (fy1 - fy0) // 2:fy1 + 1]
+        cx = int(np.nonzero(lower.any(0))[0].max()) - 2
+        hw = w or 1
+    lum = (r * 0.3 + g * 0.55 + b * 0.15)
+    best, my = 1e9, None
+    for y in range(fy0 + int((fy1 - fy0) * 0.62), fy1):
+        xs_ = [x for x in range(cx - hw, cx + hw + 1) if 0 <= x < im.width and al[y, x] > 0]
+        if not xs_:
+            continue
+        v = np.mean([lum[y, x] for x in xs_])
+        if v < best:
+            best, my = v, y
+    if my is None:
+        return im
+    px = im.load()
+    x0, x1 = (cx - hw, cx + hw) if view == 'front' else (cx - hw, cx + hw)
+    for x in range(x0, x1 + 1):
+        if 0 <= x < im.width:
+            px[x, my] = (54, 16, 20, 255)
+            px[x, my + 1] = (54, 16, 20, 255) if x0 < x < x1 or view != 'front' else (120, 44, 44, 255)
+    for x in range(x0 + 1, x1):
+        if 0 <= x < im.width and my + 2 < im.height:
+            px[x, my + 2] = (150, 62, 60, 255)            # the lower lip
+    return im
+
+
+# where each standing frame's mouth is (centre x, row, half-width), measured on the frames
+MOUTHS = {('bellhop', 'front'): (25, 26, 2), ('bellhop', 'side'): (24, 26, 1),
+          ('chuk', 'front'): (33, 38, 3), ('chuk', 'side'): (36, 38, 1)}
+
+
+def talk_mouth(im, who, view):
+    """The standing frame with its mouth drawn open (a dark gap with a lower lip)."""
+    cx, my, hw = MOUTHS[(who, view)]
+    im = im.copy()
+    px = im.load()
+    for x in range(cx - hw, cx + hw + 1):
+        px[x, my] = (60, 18, 22, 255)
+        px[x, my + 1] = (90, 28, 30, 255)
+    for x in range(cx - hw + (1 if hw > 1 else 0), cx + hw + (0 if hw > 1 else 1)):
+        px[x, my + 2] = (168, 78, 70, 255)            # the lower lip
+    return im

@@ -56,8 +56,8 @@ def khuc_views():
              [(f, 0, True) for f in walk['side']],
              [(f, 0, False) for f in walk['side']],
              [(f, 0, False) for f in walk['back']]]
-    talkf = [walk['front'][0], spr('khuc_front_talk1', F(cast_v2.talk_frame(c['front'], c['talk_front'], 0.3)))]
-    talks = [walk['side'][0], spr('khuc_side_talk1', F(cast_v2.talk_frame(c['side'], c['talk_side'], 0.3)))]
+    talkf = [walk['front'][0], spr('khuc_front_talk1', F(cast_v2.talk_mouth(c['front'], 'chuk', 'front')))]
+    talks = [walk['side'][0], spr('khuc_side_talk1', F(cast_v2.talk_mouth(c['side'], 'chuk', 'side')))]
     tl = [[(f, 0, False) for f in talkf], [(f, 0, True) for f in talks], [(f, 0, False) for f in talks],
           [(walk['back'][0], 0, False)]]
     import crypt_v3
