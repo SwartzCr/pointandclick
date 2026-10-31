@@ -64,7 +64,9 @@ OLD_CABINET = [(561, 100), (640, 90), (640, 288), (570, 288), (570, 219), (558, 
 
 def compose(old):
     """The second picture (stretched 2% wider and 10% shorter to line up with the first) over
-    the first. Where it doesn't reach, at the far left and right, the first picture shows."""
+    the first. Where it doesn't reach, at the far left and right, the first picture shows: the
+    strip left of the confessional is repainted as wall, and the old MEATBALL MADNESS cabinet
+    is pasted back in front of the new picture's cabinet (hiding its sparkle mark too)."""
     nw = cv2.imread(os.path.join(os.path.dirname(SRC), V2[0]))
     M = np.array(V2[1], np.float32)
     nw = cv2.warpAffine(nw, M, (1536, 688), flags=cv2.INTER_LANCZOS4, borderMode=cv2.BORDER_REPLICATE)
@@ -73,6 +75,25 @@ def compose(old):
     cov = Image.fromarray(cv2.erode(cov, np.ones((9, 9), np.uint8))).resize((W, VIEW_H), Image.LANCZOS)
     out = old.copy()
     out.paste(nw, (0, 0), cov.filter(ImageFilter.GaussianBlur(1.5)))
+    # left: the old cabinet's edge shows behind the confessional; wall there instead,
+    # the stones above it repeated down
+    wall = old.crop((0, 18, 27, 96))
+    for y in range(96, VIEW_H, wall.height):
+        out.paste(wall.crop((0, 0, 27, min(wall.height, VIEW_H - y))), (0, y))
+    lm = Image.new('L', (W, VIEW_H), 0)
+    ImageDraw.Draw(lm).rectangle([0, 0, 26, VIEW_H], fill=255)
+    out.paste(nw, (0, 0), Image.fromarray(np.minimum(np.asarray(cov), 255 - np.asarray(lm)).astype(np.uint8)))
+    # right: the old cabinet, in front, stretched a little wider so it hides all of the new one
+    x0 = min(p[0] for p in OLD_CABINET)
+    k = (W - 546) / (W - x0)
+    cab = old.crop((x0, 0, W, VIEW_H))
+    cm = Image.new('L', (W, VIEW_H), 0)
+    ImageDraw.Draw(cm).polygon(OLD_CABINET, fill=255)
+    cm = cm.crop((x0, 0, W, VIEW_H))
+    nwid = round(cab.width * k)
+    cab = cab.resize((nwid, VIEW_H), Image.LANCZOS)
+    cm = cm.resize((nwid, VIEW_H), Image.LANCZOS).filter(ImageFilter.GaussianBlur(0.6))
+    out.paste(cab, (W - nwid, 0), cm)
     return out
 
 
