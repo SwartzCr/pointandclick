@@ -17,7 +17,7 @@ import guest_sprite as G
 import nave_painted as NP
 import nave_muse as NM
 import nave_v3 as NB
-import crypt_nb as CN
+import crypt_v3 as CN
 import art_rooms as R
 import art_ui as U
 import sound as S
@@ -113,6 +113,7 @@ def main():
     painted_icons.update(guest_sheet.icons())
     import icon_art
     painted_icons.update(icon_art.icons())     # the generated icons win
+    painted_icons.update(CN.shape_icons())     # the stone shapes, from the Crypt's board
     for script, (name, fn) in U.ICONS.items():
         icon = painted_icons[script] if script in painted_icons else fn()
         manifest['inventory'].append(dict(script=script, name=name, sprite=spr('inv_' + script, icon)))

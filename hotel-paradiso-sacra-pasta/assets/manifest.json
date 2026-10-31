@@ -2258,15 +2258,15 @@
      "hArch",
      "archway",
      [
-      160,
-      226
+      152,
+      230
      ]
     ],
     [
      "hYarn",
      "yarn monster",
      [
-      232,
+      230,
       262
      ]
     ],
@@ -2274,47 +2274,47 @@
      "hPastaWall",
      "Pasta Identification",
      [
-      335,
-      240
+      337,
+      250
      ]
     ],
     [
      "hStaff",
-     "staff area",
+     "staff room",
      [
-      446,
-      236
+      462,
+      242
      ]
     ],
     [
      "h3Button",
-     "3Button cabinet",
+     "CONFESS booth",
      [
-      120,
-      252
+      128,
+      262
      ]
     ],
     [
      "hTrackball",
-     "Trackball cabinet",
+     "MEATBALL MADNESS",
      [
-      548,
-      266
+      562,
+      268
      ]
     ],
     [
      "hComputer",
      "Classic Computer",
      [
-      365,
-      242
+      372,
+      250
      ]
     ],
     [
      "hRex",
-     "Rex Seat",
+     "T. Rex cabinet",
      [
-      300,
+      318,
       262
      ]
     ]
@@ -2323,8 +2323,8 @@
     {
      "script": "oSlot1",
      "name": "recess",
-     "x": 274,
-     "y": 116,
+     "x": 273,
+     "y": 89,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -2340,8 +2340,8 @@
     {
      "script": "oSlot2",
      "name": "recess",
-     "x": 306,
-     "y": 116,
+     "x": 308,
+     "y": 89,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -2357,8 +2357,8 @@
     {
      "script": "oSlot3",
      "name": "recess",
-     "x": 338,
-     "y": 116,
+     "x": 341,
+     "y": 89,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -2374,8 +2374,8 @@
     {
      "script": "oSlot4",
      "name": "recess",
-     "x": 370,
-     "y": 116,
+     "x": 376,
+     "y": 89,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -2390,9 +2390,9 @@
     },
     {
      "script": "oCompartment",
-     "name": "brass plate",
-     "x": 304,
-     "y": 149,
+     "name": "drawer",
+     "x": 299,
+     "y": 138,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -2405,8 +2405,8 @@
     {
      "script": "oCrank",
      "name": "crank",
-     "x": 323,
-     "y": 148,
+     "x": 299,
+     "y": 138,
      "visible": false,
      "baseline": 2,
      "clickable": true,
@@ -2417,12 +2417,12 @@
     },
     {
      "script": "oCurtain",
-     "name": "curtain",
-     "x": 413,
-     "y": 222,
+     "name": "staff room",
+     "x": 426,
+     "y": 236,
      "visible": true,
      "baseline": 2,
-     "clickable": true,
+     "clickable": false,
      "state": "closed",
      "sprites": {
       "closed": "crypt_oCurtain_closed",
@@ -2432,10 +2432,10 @@
     {
      "script": "oToken",
      "name": "arcade token",
-     "x": 110,
-     "y": 258,
+     "x": 118,
+     "y": 288,
      "visible": false,
-     "baseline": 258,
+     "baseline": 288,
      "clickable": true,
      "state": "on",
      "sprites": {
@@ -2445,8 +2445,8 @@
     {
      "script": "oSeat",
      "name": "Pope Seat",
-     "x": 466,
-     "y": 252,
+     "x": 476,
+     "y": 260,
      "visible": true,
      "baseline": 250,
      "clickable": true,
@@ -2463,26 +2463,71 @@
      "script": "oScreen",
      "name": "screen",
      "x": 352,
-     "y": 179,
-     "visible": true,
+     "y": 172,
+     "visible": false,
      "baseline": 1,
      "clickable": false,
-     "state": "off",
+     "state": "on",
      "sprites": {
-      "off": "crypt_oScreen_off"
+      "on": "crypt_oScreen_on"
      }
     },
     {
      "script": "oHat",
      "name": "pasta pope hat",
-     "x": 507,
-     "y": 121,
+     "x": 521,
+     "y": 87,
      "visible": true,
      "baseline": 251,
      "clickable": true,
      "state": "on",
      "sprites": {
       "on": "crypt_oHat_on"
+     }
+    },
+    {
+     "script": "oBooth",
+     "name": "CONFESS booth",
+     "x": 0,
+     "y": 288,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "shut",
+     "sprites": {
+      "shut": "crypt_oBooth_shut",
+      "ajar": "crypt_oBooth_ajar",
+      "open": "crypt_oBooth_open"
+     }
+    },
+    {
+     "script": "oRexScreen",
+     "name": "screen",
+     "x": 222,
+     "y": 178,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "play",
+     "sprites": {
+      "play": "crypt_oRexScreen_play",
+      "off": "crypt_oRexScreen_off",
+      "high": "crypt_oRexScreen_high",
+      "scores": "crypt_oRexScreen_scores"
+     }
+    },
+    {
+     "script": "oMeatScreen",
+     "name": "screen",
+     "x": 590,
+     "y": 192,
+     "visible": true,
+     "baseline": 1,
+     "clickable": false,
+     "state": "coin",
+     "sprites": {
+      "coin": "crypt_oMeatScreen_coin",
+      "game": "crypt_oMeatScreen_game"
      }
     }
    ]
@@ -3267,8 +3312,17 @@
   "crypt_oSeat_seated",
   "crypt_oSeat_decree",
   "crypt_oSeat_seatednc",
-  "crypt_oScreen_off",
+  "crypt_oScreen_on",
   "crypt_oHat_on",
+  "crypt_oBooth_shut",
+  "crypt_oBooth_ajar",
+  "crypt_oBooth_open",
+  "crypt_oRexScreen_play",
+  "crypt_oRexScreen_off",
+  "crypt_oRexScreen_high",
+  "crypt_oRexScreen_scores",
+  "crypt_oMeatScreen_coin",
+  "crypt_oMeatScreen_game",
   "hotel_oNewspaper_on",
   "hotel_oTv_c0",
   "hotel_oTv_c1",
