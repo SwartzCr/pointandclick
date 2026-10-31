@@ -151,9 +151,9 @@ def main():
     for k, im in enumerate(hotel_mini.loading_screens()):
         spr('hp_loading%d' % k, im)
 
-    fonts = [('font0.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'none'),
-             ('font1.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 12, 'auto'),
-             ('font2.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 12, 'none'),
+    fonts = [('font0.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 14, 'none'),
+             ('font1.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 14, 'auto'),
+             ('font2.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 13, 'none'),
              ('font3.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 12, 'none'),
              ('font4.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf', 22, 'none'),   # newspaper masthead
              ('font5.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf', 12, 'none')]   # newsprint
