@@ -29,12 +29,12 @@ SEAT = (466, 118, 560, 252)
 HAT = (506, 50, 554, 134)              # the hanging lasagna hat
 HAT_LOWERED_BOTTOM = 168               # where its bottom ends up, on the seated guest's head
 CRANK_BOX = (527, 203, 552, 232)       # the crank on the seat's side (painted in; it starts missing)
-SLOTS = [289, 318, 349, 381]           # the four shape recesses on the board (centres)
+SLOTS = [287, 319, 351, 383]           # the four shape recesses on the board (centres)
 SLOT_Y = (92, 115)
 BOARD_INNER = (271, 89, 399, 149)      # below the board's title: repainted with the empty recesses
 COMPARTMENT = (304, 137, 362, 148)     # the brass plate that opens on the crank
 SCREEN = (352, 158, 378, 179)          # the computer's screen
-NAMES = ['FUSILLI', 'ORECCHIETTE', 'FARFALLE', 'RIGATONI']
+NAMES = ['OTTINI', 'TORTINI', 'ANELLI', 'NODINI']   # the new pastas: eights, twists, rings, knots
 
 
 def _pal(im):
@@ -124,14 +124,14 @@ def crypt():
         d.rounded_rectangle([cxs - 13, SLOT_Y[0], cxs + 13, SLOT_Y[1]], 4, fill=rec_dark, outline=rec_rim)
 
     def plate(cx, y, txt):
-        w = tiny_width(txt) + 6
+        w = tiny_width(txt) + 4
         x = int(cx - w / 2)
         d.rectangle([x, y, x + w, y + 8], fill=rgba(gold))
         d.line([(x, y + 8), (x + w, y + 8)], fill=rgba((130, 92, 40)))
         tiny(room, x + w / 2 + 0.5, y + 4.5, txt, ink, 1)
-    # names under the recesses, staggered so ORECCHIETTE fits
-    for k, (cxs, txt) in enumerate(zip(SLOTS, NAMES)):
-        plate(cxs, 118 if k % 2 == 0 else 127, txt)
+    # a name under each recess
+    for cxs, txt in zip(SLOTS, NAMES):
+        plate(cxs, 119, txt)
     cx0, cy0, cx1, cy1 = COMPARTMENT
     d.rectangle([cx0, cy0, cx1, cy1], fill=rgba((176, 132, 60)), outline=rgba((110, 74, 30)))
     d.line([(cx0 + 2, cy0 + 2), (cx1 - 2, cy0 + 2)], fill=rgba((230, 196, 110)))

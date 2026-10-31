@@ -1903,7 +1903,7 @@
     {
      "script": "oSlot1",
      "name": "recess",
-     "x": 276,
+     "x": 274,
      "y": 116,
      "visible": true,
      "baseline": 1,
@@ -1920,7 +1920,7 @@
     {
      "script": "oSlot2",
      "name": "recess",
-     "x": 305,
+     "x": 306,
      "y": 116,
      "visible": true,
      "baseline": 1,
@@ -1937,7 +1937,7 @@
     {
      "script": "oSlot3",
      "name": "recess",
-     "x": 336,
+     "x": 338,
      "y": 116,
      "visible": true,
      "baseline": 1,
@@ -1954,7 +1954,7 @@
     {
      "script": "oSlot4",
      "name": "recess",
-     "x": 368,
+     "x": 370,
      "y": 116,
      "visible": true,
      "baseline": 1,

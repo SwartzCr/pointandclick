@@ -85,10 +85,10 @@ the answer.
     unfinished Crypt, fetches four stone shapes from the staff room for the Pasta
     Identification board and plugs in the computer.
 14. Use the computer: HOTEL.EXE, a tiny Hotel Paradiso, with the guest back in his
-    bathrobe in Room 714. Read the newspaper on the floor: each pasta's "true form".
+    bathrobe in Room 714. Read the newspaper on the floor: four new pastas, described.
     (LOG OFF, top right, or Esc, to leave.)
-15. Put the shapes in the recesses: FUSILLI the figure-eight loop, ORECCHIETTE the
-    twisted band, FARFALLE the stone ring, RIGATONI the three-lobed knot. (A wrong set
+15. Put the shapes in the recesses: OTTINI the figure-eight loop, TORTINI the twisted
+    band, ANELLI the stone ring, NODINI the three-lobed knot. (A wrong set
     pops back out once all four are in.) The brass plate opens: take the crank.
 16. Give the crank to Chuk; he fits it to the Pope Seat. Sit in the seat, he cranks the
     hat down; decree "Let there be dinner!"
