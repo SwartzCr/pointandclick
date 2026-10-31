@@ -37,10 +37,10 @@ on its little table by the door, and a wall that isn't one. (Built by
 `tools/nave_v3.py` from `art_src/nave-nb/v3*.png`: the room, plus three pictures of it
 with the puzzles' other states, lined up on it and cut apart.)
 
-**The Crypt.** The CONFESS 3Button cabinet, the Classic Computer, the Trackball
-cabinet (the ball is a meatball), the Rex Seat with its T. rex game, the Pasta
-Identification wall, the yarn monster, the curtained staff area, and the Pope Seat with
-its crank and lasagna hat.
+**The Crypt.** The CONFESS 3Button cabinet, the Classic Computer (unplugged), the
+Trackball cabinet (MEATBALL MADNESS; the ball is a meatball), the Rex Seat with its
+T. rex game, the Pasta Identification board, the yarn monster, the curtained staff
+area, and the Pope Seat with its lasagna hat and a missing crank.
 
 **The UV pendant** is the game's trick: wearing it bathes either room in ultraviolet
 and shows writing that isn't there otherwise. Some of it is decoration, some of it is
@@ -75,15 +75,23 @@ the answer.
    mix, says what's off, licks it clean and gives it back.)
    Then talk to Chuk, say "ALL PASTA IS HOLY", and give him the sauced rigatone.
    The wall opens and he goes to play T. rex in the Crypt.
-8. In the Crypt, use the Classic Computer; it boots HOTEL.EXE, a tiny Hotel Paradiso,
-   with the guest back in his bathrobe in Room 714. Read the newspaper on the floor
-   (LOG OFF, top right, or Esc, to leave). Then turn the labels on the
-   Pasta Identification wall to FUSILLI, ORECCHIETTE, FARFALLE, RIGATONI. WORTHY lights
-   up and Chuk goes to the Pope Seat's crank.
-9. Play CONFESS (the 3Button cabinet) and confess three sins from Room 714. Don't
-   confess the pineapple. Pick up the token.
-10. Put the token in the Pope Seat and sit in it. Chuk cranks the hat down; decree
-    "Let there be dinner!"
+10. **The Crypt.** Chuk is glued to the T. Rex game: he wants to see its ending. The
+    computer isn't even plugged in, and the Pope Seat is missing its crank.
+11. Play CONFESS (the 3Button cabinet) and confess three sins from Room 714. Don't
+    confess the pineapple. Pick up the token.
+12. Use the token on the Trackball cabinet and beat MEATBALL MADNESS. Chuk hears the
+    victory jingle and, seeing a true gamer, lets you try the Rex Seat.
+13. Beat Chuk's T. Rex high score. (The ending is the meteor.) Chuk, ashamed of the
+    unfinished Crypt, fetches four stone shapes from the staff room for the Pasta
+    Identification board and plugs in the computer.
+14. Use the computer: HOTEL.EXE, a tiny Hotel Paradiso, with the guest back in his
+    bathrobe in Room 714. Read the newspaper on the floor: each pasta's "true form".
+    (LOG OFF, top right, or Esc, to leave.)
+15. Put the shapes in the recesses: FUSILLI the figure-eight loop, ORECCHIETTE the
+    twisted band, FARFALLE the stone ring, RIGATONI the three-lobed knot. (A wrong set
+    pops back out once all four are in.) The brass plate opens: take the crank.
+16. Give the crank to Chuk; he fits it to the Pope Seat. Sit in the seat, he cranks the
+    hat down; decree "Let there be dinner!"
 
 </details>
 

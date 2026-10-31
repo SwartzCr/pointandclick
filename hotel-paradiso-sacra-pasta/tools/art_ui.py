@@ -102,6 +102,20 @@ def icon_whipit():
     return outline(im)
 
 
+def _topo(name):
+    import topology
+    im = canvas(ICON_W, ICON_H)
+    im.alpha_composite(topology.shape(name, 40, 34), (4, 3))
+    return im
+
+
+def _crank_icon():
+    import topology
+    im = canvas(ICON_W, ICON_H)
+    im.alpha_composite(topology.crank(40, 32), (4, 4))
+    return im
+
+
 ICONS = {
     'iBeads': ('pasta rosary beads', icon_beads),
     'iPamphlet': ('pamphlet', icon_pamphlet),
@@ -111,4 +125,10 @@ ICONS = {
     'iToken': ('arcade token', icon_token),
     'iWhipit': ('whip-it canister', icon_whipit),
     'iString': ('loose string', icon_string),
+    # the Sacred Topology shapes for the Pasta Identification board (order shuffled on purpose)
+    'iTrefoil': ('three-lobed knot', lambda: _topo('trefoil')),
+    'iInfinity': ('figure-eight loop', lambda: _topo('infinity')),
+    'iMobius': ('twisted band', lambda: _topo('mobius')),
+    'iTorus': ('stone ring', lambda: _topo('torus')),
+    'iCrank': ('crank', lambda: _crank_icon()),
 }
