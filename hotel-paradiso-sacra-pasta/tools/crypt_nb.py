@@ -10,7 +10,6 @@ art_rooms.crypt(), so the game script works with either.
 import os
 import numpy as np
 import cv2
-from scipy import ndimage
 from PIL import Image, ImageDraw, ImageFilter
 
 from art_common import canvas, rgba
@@ -30,172 +29,21 @@ SEAT = (466, 118, 560, 252)
 HAT = (506, 50, 554, 134)              # the hanging lasagna hat
 HAT_LOWERED_BOTTOM = 168               # where its bottom ends up, on the seated guest's head
 CRANK_BOX = (527, 203, 552, 232)       # the crank on the seat's side (painted in; it starts missing)
-SLOTS = [288, 318, 349, 381]           # the four shape recesses on the painted board (centres)
+SLOTS = [287, 319, 351, 383]           # the four shape recesses on the board (centres)
 SLOT_Y = (92, 115)
-COMPARTMENT = (302, 132, 366, 145)     # the brass plate that opens on the crank
+BOARD_INNER = (271, 89, 399, 149)      # below the board's title: repainted with the empty recesses
+COMPARTMENT = (304, 137, 362, 148)     # the brass plate that opens on the crank
 SCREEN = (352, 158, 378, 179)          # the computer's screen
 NAMES = ['OTTINI', 'TORTINI', 'ANELLI', 'NODINI']   # the new pastas: eights, twists, rings, knots
 
 
-# the second picture of the Crypt: CONFESS as a confessional booth, the T. Rex skull cabinet,
-# the new Pasta Identification board, the computer switched off and the throne with a crank
-# socket. It's the same room, drawn 2% narrower and 10% taller, so it's stretched to line up
-# with base.jpg and just those pieces are pasted in.
-V2 = ('v2-A-confess-computer-trex-board-throne.png', [[1.0219, -0.0025, 58.128], [-0.0, 0.9054, 3.7787]])
-# a second picture framed exactly like v2-A: the booth half open, the board's drawer open with
-# the crank in it, and a new back glass, screen and trackball for the arcade cabinet
-V2B = 'v2-B-booth-open-drawer-trackball.png'
-BOOTH_SRC, BOOTH_AT = (20, 80, 136, 288), (6, 80)
-DRAWER = (296, 127, 376, 155)                  # the board's drawer, pulled out
-_composed = {}
-
-
-def v2_aligned(name=None):
-    nw = cv2.imread(os.path.join(os.path.dirname(SRC), name or V2[0]))
-    nw = cv2.warpAffine(nw, np.array(V2[1], np.float32), (1536, 688), flags=cv2.INTER_LANCZOS4,
-                        borderMode=cv2.BORDER_REPLICATE)
-    return Image.fromarray(cv2.cvtColor(nw, cv2.COLOR_BGR2RGB)).resize((W, VIEW_H), Image.LANCZOS)
-
-
-def composed(alt=False):
-    """base.jpg with the second picture's five pieces pasted in (alt: the booth half open and
-    the drawer out with the crank in it, from v2-B), and the arcade cabinet's new face."""
-    if alt in _composed:
-        return _composed[alt].copy()
-    old = Image.open(SRC).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
-    nw = v2_aligned()
-    nb = v2_aligned(V2B)
-    O = np.asarray(old).astype(float)
-    N = np.asarray(nw).astype(float)
-    NB = np.asarray(nb).astype(float)
-    # the two pictures are lit a little differently: match the new one's colours to the old,
-    # channel by channel, over the whole room
-    for c in range(3):
-        mu, sd = N[..., c].mean(), N[..., c].std()
-        N[..., c] = (N[..., c] - mu) / sd * O[..., c].std() + O[..., c].mean()
-        NB[..., c] = (NB[..., c] - mu) / sd * O[..., c].std() + O[..., c].mean()
-    if alt:
-        N = NB
-    out = O.copy()
-
-    def paste(box, at=None, keep=None, feather=4):
-        """The new picture's box, at `at`, blended in: colours matched again to the old picture
-        along the patch's edge, and the edge feathered. keep(mask) can trim the mask."""
-        x0, y0, x1, y1 = box
-        ax, ay = at or (x0, y0)
-        w, h = x1 - x0, y1 - y0
-        src = N[y0:y1, x0:x1].copy()
-        dst = out[ay:ay + h, ax:ax + w]
-        band = np.zeros((h, w), bool)
-        band[:3], band[-3:], band[:, :3], band[:, -3:] = True, True, True, True
-        for c in range(3):
-            src[..., c] += (dst[..., c][band].mean() - src[..., c][band].mean())
-        m = np.zeros((h, w), np.uint8)
-        m[feather:h - feather, feather:w - feather] = 255
-        if keep is not None:
-            m = keep(m, x0, y0)
-        m = cv2.GaussianBlur(m, (0, 0), feather / 2).astype(float)[..., None] / 255
-        out[ay:ay + h, ax:ax + w] = dst * (1 - m) + src * m
-
-    # the confessional is narrower than the old CONFESS cabinet, so it moves left a little
-    # to cover it; the wall and floor around it come along
-    paste(BOOTH_SRC, BOOTH_AT, feather=6)
-    # the T. Rex skull, with the wall and floor around it
-    paste((190, 114, 314, 286), feather=6)
-    # the board, and the computer (switched off)
-    paste((264, 68, 408, 156), feather=2)
-    paste((336, 148, 398, 234), feather=2)
-
-    # the throne with its socket, up to the arcade cabinet; left of x 478 the old curtain
-    # stays, apart from the throne's own arm, button and leg
-    def throne(m, x0, y0):
-        reg = N[y0:y0 + m.shape[0], x0:x0 + m.shape[1]]
-        gold = (reg[..., 0] > 120) & (reg[..., 0] - reg[..., 2] > 45)
-        button = (reg[..., 0] > 160) & (reg[..., 1] < 90)
-        part = ndimage.binary_dilation(ndimage.binary_fill_holes(gold | button), iterations=1)
-        cut = 478 - x0
-        m[:, :cut] = np.where(part[:, :cut], m[:, :cut], 0)
-        poly = Image.new('L', (m.shape[1], m.shape[0]), 0)
-        ImageDraw.Draw(poly).polygon([(0, 0), (550 - x0, 0), (550 - x0, m.shape[0]), (0, m.shape[0])], fill=255)
-        return np.minimum(m, np.asarray(poly))
-    paste((452, 108, 572, 262), keep=throne, feather=3)
-    # between the new throne and the arcade cabinet, the old picture still has the edge of the
-    # old, wider throne and its crank: paint those out so it's just wall and floor
-    x0, x1, y0, y1 = 545, 562, 150, 262
-    strip = out[y0:y1, x0:x1]
-    gold = (strip[..., 0] > 110) & (strip[..., 0] - strip[..., 2] > 30)
-    iron = (np.abs(strip[..., 0] - strip[..., 2]) < 25) & (strip.sum(-1) > 150) & (strip.sum(-1) < 420)
-    cab = np.zeros_like(gold)
-    for y in range(y1 - y0):                       # leave the arcade cabinet alone
-        edge = 557 if y + y0 < 198 else (558 if y + y0 < 214 else 570)
-        cab[y, max(0, edge - x0):] = True
-    tm = np.zeros((VIEW_H, W), np.uint8)
-    tm[y0:y1, x0:x1] = ((gold | iron) & ~cab) * 255
-    tm = cv2.dilate(tm, np.ones((3, 3), np.uint8))
-    tm[:, 550:] &= 255                              # (keep within the strip)
-    bgr = cv2.cvtColor(np.clip(out, 0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
-    fixed = cv2.cvtColor(cv2.inpaint(bgr, tm, 4, cv2.INPAINT_TELEA), cv2.COLOR_BGR2RGB).astype(float)
-    out = np.where((tm > 0)[..., None], fixed, out)
-    # the arcade cabinet keeps its body; its back glass, screen and trackball come from v2-B,
-    # each fitted to the exact shape of the old part it replaces, so the outlines stay put
-    nbi = Image.fromarray(np.clip(NB, 0, 255).astype(np.uint8))
-
-    def poly_mask(pts):
-        m = Image.new('L', (W, VIEW_H), 0)
-        ImageDraw.Draw(m).polygon(pts, fill=255)
-        return np.asarray(m) > 0
-
-    def fit(src, mask):
-        ys, xs = np.nonzero(mask)
-        x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
-        p = np.asarray(nbi.crop(src).resize((x1 - x0, y1 - y0), Image.LANCZOS)).astype(float)
-        m = cv2.GaussianBlur(mask[y0:y1, x0:x1].astype(np.float32), (0, 0), 0.5)[..., None]
-        out[y0:y1, x0:x1] = out[y0:y1, x0:x1] * (1 - m) + p * m
-
-    # the old meatball first: painted out, then the cabinet's left edge drawn back where it ran
-    meat = poly_mask([(574, 178), (580, 172), (590, 171), (600, 174), (605, 182), (604, 194),
-                      (597, 201), (585, 202), (576, 197), (572, 188)])
-    # (the old screen's glow is darkened first, so the fill doesn't pick up its orange)
-    scr_old = poly_mask([(601, 149), (625, 149), (622, 186), (594, 186), (596, 162)])
-    tmp = out.copy()
-    tmp[ndimage.binary_dilation(scr_old, iterations=2)] = (44, 36, 56)
-    bgr = cv2.cvtColor(np.clip(tmp, 0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
-    tm = (ndimage.binary_dilation(meat, iterations=2) * 255).astype(np.uint8)
-    filled_ = cv2.cvtColor(cv2.inpaint(bgr, tm, 4, cv2.INPAINT_TELEA), cv2.COLOR_BGR2RGB).astype(float)
-    out = np.where((tm > 0)[..., None], filled_, out)
-    # the back glass and the screen, each fitted to the old panel's exact shape
-    fit((560, 112, 594, 130), poly_mask([(580, 111), (612, 111), (612, 129), (580, 129)]))
-    fit((572, 151, 604, 184), poly_mask([(601, 149), (625, 149), (622, 186), (594, 186), (596, 162)]))
-    # the new small trackball and its joystick, set into the panel where the meatball sat
-    tb = nbi.crop((554, 190, 600, 204))
-    ta = np.asarray(tb).astype(int)
-    keep = ((ta[..., 0] > 120) & (ta[..., 0] - ta[..., 2] > 60)) | (ta.sum(-1) > 450)
-    keep = ndimage.binary_dilation(keep, iterations=1)
-    tb = np.asarray(tb).astype(float)
-    tx, ty = 566, 186
-    m = cv2.GaussianBlur(keep.astype(np.float32), (0, 0), 0.5)[..., None]
-    out[ty:ty + tb.shape[0], tx:tx + tb.shape[1]] = out[ty:ty + tb.shape[0], tx:tx + tb.shape[1]] * (1 - m) + tb * m
-    out = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
-    _composed[alt] = out
-    return out.copy()
-
-
 def _pal(im):
-    """The game is full colour: no palette any more, just hard edges on any transparency."""
-    if im.mode == 'RGBA':
-        out = im.copy()
-        out.putalpha(im.getchannel('A').point(lambda v: 255 if v >= 128 else 0))
-        return out
-    return im.convert('RGBA')
-
-
-def _pal_256(im):
-    """(Old) snap to a 256-colour palette made from the room itself."""
+    """Snap to a 256-colour palette made from the room itself."""
     global _palette
     try:
         _palette
     except NameError:
-        q = composed().quantize(
+        q = Image.open(SRC).convert('RGB').resize((W, VIEW_H), Image.LANCZOS).quantize(
             256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
         _palette = Image.new('P', (1, 1))
         _palette.putpalette(q.getpalette())
@@ -208,8 +56,7 @@ def _pal_256(im):
 
 def crypt():
     sc = Scene('crypt')
-    old_base = Image.open(SRC).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
-    base = composed()
+    base = Image.open(SRC).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
 
     # lift the hat out: inpaint the wall behind it, keep the cut-out as a sprite
     hx0, hy0, hx1, hy1 = HAT
@@ -218,6 +65,7 @@ def crypt():
     # the hat is pale gold/cream; the wall is dark purple-grey
     lum = hat_region.sum(-1)
     m = (lum > 300) | ((hat_region[..., 0] - hat_region[..., 2]) > 40)
+    from scipy import ndimage
     m[70:] = False                     # below this is the throne's finial, not the hat
     m = ndimage.binary_closing(m, iterations=2)
     m = ndimage.binary_fill_holes(m)
@@ -255,19 +103,44 @@ def crypt():
     sc.hotspot('hYarn', 'yarn monster', (232, 262), [('rect', [185, 22, 275, 132])])
     sc.hotspot('hPastaWall', 'Pasta Identification', (335, 240), [('rect', [268, 72, 402, 150])])
     sc.hotspot('hStaff', 'staff area', (446, 236), [('rect', [413, 76, 481, 222])])
-    sc.hotspot('h3Button', 'CONFESS booth', (124, 256), [('rect', [8, 88, 112, 288])])
+    sc.hotspot('h3Button', '3Button cabinet', (120, 252), [('poly', [(8, 100), (100, 104), (102, 288), (8, 288)])])
     sc.hotspot('hTrackball', 'Trackball cabinet', (548, 266), [('poly', [(560, 104), (640, 92), (640, 288), (560, 288)])])
     sc.hotspot('hComputer', 'Classic Computer', (365, 242), [('rect', [337, 150, 394, 232])])
-    sc.hotspot('hRex', 'T. Rex cabinet', (300, 262), [('rect', [200, 122, 292, 272])])
+    sc.hotspot('hRex', 'Rex Seat', (300, 262), [('rect', [210, 140, 300, 250])])
 
     # ---------- the Pasta Identification board: names, empty recesses, a plate that opens (stand-in)
     import topology
+    gold, gold_lit, ink = (214, 170, 84), (255, 230, 120), (60, 34, 24)
+    bx0, by0, bx1, by1 = BOARD_INNER
+    wood = np.asarray(orig.crop((bx0, by0, bx1, by1)).convert('RGB')).astype(float)
+    base_c = np.median(wood.reshape(-1, 3), 0)
+    rng = np.random.default_rng(3)
+    grain = np.clip(base_c[None, None, :] * (0.92 + 0.08 * np.sin(np.arange(by1 - by0)[:, None, None] * 1.7)
+                                           + rng.normal(0, 0.025, (by1 - by0, bx1 - bx0, 1))), 0, 255)
+    room.paste(Image.fromarray(grain.astype(np.uint8)).convert('RGBA'), (bx0, by0))
+    d = ImageDraw.Draw(room)
+    rec_dark, rec_rim = (46, 28, 20, 255), (120, 80, 40, 255)
+    for cxs in SLOTS:
+        d.rounded_rectangle([cxs - 13, SLOT_Y[0], cxs + 13, SLOT_Y[1]], 4, fill=rec_dark, outline=rec_rim)
+
+    def plate(cx, y, txt):
+        w = tiny_width(txt) + 4
+        x = int(cx - w / 2)
+        d.rectangle([x, y, x + w, y + 8], fill=rgba(gold))
+        d.line([(x, y + 8), (x + w, y + 8)], fill=rgba((130, 92, 40)))
+        tiny(room, x + w / 2 + 0.5, y + 4.5, txt, ink, 1)
+    # a name under each recess
+    for cxs, txt in zip(SLOTS, NAMES):
+        plate(cxs, 119, txt)
     cx0, cy0, cx1, cy1 = COMPARTMENT
+    d.rectangle([cx0, cy0, cx1, cy1], fill=rgba((176, 132, 60)), outline=rgba((110, 74, 30)))
+    d.line([(cx0 + 2, cy0 + 2), (cx1 - 2, cy0 + 2)], fill=rgba((230, 196, 110)))
+    d.ellipse([(cx0 + cx1) // 2 - 2, cy0 + 4, (cx0 + cx1) // 2 + 2, cy0 + 8], fill=rgba((60, 34, 20)))
     orig = room.copy()
 
     def slot_sprite(k):
         cxs = SLOTS[k]
-        box = (cxs - 12, SLOT_Y[0], cxs + 13, SLOT_Y[1] + 1)
+        box = (cxs - 13, SLOT_Y[0], cxs + 14, SLOT_Y[1] + 1)
         return orig.crop(box), box
 
     shapes = {n: topology.shape(n, 24, 21) for n in topology.SHAPES}
@@ -276,7 +149,7 @@ def crypt():
         sprites = {'empty': empty_slot}
         for n in topology.SHAPES:
             im = empty_slot.copy()
-            im.alpha_composite(shapes[n], ((im.width - shapes[n].width) // 2, 1))
+            im.alpha_composite(shapes[n], (1, 1))
             sprites[n] = im
         sc.obj('oSlot%d' % (k + 1), 'recess', sprites, box[0], box[3], baseline=1)
     # the compartment: shut as painted; open shows a dark hollow with the crank in it
@@ -284,42 +157,11 @@ def crypt():
     hollow = shut.copy()
     hd_ = ImageDraw.Draw(hollow)
     hd_.rectangle([0, 0, hollow.width - 1, hollow.height - 1], fill=(30, 18, 14, 255), outline=(110, 74, 30, 255))
-    # open: the drawer pulled out (v2-B), with the crank in it as its own sprite on top
-    alt = _pal(composed(alt=True).convert('RGBA'))
-    dx0, dy0, dx1, dy1 = DRAWER
-    full = alt.crop(DRAWER)
-    a_ = np.asarray(full.convert('RGB')).astype(int)
-    lum = a_.sum(-1)
-    inner = np.zeros(lum.shape, bool)
-    inner[2:15, 9:70] = True                    # the drawer's dark inside
-    crankpx = inner & (lum > np.median(lum[inner]) + 70)
-    crankpx = ndimage.binary_closing(crankpx, iterations=1)
-    lab, n = ndimage.label(crankpx)
-    if n:
-        sizes = ndimage.sum(crankpx, lab, range(1, n + 1))
-        crankpx = lab == 1 + int(np.argmax(sizes))          # just the crank, not the plates' edges
-    crankpx = ndimage.binary_dilation(crankpx, iterations=1) & inner
-    # the empty drawer: the crank's pixels filled with the drawer's dark inside
-    ea_ = np.asarray(full.convert('RGBA')).copy()
-    hole = ndimage.binary_dilation(crankpx, iterations=1) & inner
-    dark = inner & ~hole & (lum < np.median(lum[inner]) + 15)
-    fillc = np.median(ea_[dark][:, :3], 0)
-    noise = np.random.default_rng(4).normal(0, 4, hole.sum())[:, None]
-    ea_[hole, :3] = np.clip(fillc[None, :] + noise, 0, 255).astype(np.uint8)
-    empty_dr = Image.fromarray(ea_, 'RGBA')
-    crank_in = full.copy()
-    crank_in.putalpha(Image.fromarray((crankpx * 255).astype(np.uint8)))
-    hollow = empty_dr
-    sc.obj('oCompartment', 'drawer', {'shut': orig.crop(DRAWER), 'open': hollow}, dx0, dy1, baseline=1)
+    sc.obj('oCompartment', 'brass plate', {'shut': shut, 'open': hollow}, cx0, cy1 + 1, baseline=1)
     import icon_art
-    sc.obj('oCrank', 'crank', {'on': crank_in}, dx0, dy1, visible=False, baseline=2)
+    crank_spr = icon_art.item('iCrank', 26, 10)
+    sc.obj('oCrank', 'crank', {'on': crank_spr}, (cx0 + cx1 - crank_spr.width) // 2, cy1, visible=False, baseline=2)
     sc.uv(lambda im, dd: glow_text(im, (335, 157), 'ASK THE COMPUTER', 8, (120, 255, 200)))
-
-    # ---------- the CONFESS booth: shut as painted, and half open (v2-B) while you play
-    bx0, by0 = BOOTH_AT
-    bbox = (bx0, by0, bx0 + BOOTH_SRC[2] - BOOTH_SRC[0], VIEW_H)
-    sc.obj('oBooth', 'CONFESS booth', {'shut': orig.crop(bbox), 'ajar': alt.crop(bbox)},
-           bbox[0], bbox[3], baseline=1, clickable=False)
 
     # ---------- the STAFF curtain: closed as painted; open shows a little storeroom
     cx0, cy0, cx1, cy1 = CURTAIN
@@ -346,15 +188,20 @@ def crypt():
     zone = ea[183 - sy0:CURTAIN[3] - sy0, :CURTAIN[2] - sx0 + 1]
     red = (zone[..., 0].astype(int) - zone[..., 1] > 50) & (zone[..., 0] < 200)
     zone[red] = 0
-    empty = Image.fromarray(ea, 'RGBA')          # the new throne: a socket, no crank
-    # with the crank: the old picture's crank, set on the socket
-    oldp = np.asarray(old_base.convert('RGB')).astype(int)
-    kx0, ky0, kx1, ky1 = CRANK_BOX
-    reg = oldp[ky0:ky1, kx0:kx1]
+    with_crank = Image.fromarray(ea, 'RGBA')
+    # without the crank: paint it out of the seat's side, leaving a dark socket
+    bgr = cv2.cvtColor(np.asarray(with_crank.convert('RGB')), cv2.COLOR_RGB2BGR)
+    k0, k1 = CRANK_BOX[0] - sx0, CRANK_BOX[1] - sy0
+    reg = bgr[k1:CRANK_BOX[3] - sy0, k0:CRANK_BOX[2] - sx0].astype(int)
     iron = (np.abs(reg[..., 2] - reg[..., 0]) < 40) & (reg.sum(-1) < 400)          # grey, not gold
-    crank_px = Image.fromarray(np.dstack([reg.astype(np.uint8), (iron * 255).astype(np.uint8)]), 'RGBA')
-    with_crank = empty.copy()
-    with_crank.alpha_composite(crank_px, (kx0 - sx0 - 7, ky0 - sy0 + 4))
+    cm = np.zeros(bgr.shape[:2], np.uint8)
+    cm[k1:CRANK_BOX[3] - sy0, k0:CRANK_BOX[2] - sx0] = iron * 255
+    cm = cv2.dilate(cm, np.ones((3, 3), np.uint8))
+    filled_seat = cv2.inpaint(bgr, cm, 3, cv2.INPAINT_TELEA)
+    no_crank = Image.fromarray(cv2.cvtColor(filled_seat, cv2.COLOR_BGR2RGB)).convert('RGBA')
+    no_crank.putalpha(with_crank.getchannel('A'))
+    ImageDraw.Draw(no_crank).ellipse([534 - sx0 - 2, 212 - sy0 - 2, 534 - sx0 + 2, 212 - sy0 + 2], fill=(40, 30, 30, 255))
+    empty = no_crank
     import guest_sheet
     seated = with_crank.copy()
     decree = with_crank.copy()
@@ -366,9 +213,10 @@ def crypt():
     sc.obj('oSeat', 'Pope Seat', {'empty': empty, 'crank': with_crank, 'seated': seated, 'decree': decree,
                                   'seatednc': seated_nc}, sx0, sy1, baseline=250)
     # the computer, dark until Chuk plugs it in
-    # the room shows the computer switched off; this is its screen on, once Chuk plugs it in
-    scr = _pal(old_base.crop(SCREEN).convert('RGBA'))
-    sc.obj('oScreen', 'screen', {'on': scr}, SCREEN[0], SCREEN[3], baseline=1, clickable=False, visible=False)
+    scr = orig.crop(SCREEN)
+    ImageDraw.Draw(scr).rectangle([1, 1, scr.width - 2, scr.height - 2], fill=(18, 22, 22, 255))
+    ImageDraw.Draw(scr).line([(3, 3), (8, 3)], fill=(50, 58, 58, 255))
+    sc.obj('oScreen', 'screen', {'off': scr}, SCREEN[0], SCREEN[3], baseline=1, clickable=False)
     sc.obj('oHat', 'pasta pope hat', {'on': hat}, hbx0, hby0 + hat.height, baseline=251)
 
     sc.uv(lambda im, dd: glow_text(im, (512, 262), 'THE CRANK NEEDS', 8, (255, 160, 80)))
