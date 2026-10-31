@@ -2551,6 +2551,84 @@
       "r1": "crypt_oPoseRex_r1",
       "r2": "crypt_oPoseRex_r2"
      }
+    },
+    {
+     "script": "oFreeConfess",
+     "name": "screen",
+     "x": 42,
+     "y": 168,
+     "visible": false,
+     "baseline": 2,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oFreeConfess_on"
+     }
+    },
+    {
+     "script": "oFreeRex",
+     "name": "screen",
+     "x": 214,
+     "y": 194,
+     "visible": false,
+     "baseline": 2,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oFreeRex_on"
+     }
+    },
+    {
+     "script": "oFreeMeat",
+     "name": "screen",
+     "x": 590,
+     "y": 192,
+     "visible": false,
+     "baseline": 2,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oFreeMeat_on"
+     }
+    },
+    {
+     "script": "oClownPlay1",
+     "name": "clown",
+     "x": 59,
+     "y": 286,
+     "visible": false,
+     "baseline": 286,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oClownPlay1_on"
+     }
+    },
+    {
+     "script": "oClownPlay2",
+     "name": "clown",
+     "x": 238,
+     "y": 267,
+     "visible": false,
+     "baseline": 267,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oClownPlay2_on"
+     }
+    },
+    {
+     "script": "oClownPlay3",
+     "name": "clown",
+     "x": 515,
+     "y": 286,
+     "visible": false,
+     "baseline": 286,
+     "clickable": false,
+     "state": "on",
+     "sprites": {
+      "on": "crypt_oClownPlay3_on"
+     }
     }
    ]
   },
@@ -3371,6 +3449,12 @@
   "crypt_oPoseConfess_on",
   "crypt_oPoseRex_r1",
   "crypt_oPoseRex_r2",
+  "crypt_oFreeConfess_on",
+  "crypt_oFreeRex_on",
+  "crypt_oFreeMeat_on",
+  "crypt_oClownPlay1_on",
+  "crypt_oClownPlay2_on",
+  "crypt_oClownPlay3_on",
   "hotel_oNewspaper_on",
   "hotel_oTv_c0",
   "hotel_oTv_c1",

@@ -24,7 +24,10 @@ DIR = os.path.join(HERE, '..', 'art_src', 'crypt-nb')
 PICS = {'A': 'v2-A-confess-computer-trex-board-throne.png', 'B': 'v2-B-booth-open-drawer-trackball.png',
         'C': 'v2-C-booth-open-board-filled-meatball-coin.png',
         'D': 'v3-D-trex-highscore-insertcoin.png', 'E': 'v3-E-trex-off.png',
-        'F': 'v3-F-trex-scores-toothgenius.png'}
+        'F': 'v3-F-trex-scores-toothgenius.png',
+        'G': 'v4-G-freeplay.png',               # every cabinet flashing FREE PLAY
+        'H': 'v4-H-freeplay-clowns.png',        # the same with the three clowns playing
+        'I': 'v4-I-throne-crank.png'}           # the crank in the throne's side socket
 REX_SCREEN = (222, 149, 254, 178)      # the T. Rex cabinet's screen
 MEAT_SCREEN = (590, 114, 640, 192)     # the arcade cabinet's screen and controls
 K = W / 1376                           # 1376 -> 640
@@ -43,6 +46,9 @@ HAT_LOWERED_BOTTOM = 160               # where its bottom ends up, on the seated
 COIN = (118, 266, 150, 288)            # the token CONFESS pays out (picture C)
 CABINET = (558, 70, 640, 288)          # the arcade cabinet (its face from picture C)
 SPARKLE = (596, 258, 632, 288)         # the generator's mark, painted out
+FREE_CONFESS = (42, 126, 86, 168)      # CONFESS's screen
+FREE_REX = (214, 134, 270, 194)        # the T. Rex screen, FREE PLAY with its glow
+CLOWN_BOX = [(50, 110, 162, 288), (236, 112, 334, 270), (512, 114, 616, 288)]   # at CONFESS, T. Rex, MEATBALL MADNESS
 SHAPE_ORDER = ['infinity', 'mobius', 'torus', 'trefoil']   # what picture C shows in slots 1..4
 
 _cache = {}
@@ -52,7 +58,7 @@ def pic(k, full=False):
     """Picture k at room scale (RGB), or at full size (full=True)."""
     key = (k, full)
     if key not in _cache:
-        im = Image.open(os.path.join(DIR, PICS[k])).convert('RGB')
+        im = Image.open(os.path.join(DIR, PICS[k])).convert('RGB').crop((0, 0, 1376, 768))
         if not full:
             im = im.resize((W, round(im.height * K)), Image.LANCZOS)
             im = im.filter(ImageFilter.UnsharpMask(radius=0.8, percent=40, threshold=3))
@@ -292,15 +298,18 @@ def crypt():
     body = ndimage.binary_dilation(body, iterations=1)
     ea[..., 3] = body * 255
     empty = Image.fromarray(ea, 'RGBA')
-    # the crank: the old Crypt picture's, in the socket
-    old = Image.open(os.path.join(DIR, 'base.jpg')).convert('RGB').resize((W, VIEW_H), Image.LANCZOS)
-    kx0, ky0, kx1, ky1 = 527, 203, 552, 232
-    reg = np.asarray(old.crop((kx0, ky0, kx1, ky1))).astype(int)
-    iron = (np.abs(reg[..., 2] - reg[..., 0]) < 40) & (reg.sum(-1) < 400)
-    crank = rgba_of(old.crop((kx0, ky0, kx1, ky1)), iron)
-    crank = crank.resize((round(crank.width * 1.12), round(crank.height * 1.12)), Image.LANCZOS)
+    # the crank in the side socket, from picture I (only its side crank, not the one up top)
+    KBOX = (544, 204, 572, 231)
+    I = pic('I')
+    kd = np.abs(np.asarray(A.crop(KBOX)).astype(int) - np.asarray(I.crop(KBOX)).astype(int)).sum(-1)
+    km = ndimage.binary_closing(kd > 45, iterations=2)
+    km = ndimage.binary_opening(ndimage.binary_fill_holes(km), iterations=1)
+    lab, n = ndimage.label(km)
+    if n:
+        sz = ndimage.sum(km, lab, range(1, n + 1))
+        km = np.isin(lab, [j + 1 for j, v in enumerate(sz) if v >= 12])
     with_crank = empty.copy()
-    with_crank.alpha_composite(crank, (SOCKET[0] - sx0 - 4, SOCKET[1] - sy0 - 3))
+    with_crank.alpha_composite(rgba_of(I.crop(KBOX), km), (KBOX[0] - sx0, KBOX[1] - sy0))
     import guest_sheet
 
     def sit(base, decree=False):
@@ -373,7 +382,36 @@ def crypt():
         c.alpha_composite(r, (rx - x0, ry - y0))
         fr.append(c)
     sc.obj('oPoseRex', 'yourself', {'r1': fr[0], 'r2': fr[1]}, x0, y0 + h, visible=False, baseline=240, clickable=False)
+
+    # ---------- free play: every cabinet's screen flashing FREE PLAY (G), the clowns playing (H)
+    G, Hc = pic('G'), pic('H')
+    for name, box, base in (('oFreeConfess', FREE_CONFESS, C), ('oFreeRex', FREE_REX, F), ('oFreeMeat', MEAT_SCREEN, C)):
+        m = diff_mask(base, G, box, thresh=60, grow=2)
+        sc.obj(name, 'screen', {'on': rgba_of(G.crop(box), m)}, box[0], box[3], visible=False, baseline=2,
+               clickable=False)
+    for k, box in enumerate(CLOWN_BOX):
+        g, gx, gy = cutout(G, Hc, box)
+        sc.obj('oClownPlay%d' % (k + 1), 'clown', {'on': g}, gx, gy + g.height, visible=False,
+               baseline=min(287, gy + g.height), clickable=False)
     return sc
+
+
+def cutout(base, im, box):
+    """(sprite, x0, y0): what im has inside box that base doesn't, cropped to its pixels."""
+    x0, y0, x1, y1 = box
+    p = np.asarray(im.crop(box)).astype(int)
+    diff = np.abs(p - np.asarray(base.crop(box)).astype(int)).sum(-1)
+    strong = ndimage.binary_opening(diff > 60, iterations=1)
+    d = ndimage.binary_propagation(strong, mask=ndimage.binary_closing(diff > 22, iterations=1))
+    lab, n = ndimage.label(ndimage.binary_closing(d, iterations=2))
+    if n:
+        sizes = ndimage.sum(d, lab, range(1, n + 1))
+        d = lab == 1 + int(np.argmax(sizes))
+    d = ndimage.binary_fill_holes(ndimage.binary_closing(d, iterations=2))
+    d = ndimage.binary_opening(d, iterations=1)
+    out = Image.fromarray(np.dstack([p, d * 255]).astype(np.uint8), 'RGBA')
+    bb = out.getbbox()
+    return out.crop(bb), x0 + bb[0], y0 + bb[1]
 
 
 if __name__ == '__main__':
