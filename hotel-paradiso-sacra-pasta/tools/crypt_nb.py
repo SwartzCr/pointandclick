@@ -136,31 +136,61 @@ def composed(alt=False):
     bgr = cv2.cvtColor(np.clip(out, 0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
     fixed = cv2.cvtColor(cv2.inpaint(bgr, tm, 4, cv2.INPAINT_TELEA), cv2.COLOR_BGR2RGB).astype(float)
     out = np.where((tm > 0)[..., None], fixed, out)
-    # the arcade cabinet keeps its body; its back glass, screen and trackball come from v2-B.
-    # First the old meatball (and its glow) is painted out where the new parts won't cover it.
-    reg = out[165:192, 566:596]
-    orange = (reg[..., 0] > 120) & (reg[..., 0] - reg[..., 2] > 40)
-    tm = np.zeros((VIEW_H, W), np.uint8)
-    tm[165:192, 566:596] = orange * 255
-    tm = cv2.dilate(tm, np.ones((3, 3), np.uint8))
-    bgr = cv2.cvtColor(np.clip(out, 0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
-    out = cv2.cvtColor(cv2.inpaint(bgr, tm, 3, cv2.INPAINT_TELEA), cv2.COLOR_BGR2RGB).astype(float)
+    # the arcade cabinet keeps its body; its back glass, screen and trackball come from v2-B,
+    # each fitted to the exact shape of the old part it replaces, so the outlines stay put
     nbi = Image.fromarray(np.clip(NB, 0, 255).astype(np.uint8))
-    for src, dst in (((558, 110, 596, 131), (576, 109, 614, 130)),     # back glass
-                     ((569, 148, 606, 186), (591, 147, 627, 187)),     # screen
-                     ((552, 186, 606, 206), (566, 186, 620, 206))):    # control panel, trackball
-        p = np.asarray(nbi.crop(src).resize((dst[2] - dst[0], dst[3] - dst[1]), Image.LANCZOS)).astype(float)
-        m = np.zeros(p.shape[:2], np.uint8)
-        m[1:-1, 1:-1] = 255
-        m = cv2.GaussianBlur(m, (0, 0), 0.8).astype(float)[..., None] / 255
-        out[dst[1]:dst[3], dst[0]:dst[2]] = out[dst[1]:dst[3], dst[0]:dst[2]] * (1 - m) + p * m
+
+    def poly_mask(pts):
+        m = Image.new('L', (W, VIEW_H), 0)
+        ImageDraw.Draw(m).polygon(pts, fill=255)
+        return np.asarray(m) > 0
+
+    def fit(src, mask):
+        ys, xs = np.nonzero(mask)
+        x0, y0, x1, y1 = xs.min(), ys.min(), xs.max() + 1, ys.max() + 1
+        p = np.asarray(nbi.crop(src).resize((x1 - x0, y1 - y0), Image.LANCZOS)).astype(float)
+        m = cv2.GaussianBlur(mask[y0:y1, x0:x1].astype(np.float32), (0, 0), 0.5)[..., None]
+        out[y0:y1, x0:x1] = out[y0:y1, x0:x1] * (1 - m) + p * m
+
+    # the old meatball first: painted out, then the cabinet's left edge drawn back where it ran
+    meat = poly_mask([(574, 178), (580, 172), (590, 171), (600, 174), (605, 182), (604, 194),
+                      (597, 201), (585, 202), (576, 197), (572, 188)])
+    # (the old screen's glow is darkened first, so the fill doesn't pick up its orange)
+    scr_old = poly_mask([(601, 149), (625, 149), (622, 186), (594, 186), (596, 162)])
+    tmp = out.copy()
+    tmp[ndimage.binary_dilation(scr_old, iterations=2)] = (44, 36, 56)
+    bgr = cv2.cvtColor(np.clip(tmp, 0, 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
+    tm = (ndimage.binary_dilation(meat, iterations=2) * 255).astype(np.uint8)
+    filled_ = cv2.cvtColor(cv2.inpaint(bgr, tm, 4, cv2.INPAINT_TELEA), cv2.COLOR_BGR2RGB).astype(float)
+    out = np.where((tm > 0)[..., None], filled_, out)
+    # the back glass and the screen, each fitted to the old panel's exact shape
+    fit((560, 112, 594, 130), poly_mask([(580, 111), (612, 111), (612, 129), (580, 129)]))
+    fit((572, 151, 604, 184), poly_mask([(601, 149), (625, 149), (622, 186), (594, 186), (596, 162)]))
+    # the new small trackball and its joystick, set into the panel where the meatball sat
+    tb = nbi.crop((554, 190, 600, 204))
+    ta = np.asarray(tb).astype(int)
+    keep = ((ta[..., 0] > 120) & (ta[..., 0] - ta[..., 2] > 60)) | (ta.sum(-1) > 450)
+    keep = ndimage.binary_dilation(keep, iterations=1)
+    tb = np.asarray(tb).astype(float)
+    tx, ty = 566, 186
+    m = cv2.GaussianBlur(keep.astype(np.float32), (0, 0), 0.5)[..., None]
+    out[ty:ty + tb.shape[0], tx:tx + tb.shape[1]] = out[ty:ty + tb.shape[0], tx:tx + tb.shape[1]] * (1 - m) + tb * m
     out = Image.fromarray(np.clip(out, 0, 255).astype(np.uint8))
     _composed[alt] = out
     return out.copy()
 
 
 def _pal(im):
-    """Snap to a 256-colour palette made from the room itself."""
+    """The game is full colour: no palette any more, just hard edges on any transparency."""
+    if im.mode == 'RGBA':
+        out = im.copy()
+        out.putalpha(im.getchannel('A').point(lambda v: 255 if v >= 128 else 0))
+        return out
+    return im.convert('RGBA')
+
+
+def _pal_256(im):
+    """(Old) snap to a 256-colour palette made from the room itself."""
     global _palette
     try:
         _palette
