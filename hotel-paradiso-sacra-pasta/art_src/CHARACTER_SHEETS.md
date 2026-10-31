@@ -1,4 +1,4 @@
-# Character sprite sheets: the bellhop and Chuk
+# Character sprite sheets: the bellhop, Chuk and the clowns
 
 Prompts for every pose the game uses now (the reworked Crypt and the three endings
 included). Each sheet is one image, generated in Nano Banana / Google AI Studio.
@@ -92,6 +92,56 @@ Two rows. Top row: 1) and 2) a two-frame animation, seen from behind, of him sit
 
 ---
 
+## The clowns
+
+The three room-service clowns from Hotel Paradiso, who arrive in two of the endings. They're
+the same three people in different colours, so generate **one set of sheets per clown**:
+paste the clown line, then the line for that clown's colours, then the sheet. Attach
+`clowns_reference.png` (the first game's clowns, next to this file) as well as any finished
+clown sheet, so all three come out as one troupe.
+
+**Clown line** (paste after the style line):
+
+```
+The character: a circus clown working as hotel room service. White greasepaint face, round red nose, wide red painted smile, black dot eyes, a big frilly white ruff collar, a baggy one-piece polka-dot clown suit, white gloves, enormous red clown shoes, and a wild puff of clown hair on each side of a bald crown. Cheerful, a little sinister.
+```
+
+**Colours** (pick one per set):
+
+```
+Clown one: a yellow suit with blue polka dots and bright orange hair.
+```
+```
+Clown two: a green suit with yellow polka dots and purple hair.
+```
+```
+Clown three: a blue suit with pink polka dots and yellow hair.
+```
+
+### Sheet K1: standing and walking (`clown1_walk`, `clown2_walk`, `clown3_walk`)
+
+```
+Three rows. Top row, four standing poses: facing us; facing away from us; facing right in profile; facing left in profile. Middle row: a six-frame walk cycle facing right, in profile, big floppy shoes slapping, arms swinging. Bottom row: a four-frame walk cycle walking towards us, then a four-frame walk cycle walking away from us, seen from behind.
+```
+
+### Sheet K2: the endings (`clown1_actions`, `clown2_actions`, `clown3_actions`)
+
+```
+Two rows. Top row: 1) facing us, carrying a silver room-service tray with a domed cloche on one raised hand, the other hand on the hip; 2) facing us, both arms straight up overhead, hands open, as if carrying someone above his head (no one there); 3) the same, mid-stride, one foot forward; 4) facing us, shouting with arms flung wide, mouth wide open; 5) facing us, honking a small bicycle horn. Bottom row: 6) and 7) a two-frame animation of him standing at an arcade cabinet seen from behind, hands on the controls, the second frame jabbing buttons; 8) seen from behind, sitting low in a racing-style arcade seat, hands on a small steering wheel; 9) and 10) two close-ups of his head and ruff, twice the scale, facing us, mouth closed and mouth open, talking.
+```
+
+| Clown pose | Where |
+|---|---|
+| Stand and walk, four directions | in through the Crypt's archway and back out |
+| Tray | "Room service for all!": they arrive with room service |
+| Arms up overhead (standing and mid-stride) | carrying the new Pope and Chuk away |
+| Shouting, arms wide | "ROOM SERVICE!", "FREE PLAY!" |
+| Horn | a honk as they arrive (optional) |
+| Arcade (standing, racing seat) | "All games are free play!": taking over CONFESS, MEATBALL MADNESS and T. Rex |
+| Talking heads | their lines |
+
+---
+
 ## How each pose is used
 
 | Pose | Where |
@@ -117,5 +167,5 @@ Two rows. Top row: 1) and 2) a two-frame animation, seen from behind, of him sit
 | Chuk with a cup | party ending |
 | Chuk lying stiff | room-service ending |
 
-Not needed: ultraviolet versions (the game tints both of them), and the bathrobe guest in
-HOTEL.EXE and the clowns (both come from the first game).
+Not needed: ultraviolet versions (the game tints the characters), and the bathrobe guest in
+HOTEL.EXE (he stays as he was in the first game).
