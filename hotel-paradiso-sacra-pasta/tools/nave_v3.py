@@ -293,7 +293,7 @@ def nave():
     sc.hotspot('hSodTable', 'sod table', (190, F), [('poly', sod)])
     sc.hotspot('hHandset', 'telephone handset', (250, F), [('rect', [229, 175, 271, 201])])
     sc.hotspot('hSculpture', 'spaghetti sculpture', (325, 274), [('poly', SCULPTURE)])
-    sc.hotspot('hSpinner', 'paragraph spinner', (453, F), [('rect', [412, 164, 500, 244])])
+    sc.hotspot('hSpinner', 'paragraph spinner', (398, 264), [('rect', [412, 164, 500, 244])])
     sc.hotspot('hScales', 'scales of pasta', (382, F), [('rect', [352, 160, 410, 244])])
 
     # ---------- A1: the archway, plastered over until you're ordained (from A)

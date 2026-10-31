@@ -1881,8 +1881,8 @@
      "hSpinner",
      "paragraph spinner",
      [
-      453,
-      262
+      398,
+      264
      ]
     ],
     [
@@ -2528,8 +2528,8 @@
     {
      "script": "oPoseConfess",
      "name": "yourself",
-     "x": 58,
-     "y": 286,
+     "x": 0,
+     "y": 288,
      "visible": false,
      "baseline": 287,
      "clickable": false,

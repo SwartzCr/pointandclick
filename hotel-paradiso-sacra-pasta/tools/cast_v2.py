@@ -158,8 +158,11 @@ def necklaces():
             if n:
                 sizes = ndimage.sum(m, lab, range(1, n + 1))
                 m &= np.isin(lab, [j + 1 for j, sz in enumerate(sizes) if sz >= minsz])
-            ov = Image.fromarray(np.dstack([a[..., :3], m * 255]).astype(np.uint8), 'RGBA')
             t, cx = _hat(w)
+            if view == 'side':
+                # nothing on the face: in profile the cord's diff catches bits of cheek and ear
+                m[:int(t + 0.25 * ART_H)] = False
+            ov = Image.fromarray(np.dstack([a[..., :3], m * 255]).astype(np.uint8), 'RGBA')
             out[(kind, view)] = (ov, t, cx)
     return out
 

@@ -43,7 +43,8 @@ SEAT = (476, 96, 576, 260)
 SOCKET = (551, 211)                    # the crank socket on the throne's side
 HAT = (520, 10, 572, 88)               # the lasagna hat, lifted out of the picture
 HAT_LOWERED_BOTTOM = 160               # where its bottom ends up, on the seated guest's head
-COIN = (118, 266, 150, 288)            # the token CONFESS pays out (picture C)
+COIN = (118, 266, 150, 288)
+CONFESS_POSE = (0, 38, 150, 288)     # the booth and him at it (pose picture 3)            # the token CONFESS pays out (picture C)
 CABINET = (558, 70, 640, 288)          # the arcade cabinet (its face from picture C)
 SPARKLE = (596, 258, 632, 288)         # the generator's mark, painted out
 FREE_CONFESS = (42, 126, 86, 168)      # CONFESS's screen
@@ -370,8 +371,18 @@ def crypt():
                    (310, 246), (420, 246), (428, 238), (500, 238), (500, 246), (476, 262), (580, 262),
                    (570, 288)], fill=1)
     # ---------- the bellhop at the cabinets (shown while he plays; he's hidden meanwhile)
-    g, gx, gy = pose('guest_confess')
-    sc.obj('oPoseConfess', 'yourself', {'on': g}, gx, gy + g.height, visible=False, baseline=287, clickable=False)
+    # at CONFESS: the whole half-open booth with him at it, as pose picture 3 paints it (a cutout
+    # loses his hat against the booth), less the token by his feet, which isn't there yet
+    cb = CONFESS_POSE
+    g = np.asarray(pose_pic(3).crop(cb)).copy()
+    bb = np.asarray(B.crop(cb))
+    r_, g_, b_ = (g[..., k].astype(int) for k in range(3))
+    yy, xx = np.mgrid[cb[1]:cb[3], cb[0]:cb[2]]
+    coin = (r_ > 140) & (g_ > 110) & (b_ < 120) & (r_ - b_ > 60) & (xx >= COIN[0]) & (yy >= COIN[1] - 4)
+    coin = ndimage.binary_dilation(coin, iterations=1)
+    g[coin] = bb[coin]
+    g = Image.fromarray(g).convert('RGBA')
+    sc.obj('oPoseConfess', 'yourself', {'on': g}, cb[0], cb[3], visible=False, baseline=287, clickable=False)
     r1, rx1, ry1 = pose('guest_rex1')
     r2, rx2, ry2 = pose('guest_rex2')
     x0, y0 = min(rx1, rx2), min(ry1, ry2)
