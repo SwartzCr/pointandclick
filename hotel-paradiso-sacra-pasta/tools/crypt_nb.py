@@ -158,7 +158,9 @@ def crypt():
     hd_ = ImageDraw.Draw(hollow)
     hd_.rectangle([0, 0, hollow.width - 1, hollow.height - 1], fill=(30, 18, 14, 255), outline=(110, 74, 30, 255))
     sc.obj('oCompartment', 'brass plate', {'shut': shut, 'open': hollow}, cx0, cy1 + 1, baseline=1)
-    sc.obj('oCrank', 'crank', {'on': topology.crank(22, 11)}, cx0 + 18, cy1, visible=False, baseline=2)
+    import icon_art
+    crank_spr = icon_art.item('iCrank', 26, 10)
+    sc.obj('oCrank', 'crank', {'on': crank_spr}, (cx0 + cx1 - crank_spr.width) // 2, cy1, visible=False, baseline=2)
     sc.uv(lambda im, dd: glow_text(im, (335, 157), 'ASK THE COMPUTER', 8, (120, 255, 200)))
 
     # ---------- the STAFF curtain: closed as painted; open shows a little storeroom

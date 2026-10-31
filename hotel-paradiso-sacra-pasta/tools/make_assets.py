@@ -111,6 +111,8 @@ def main():
     painted_icons = NM.icons()
     import guest_sheet
     painted_icons.update(guest_sheet.icons())
+    import icon_art
+    painted_icons.update(icon_art.icons())     # the generated icons win
     for script, (name, fn) in U.ICONS.items():
         icon = painted_icons[script] if script in painted_icons else fn()
         manifest['inventory'].append(dict(script=script, name=name, sprite=spr('inv_' + script, icon)))
