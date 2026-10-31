@@ -28,7 +28,8 @@ PICS = {'A': 'v2-A-confess-computer-trex-board-throne.png', 'B': 'v2-B-booth-ope
         'G': 'v4-G-freeplay.png',               # every cabinet flashing FREE PLAY
         'H': 'v4-H-freeplay-clowns.png',        # the same with the three clowns playing
         'I': 'v4-I-throne-crank.png',
-        'S': 'v1-shark-screen.png'}            # an older version: the arcade showing boxing sharks           # the crank in the throne's side socket
+        'S': 'v1-shark-screen.png',            # an older version: the arcade showing boxing sharks
+        'T': 'v1-tooth-screen.png'}            # another: the arcade showing the tooth game           # the crank in the throne's side socket
 REX_SCREEN = (222, 149, 254, 178)      # the T. Rex cabinet's screen
 MEAT_SCREEN = (590, 114, 640, 192)     # the arcade cabinet's screen and controls
 K = W / 1376                           # 1376 -> 640
@@ -493,17 +494,15 @@ def attract_screens(C, D, orig):
         title.paste(b, ((gw - b.width) // 2, 26), bmask)
     centre(title, gh - 10, 'PUSH', (255, 230, 120))
 
-    flipped = Image.fromarray(game[:, ::-1])
-
     scores = Image.new('RGB', (gw, gh), (14, 10, 34))
     centre(scores, 6, 'HI', (255, 220, 90))
     rows = [('KHC 999', (250, 250, 250)), ('KHC 998', (120, 220, 255)),
             ('KHC 997', (255, 140, 200)), ('KHC 980', (140, 240, 140))]
     for k, (txt, col) in enumerate(rows):
         centre(scores, 15 + k * 8, txt, col)
-    out = {'title': on_glass(title), 'game2': on_glass(flipped), 'scores': on_glass(scores)}
+    out = {'title': on_glass(title), 'scores': on_glass(scores)}
     # two other games from the older pictures, on the same glass: the Lorax (A) and the boxing sharks
-    for name, k in (('lorax', 'A'), ('shark', 'S')):
+    for name, k in (('lorax', 'A'), ('shark', 'S'), ('tooth', 'T')):
         src = np.asarray(pic(k).crop(MEAT_SCREEN).convert('RGB'))
         o = np.asarray(base).copy()
         mm = ndimage.binary_erosion(m, iterations=1)
