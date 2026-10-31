@@ -306,7 +306,18 @@ def crypt():
            sx0, sy1, baseline=250)
 
     # ---------- the computer: off as in the room; on (B), once Chuk plugs it in
-    sc.obj('oScreen', 'screen', {'on': B.crop(SCREEN).convert('RGBA')}, SCREEN[0], SCREEN[3],
+    # on: the room's switched-off computer, with only the inside of its screen from picture B
+    off = np.asarray(orig.crop(SCREEN).convert('RGB')).astype(int)
+    lum = off.mean(-1)
+    glass = lum < 75
+    lab, n = ndimage.label(glass)
+    cy, cx = glass.shape[0] // 2 - 2, glass.shape[1] // 2
+    glass = lab == lab[cy, cx] if lab[cy, cx] else glass
+    glass = ndimage.binary_erosion(ndimage.binary_fill_holes(glass), iterations=1)
+    on = np.asarray(orig.crop(SCREEN)).copy()
+    inside = np.asarray(B.crop(SCREEN).convert('RGBA'))
+    on[glass] = inside[glass]
+    sc.obj('oScreen', 'screen', {'on': Image.fromarray(on, 'RGBA')}, SCREEN[0], SCREEN[3],
            baseline=1, clickable=False, visible=False)
     sc.obj('oHat', 'pasta pope hat', {'on': hat}, hat_x, hat_y + hat.height, baseline=251)
 
