@@ -2523,8 +2523,6 @@
      "sprites": {
       "coin": "crypt_oMeatScreen_coin",
       "game": "crypt_oMeatScreen_game",
-      "title": "crypt_oMeatScreen_title",
-      "scores": "crypt_oMeatScreen_scores",
       "lorax": "crypt_oMeatScreen_lorax",
       "shark": "crypt_oMeatScreen_shark",
       "tooth": "crypt_oMeatScreen_tooth"
@@ -3451,8 +3449,6 @@
   "crypt_oRexScreen_scores",
   "crypt_oMeatScreen_coin",
   "crypt_oMeatScreen_game",
-  "crypt_oMeatScreen_title",
-  "crypt_oMeatScreen_scores",
   "crypt_oMeatScreen_lorax",
   "crypt_oMeatScreen_shark",
   "crypt_oMeatScreen_tooth",

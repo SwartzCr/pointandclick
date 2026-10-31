@@ -500,7 +500,7 @@ def attract_screens(C, D, orig):
             ('KHC 997', (255, 140, 200)), ('KHC 980', (140, 240, 140))]
     for k, (txt, col) in enumerate(rows):
         centre(scores, 15 + k * 8, txt, col)
-    out = {'title': on_glass(title), 'scores': on_glass(scores)}
+    out = {}                                   # (the drawn title and score screens aren't used)
     # two other games from the older pictures, on the same glass: the Lorax (A) and the boxing sharks
     for name, k in (('lorax', 'A'), ('shark', 'S'), ('tooth', 'T')):
         src = np.asarray(pic(k).crop(MEAT_SCREEN).convert('RGB'))
