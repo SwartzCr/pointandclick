@@ -2288,10 +2288,10 @@
     ],
     [
      "h3Button",
-     "3Button cabinet",
+     "CONFESS booth",
      [
-      120,
-      252
+      124,
+      256
      ]
     ],
     [
@@ -2312,7 +2312,7 @@
     ],
     [
      "hRex",
-     "Rex Seat",
+     "T. Rex cabinet",
      [
       300,
       262
@@ -2323,7 +2323,7 @@
     {
      "script": "oSlot1",
      "name": "recess",
-     "x": 274,
+     "x": 276,
      "y": 116,
      "visible": true,
      "baseline": 1,
@@ -2357,7 +2357,7 @@
     {
      "script": "oSlot3",
      "name": "recess",
-     "x": 338,
+     "x": 337,
      "y": 116,
      "visible": true,
      "baseline": 1,
@@ -2374,7 +2374,7 @@
     {
      "script": "oSlot4",
      "name": "recess",
-     "x": 370,
+     "x": 369,
      "y": 116,
      "visible": true,
      "baseline": 1,
@@ -2391,8 +2391,8 @@
     {
      "script": "oCompartment",
      "name": "brass plate",
-     "x": 304,
-     "y": 149,
+     "x": 302,
+     "y": 146,
      "visible": true,
      "baseline": 1,
      "clickable": true,
@@ -2405,8 +2405,8 @@
     {
      "script": "oCrank",
      "name": "crank",
-     "x": 323,
-     "y": 148,
+     "x": 324,
+     "y": 145,
      "visible": false,
      "baseline": 2,
      "clickable": true,
