@@ -311,7 +311,9 @@ def nave():
     rag, rx, ry = cut(orig, C, TAPESTRY)
     ruined = orig.crop(TAPESTRY)
     ruined.alpha_composite(rag, (rx - tx0, ry - ty0))
-    sc.obj('oTapestry', 'tapestry', {'closed': orig.crop(TAPESTRY), 'ruined': ruined}, tx0, ty1, baseline=1)
+    tclosed = orig.crop(TAPESTRY)
+    sc.obj('oTapestry', 'tapestry', {'closed': tclosed, 'ruined': ruined, 'uvclosed': uv_of(tclosed),
+                                     'uvruined': uv_of(ruined)}, tx0, ty1, baseline=1)
     beads = to_pal(fit(keyed('A7-rosary-beads.png'), 12, 30))
     sc.obj('oBeads', 'pasta rosary beads', {'on': beads}, 500, 140, visible=False, baseline=2)
 
@@ -395,7 +397,7 @@ def nave():
     sc.obj('oRigatone', 'golden rigatone', {'on': rig}, rx, ry + rig.height, visible=False, baseline=3)
     # the Scales of Pasta with their macaroni gone (made into beads), from D
     emp, ex, ey = cut(orig, D, (350, 150, 416, 215))
-    sc.obj('oScales', 'scales of pasta', {'empty': emp}, ex, ey + emp.height, visible=False, baseline=1, clickable=False)
+    sc.obj('oScales', 'scales of pasta', {'empty': emp, 'uv': uv_of(emp)}, ex, ey + emp.height, visible=False, baseline=1, clickable=False)
 
     # ---------- A5: Timeline tiles (lit, from A; unlit = the same pictures, dimmed), drawer, pendant
     def tile_sprite(i, on):
@@ -411,7 +413,8 @@ def nave():
         sc.obj('oTile%d' % (i + 1), TILE_NAMES[kind], {'off': tile_sprite(i, False), 'on': tile_sprite(i, True)},
                b[0], b[3], baseline=1)
     DRAWER = (366, 130, 468, 158)
-    sc.obj('oDrawer', 'drawer', {'open': A.crop(DRAWER)}, DRAWER[0], DRAWER[3], visible=False, baseline=2)
+    dr = A.crop(DRAWER)
+    sc.obj('oDrawer', 'drawer', {'open': dr, 'uv': uv_of(dr)}, DRAWER[0], DRAWER[3], visible=False, baseline=2)
     pend, px, py = cut(A, B, (378, 132, 442, 158))
     full = variant('B', full_colour=True).crop((px, py, px + pend.width, py + pend.height))
     full.putalpha(pend.getchannel('A'))

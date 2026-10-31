@@ -1505,7 +1505,9 @@
      "state": "closed",
      "sprites": {
       "closed": "nave_oTapestry_closed",
-      "ruined": "nave_oTapestry_ruined"
+      "ruined": "nave_oTapestry_ruined",
+      "uvclosed": "nave_oTapestry_uvclosed",
+      "uvruined": "nave_oTapestry_uvruined"
      }
     },
     {
@@ -1712,7 +1714,8 @@
      "clickable": false,
      "state": "empty",
      "sprites": {
-      "empty": "nave_oScales_empty"
+      "empty": "nave_oScales_empty",
+      "uv": "nave_oScales_uv"
      }
     },
     {
@@ -1781,7 +1784,8 @@
      "clickable": true,
      "state": "open",
      "sprites": {
-      "open": "nave_oDrawer_open"
+      "open": "nave_oDrawer_open",
+      "uv": "nave_oDrawer_uv"
      }
     },
     {
@@ -2654,6 +2658,8 @@
   "nave_oArchPanel_uv",
   "nave_oTapestry_closed",
   "nave_oTapestry_ruined",
+  "nave_oTapestry_uvclosed",
+  "nave_oTapestry_uvruined",
   "nave_oBeads_on",
   "nave_oRuins_on",
   "nave_oRuins_uv",
@@ -2705,6 +2711,7 @@
   "nave_oBtn3_uv",
   "nave_oRigatone_on",
   "nave_oScales_empty",
+  "nave_oScales_uv",
   "nave_oTile1_off",
   "nave_oTile1_on",
   "nave_oTile2_off",
@@ -2714,6 +2721,7 @@
   "nave_oTile4_off",
   "nave_oTile4_on",
   "nave_oDrawer_open",
+  "nave_oDrawer_uv",
   "nave_oPendant_on",
   "nave_oFork_f0",
   "nave_oFork_f1",
