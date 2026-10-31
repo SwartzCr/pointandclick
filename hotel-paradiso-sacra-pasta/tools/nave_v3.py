@@ -299,10 +299,6 @@ def nave():
     # ---------- A1: the archway, plastered over until you're ordained (from A)
     panel, ax0, ay0 = cut(orig, A, (538, 80, 620, 262))
     panel_uv = uv_of(panel)
-    lay = canvas(*panel.size)
-    for k, wtxt in enumerate(('NOT', 'A', 'WALL')):
-        text(ImageDraw.Draw(lay), (panel.width // 2, panel.height // 2 - 16 + k * 15), wtxt, 10, (255, 120, 220), anchor='mm')
-    glow_layer(lay, panel_uv, 2)
     panel_uv.putalpha(panel.getchannel('A'))
     sc.obj('oArchPanel', 'wall', {'closed': panel, 'uv': panel_uv}, ax0, ay0 + panel.height, baseline=1)
 
@@ -312,7 +308,12 @@ def nave():
     ruined = orig.crop(TAPESTRY)
     ruined.alpha_composite(rag, (rx - tx0, ry - ty0))
     tclosed = orig.crop(TAPESTRY)
-    sc.obj('oTapestry', 'tapestry', {'closed': tclosed, 'ruined': ruined, 'uvclosed': uv_of(tclosed),
+    tuv = uv_of(tclosed)
+    lay = canvas(*tuv.size)
+    for k, wtxt in enumerate(('PULL THE', 'THREAD')):
+        text(ImageDraw.Draw(lay), (tuv.width // 2 + 1, 82 + k * 11), wtxt, 9, (255, 140, 220), anchor='mm')
+    glow_layer(lay, tuv, 2)
+    sc.obj('oTapestry', 'tapestry', {'closed': tclosed, 'ruined': ruined, 'uvclosed': tuv,
                                      'uvruined': uv_of(ruined)}, tx0, ty1, baseline=1)
     beads = to_pal(fit(keyed('A7-rosary-beads.png'), 12, 30))
     sc.obj('oBeads', 'pasta rosary beads', {'on': beads}, 500, 140, visible=False, baseline=2)
@@ -334,15 +335,12 @@ def nave():
             return im
         u = uv_of(im)
         if correct:
-            a = np.asarray(im.convert('L')).astype(int)
-            inner = np.zeros_like(a, bool)
-            inner[3:-3, 3:-3] = True
-            ink = (a < a[inner].mean() - 35) & inner          # the dark letters on the pale barrel
+            # the whole barrel glows, too bright to read: take the pendant off to see the word
             lay = canvas(*im.size)
-            px = lay.load()
-            for y, x in zip(*np.nonzero(ink)):
-                px[int(x), int(y)] = (200, 255, 140, 255)
-            glow_layer(lay, u, 2.0, 0.5, crisp=True)
+            ImageDraw.Draw(lay).rounded_rectangle([2, 2, im.width - 3, im.height - 3], radius=3,
+                                                  fill=(190, 255, 130, 235))
+            ImageDraw.Draw(lay).rectangle([4, 4, im.width - 5, im.height - 5], fill=(235, 255, 210, 245))
+            glow_layer(lay, u, 1.6, 0.8)
         return u
 
     for i in range(4):
@@ -428,10 +426,7 @@ def nave():
     sc.fork_frames = ['f%d' % k for k in range(8)]
 
     # ---------- writing that only ultraviolet light shows
-    sc.uv(lambda im, dd: glow_text(im, (258, 172), 'THE KEEPER KNOWS', 8, (255, 200, 120)))
     sc.uv(lambda im, dd: glow_text(im, (182, 77), 'SAUCE THY OFFERING', 8, (120, 255, 160)))
-    sc.uv(lambda im, dd: glow_text(im, (322, 56), 'THE WORD IS SPUN', 9, (255, 240, 120)))
-    sc.uv(lambda im, dd: glow_text(im, (190, 252), 'FIRST CAME THE STRING', 8, (120, 230, 255)))
 
     # ---------- walkable floor and walk-behinds
     sc.wd.polygon([(0, 288), (0, 274), (50, 264), (108, 252), (130, 248), (560, 248), (566, 264),
