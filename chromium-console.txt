@@ -1,0 +1,44 @@
+[log] 1:06:02 PM Downloading ScummVM...
+[log] 1:06:02 PM Preparing... 
+[log] 1:06:02 PM All downloads complete.
+[log] 1:06:02 PM Running...
+[error] Failed to load resource: the server responded with a status of 404 (File not found)
+[debug] Downloading %s /data/index.json
+[debug] Downloading %s /data/games/index.json
+[error] WARNING: FSNode::createReadStream: 'scummvm.ini' does not exist!
+[log] Default configuration file missing, creating a new one
+[log] Found %d voices 0
+[debug] Downloading %s /data/gui-icons/index.json
+[log] Found %d voices 0
+[debug] Downloading %s /data/games/index.json
+[debug] Cache hit for %s /data/games/index.json
+[debug] Downloading %s /data/translations.dat
+[error] WARNING: No voice is available for language: en!
+[warning] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet)
+[debug] Downloading %s /data/gui-icons/index.json
+[debug] Cache hit for %s /data/gui-icons/index.json
+[debug] Downloading %s /data/shaders.dat
+[warning] [.WebGL-0x884005d1400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[log] User picked target 'tentacle' (engine ID 'scumm', game ID 'tentacle')...
+[error] WARNING: No voice is available for language: en!
+[debug] Downloading %s /data/games/hotel-paradiso/index.json
+[debug] Downloading %s /data/games/hotel-paradiso/tentacle.000
+[error] WARNING: Engine_SCUMM_create: No unique game candidate found, using first one!
+[error] Your game version appears to be unknown. Please, report the following data to the
+[error] ScummVM team along with the name of the game you tried to add and its version,
+[error] language, etc.:
+[error]   SCUMM gameid 'tentacle', file 'tentacle.000', MD5 'd309934c3bc41d08158bb57643b5086a'
+[error] 
+[error] WARNING: No voice is available for language: en!
+[debug] Downloading %s /data/scummmodern.zip
+[debug] Downloading %s /data/residualvm.zip
+[debug] Downloading %s /data/scummremastered.zip
+[debug] Downloading %s /data/scummclassic.zip
+[debug] Downloading %s /data/helpdialog.zip
+[warning] [.WebGL-0x884005d1400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[warning] [.WebGL-0x884005d1400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[midi] resolved, outputs: 0
+[warning] [.WebGL-0x884005d1400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+[debug] Downloading %s /data/games/hotel-paradiso/tentacle.001
+[error] WARNING: No voice is available for language: en!
+canvas: {"x":0,"y":0,"width":1280,"height":800}

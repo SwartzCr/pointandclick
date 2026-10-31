@@ -1,0 +1,87 @@
+[log] 1:07:19 PM Downloading ScummVM...
+[log] 1:07:19 PM Preparing... 
+[log] 1:07:20 PM All downloads complete.
+[log] 1:07:20 PM Running...
+[error] Failed to load resource: the server responded with a status of 404 (File not found)
+[debug] Downloading %s /data/index.json
+[debug] Downloading %s /data/games/index.json
+[error] WARNING: FSNode::createReadStream: 'scummvm.ini' does not exist!
+[log] Default configuration file missing, creating a new one
+[debug] Downloading %s /data/games/sacra-pasta/index.json
+[debug] Downloading %s /data/games/sacra-pasta/sacrapasta.ags
+[error] WARNING: Engine plugin for SCI not present. Fallback detection is disabled!
+[debug] Downloading %s /data/gui-icons/index.json
+[debug] Downloading %s /data/games/index.json
+[debug] Cache hit for %s /data/games/index.json
+[error] WARNING: Engine plugin for Wintermute not present. Fallback detection is disabled.!
+[log] The game in 'sacra-pasta' seems to be an unknown game variant.
+[log] 
+[log] Please report the following data to the ScummVM team at
+[log] https://bugs.scummvm.org/ along with the name of the game you tried to add and
+[log] its version, language, etc.:
+[log] 
+[log] Matched game IDs for the ags engine: ags-fallback
+[log] 
+[log]   {"sacrapasta.ags", 0, "70267d8444bd8cb063dd25eb04a0cfe4", 11259788},
+[log] 
+[log] GameID                         Description                                                Full Path
+[log] ------------------------------ ---------------------------------------------------------- ---------------------------------------------------------
+[log] ags:ags                        Unknown AGS game (sacrapasta.ags)                          /data/games/sacra-pasta
+[log] Found %d voices 0
+[debug] Downloading %s /data/translations.dat
+[log] Found %d voices 0
+[error] WARNING: No voice is available for language: en!
+[warning] The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet)
+[debug] Downloading %s /data/gui-icons/index.json
+[debug] Cache hit for %s /data/gui-icons/index.json
+[debug] Downloading %s /data/shaders.dat
+[warning] [.WebGL-0xec005bce00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[log] User picked target 'ags' (engine ID 'ags', game ID 'ags')...
+[error] WARNING: No voice is available for language: en!
+[log] Running Unknown AGS game (sacrapasta.ags)
+[log] sacrapasta.ags: 70267d8444bd8cb063dd25eb04a0cfe4, 11259788 bytes.
+[error] WARNING: No voice is available for language: en!
+[debug] Downloading %s /data/scummmodern.zip
+[debug] Downloading %s /data/residualvm.zip
+[debug] Downloading %s /data/scummremastered.zip
+[debug] Downloading %s /data/scummclassic.zip
+[debug] Downloading %s /data/helpdialog.zip
+[error] WARNING: TODO: SetCurrentDirectory: /data/games/sacra-pasta!
+[warning] [.WebGL-0xec005bce00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[midi] resolved, outputs: 0
+[log] Initializing backend libs
+[log] Initializing game data
+[log] Opened game data file: game28.dta
+[log] Game data version: 3060114
+[log] Compiled with: 3.6.1.30
+[log] Startup directory: ./
+[log] Data directory: ./
+[log] Setting up game configuration
+[log] Was not able to init voice pack 'speech.vox': file not found or of unknown format.
+[log] Initializing TTF renderer
+[log] Initializing mouse: number of buttons reported is 3
+[log] Initialize path finder library
+[log] Game title: 'Hotel Paradiso: Sacra Pasta'
+[log] Game uid (old format): `9130714`
+[log] Game guid: '{6b7a3c51-913a-4f0e-8d1c-5ac7a9a50714}'
+[log] Game GUI version: 119
+[log] Requested script API: v3.6.1 (3060100), compat level: v3.6.1 (3060100)
+[log] Game native resolution: 640 x 400 (32 bit)
+[log] Checking for disk space
+[log] Graphic settings: driver: OGL, windowed: no, screen size: 0 x 0, game scale: proportional
+[log] Graphic settings: refresh rate (optional): 0, vsync: 0
+[log] Requested graphics driver 'OGL' not found, will try existing drivers instead
+[warning] [.WebGL-0xec005bce00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels
+[log] Graphics driver set: ScummVM 2D renderer
+[log] Graphics mode set: 640 x 400 (32-bit) fullscreen desktop, on display 0
+[log] Graphics mode set: refresh rate (optional): 0, vsync: 0
+[error] WARNING: movement control not supported, mouse control can't be enabled!
+[log] Mouse speed control: enabled, unit: 1.000000, user value: 1.000000
+[log] Multitasking mode set: 0
+[log] Setting up window
+[log] Multitasking mode set: 0
+[log] Initialize sprites
+[log] Engine initialization complete
+[log] Starting game
+[warning] [.WebGL-0xec005bce00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)
+canvas: {"x":0,"y":0,"width":1280,"height":800}

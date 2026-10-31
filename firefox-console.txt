@@ -1,0 +1,37 @@
+[log] 1:06:43 PM Downloading ScummVM...
+[log] 1:06:43 PM Preparing... 
+[log] 1:06:44 PM All downloads complete.
+[log] 1:06:44 PM Running...
+[debug] Downloading /data/index.json
+[debug] Downloading /data/games/index.json
+[error] WARNING: FSNode::createReadStream: 'scummvm.ini' does not exist!
+[log] Default configuration file missing, creating a new one
+[log] Found 0 voices
+[debug] Downloading /data/gui-icons/index.json
+[debug] Downloading /data/games/index.json
+[debug] Cache hit for /data/games/index.json
+[debug] Downloading /data/translations.dat
+[error] WARNING: No voice is available for language: en!
+[debug] Downloading /data/gui-icons/index.json
+[debug] Cache hit for /data/gui-icons/index.json
+[debug] Downloading /data/shaders.dat
+[midi] resolved, outputs: 0
+[log] User picked target 'tentacle' (engine ID 'scumm', game ID 'tentacle')...
+[error] WARNING: No voice is available for language: en!
+[debug] Downloading /data/games/hotel-paradiso/index.json
+[debug] Downloading /data/games/hotel-paradiso/tentacle.000
+[error] WARNING: Engine_SCUMM_create: No unique game candidate found, using first one!
+[error] Your game version appears to be unknown. Please, report the following data to the
+[error] ScummVM team along with the name of the game you tried to add and its version,
+[error] language, etc.:
+[error]   SCUMM gameid 'tentacle', file 'tentacle.000', MD5 'd309934c3bc41d08158bb57643b5086a'
+[error] 
+[error] WARNING: No voice is available for language: en!
+[debug] Downloading /data/scummmodern.zip
+[debug] Downloading /data/residualvm.zip
+[debug] Downloading /data/scummremastered.zip
+[debug] Downloading /data/scummclassic.zip
+[debug] Downloading /data/helpdialog.zip
+[debug] Downloading /data/games/hotel-paradiso/tentacle.001
+[error] WARNING: No voice is available for language: en!
+canvas: {"x":0,"y":0,"width":1280,"height":800}
