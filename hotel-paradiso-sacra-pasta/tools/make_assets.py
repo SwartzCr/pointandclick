@@ -45,28 +45,30 @@ def guest_views():
 
 
 def khuc_views():
-    import khuc_sprite as K
-    v = K.views()
-    st = v['stand']
-    walk = {'front': [spr('khuc_front_stand', st['front'])] + [spr('khuc_front_walk%d' % i, f) for i, f in enumerate(v['walk_front'])],
-            'side': [spr('khuc_side_stand', st['side'])] + [spr('khuc_side_walk%d' % i, f) for i, f in enumerate(v['walk_side'])],
-            'back': [spr('khuc_back_stand', st['back'])] + [spr('khuc_back_walk%d' % i, f) for i, f in enumerate(v['walk_back'])]}
+    """Chuk, from the second set of sheets (art_src/cast_v2)."""
+    import cast_v2
+    from khuc_sprite import _frame as F
+    c = cast_v2.chuk()
+    walk = {'front': [spr('khuc_front_stand', F(c['front']))] + [spr('khuc_front_walk%d' % i, F(f)) for i, f in enumerate(c['walk_front'])],
+            'side': [spr('khuc_side_stand', F(c['side']))] + [spr('khuc_side_walk%d' % i, F(f)) for i, f in enumerate(c['walk'])],
+            'back': [spr('khuc_back_stand', F(c['back']))] + [spr('khuc_back_walk%d' % i, F(f)) for i, f in enumerate(c['walk_back'])]}
     loops = [[(f, 0, False) for f in walk['front']],
              [(f, 0, True) for f in walk['side']],
              [(f, 0, False) for f in walk['side']],
              [(f, 0, False) for f in walk['back']]]
-    talkf = [walk['front'][0], spr('khuc_front_talk1', v['talk_front'][1])]
-    talks = [walk['side'][0], spr('khuc_side_talk1', v['talk_side'][1])]
+    talkf = [walk['front'][0], spr('khuc_front_talk1', F(c['talk_front']))]
+    talks = [walk['side'][0], spr('khuc_side_talk1', F(c['talk_side']))]
     tl = [[(f, 0, False) for f in talkf], [(f, 0, True) for f in talks], [(f, 0, False) for f in talks],
           [(walk['back'][0], 0, False)]]
-    play = [spr('khuc_play%d' % k, f) for k, f in enumerate(v['play'])]
-    raise_ = spr('khuc_raise', v['raise_'])
-    crank = spr('khuc_crank', v['crank'])
+    play = [spr('khuc_play%d' % k, F(c['play'][0], bob=b)) for k, b in enumerate((0, 1, 0, 1))]
+    raise_ = spr('khuc_raise', F(c['raise_']))
+    crank = [spr('khuc_crank%d' % k, F(f)) for k, f in enumerate(c['crank'])]
     blank = spr('blank_char', Image.new('RGBA', (2, 2), (0, 0, 0, 0)))
     return [dict(name='VKHUC', loops=loops), dict(name='VKTALK', loops=tl),
             dict(name='VKPLAY', loops=[[(f, 2, False) for f in play]] * 4),
             dict(name='VKRAISE', loops=[[(raise_, 0, False)]] * 4),
-            dict(name='VKCRANK', loops=[[(crank, 0, False)], [(crank, 0, True)], [(crank, 0, False)], [(crank, 0, False)]]),
+            dict(name='VKCRANK', loops=[[(crank[0], 0, False)], [(f, 3, True) for f in crank],
+                                        [(f, 3, False) for f in crank], [(crank[0], 0, False)]]),
             dict(name='VBLANK', loops=[[(blank, 0, False)]] * 4)]
 
 

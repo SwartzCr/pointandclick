@@ -129,6 +129,16 @@
       "guest_back_walk3",
       0,
       false
+     ],
+     [
+      "guest_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_back_walk5",
+      0,
+      false
      ]
     ]
    ]
@@ -308,6 +318,16 @@
      ],
      [
       "guest_B_back_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_B_back_walk5",
       0,
       false
      ]
@@ -491,6 +511,16 @@
       "guest_U_back_walk3",
       0,
       false
+     ],
+     [
+      "guest_U_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_U_back_walk5",
+      0,
+      false
      ]
     ]
    ]
@@ -670,6 +700,16 @@
      ],
      [
       "guest_BU_back_walk3",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk4",
+      0,
+      false
+     ],
+     [
+      "guest_BU_back_walk5",
       0,
       false
      ]
@@ -1089,28 +1129,38 @@
    "loops": [
     [
      [
-      "khuc_crank",
+      "khuc_crank0",
       0,
       false
      ]
     ],
     [
      [
-      "khuc_crank",
-      0,
+      "khuc_crank0",
+      3,
+      true
+     ],
+     [
+      "khuc_crank1",
+      3,
       true
      ]
     ],
     [
      [
-      "khuc_crank",
-      0,
+      "khuc_crank0",
+      3,
+      false
+     ],
+     [
+      "khuc_crank1",
+      3,
       false
      ]
     ],
     [
      [
-      "khuc_crank",
+      "khuc_crank0",
       0,
       false
      ]
@@ -3054,6 +3104,8 @@
   "guest_back_walk1",
   "guest_back_walk2",
   "guest_back_walk3",
+  "guest_back_walk4",
+  "guest_back_walk5",
   "guest_front_talk1",
   "guest_side_talk1",
   "guest_B_front_stand",
@@ -3073,6 +3125,8 @@
   "guest_B_back_walk1",
   "guest_B_back_walk2",
   "guest_B_back_walk3",
+  "guest_B_back_walk4",
+  "guest_B_back_walk5",
   "guest_B_front_talk1",
   "guest_B_side_talk1",
   "guest_U_front_stand",
@@ -3092,6 +3146,8 @@
   "guest_U_back_walk1",
   "guest_U_back_walk2",
   "guest_U_back_walk3",
+  "guest_U_back_walk4",
+  "guest_U_back_walk5",
   "guest_U_front_talk1",
   "guest_U_side_talk1",
   "guest_BU_front_stand",
@@ -3111,6 +3167,8 @@
   "guest_BU_back_walk1",
   "guest_BU_back_walk2",
   "guest_BU_back_walk3",
+  "guest_BU_back_walk4",
+  "guest_BU_back_walk5",
   "guest_BU_front_talk1",
   "guest_BU_side_talk1",
   "guest_gesture0",
@@ -3138,7 +3196,8 @@
   "khuc_play2",
   "khuc_play3",
   "khuc_raise",
-  "khuc_crank",
+  "khuc_crank0",
+  "khuc_crank1",
   "blank_char",
   "mini_front0",
   "mini_front1",

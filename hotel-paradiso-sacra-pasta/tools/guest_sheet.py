@@ -102,6 +102,14 @@ _necks = None
 
 
 def necklace_overlays():
+    import cast_v2
+    global _necks
+    if _necks is None:
+        _necks = cast_v2.necklaces()
+    return _necks
+
+
+def necklace_overlays_v1():
     """{(kind, view): (overlay at game scale, hat top, hat cx)}: the necklaces lifted
     off the 'wearing' figures by comparing them with the matching plain figure."""
     global _necks
@@ -243,6 +251,14 @@ def _talk(fig, view):
 
 
 def frames():
+    """All frames (the second set of sheets, art_src/cast_v2): stand, walk, poses.
+    poses: reach, bend, push, pull, sit, sit with an arm raised."""
+    import cast_v2
+    stand, walk, poses, _ = cast_v2.bellhop()
+    return stand, walk, poses
+
+
+def frames_v1():
     """All frames, as {name: image} plus ordered lists for the views."""
     side = _sheet('bellhop_walk_side.jpg')
     fb = _sheet('bellhop_walk_fb.jpg')
@@ -259,7 +275,8 @@ def frames():
 
 def guest_views(spr):
     """The AGS views for the guest in every outfit; spr(name, image) registers a sprite."""
-    stand, walk, poses = frames()
+    import cast_v2
+    stand, walk, poses, talk = cast_v2.bellhop()
     outfits = {'': {}, 'B': {'beads': True}, 'U': {'uv': True}, 'BU': {'beads': True, 'uv': True}}
     views = []
     for tag, kind in outfits.items():
@@ -271,8 +288,8 @@ def guest_views(spr):
         loops = [[(f, 0, False) for f in w['front']], [(f, 0, True) for f in w['side']],
                  [(f, 0, False) for f in w['side']], [(f, 0, False) for f in w['back']]]
         views.append(dict(name='VGUEST' + tag, loops=loops))
-        tf = [w['front'][0], spr('guest%s_front_talk1' % sfx, _frame(_wear(_talk(stand['front'], 'front'), 'front', kind)))]
-        ts = [w['side'][0], spr('guest%s_side_talk1' % sfx, _frame(_wear(_talk(stand['side'], 'side'), 'side', kind)))]
+        tf = [w['front'][0], spr('guest%s_front_talk1' % sfx, _frame(_wear(talk['front'], 'front', kind)))]
+        ts = [w['side'][0], spr('guest%s_side_talk1' % sfx, _frame(_wear(talk['side'], 'side', kind)))]
         tl = [[(f, 0, False) for f in tf], [(f, 0, True) for f in ts], [(f, 0, False) for f in ts],
               [(w['back'][0], 0, False)]]
         views.append(dict(name='VGTALK' + tag, loops=tl))
@@ -286,7 +303,7 @@ def guest_views(spr):
 def seated(decree=False):
     """The guest sitting (for the Pope Seat), at the Crypt's scale."""
     poses = frames()[2]
-    p = poses[4 if decree else 3]
+    p = poses[5 if decree else 4]
     k = 0.62
     p = p.resize((round(p.width * k), round(p.height * k)), Image.LANCZOS)
     p.putalpha(p.getchannel('A').point(lambda v: 255 if v >= 128 else 0))
