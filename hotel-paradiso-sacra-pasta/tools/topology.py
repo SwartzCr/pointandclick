@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 SHAPES = ['trefoil', 'infinity', 'mobius', 'torus']
 NAMES = {'trefoil': 'three-lobed knot', 'infinity': 'figure-eight loop', 'mobius': 'twisted band',
-         'torus': 'stone ring'}
+         'torus': 'pasta ring'}
 MARBLE, MARBLE_HI, MARBLE_DK, EDGE = (222, 214, 196), (248, 244, 232), (160, 150, 136), (52, 40, 44)
 
 

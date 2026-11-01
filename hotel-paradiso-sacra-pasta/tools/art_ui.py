@@ -129,6 +129,6 @@ ICONS = {
     'iTrefoil': ('three-lobed knot', lambda: _topo('trefoil')),
     'iInfinity': ('figure-eight loop', lambda: _topo('infinity')),
     'iMobius': ('twisted band', lambda: _topo('mobius')),
-    'iTorus': ('stone ring', lambda: _topo('torus')),
+    'iTorus': ('pasta ring', lambda: _topo('torus')),
     'iCrank': ('crank', lambda: _crank_icon()),
 }
