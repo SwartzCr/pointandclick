@@ -116,12 +116,25 @@ def shape_icons():
         box = full_box(SLOTS[k])
         src = shape_src(shape, True)
         m = diff_mask(A, src, box, thresh=80, grow=1)
+        # not the board showing through the holes (nor its shadow): big patches of dark brown
+        c = np.asarray(src.crop(box)).astype(int)
+        dark = c.mean(-1) < 95
+        m &= ~ndimage.binary_opening(dark, iterations=3)
+        lab, n = ndimage.label(m)
+        if n:
+            m = lab == 1 + int(np.argmax(ndimage.sum(m, lab, range(1, n + 1))))
         spr = rgba_of(src.crop(box), m)
         spr = spr.crop(spr.getbbox())
         s = min((ICON_W - 4) / spr.width, (ICON_H - 4) / spr.height)
         spr = spr.resize((round(spr.width * s), round(spr.height * s)), Image.LANCZOS)
         a = np.asarray(spr).copy()
         a[..., 3] = np.where(a[..., 3] > 120, 255, 0)
+        # a dark outline all round, holes included, like the other icons
+        inside = a[..., 3] > 0
+        ring = ndimage.binary_dilation(inside) & ~inside
+        a = np.pad(a, ((1, 1), (1, 1), (0, 0)))
+        ring = np.pad(ndimage.binary_dilation(np.pad(inside, 1)) & ~np.pad(inside, 1), 0)
+        a[ring] = (58, 36, 26, 255)
         spr = Image.fromarray(a, 'RGBA')
         icon = canvas(ICON_W, ICON_H)
         icon.alpha_composite(spr, ((ICON_W - spr.width) // 2, (ICON_H - spr.height) // 2))
