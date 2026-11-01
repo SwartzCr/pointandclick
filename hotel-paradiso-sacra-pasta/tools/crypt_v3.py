@@ -304,6 +304,13 @@ def crypt():
     if n:
         body = lab == 1 + int(np.argmax(ndimage.sum(body, lab, range(1, n + 1))))
     body = ndimage.binary_dilation(body, iterations=1)
+    # and everything inside the throne's outline (its side panel and seat aren't gold or red enough)
+    pts = [(200, 100), (205, 70), (232, 70), (290, 32), (350, 70), (385, 70), (392, 100), (392, 395),
+           (384, 405), (382, 612), (362, 640), (252, 655), (230, 636), (96, 608), (62, 600), (48, 380),
+           (120, 345), (200, 345)]
+    outline = Image.new('L', (sx1 - sx0, sy1 - sy0))
+    ImageDraw.Draw(outline).polygon([(470 + x / 4 - sx0, 90 + y / 4 - sy0) for x, y in pts], fill=255)
+    body |= np.asarray(outline) > 0
     ea[..., 3] = body * 255
     empty = Image.fromarray(ea, 'RGBA')
     # the crank in the side socket, from picture I (only its side crank, not the one up top)
