@@ -147,6 +147,9 @@ def main():
     spr('nave_wrecked', NB.wrecked(rooms[0][1]))
     for name, im in CARDS.cards().items():
         spr(name, im)
+    import cast_v2
+    spr('lie_bellhop', cast_v2.bellhop_extras()[1][1])        # carried off overhead (room-service ending)
+    spr('lie_chuk', cast_v2.chuk()['extras']['lying'])
     import hotel_mini
     for k, im in enumerate(hotel_mini.loading_screens()):
         spr('hp_loading%d' % k, im)

@@ -207,9 +207,17 @@ def crypt():
     if n:
         m = lab == 1 + int(np.argmax(ndimage.sum(m, lab, range(1, n + 1))))
     m = ndimage.binary_dilation(m, iterations=1)
+    # just the hat: not the ropes under it, nor the bit of candle sconce at its left
+    core = ndimage.binary_erosion(m, iterations=2)
+    lab, n = ndimage.label(core)
+    if n:
+        core = lab == 1 + int(np.argmax(ndimage.sum(core, lab, range(1, n + 1))))
+    hat_only = ndimage.binary_dilation(core, iterations=3) & m
     hat = Image.fromarray(cv2.cvtColor(bgr, cv2.COLOR_BGR2RGB)).crop(HAT).convert('RGBA')
-    hat.putalpha(Image.fromarray((m * 255).astype(np.uint8)))
-    hb = hat.getbbox()
+    hb = Image.fromarray((m * 255).astype(np.uint8)).getbbox()     # the same box as before (the script places it)
+    yy, xx = np.mgrid[0:m.shape[0], 0:m.shape[1]]
+    hat_only &= ~((xx < hb[0] + 7) & (yy > hb[1] + 46))             # the sconce at its lower left
+    hat.putalpha(Image.fromarray((hat_only * 255).astype(np.uint8)))
     hat = hat.crop(hb)
     hat_x, hat_y = hx0 + hb[0], hy0 + hb[1]
     hm = np.zeros(bgr.shape[:2], np.uint8)
