@@ -174,6 +174,7 @@ def pose(name):
         d &= ~purple & ~((xx >= 118) & (yy >= 270))
     if name == 'guest_cheer':
         d &= np.where(yy < 200, xx > 486, xx > 478)
+        d &= ~((yy >= 195) & (yy < 234) & (xx < 488))      # the end of Chuk's crank, by his knee
     im = Image.fromarray(np.dstack([p, d * 255]).astype(np.uint8), 'RGBA')
     bb = im.getbbox()
     return im.crop(bb), x0 + bb[0], y0 + bb[1]
