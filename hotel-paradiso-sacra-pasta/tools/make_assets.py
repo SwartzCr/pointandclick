@@ -160,10 +160,9 @@ def main():
              ('font3.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 12, 'none'),
              ('font4.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf', 22, 'none'),   # newspaper masthead
              ('font5.wfn', '/usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf', 12, 'none')]   # newsprint
-    # SPEECH_FONT=jersey: a test build with Jersey 10 (a pixel font) for spoken text
-    if os.environ.get('SPEECH_FONT') == 'jersey':
-        jersey = os.path.join(os.path.dirname(__file__), '..', 'art_src', 'fonts', 'Jersey10-Regular.ttf')
-        fonts[1] = ('font1.wfn', jersey, 18, 'auto')
+    # spoken text: Jersey 10, a pixel font (art_src/fonts, SIL Open Font License)
+    jersey = os.path.join(os.path.dirname(__file__), '..', 'art_src', 'fonts', 'Jersey10-Regular.ttf')
+    fonts[1] = ('font1.wfn', jersey, 18, 'auto')
     os.makedirs(os.path.join(ROOT, 'fonts'))
     for fname, path, size, outl in fonts:
         with open(os.path.join(ROOT, 'fonts', fname), 'wb') as f:
