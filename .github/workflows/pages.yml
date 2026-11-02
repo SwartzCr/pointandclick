@@ -101,6 +101,13 @@ jobs:
              $site/data/games/hotel-paradiso/
           mkdir -p $site/data/games/sacra-pasta
           cp hotel-paradiso-sacra-pasta/dist/sacrapasta.ags $site/data/games/sacra-pasta/
+          # test builds (not linked from the landing page): dist-test/<name>/ -> data/games/sacra-pasta-<name>/
+          for d in hotel-paradiso-sacra-pasta/dist-test/*/; do
+            [ -f "$d/sacrapasta.ags" ] || continue
+            n=$(basename "$d")
+            mkdir -p $site/data/games/sacra-pasta-$n
+            cp "$d/sacrapasta.ags" $site/data/games/sacra-pasta-$n/
+          done
           # the data folder is served over HTTP from an index; rebuild it with the game in
           python3 scummvm/dists/emscripten/build-make_http_index.py $site/data
           cp hotel-paradiso-scummc/web/index.html $site/index.html
