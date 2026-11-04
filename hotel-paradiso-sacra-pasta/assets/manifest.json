@@ -2219,8 +2219,8 @@
     {
      "script": "oFork",
      "name": "painting \"Spinning Fork\"",
-     "x": 62,
-     "y": 118,
+     "x": 64,
+     "y": 120,
      "visible": true,
      "baseline": 1,
      "clickable": true,

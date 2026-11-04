@@ -60,11 +60,9 @@ def tone(bgr, smooth=True):
 
 def load():
     import cv2
-    im = tone(cv2.imread(SRC))
-    # paint out the generator's sparkle in the bottom-right corner with the floor beside it
-    im.paste(im.crop((582, 258, 608, 288)), (608, 258))
-    im.paste(im.crop((582, 258, 590, 288)), (632, 258))
-    return im
+    # (the generator's sparkle in the corner is gone from v3.png: patched from a regenerated
+    # picture that has it off the edge)
+    return tone(cv2.imread(SRC))
 
 
 # the three state pictures, each lined up on v3.png (affine fits from SIFT matches, 1552 -> 1536 wide)
@@ -75,6 +73,10 @@ VARIANTS = {
     'D': ('v3-D-box-open-scales-empty.png', [[0.998, 0.0007, -6.6169], [-0.0004, 1.0084, 0.1291]]),  # box open and empty, scales empty
     'E': ('v3-E-rigatone.png', [[0.9984, 0.0, -6.8929], [-0.0002, 1.0076, 0.0263]]),             # box open, golden rigatone inside
     # the Paragraph Spinner's words, four to a picture (and no little table by the sculpture)
+    'K1': ('v4-fork1.png', [[1.1089, -0.0002, 4.9382], [-0.0006, 0.9088, -4.6172]]),     # the Spinning Fork, frame 1
+    'K2': ('v4-fork2.png', [[1.1089, 0.0001, 4.8986], [0.0001, 0.908, -4.917]]),     # the Spinning Fork, frame 2
+    'K3': ('v4-fork3.png', [[1.1073, 0.0031, 4.8433], [-0.0003, 0.9077, -4.4399]]),     # the Spinning Fork, frame 3
+    'K4': ('v4-fork4.png', [[1.1098, -0.0003, 4.3119], [0.0004, 0.9077, -4.8382]]),     # the Spinning Fork, frame 4
     'F1': ('v3-F1-some-forks-look-raw.png', [[0.9999, -0.0018, -6.9143], [0.0006, 1.0093, -0.7931]]),
     'F2': ('v3-F2-no-bread-seem-bland.png', [[0.9989, -0.0007, -7.0147], [0.0003, 1.0118, 0.6126]]),
     'F3': ('v3-F3-all-pasta-is-holy.png', [[0.998, -0.0013, -6.0896], [0.0007, 1.0095, -0.8741]]),
@@ -420,9 +422,18 @@ def nave():
     sc.obj('oPendant', 'UV pendant', {'on': pend}, px, py + pend.height, visible=False, baseline=3)
 
     # ---------- A8: the Spinning Fork, in the empty frame by the door (from A)
-    fork, fx, fy = cut(orig, A, (60, 40, 112, 120))
-    frames = {('f%d' % k): fork for k in range(8)}
-    sc.obj('oFork', 'painting "Spinning Fork"', frames, fx, fy + fork.height, baseline=1, state='f0')
+    # four painted frames of the fork going round (v4-fork1..4), each shown twice
+    box = (62, 40, 116, 122)
+    cuts = [cut(orig, variant('K%d' % (k + 1), True), box, thresh=50) for k in range(4)]
+    fx = min(c[1] for c in cuts); fy = min(c[2] for c in cuts)
+    fw = max(c[1] + c[0].width for c in cuts) - fx; fh = max(c[2] + c[0].height for c in cuts) - fy
+    pics = []
+    for spr, x, y in cuts:
+        c = Image.new('RGBA', (fw, fh), (0, 0, 0, 0))
+        c.alpha_composite(spr, (x - fx, y - fy))
+        pics.append(c)
+    frames = {('f%d' % k): pics[k // 2] for k in range(8)}
+    sc.obj('oFork', 'painting "Spinning Fork"', frames, fx, fy + fh, baseline=1, state='f0')
     sc.fork_frames = ['f%d' % k for k in range(8)]
 
     # ---------- writing that only ultraviolet light shows
