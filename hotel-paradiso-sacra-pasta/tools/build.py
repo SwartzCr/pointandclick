@@ -119,7 +119,9 @@ def main():
     things.append('#define SPR_PLATE %d' % num['plate'])
     things.append('#define SPR_HP_SCREEN %d' % num['hp_screen'])
     things.append('#define SPR_NAVE_WRECKED %d' % num['nave_wrecked'])
-    for name in ('card_roomservice', 'card_freeplay', 'card_tinyfolk', 'card_end', 'lie_bellhop', 'lie_chuk'):
+    for name in ('card_roomservice', 'card_freeplay', 'card_tinyfolk', 'card_end', 'lie_bellhop', 'lie_chuk',
+                 'mm_sky', 'mm_hills', 'mm_ground', 'mm_splat', 'mm_bowl', 'mm_fork', 'mm_colander',
+                 'mm_parmesan', 'mm_bread', 'mm_ball0', 'mm_ball1', 'mm_ball2', 'mm_ball3'):
         things.append('#define SPR_%s %d' % (name.upper(), num[name]))
     for k in range(6):
         things.append('#define SPR_HP_LOAD%d %d' % (k, num['hp_loading%d' % k]))

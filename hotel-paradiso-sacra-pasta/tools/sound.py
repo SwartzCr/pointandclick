@@ -231,6 +231,20 @@ def sfx_bleeps():
     return mix(*parts)
 
 
+def sfx_jump():
+    """A quick rising blip, for the meatball's hop."""
+    n = int(0.12 * SR)
+    f = np.linspace(330, 880, n)
+    w = np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR))
+    return w * np.linspace(1, 0, n) * 0.25
+
+
+def sfx_splat():
+    """A wet thud, when the meatball hits something."""
+    return mix((0, noise(0.18) * env(int(0.18 * SR), 0.002, 0.05, 0.3, 0.1) * 0.5),
+               (0, tone(110, 0.2, 'sine') * env(int(0.2 * SR), 0.002, 0.1, 0.2, 0.08) * 0.6))
+
+
 def sfx_sad():
     return mix((0, tone(392, 0.2, 'square') * 0.3), (0.22, tone(370, 0.2, 'square') * 0.3),
                (0.44, tone(349, 0.2, 'square') * 0.3), (0.66, tone(330, 0.5, 'square') * env(int(0.5 * SR), 0.01, 0.3, 0.4, 0.2) * 0.3))
@@ -368,7 +382,7 @@ EFFECTS = {
     'aShimmer': sfx_shimmer, 'aRattle': sfx_rattle, 'aPaper': sfx_paper, 'aStone': sfx_stone,
     'aClink': sfx_clink, 'aCoinIn': sfx_coin_in, 'aCrank': sfx_crank, 'aWhoosh': sfx_whoosh,
     'aBleeps': sfx_bleeps, 'aSad': sfx_sad, 'aFanfare': sfx_fanfare, 'aSlurp': sfx_slurp,
-    'aPhone': sfx_phone,
+    'aPhone': sfx_phone, 'aJump': sfx_jump, 'aSplat': sfx_splat,
 }
 MUSIC = {'aMusTitle': music_title, 'aMusCrypt': music_crypt, 'aMusEnding': music_ending}
 

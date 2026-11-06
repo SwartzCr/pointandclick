@@ -475,331 +475,360 @@ speaker as they are. Then upload the file and ask for it to be imported.
 - `s362` **Chuk:** Worthier than anyone ever. Sit, your holiness-to-be.
 - `s363` **Bellhop:** See you later.
 
+## Meatball Game
+
+- `s364` **Text:** SCORE %06d
+- `s365` **Text:** HI KHC 069990
+- `s366` **Text:** HI KHC 069990
+- `s367` **Text:** GET READY!
+- `s368` **Text:** GAME OVER
+- `s369` **Text:** INTO THE BOWL! +50000
+- `s370` **Text:** MEATBALL MADNESS
+- `s371` **Text:** Click, Space or Up to jump. Roll the meatball home!
+- `s372` **Text:** NEW HIGH SCORE!
+- `s373` **Text:** ENTER YOUR NAME
+- `s374` **Text:** %c  %c  %c
+- `s375` **Text:** HIGH SCORES
+- `s376` **Text:** 1  FSM
+- `s377` **Text:** %06d
+- `s378` **Text:** %06d
+- `s379` **Text:** 2  KHC
+- `s380` **Text:** 069990
+- `s381` **Text:** 069990
+- `s382` **Text:** 3  KHC
+- `s383` **Text:** 069980
+- `s384` **Text:** 069980
+- `s385` **Text:** 4  KHC
+- `s386` **Text:** 069970
+- `s387` **Text:** 069970
+- `s388` **Text:** ALL HAIL THE MEATBALL MASTER!
+
 ## MEATBALL MADNESS
 
-- `s364` **Bellhop:** I've beaten Meatball Madness. My wrists have retired.
-- `s365` **Bellhop:** INSERT TOKEN, it says. I don't have one.
-- `s366` **Narration:** MEATBALL MADNESS! ROLL THE MEATBALL HOME!
-- `s367` **Bellhop:** Left. Right. Round the fork. Under the colander...
-- `s368` **Bellhop:** Past the parmesan avalanche, over the garlic bread bridge, and...
-- `s369` **Bellhop:** Into the bowl!
-- `s370` **Narration:** YOU WIN! ALL HAIL THE MEATBALL MASTER!
-- `s371` **Chuk:** Was that... the Meatball Madness victory jingle?
-- `s372` **Chuk:** Nobody beats Meatball Madness. I've been trying since they dug the Crypt.
-- `s373` **Chuk:** You're a true gamer, pilgrim.
-- `s374` **Chuk:** Fine. Take the Rex Seat. Beat my high score, and one of us might finally see the ending.
+- `s389` **Bellhop:** I've beaten Meatball Madness. My wrists have retired.
+- `s390` **Bellhop:** INSERT TOKEN, it says. I don't have one.
+- `s391` **Bellhop:** Splat. Hang on, the token just rolled back out of the coin return.
+- `s392` **Chuk:** (without looking up) Coin return's broken. That cabinet has never kept a token in its life.
+- `s393` **Chuk:** Why do you think the sign says nobody's beaten it? Everyone just keeps trying.
+- `s394` **Bellhop:** Splat again. And the token's back again. I could do this all night.
+- `s395` **Bellhop:** Token's back. The cabinet believes in me, even if the meatball doesn't.
+- `s396` **Bellhop:** FSM. For the Flying Spaghetti Monster. When in Rome.
+- `s397` **Chuk:** Was that... the Meatball Madness victory jingle?
+- `s398` **Chuk:** Nobody beats Meatball Madness. I've been trying since they dug the Crypt.
+- `s399` **Chuk:** You're a true gamer, pilgrim.
+- `s400` **Chuk:** Fine. Take the Rex Seat. Beat my high score, and one of us might finally see the ending.
 
 ## T. Rex
 
-- `s375` **Chuk:** Busy. Level nine. I'm going to beat this and see the ending if it kills me.
-- `s376` **Bellhop:** I've seen the ending. It's a chicken.
-- `s377` **Bellhop:** Chuk's high score is 99,999. Here goes.
-- `s378` **Bellhop:** Jump. Jump. Duck. Jump. A pterodactyl! Duck!
-- `s379` **Bellhop:** 99,998... 99,999... 100,000!
-- `s380` **Narration:** NEW HIGH SCORE! PREPARE FOR THE ENDING!
-- `s381` **Narration:** THE METEOR FALLS... BUT T. REX RUNS FASTER! T. REX SURVIVES!
-- `s382` **Narration:** 65 MILLION YEARS LATER...
-- `s383` **Narration:** T. REX HAS EVOLVED INTO: A CHICKEN. THE END.
-- `s384` **Bellhop:** It outran the meteor, survived extinction... and became a chicken.
-- `s385` **Chuk:** All those years. For a chicken.
-- `s386` **Chuk:** It cheated the meteor. Cheated extinction itself. And its reward was to become... a chicken.
-- `s387` **Chuk:** I thought my theology was solid, pilgrim. Now I'm not so sure.
-- `s388` **Chuk:** Maybe it's better to burn out in one glorious, fiery explosion than to grow old and become... a chicken.
-- `s389` **Chuk:** I'm sorry, pilgrim. I've been so busy with games, I never finished setting up the Crypt.
-- `s390` **Chuk:** Wait here.
-- `s391` **Chuk:** The shapes for the Pasta Identification board. I never got round to putting them up.
-- `s392` **Bellhop:** These aren't pasta. They're... geometry.
-- `s393` **Chuk:** They're the new pastas. Very modern. It was in all the papers.
-- `s394` **Chuk:** And the computer. I never even plugged it in.
-- `s395` **Chuk:** There. It's got the news on it, and a game or two.
-- `s396` **Chuk:** I'll be by the Pope Seat when you need me.
+- `s401` **Chuk:** Busy. Level nine. I'm going to beat this and see the ending if it kills me.
+- `s402` **Bellhop:** I've seen the ending. It's a chicken.
+- `s403` **Bellhop:** Chuk's high score is 99,999. Here goes.
+- `s404` **Bellhop:** Jump. Jump. Duck. Jump. A pterodactyl! Duck!
+- `s405` **Bellhop:** 99,998... 99,999... 100,000!
+- `s406` **Narration:** NEW HIGH SCORE! PREPARE FOR THE ENDING!
+- `s407` **Narration:** THE METEOR FALLS... BUT T. REX RUNS FASTER! T. REX SURVIVES!
+- `s408` **Narration:** 65 MILLION YEARS LATER...
+- `s409` **Narration:** T. REX HAS EVOLVED INTO: A CHICKEN. THE END.
+- `s410` **Bellhop:** It outran the meteor, survived extinction... and became a chicken.
+- `s411` **Chuk:** All those years. For a chicken.
+- `s412` **Chuk:** It cheated the meteor. Cheated extinction itself. And its reward was to become... a chicken.
+- `s413` **Chuk:** I thought my theology was solid, pilgrim. Now I'm not so sure.
+- `s414` **Chuk:** Maybe it's better to burn out in one glorious, fiery explosion than to grow old and become... a chicken.
+- `s415` **Chuk:** I'm sorry, pilgrim. I've been so busy with games, I never finished setting up the Crypt.
+- `s416` **Chuk:** Wait here.
+- `s417` **Chuk:** The shapes for the Pasta Identification board. I never got round to putting them up.
+- `s418` **Bellhop:** These aren't pasta. They're... geometry.
+- `s419` **Chuk:** They're the new pastas. Very modern. It was in all the papers.
+- `s420` **Chuk:** And the computer. I never even plugged it in.
+- `s421` **Chuk:** There. It's got the news on it, and a game or two.
+- `s422` **Chuk:** I'll be by the Pope Seat when you need me.
 
 ## CONFESS
 
-- `s397` **Narration:** ABSOLVED ALREADY. GO IN PEACE. INSERT NO MORE SINS.
-- `s398` **Narration:** WELCOME TO CONFESS! CONFESS YOUR SINS TO WIN!
-- `s399` **Card title:** I stole a bellhop uniform from a hotel dresser.
-- `s400` **Card text:** I unscrewed a medicine cabinet mirror. With a screwdriver.
-- `s401` **Text:** I ate a candy bar from the minibar and didn't pay.
-- `s402` **Text:** I once put pineapple on pasta.
-- `s403` **Choice:** I'd rather not say.
-- `s404` **Bellhop:** I'd rather not say.
-- `s405` **Narration:** COWARD! GAME OVER.
-- `s406` **Bellhop:** I stole a bellhop uniform from a hotel dresser.
-- `s407` **Bellhop:** I unscrewed a medicine cabinet mirror. With a screwdriver.
-- `s408` **Bellhop:** I ate a candy bar from the minibar and didn't pay.
-- `s409` **Bellhop:** I once put pineapple on pasta.
-- `s410` **Narration:** UNFORGIVABLE! ALL PROGRESS LOST.
-- `s411` **Narration:** GOOD. MORE.
-- `s412` **Narration:** MORE! MORE SINS!
-- `s413` **Narration:** ABSOLVED!! HAVE A TOKEN.
+- `s423` **Narration:** ABSOLVED ALREADY. GO IN PEACE. INSERT NO MORE SINS.
+- `s424` **Narration:** WELCOME TO CONFESS! CONFESS YOUR SINS TO WIN!
+- `s425` **Card title:** I stole a bellhop uniform from a hotel dresser.
+- `s426` **Card text:** I unscrewed a medicine cabinet mirror. With a screwdriver.
+- `s427` **Text:** I ate a candy bar from the minibar and didn't pay.
+- `s428` **Text:** I once put pineapple on pasta.
+- `s429` **Choice:** I'd rather not say.
+- `s430` **Bellhop:** I'd rather not say.
+- `s431` **Narration:** COWARD! GAME OVER.
+- `s432` **Bellhop:** I stole a bellhop uniform from a hotel dresser.
+- `s433` **Bellhop:** I unscrewed a medicine cabinet mirror. With a screwdriver.
+- `s434` **Bellhop:** I ate a candy bar from the minibar and didn't pay.
+- `s435` **Bellhop:** I once put pineapple on pasta.
+- `s436` **Narration:** UNFORGIVABLE! ALL PROGRESS LOST.
+- `s437` **Narration:** GOOD. MORE.
+- `s438` **Narration:** MORE! MORE SINS!
+- `s439` **Narration:** ABSOLVED!! HAVE A TOKEN.
 
 ## Ending: room service for all
 
-- `s414` **Narration:** Room service for all!
-- `s415` **Chuk:** Room service for all?? Do you know what you've just done!
-- `s416` **Chuk:** They're going to send the clowns!
-- `s417` **Clown:** ROOM SERVICE!
-- `s418` **Chuk:** Put me down! I'm clergy!
+- `s440` **Narration:** Room service for all!
+- `s441` **Chuk:** Room service for all?? Do you know what you've just done!
+- `s442` **Chuk:** They're going to send the clowns!
+- `s443` **Clown:** ROOM SERVICE!
+- `s444` **Chuk:** Put me down! I'm clergy!
 
 ## Ending: all games are free play
 
-- `s419` **Narration:** All games are free play!
-- `s420` **Chuk:** FREE PLAY! You beautiful, beautiful Pope!
-- `s421` **Clown:** FREE PLAY!
-- `s422` **Chuk:** Hey! That's MY high score they're beating!
+- `s445` **Narration:** All games are free play!
+- `s446` **Chuk:** FREE PLAY! You beautiful, beautiful Pope!
+- `s447` **Clown:** FREE PLAY!
+- `s448` **Chuk:** Hey! That's MY high score they're beating!
 
 ## Ending: let's party
 
-- `s423` **Narration:** Let's party!
-- `s424` **Chuk:** Let's party? Hasn't that been what we've been doing this whole time?
-- `s425` **Chuk:** Look at the time. It's nearly strike anyway. Everything gets torn down in the morning.
-- `s426` **Chuk:** Come on, your holiness. One drink in the staff room before we have to tear it all down.
+- `s449` **Narration:** Let's party!
+- `s450` **Chuk:** Let's party? Hasn't that been what we've been doing this whole time?
+- `s451` **Chuk:** Look at the time. It's nearly strike anyway. Everything gets torn down in the morning.
+- `s452` **Chuk:** Come on, your holiness. One drink in the staff room before we have to tear it all down.
 
 ## The Pope Seat and the papal request
 
-- `s427` **Narration:** Comfy. But the hat only comes down by the crank, and the crank's missing.
-- `s428` **Narration:** There's just an empty socket on the side.
-- `s429` **Chuk:** Hold still, your holiness.
-- `s430` **Chuk:** Behold! The Hat is upon you!
-- `s431` **Chuk:** You beat my high score. And you solved every one of my puzzles. Nobody has ever done both.
-- `s432` **Chuk:** Nobody has ever done either, actually.
-- `s433` **Chuk:** So by the power of the Hat, I decree it: you are Pope! And every Pope gets one papal request.
-- `s434` **Choice:** "Room service for all!"
-- `s435` **Choice:** "All games are free play!"
-- `s436` **Choice:** "Let's party!"
+- `s453` **Narration:** Comfy. But the hat only comes down by the crank, and the crank's missing.
+- `s454` **Narration:** There's just an empty socket on the side.
+- `s455` **Chuk:** Hold still, your holiness.
+- `s456` **Chuk:** Behold! The Hat is upon you!
+- `s457` **Chuk:** You beat my high score. And you solved every one of my puzzles. Nobody has ever done both.
+- `s458` **Chuk:** Nobody has ever done either, actually.
+- `s459` **Chuk:** So by the power of the Hat, I decree it: you are Pope! And every Pope gets one papal request.
+- `s460` **Choice:** "Room service for all!"
+- `s461` **Choice:** "All games are free play!"
+- `s462` **Choice:** "Let's party!"
 
 ## Run Hotel
 
-- `s437` **Bellhop:** A game called HOTEL.EXE. Let's see...
+- `s463` **Bellhop:** A game called HOTEL.EXE. Let's see...
 
 ## The Daily Noodle
 
-- `s438` **Note title:** The Daily Noodle
-- `s439` **Note text:** NEW PASTAS BAFFLE DINERS! The Church of the Noodle has unveiled four new shapes, cut from pure geometry.[[OTTINI never end: follow one round and you cross the middle, like an eight. TORTINI have a single twist, and so only one side. ANELLI are plain rings, with a hole for your finger. And NODINI are tied in a knot of three loops that can never be undone.[[The Crypt's Pasta Identification board will be updated, says its keeper, after this level.[[Also inside: clowns spotted roaming the hotel. Be on the lookout for hijinks. Duck still missing.
+- `s464` **Note title:** The Daily Noodle
+- `s465` **Note text:** NEW PASTAS BAFFLE DINERS! The Church of the Noodle has unveiled four new shapes, cut from pure geometry.[[OTTINI never end: follow one round and you cross the middle, like an eight. TORTINI have a single twist, and so only one side. ANELLI are plain rings, with a hole for your finger. And NODINI are tied in a knot of three loops that can never be undone.[[The Crypt's Pasta Identification board will be updated, says its keeper, after this level.[[Also inside: clowns spotted roaming the hotel. Be on the lookout for hijinks. Duck still missing.
 
 ## Gustav on the phone
 
-- `s440` **Bellhop:** I dial zero.
-- `s441` **Gustav:** Front desk, Gustav speaking. How may I help you?
-- `s442` **Choice:** Gustav! It's me, from Room 714.
-- `s443` **Choice:** Gustav, do you know you're in a computer game?
-- `s444` **Choice:** Any tips for the pasta wall?
-- `s445` **Choice:** What's it like down there?
-- `s446` **Choice:** Never mind. Goodbye.
-- `s447` **Bellhop:** Gustav! It's me, from Room 714.
-- `s448` **Gustav:** Sir checked out hours ago. I have it in the ledger. Ninth floor, wasn't it?
-- `s449` **Gustav:** And yet here sir is, calling from 714. On a phone that is, if you'll forgive me, drawn.
-- `s450` **Bellhop:** Gustav, do you know you're in a computer game?
-- `s451` **Gustav:** Sir, I am the front desk. I am in whatever I am put in.
-- `s452` **Gustav:** Between ourselves, sir is in one too. And that one is on a computer in a crypt.
-- `s453` **Gustav:** I try not to think about who is playing that.
-- `s454` **Bellhop:** Any tips for the pasta wall?
-- `s455` **Gustav:** Read the paper, sir. There's a piece about the new pastas. We slid it under the door at considerable expense.
-- `s456` **Bellhop:** What's it like down there?
-- `s457` **Gustav:** Quiet, sir. The clowns have gone up to some sort of noodle church.
-- `s458` **Gustav:** They are still on duty, of course. Should sir require room service, wherever sir may be, sir need only ask for it.
-- `s459` **Gustav:** Out loud. With conviction. They will come.
-- `s460` **Gustav:** Also there is a duck in the lobby. Nobody knows whose. Nobody asks.
-- `s461` **Bellhop:** Never mind. Goodbye.
-- `s462` **Gustav:** Good night, sir. Do enjoy whichever party you are at.
+- `s466` **Bellhop:** I dial zero.
+- `s467` **Gustav:** Front desk, Gustav speaking. How may I help you?
+- `s468` **Choice:** Gustav! It's me, from Room 714.
+- `s469` **Choice:** Gustav, do you know you're in a computer game?
+- `s470` **Choice:** Any tips for the pasta wall?
+- `s471` **Choice:** What's it like down there?
+- `s472` **Choice:** Never mind. Goodbye.
+- `s473` **Bellhop:** Gustav! It's me, from Room 714.
+- `s474` **Gustav:** Sir checked out hours ago. I have it in the ledger. Ninth floor, wasn't it?
+- `s475` **Gustav:** And yet here sir is, calling from 714. On a phone that is, if you'll forgive me, drawn.
+- `s476` **Bellhop:** Gustav, do you know you're in a computer game?
+- `s477` **Gustav:** Sir, I am the front desk. I am in whatever I am put in.
+- `s478` **Gustav:** Between ourselves, sir is in one too. And that one is on a computer in a crypt.
+- `s479` **Gustav:** I try not to think about who is playing that.
+- `s480` **Bellhop:** Any tips for the pasta wall?
+- `s481` **Gustav:** Read the paper, sir. There's a piece about the new pastas. We slid it under the door at considerable expense.
+- `s482` **Bellhop:** What's it like down there?
+- `s483` **Gustav:** Quiet, sir. The clowns have gone up to some sort of noodle church.
+- `s484` **Gustav:** They are still on duty, of course. Should sir require room service, wherever sir may be, sir need only ask for it.
+- `s485` **Gustav:** Out loud. With conviction. They will come.
+- `s486` **Gustav:** Also there is a duck in the lobby. Nobody knows whose. Nobody asks.
+- `s487` **Bellhop:** Never mind. Goodbye.
+- `s488` **Gustav:** Good night, sir. Do enjoy whichever party you are at.
 
 ## HOTEL.EXE: things in the room
 
-- `s463` **Bellhop:** LOG OFF. Back to the Crypt.
-- `s464` **Bellhop:** I'm not going back in the bathroom. Some things you only do once.
-- `s465` **Bellhop:** Click. The weather. Sunny, with a chance of clowns.
-- `s466` **Bellhop:** Click. A cooking show. A man in a colander is shouting about rigatoni.
-- `s467` **Bellhop:** Click. A tiny bellhop, in a tiny Crypt, playing a tiny computer.
-- `s468` **Bellhop:** Click. Static. Even the TV needs a break from all this.
-- `s469` **Bellhop:** I close the curtains. Much better.
-- `s470` **Bellhop:** I peek out. The city at night, eight colours deep. A full moon.
-- `s471` **Bellhop:** Somewhere down there, a clown is parallel parking a very small car.
-- `s472` **Bellhop:** It's already shut.
-- `s473` **Bellhop:** I shut the minibar. Temptation averted.
-- `s474` **Bellhop:** It's already open. The candy bar is looking at me.
-- `s475` **Bellhop:** I open the minibar. Little bottles, and one candy bar.
-- `s476` **Bellhop:** Click. Click. It stays on. They only drew it one way.
-- `s477` **Bellhop:** I lie down for a quick pixel nap.
-- `s478` **Bellhop:** I wake up. Still in the game. Both of them.
-- `s479` **Bellhop:** The safe behind the painting. I'm not doing the safe again. I still dream about that code.
-- `s480` **Bellhop:** Through that door is the ninth floor, the Nave, Chuk, and eventually a computer with this game on it.
-- `s481` **Bellhop:** Best not.
-- `s482` **Bellhop:** I already did all that. It's a much smaller game the second time round.
-- `s483` **Bellhop:** The door of Room 714. There's a party upstairs I haven't been to yet. Well, I have, but he hasn't.
-- `s484` **Bellhop:** The TV. There are four channels, and they're all a bit much.
-- `s485` **Bellhop:** The bathroom. I'm not going back in there. Not after the medicine cabinet.
-- `s486` **Bellhop:** The dresser where I found the bellhop uniform. Small world. Small pixels.
-- `s487` **Bellhop:** The city at night. Somewhere out there, the clowns.
-- `s488` **Bellhop:** Curtains. The clowns are out there somewhere.
-- `s489` **Bellhop:** The minibar. I'd rather not relive the candy bar.
-- `s490` **Bellhop:** A lamp. It's on. It's always on in here.
-- `s491` **Bellhop:** The phone. Nobody's calling a computer game.
-- `s492` **Bellhop:** The nightstand. Empty, as I left it.
-- `s493` **Bellhop:** The deer painting, with the safe behind it. I know its tricks.
-- `s494` **Bellhop:** The bed. I could lie down, but then I'd have to play the whole thing again.
-- `s495` **Bellhop:** The coffee table. Mercifully empty.
-- `s496` **Bellhop:** It's very pixelly.
+- `s489` **Bellhop:** LOG OFF. Back to the Crypt.
+- `s490` **Bellhop:** I'm not going back in the bathroom. Some things you only do once.
+- `s491` **Bellhop:** Click. The weather. Sunny, with a chance of clowns.
+- `s492` **Bellhop:** Click. A cooking show. A man in a colander is shouting about rigatoni.
+- `s493` **Bellhop:** Click. A tiny bellhop, in a tiny Crypt, playing a tiny computer.
+- `s494` **Bellhop:** Click. Static. Even the TV needs a break from all this.
+- `s495` **Bellhop:** I close the curtains. Much better.
+- `s496` **Bellhop:** I peek out. The city at night, eight colours deep. A full moon.
+- `s497` **Bellhop:** Somewhere down there, a clown is parallel parking a very small car.
+- `s498` **Bellhop:** It's already shut.
+- `s499` **Bellhop:** I shut the minibar. Temptation averted.
+- `s500` **Bellhop:** It's already open. The candy bar is looking at me.
+- `s501` **Bellhop:** I open the minibar. Little bottles, and one candy bar.
+- `s502` **Bellhop:** Click. Click. It stays on. They only drew it one way.
+- `s503` **Bellhop:** I lie down for a quick pixel nap.
+- `s504` **Bellhop:** I wake up. Still in the game. Both of them.
+- `s505` **Bellhop:** The safe behind the painting. I'm not doing the safe again. I still dream about that code.
+- `s506` **Bellhop:** Through that door is the ninth floor, the Nave, Chuk, and eventually a computer with this game on it.
+- `s507` **Bellhop:** Best not.
+- `s508` **Bellhop:** I already did all that. It's a much smaller game the second time round.
+- `s509` **Bellhop:** The door of Room 714. There's a party upstairs I haven't been to yet. Well, I have, but he hasn't.
+- `s510` **Bellhop:** The TV. There are four channels, and they're all a bit much.
+- `s511` **Bellhop:** The bathroom. I'm not going back in there. Not after the medicine cabinet.
+- `s512` **Bellhop:** The dresser where I found the bellhop uniform. Small world. Small pixels.
+- `s513` **Bellhop:** The city at night. Somewhere out there, the clowns.
+- `s514` **Bellhop:** Curtains. The clowns are out there somewhere.
+- `s515` **Bellhop:** The minibar. I'd rather not relive the candy bar.
+- `s516` **Bellhop:** A lamp. It's on. It's always on in here.
+- `s517` **Bellhop:** The phone. Nobody's calling a computer game.
+- `s518` **Bellhop:** The nightstand. Empty, as I left it.
+- `s519` **Bellhop:** The deer painting, with the safe behind it. I know its tricks.
+- `s520` **Bellhop:** The bed. I could lie down, but then I'd have to play the whole thing again.
+- `s521` **Bellhop:** The coffee table. Mercifully empty.
+- `s522` **Bellhop:** It's very pixelly.
 
 ## HOTEL.EXE: objects
 
-- `s497` **Bellhop:** A newspaper. Someone must have slid it under the door overnight.
-- `s498` **Bellhop:** Hang on. I'm reading a newspaper, in a hotel room, in a video game, in the crypt, in a video game, in the crypt, in a hotel room?
-- `s499` **Bellhop:** This metafiction has gotten a little out of hand, don't you think?
-- `s500` **Bellhop:** One candy bar, priced at forty dollars.
-- `s501` **Bellhop:** One candy bar, priced at forty dollars. I know better now.
+- `s523` **Bellhop:** A newspaper. Someone must have slid it under the door overnight.
+- `s524` **Bellhop:** Hang on. I'm reading a newspaper, in a hotel room, in a video game, in the crypt, in a video game, in the crypt, in a hotel room?
+- `s525` **Bellhop:** This metafiction has gotten a little out of hand, don't you think?
+- `s526` **Bellhop:** One candy bar, priced at forty dollars.
+- `s527` **Bellhop:** One candy bar, priced at forty dollars. I know better now.
 
 ## The Crypt: things in the room
 
-- `s502` **Bellhop:** The archway back to the Nave.
-- `s503` **Bellhop:** The Flying Spaghetti Monster, crocheted out of yarn. Its meatballs are pompoms.
-- `s504` **Bellhop:** I can't reach it, and I wouldn't dare.
-- `s505` **Bellhop:** "Pasta Identification." OTTINI, TORTINI, ANELLI, NODINI. Pastas I've never heard of, and four empty recesses.
-- `s506` **Bellhop:** And a brass plate underneath, shut tight.
-- `s507` **Bellhop:** Which recess? I'll put it in one.
-- `s508` **Bellhop:** The staff area. Something smells amazing back there.
-- `s509` **Bellhop:** A confessional booth with three arcade buttons. CONFESS, it says, in red neon. A lot of judgment in one cabinet.
-- `s510` **Bellhop:** It only takes sins.
-- `s511` **Bellhop:** A trackball cabinet: MEATBALL MADNESS. The trackball is a meatball.
-- `s512` **Bellhop:** INSERT TOKEN. Nobody has ever beaten it, says a handwritten sign.
-- `s513` **Bellhop:** It only takes tokens.
-- `s514` **Bellhop:** A classic computer, beige and humming. There's a folder on it called GAMES.
-- `s515` **Bellhop:** A classic computer, beige and silent. Its power cable is lying on the floor, unplugged.
-- `s516` **Bellhop:** Nothing. It isn't even plugged in.
-- `s517` **Chuk:** I'll set that up after this level.
-- `s518` **Bellhop:** A T. Rex game built into a real T. rex skull. You sit in its jaws. Jump the cacti. Fear the meteor.
+- `s528` **Bellhop:** The archway back to the Nave.
+- `s529` **Bellhop:** The Flying Spaghetti Monster, crocheted out of yarn. Its meatballs are pompoms.
+- `s530` **Bellhop:** I can't reach it, and I wouldn't dare.
+- `s531` **Bellhop:** "Pasta Identification." OTTINI, TORTINI, ANELLI, NODINI. Pastas I've never heard of, and four empty recesses.
+- `s532` **Bellhop:** And a brass plate underneath, shut tight.
+- `s533` **Bellhop:** Which recess? I'll put it in one.
+- `s534` **Bellhop:** The staff area. Something smells amazing back there.
+- `s535` **Bellhop:** A confessional booth with three arcade buttons. CONFESS, it says, in red neon. A lot of judgment in one cabinet.
+- `s536` **Bellhop:** It only takes sins.
+- `s537` **Bellhop:** A trackball cabinet: MEATBALL MADNESS. The trackball is a meatball.
+- `s538` **Bellhop:** INSERT TOKEN. Nobody has ever beaten it, says a handwritten sign.
+- `s539` **Bellhop:** It only takes tokens.
+- `s540` **Bellhop:** A classic computer, beige and humming. There's a folder on it called GAMES.
+- `s541` **Bellhop:** A classic computer, beige and silent. Its power cable is lying on the floor, unplugged.
+- `s542` **Bellhop:** Nothing. It isn't even plugged in.
+- `s543` **Chuk:** I'll set that up after this level.
+- `s544` **Bellhop:** A T. Rex game built into a real T. rex skull. You sit in its jaws. Jump the cacti. Fear the meteor.
 
 ## The Crypt: objects
 
-- `s519` **Bellhop:** The recess above %s. Empty.
-- `s520` **Bellhop:** %s, in the recess above %s.
-- `s521` **Bellhop:** That doesn't go on the board.
-- `s522` **Bellhop:** The board's solved. I'll leave it be.
-- `s523` **Bellhop:** An empty recess. One of the shapes must go here.
-- `s524` **Bellhop:** An empty recess. Something's missing from this board.
-- `s525` **Bellhop:** The drawer under the names. It slid shut once I took the crank.
-- `s526` **Bellhop:** The drawer under the names is open.
-- `s527` **Bellhop:** A drawer under the names, with no handle to pull. It must open somehow.
-- `s528` **Bellhop:** It's empty now. Best left shut.
-- `s529` **Bellhop:** It's open already.
-- `s530` **Bellhop:** It won't budge. The board has to be right first, I bet.
-- `s531` **Bellhop:** An iron crank with a wooden handle. It'd fit the Pope Seat's empty socket.
-- `s532` **Bellhop:** Got the crank.
-- `s533` **Bellhop:** An arcade token, stamped FSM.
-- `s534` **Bellhop:** The staff room. Shelves of boxes, folding chairs, and the drinks for after strike.
-- `s535` **Chuk:** Staff only! That's where we keep the drinks for after strike.
-- `s536` **Bellhop:** It says STAFF. I'd better not.
-- `s537` **Bellhop:** The Pope Seat: a red throne with a big red button on the armrest.
-- `s538` **Bellhop:** A pope hat made of lasagna hangs over it on a rope.
-- `s539` **Bellhop:** There's an empty socket on the side, where the crank should go.
-- `s540` **Bellhop:** I'll need someone to turn it while I sit, though.
-- `s541` **Bellhop:** That doesn't go on the throne.
-- `s542` **Bellhop:** I can't sit in the seat and turn the crank at the same time.
-- `s543` **Bellhop:** There's nothing to pull. The crank's missing.
-- `s544` **Bellhop:** A pope hat made of lasagna. The sauce band is a nice touch.
-- `s545` **Bellhop:** It's on a rope, way up there. It comes down when someone turns the crank.
+- `s545` **Bellhop:** The recess above %s. Empty.
+- `s546` **Bellhop:** %s, in the recess above %s.
+- `s547` **Bellhop:** That doesn't go on the board.
+- `s548` **Bellhop:** The board's solved. I'll leave it be.
+- `s549` **Bellhop:** An empty recess. One of the shapes must go here.
+- `s550` **Bellhop:** An empty recess. Something's missing from this board.
+- `s551` **Bellhop:** The drawer under the names. It slid shut once I took the crank.
+- `s552` **Bellhop:** The drawer under the names is open.
+- `s553` **Bellhop:** A drawer under the names, with no handle to pull. It must open somehow.
+- `s554` **Bellhop:** It's empty now. Best left shut.
+- `s555` **Bellhop:** It's open already.
+- `s556` **Bellhop:** It won't budge. The board has to be right first, I bet.
+- `s557` **Bellhop:** An iron crank with a wooden handle. It'd fit the Pope Seat's empty socket.
+- `s558` **Bellhop:** Got the crank.
+- `s559` **Bellhop:** An arcade token, stamped FSM.
+- `s560` **Bellhop:** The staff room. Shelves of boxes, folding chairs, and the drinks for after strike.
+- `s561` **Chuk:** Staff only! That's where we keep the drinks for after strike.
+- `s562` **Bellhop:** It says STAFF. I'd better not.
+- `s563` **Bellhop:** The Pope Seat: a red throne with a big red button on the armrest.
+- `s564` **Bellhop:** A pope hat made of lasagna hangs over it on a rope.
+- `s565` **Bellhop:** There's an empty socket on the side, where the crank should go.
+- `s566` **Bellhop:** I'll need someone to turn it while I sit, though.
+- `s567` **Bellhop:** That doesn't go on the throne.
+- `s568` **Bellhop:** I can't sit in the seat and turn the crank at the same time.
+- `s569` **Bellhop:** There's nothing to pull. The crank's missing.
+- `s570` **Bellhop:** A pope hat made of lasagna. The sauce band is a nice touch.
+- `s571` **Bellhop:** It's on a rope, way up there. It comes down when someone turns the crank.
 
 ## Looking at things in your pockets
 
-- `s546` **Bellhop:** Pasta rosary beads. Elbow macaroni on a string.
-- `s547` **Bellhop:** The UV pendant. I'm wearing it. To take it off, I use it on myself.
-- `s548` **Bellhop:** A UV pendant. A crystal with a little ultraviolet light inside.
-- `s549` **Bellhop:** A golden rigatone. The offering, but unsauced. The Weird Sauce machine should fix that.
-- `s550` **Bellhop:** A golden rigatone, covered in Weird Sauce.
-- `s551` **Bellhop:** An arcade token, stamped FSM.
-- `s552` **Bellhop:** The Pope Seat's crank.
-- `s553` **Bellhop:** %s, made of dried pasta. Chuk says it's one of the new pastas.
+- `s572` **Bellhop:** Pasta rosary beads. Elbow macaroni on a string.
+- `s573` **Bellhop:** The UV pendant. I'm wearing it. To take it off, I use it on myself.
+- `s574` **Bellhop:** A UV pendant. A crystal with a little ultraviolet light inside.
+- `s575` **Bellhop:** A golden rigatone. The offering, but unsauced. The Weird Sauce machine should fix that.
+- `s576` **Bellhop:** A golden rigatone, covered in Weird Sauce.
+- `s577` **Bellhop:** An arcade token, stamped FSM.
+- `s578` **Bellhop:** The Pope Seat's crank.
+- `s579` **Bellhop:** %s, made of dried pasta. Chuk says it's one of the new pastas.
 
 ## Put On
 
-- `s554` **Bellhop:** I put on the beads. I feel 12% holier.
-- `s555` **Bellhop:** I put on the pendant. Everything goes purple, and writing shows up on the walls!
+- `s580` **Bellhop:** I put on the beads. I feel 12% holier.
+- `s581` **Bellhop:** I put on the pendant. Everything goes purple, and writing shows up on the walls!
 
 ## Take Off
 
-- `s556` **Bellhop:** I take the beads off.
-- `s557` **Bellhop:** I take off the pendant. Back to boring old visible light.
+- `s582` **Bellhop:** I take the beads off.
+- `s583` **Bellhop:** I take off the pendant. Back to boring old visible light.
 
 ## Using things on yourself
 
-- `s558` **Bellhop:** It's an offering, not a snack.
-- `s559` **Bellhop:** I flip the token. Heads: a meatball.
-- `s560` **Bellhop:** I crank myself. Nothing happens. As usual.
-- `s561` **Bellhop:** I turn it over in my hands. Still not pasta.
+- `s584` **Bellhop:** It's an offering, not a snack.
+- `s585` **Bellhop:** I flip the token. Heads: a meatball.
+- `s586` **Bellhop:** I crank myself. Nothing happens. As usual.
+- `s587` **Bellhop:** I turn it over in my hands. Still not pasta.
 
 ## Use Item On Item
 
-- `s562` **Bellhop:** The pamphlet says to sauce it, not to read to it.
-- `s563` **Bellhop:** Those don't go together.
+- `s588` **Bellhop:** The pamphlet says to sauce it, not to read to it.
+- `s589` **Bellhop:** Those don't go together.
 
 ## Item Action
 
-- `s564` **Bellhop:** I already have it.
-- `s565` **Bellhop:** It doesn't say much.
-- `s566` **Bellhop:** That won't do anything.
+- `s590` **Bellhop:** I already have it.
+- `s591` **Bellhop:** It doesn't say much.
+- `s592` **Bellhop:** That won't do anything.
 
 ## Clicking on yourself
 
-- `s567` **Bellhop:** Beads, a glowing pendant and a bellhop's uniform. I look like a very confused disco priest.
-- `s568` **Bellhop:** Bellhop uniform, pasta beads. Holy, but still on the clock.
-- `s569` **Bellhop:** I'm glowing faintly purple. Stylish.
-- `s570` **Bellhop:** Still in my bellhop uniform. Nobody told me it wasn't a costume party.
-- `s571` **Bellhop:** I'd answer, but I already know what I'm going to say.
-- `s572` **Choice:** Take off the beads.
-- `s573` **Choice:** Take off the UV pendant.
-- `s574` **Choice:** Never mind.
-- `s575` **Bellhop:** I can't pick myself up. I've tried, emotionally.
-- `s576` **Bellhop:** I'd rather stay closed, thanks.
-- `s577` **Bellhop:** I'm not that kind of door.
-- `s578` **Bellhop:** Use me with what? I should pick something from my pockets first.
+- `s593` **Bellhop:** Beads, a glowing pendant and a bellhop's uniform. I look like a very confused disco priest.
+- `s594` **Bellhop:** Bellhop uniform, pasta beads. Holy, but still on the clock.
+- `s595` **Bellhop:** I'm glowing faintly purple. Stylish.
+- `s596` **Bellhop:** Still in my bellhop uniform. Nobody told me it wasn't a costume party.
+- `s597` **Bellhop:** I'd answer, but I already know what I'm going to say.
+- `s598` **Choice:** Take off the beads.
+- `s599` **Choice:** Take off the UV pendant.
+- `s600` **Choice:** Never mind.
+- `s601` **Bellhop:** I can't pick myself up. I've tried, emotionally.
+- `s602` **Bellhop:** I'd rather stay closed, thanks.
+- `s603` **Bellhop:** I'm not that kind of door.
+- `s604` **Bellhop:** Use me with what? I should pick something from my pockets first.
 
 ## Doing things
 
-- `s579` **Bellhop:** Chuk. He's wearing a colander and an air of great patience.
-- `s580` **Bellhop:** I don't think he'd like that.
-- `s581` **Chuk:** The news. On the computer. The new pastas are all in it. Read it!
-- `s582` **Bellhop:** Yes, Chuk.
-- `s583` **Bellhop:** It's the %s.
-- `s584` **Bellhop:** That doesn't work.
+- `s605` **Bellhop:** Chuk. He's wearing a colander and an air of great patience.
+- `s606` **Bellhop:** I don't think he'd like that.
+- `s607` **Chuk:** The news. On the computer. The new pastas are all in it. Read it!
+- `s608` **Bellhop:** Yes, Chuk.
+- `s609` **Bellhop:** It's the %s.
+- `s610` **Bellhop:** That doesn't work.
 
 ## UIClick
 
-- `s585` **Bellhop:** To take it off, I should use it on me.
-- `s586` **Bellhop:** To wear it, I should use it on me.
+- `s611` **Bellhop:** To take it off, I should use it on me.
+- `s612` **Bellhop:** To wear it, I should use it on me.
 
 ## The ending cards
 
-- `s587` **Card title:** Room Service for all
-- `s588` **Card text:** The clowns paraded through the hotel causing revelry and havoc. The party continued forever and spread far and wide.
-- `s589` **Card title:** Chuk and the new Pope of the Noodle
-- `s590` **Card text:** were whisked away. Some say they're still out there somewhere, partying on.
-- `s591` **Card title:** Now isn't it your turn to join in the party?
-- `s592` **Card text:** This is Room Service after all. Quit playing games and get out there!
-- `s593` **Card title:** All games are free play.
-- `s594` **Card text:** The clowns played all night, beating every one of Chuk's high scores.
-- `s595` **Card title:** The CONFESS cabinet
-- `s596` **Card text:** has heard things no cabinet should hear. I guess the party was pretty wild.
-- `s597` **Card title:** Chuk finally left his room
-- `s598` **Card text:** and spread the word of the Sacred Noodle far and wide. Why not join him, and go spread the word of the Sacred Pasta?
-- `s599` **Card title:** They drank all night.
-- `s600` **Card text:** Might as well enjoy the party while it's still going.
-- `s601` **Card title:** The next morning, the Nave.
-- `s602` **Card title:** Strike took all day.
-- `s603` **Card text:** But it was worth it to get to party. Speaking of which, shouldn't you be partying?
-- `s604` **Card text:** Thanks for playing Hotel Paradiso: Sacra Pasta.
+- `s613` **Card title:** Room Service for all
+- `s614` **Card text:** The clowns paraded through the hotel causing revelry and havoc. The party continued forever and spread far and wide.
+- `s615` **Card title:** Chuk and the new Pope of the Noodle
+- `s616` **Card text:** were whisked away. Some say they're still out there somewhere, partying on.
+- `s617` **Card title:** Now isn't it your turn to join in the party?
+- `s618` **Card text:** This is Room Service after all. Quit playing games and get out there!
+- `s619` **Card title:** All games are free play.
+- `s620` **Card text:** The clowns played all night, beating every one of Chuk's high scores.
+- `s621` **Card title:** The CONFESS cabinet
+- `s622` **Card text:** has heard things no cabinet should hear. I guess the party was pretty wild.
+- `s623` **Card title:** Chuk finally left his room
+- `s624` **Card text:** and spread the word of the Sacred Noodle far and wide. Why not join him, and go spread the word of the Sacred Pasta?
+- `s625` **Card title:** They drank all night.
+- `s626` **Card text:** Might as well enjoy the party while it's still going.
+- `s627` **Card title:** The next morning, the Nave.
+- `s628` **Card title:** Strike took all day.
+- `s629` **Card text:** But it was worth it to get to party. Speaking of which, shouldn't you be partying?
+- `s630` **Card text:** Thanks for playing Hotel Paradiso: Sacra Pasta.
 
 ## Arriving in rooms
 
-- `s605` **Guest:** Oh no. Not again.
-- `s606` **Bellhop:** Ninth floor, at last. The clowns dropped me at the end of the hall and honked off into the night.
-- `s607` **Bellhop:** Huh. This doesn't look like a hotel room anymore.
-- `s608` **Chuk:** Welcome, pilgrim, to the Nave.
-- `s609` **Bellhop:** Is this the party?
-- `s610` **Chuk:** The party is in the Crypt, beyond this wall.
-- `s611` **Bellhop:** What wall? Oh. That wall.
-- `s612` **Chuk:** Only the ordained may pass.
-- `s613` **Bellhop:** The Crypt! Arcade cabinets, candles, and a yarn monster on the ceiling.
-- `s614` **Chuk:** (without looking up) Welcome. I'm on level nine.
+- `s631` **Guest:** Oh no. Not again.
+- `s632` **Bellhop:** Ninth floor, at last. The clowns dropped me at the end of the hall and honked off into the night.
+- `s633` **Bellhop:** Huh. This doesn't look like a hotel room anymore.
+- `s634` **Chuk:** Welcome, pilgrim, to the Nave.
+- `s635` **Bellhop:** Is this the party?
+- `s636` **Chuk:** The party is in the Crypt, beyond this wall.
+- `s637` **Bellhop:** What wall? Oh. That wall.
+- `s638` **Chuk:** Only the ordained may pass.
+- `s639` **Bellhop:** The Crypt! Arcade cabinets, candles, and a yarn monster on the ceiling.
+- `s640` **Chuk:** (without looking up) Welcome. I'm on level nine.
 
 ## Hover names in the Nave
 

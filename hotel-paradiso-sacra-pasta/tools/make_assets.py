@@ -147,6 +147,9 @@ def main():
     spr('nave_wrecked', NB.wrecked(rooms[0][1]))
     for name, im in CARDS.cards().items():
         spr(name, im)
+    import meatball_game
+    for name, im in meatball_game.sprites().items():
+        spr(name, im)
     import cast_v2
     spr('lie_bellhop', cast_v2.bellhop_extras()[1][1])        # carried off overhead (room-service ending)
     spr('lie_chuk', cast_v2.chuk()['extras']['lying'])

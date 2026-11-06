@@ -153,9 +153,16 @@ def import_(md=MD):
                 txt = new[e['id']].replace("'", "\\'")
             if txt == e['orig']:
                 continue
-            if src[e['start']:e['end']] != e['orig']:
-                sys.exit('%s has changed since the export (%s); export again first' % (e['id'], fname))
-            todo.append((e['start'], e['end'], txt))
+            a, b = e['start'], e['end']
+            if src[a:b] != e['orig']:
+                # the script has moved on since the export: find the line by its old text
+                q = '"' if fname == 'game' else "'"
+                hits = [m.start() + 1 for m in re.finditer(re.escape(q + e['orig'] + q), src)]
+                if not hits:
+                    sys.exit('%s: can\'t find "%s" in %s any more' % (e['id'], e['orig'], fname))
+                a = min(hits, key=lambda h: abs(h - e['start']))    # the nearest, if it's said twice
+                b = a + len(e['orig'])
+            todo.append((a, b, txt))
         for a, b, txt in sorted(todo, reverse=True):
             src = src[:a] + txt + src[b:]
         if todo:

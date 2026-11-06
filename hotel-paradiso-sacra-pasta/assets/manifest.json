@@ -3089,6 +3089,18 @@
    "repeat": false
   },
   {
+   "script": "aJump",
+   "file": "audio/aJump.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aSplat",
+   "file": "audio/aSplat.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
    "script": "aTvClick",
    "file": "audio/aTvClick.wav",
    "type": 2,
@@ -3480,6 +3492,19 @@
   "card_freeplay",
   "card_tinyfolk",
   "card_end",
+  "mm_sky",
+  "mm_hills",
+  "mm_ground",
+  "mm_splat",
+  "mm_bowl",
+  "mm_fork",
+  "mm_colander",
+  "mm_parmesan",
+  "mm_bread",
+  "mm_ball0",
+  "mm_ball1",
+  "mm_ball2",
+  "mm_ball3",
   "lie_bellhop",
   "lie_chuk",
   "hp_loading0",
