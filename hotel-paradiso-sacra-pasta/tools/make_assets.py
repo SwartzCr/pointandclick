@@ -74,18 +74,25 @@ def khuc_views():
 
 
 # ------------------------------------------------------------------ fonts
-def make_font(path, size, ascii_only=True):
+def make_font(path, size, ascii_only=True, tabular=False):
+    """tabular: every digit (and the space) as wide as the widest, centred, so numbers line up
+    and don't shuffle about as they count."""
     ft = ImageFont.truetype(path, size)
     asc, desc = ft.getmetrics()
     h = asc + desc
+    dw = max(int(round(ft.getlength(c))) for c in '0123456789')
     glyphs = []
     for c in range(128):
         ch = chr(c) if c >= 32 else ' '
         w = max(1, int(round(ft.getlength(ch))))
+        x = 0
+        if tabular and ch in '0123456789 ':
+            x = (dw - w) // 2
+            w = dw
         im = Image.new("1", (w, h), 0)
         d = ImageDraw.Draw(im)
         d.fontmode = '1'
-        d.text((0, 0), ch, font=ft, fill=1)
+        d.text((x, 0), ch, font=ft, fill=1)
         glyphs.append(im)
     return formats.write_wfn(glyphs)
 
@@ -166,10 +173,11 @@ def main():
     # spoken text: Jersey 10, a pixel font (art_src/fonts, SIL Open Font License)
     jersey = os.path.join(os.path.dirname(__file__), '..', 'art_src', 'fonts', 'Jersey10-Regular.ttf')
     fonts[1] = ('font1.wfn', jersey, 18, 'auto')
+    fonts.append(('font6.wfn', jersey, 18, 'none'))     # MEATBALL MADNESS: Jersey with even-width digits
     os.makedirs(os.path.join(ROOT, 'fonts'))
     for fname, path, size, outl in fonts:
         with open(os.path.join(ROOT, 'fonts', fname), 'wb') as f:
-            f.write(make_font(path, size))
+            f.write(make_font(path, size, tabular=(fname == 'font6.wfn')))
         manifest['fonts'].append(dict(file='fonts/' + fname, outline=outl))
 
     os.makedirs(os.path.join(ROOT, 'audio'))

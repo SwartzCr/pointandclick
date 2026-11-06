@@ -206,12 +206,94 @@ def bowl():
     return im
 
 
+def bowl_full():
+    """The bowl with the meatball landed in the spaghetti."""
+    im = bowl()
+    m = meatball(0)
+    im.alpha_composite(m, (19, -5 if False else 0))
+    im2 = canvas(54, 30)
+    im2.alpha_composite(bowl(), (0, 4))
+    m = meatball(1)
+    im2.alpha_composite(m, (19, 0))
+    d = ImageDraw.Draw(im2)
+    # a few strands of spaghetti draped over it
+    for x0, x1 in ((18, 26), (27, 36), (22, 31)):
+        d.arc([x0, 5, x1, 15], 200, 340, fill=P['noodle'])
+    d.point((24, 14), fill=P['sauce'])
+    return im2
+
+
+def finale():
+    """The close-up at the end: the meatball sitting on a heap of spaghetti, full screen."""
+    import math
+    import random
+    im = sky()
+    px = im.load()
+    d = ImageDraw.Draw(im)
+    # sunburst behind the bowl
+    cx, cy = 160, 64
+    for k in range(16):
+        a0 = k * math.pi / 8
+        a1 = a0 + math.pi / 16
+        d.polygon([(cx, cy), (cx + 260 * math.cos(a0), cy + 260 * math.sin(a0)),
+                   (cx + 260 * math.cos(a1), cy + 260 * math.sin(a1))], fill=P['sky_lo'])
+    # the tablecloth
+    g = ground()
+    for x in range(0, W, 32):
+        im.alpha_composite(g, (x, GROUND))
+    # the bowl, big
+    d.pieslice([70, 40, 250, 150], 0, 180, fill=P['bowl'], outline=P['bowl_dk'])
+    d.rectangle([120, 142, 200, 147], fill=P['bowl_dk'])
+    d.arc([78, 50, 242, 140], 20, 160, fill=P['bowl_dk'])
+    d.line([(96, 104), (110, 112)], fill=(255, 255, 255))
+    # the heap of spaghetti
+    rnd = random.Random(5)
+    d.ellipse([74, 70, 246, 106], fill=P['noodle'])
+    d.ellipse([96, 50, 224, 96], fill=P['noodle'])
+    for _ in range(70):
+        x = rnd.randint(84, 236)
+        y = rnd.randint(58, 100)
+        if ((x - 160) / 80) ** 2 + ((y - 82) / 26) ** 2 < 1:
+            d.arc([x - 7, y - 3, x + 7, y + 4], rnd.choice([0, 180]), rnd.choice([150, 330]), fill=P['cheese_dk'])
+    # strands over the rim
+    for x in (88, 118, 196, 226):
+        d.line([(x, 92), (x - 2, 106), (x + 1, 116)], fill=P['noodle'])
+    # the sauce, and the meatball on top
+    d.ellipse([118, 52, 202, 80], fill=P['sauce'])
+    d.ellipse([130, 56, 160, 66], fill=P['sauce_hi'])
+    for x in (126, 196):
+        d.line([(x, 72), (x, 84)], fill=P['sauce'], width=2)
+    # the meatball, drawn big at the same pixel size as everything else
+    mb = canvas(46, 44)
+    md = ImageDraw.Draw(mb)
+    md.ellipse([0, 0, 45, 43], fill=P['meat_dk'])
+    md.ellipse([1, 0, 41, 37], fill=P['meat'])
+    md.ellipse([8, 6, 22, 15], fill=P['meat_hi'])
+    md.ellipse([11, 8, 15, 11], fill=P['bread_hi'])
+    rr = random.Random(9)
+    for _ in range(26):
+        x, y = rr.randint(6, 39), rr.randint(6, 38)
+        if ((x - 22.5) / 20) ** 2 + ((y - 21.5) / 19) ** 2 < 1:
+            md.rectangle([x, y, x + 1, y], fill=rr.choice([P['herb'], P['meat_dk'], P['meat_hi']]))
+    im.alpha_composite(mb, (137, 16))
+    # a basil leaf and some steam and sparkle
+    d.polygon([(176, 30), (192, 24), (186, 36)], fill=P['herb'])
+    d.line([(176, 30), (190, 27)], fill=(110, 170, 80))
+    for k, x in enumerate((122, 160, 198)):
+        for t in range(0, 22, 2):
+            d.point((x + int(3 * math.sin((t + k * 4) / 3)), 14 - t // 2 + 0), fill=(250, 246, 236))
+    for x, y in ((60, 30), (262, 40), (44, 70), (280, 84), (100, 20)):
+        d.line([(x - 3, y), (x + 3, y)], fill=P['sun'])
+        d.line([(x, y - 3), (x, y + 3)], fill=P['sun'])
+    return im
+
+
 def sprites():
     """{sprite name: image}, all doubled."""
     out = {'mm_sky': big(sky()), 'mm_hills': big(hills()), 'mm_ground': big(ground()),
            'mm_splat': big(splat()), 'mm_bowl': big(bowl()),
            'mm_fork': big(fork()), 'mm_colander': big(colander()), 'mm_parmesan': big(parmesan()),
-           'mm_bread': big(bread())}
+           'mm_bread': big(bread()), 'mm_bowlfull': big(bowl_full()), 'mm_finale': big(finale())}
     for k in range(4):
         out['mm_ball%d' % k] = big(meatball(k))
     return out

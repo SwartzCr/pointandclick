@@ -2941,6 +2941,10 @@
   {
    "file": "fonts/font5.wfn",
    "outline": "none"
+  },
+  {
+   "file": "fonts/font6.wfn",
+   "outline": "none"
   }
  ],
  "audio": [
@@ -3501,6 +3505,8 @@
   "mm_colander",
   "mm_parmesan",
   "mm_bread",
+  "mm_bowlfull",
+  "mm_finale",
   "mm_ball0",
   "mm_ball1",
   "mm_ball2",
