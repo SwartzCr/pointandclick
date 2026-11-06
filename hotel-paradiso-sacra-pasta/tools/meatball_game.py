@@ -107,93 +107,102 @@ def ground():
 
 # ------------------------------------------------------------------ the meatball
 def meatball(frame):
-    """12x12, four frames of rolling (the herb flecks go round)."""
-    im = canvas(12, 12)
-    d = ImageDraw.Draw(im)
-    d.ellipse([0, 0, 11, 11], fill=P['meat'], outline=P['meat_dk'])
-    d.ellipse([2, 2, 6, 5], fill=P['meat_hi'])
+    """16x16, four frames of rolling (the herb flecks go round)."""
     import math
+    im = canvas(16, 16)
+    d = ImageDraw.Draw(im)
+    d.ellipse([0, 0, 15, 15], fill=P['meat'], outline=P['meat_dk'])
+    d.ellipse([3, 2, 8, 6], fill=P['meat_hi'])
+    d.point((4, 3), fill=P['bread_hi'])
+    d.arc([1, 1, 14, 14], 20, 160, fill=P['meat_dk'])
     for k in range(3):
         a = frame * math.pi / 2 + k * 2 * math.pi / 3
-        x, y = 6 + 3.2 * math.cos(a), 6 + 3.2 * math.sin(a)
-        d.point((round(x), round(y)), fill=P['herb'])
-        d.point((round(x) + 1, round(y)), fill=P['meat_dk'])
+        x, y = round(7.5 + 4.2 * math.cos(a)), round(7.5 + 4.2 * math.sin(a))
+        d.rectangle([x, y, x + 1, y], fill=P['herb'])
+        d.point((x, y + 1), fill=P['meat_dk'])
     return im
 
 
 def splat():
-    im = canvas(22, 8)
+    im = canvas(28, 10)
     d = ImageDraw.Draw(im)
-    d.ellipse([0, 3, 21, 7], fill=P['sauce'])
-    d.ellipse([5, 1, 15, 6], fill=P['meat'], outline=P['meat_dk'])
-    for x in (1, 19, 9):
-        d.point((x, 2), fill=P['sauce_hi'])
+    d.ellipse([0, 4, 27, 9], fill=P['sauce'])
+    d.ellipse([7, 1, 20, 8], fill=P['meat'], outline=P['meat_dk'])
+    for x in (1, 25, 12, 5):
+        d.point((x, 3), fill=P['sauce_hi'])
     return im
 
 
 # ------------------------------------------------------------------ what's in the way
 def fork():
-    """A fork stuck tines-down in the table: 7 wide, 28 tall."""
-    im = canvas(7, 28)
+    """A fork stuck tines-down in the table: 9 wide, 36 tall."""
+    im = canvas(9, 36)
     d = ImageDraw.Draw(im)
-    d.rectangle([2, 0, 4, 15], fill=P['steel'])
-    d.line([(2, 0), (2, 15)], fill=P['steel_hi'])
-    d.rectangle([0, 15, 6, 18], fill=P['steel'])
-    for x in (0, 2, 4, 6):
-        d.line([(x, 18), (x, 27)], fill=P['steel'])
-    d.line([(6, 15), (6, 27)], fill=P['steel_dk'])
-    d.line([(4, 1), (4, 14)], fill=P['steel_dk'])
+    d.rounded_rectangle([2, 0, 6, 20], radius=2, fill=P['steel'])
+    d.line([(3, 1), (3, 19)], fill=P['steel_hi'])
+    d.line([(6, 1), (6, 20)], fill=P['steel_dk'])
+    d.rectangle([0, 20, 8, 24], fill=P['steel'])
+    d.line([(0, 20), (8, 20)], fill=P['steel_hi'])
+    for x in (0, 3, 5, 8):
+        d.line([(x, 24), (x, 35)], fill=P['steel'])
+    d.line([(8, 21), (8, 35)], fill=P['steel_dk'])
     return im
 
 
 def colander():
-    """An upturned colander: 24 wide, 14 tall."""
-    im = canvas(24, 14)
+    """An upturned colander: 30 wide, 18 tall."""
+    im = canvas(30, 18)
     d = ImageDraw.Draw(im)
-    d.pieslice([1, 1, 22, 26], 180, 360, fill=P['steel'], outline=P['steel_dk'])
-    d.rectangle([0, 12, 23, 13], fill=P['steel_dk'])
-    d.line([(3, 9), (20, 9)], fill=P['steel_hi'])
-    for x, y in ((6, 6), (10, 4), (14, 4), (18, 6), (8, 10), (12, 10), (16, 10)):
+    d.pieslice([1, 1, 28, 34], 180, 360, fill=P['steel'], outline=P['steel_dk'])
+    d.rectangle([0, 15, 29, 17], fill=P['steel_dk'])
+    d.line([(1, 15), (28, 15)], fill=P['steel_hi'])
+    d.arc([5, 4, 24, 30], 200, 260, fill=P['steel_hi'])
+    for x, y in ((7, 8), (12, 5), (17, 5), (22, 8), (9, 12), (14, 10), (19, 10), (24, 12), (5, 13)):
         d.point((x, y), fill=P['ink'])
-    d.rectangle([10, 0, 13, 1], fill=P['steel_dk'])
+    d.rectangle([12, 0, 17, 1], fill=P['steel_dk'])
     return im
 
 
 def parmesan():
-    """A tumbling pile of parmesan: 22 wide, 16 tall."""
-    im = canvas(22, 16)
+    """A tumbling pile of parmesan: 28 wide, 20 tall."""
+    im = canvas(28, 20)
     d = ImageDraw.Draw(im)
-    d.polygon([(0, 15), (6, 6), (11, 9), (15, 2), (21, 15)], fill=P['cheese'], outline=P['cheese_dk'])
-    d.polygon([(13, 15), (16, 8), (21, 15)], fill=P['cheese_dk'])
-    for x, y in ((5, 11), (9, 13), (14, 7), (17, 12), (11, 11)):
-        d.point((x, y), fill=P['cheese_hi'])
-    d.rectangle([2, 0, 3, 1], fill=P['cheese_hi'])        # a crumb in mid-air
+    d.polygon([(0, 19), (7, 8), (13, 11), (19, 3), (27, 19)], fill=P['cheese'], outline=P['cheese_dk'])
+    d.polygon([(17, 19), (21, 10), (27, 19)], fill=P['cheese_dk'])
+    d.polygon([(3, 19), (8, 13), (11, 19)], fill=P['cheese_hi'])
+    for x, y in ((6, 14), (12, 16), (18, 9), (22, 15), (14, 13), (9, 17)):
+        d.point((x, y), fill=P['cheese_dk'])
+    d.rectangle([3, 1, 4, 2], fill=P['cheese_hi'])
+    d.rectangle([24, 4, 25, 5], fill=P['cheese'])
     return im
 
 
 def bread():
-    """A loaf of garlic bread: 34 wide, 10 tall."""
-    im = canvas(34, 10)
+    """A loaf of garlic bread: 42 wide, 12 tall."""
+    im = canvas(42, 12)
     d = ImageDraw.Draw(im)
-    d.rounded_rectangle([0, 1, 33, 9], radius=4, fill=P['bread'], outline=P['bread_dk'])
-    d.line([(3, 3), (30, 3)], fill=P['bread_hi'])
-    for x in range(5, 31, 6):
-        d.line([(x, 2), (x + 2, 6)], fill=P['bread_dk'])
-        d.point((x + 1, 5), fill=P['garlic'])
+    d.rounded_rectangle([0, 1, 41, 11], radius=5, fill=P['bread'], outline=P['bread_dk'])
+    d.line([(4, 3), (37, 3)], fill=P['bread_hi'])
+    d.line([(4, 10), (37, 10)], fill=P['bread_dk'])
+    for x in range(6, 38, 7):
+        d.line([(x, 2), (x + 3, 8)], fill=P['bread_dk'])
+        d.point((x + 2, 6), fill=P['garlic'])
+        d.point((x + 4, 4), fill=P['garlic'])
     return im
 
 
 def bowl():
-    """The finish: a big bowl of spaghetti and sauce, 44 wide, 22 tall."""
-    im = canvas(44, 22)
+    """The finish: a big bowl of spaghetti and sauce, 54 wide, 26 tall."""
+    im = canvas(54, 26)
     d = ImageDraw.Draw(im)
-    d.pieslice([0, -14, 43, 21], 0, 180, fill=P['bowl'], outline=P['bowl_dk'])
-    d.rectangle([14, 19, 29, 21], fill=P['bowl_dk'])
-    d.ellipse([2, 0, 41, 8], fill=P['noodle'])
-    d.ellipse([12, 1, 31, 6], fill=P['sauce'])
-    d.point((18, 2), fill=P['sauce_hi'])
-    for x in range(4, 40, 5):
-        d.point((x, 5), fill=P['bowl_dk'])
+    d.pieslice([0, -18, 53, 25], 0, 180, fill=P['bowl'], outline=P['bowl_dk'])
+    d.rectangle([18, 23, 35, 25], fill=P['bowl_dk'])
+    d.ellipse([2, 0, 51, 9], fill=P['noodle'])
+    d.ellipse([14, 1, 39, 7], fill=P['sauce'])
+    d.point((21, 2), fill=P['sauce_hi'])
+    d.point((22, 2), fill=P['sauce_hi'])
+    for x in range(5, 50, 6):
+        d.point((x, 6), fill=P['bowl_dk'])
     return im
 
 
