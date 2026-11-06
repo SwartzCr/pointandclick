@@ -73,10 +73,10 @@ VARIANTS = {
     'D': ('v3-D-box-open-scales-empty.png', [[0.998, 0.0007, -6.6169], [-0.0004, 1.0084, 0.1291]]),  # box open and empty, scales empty
     'E': ('v3-E-rigatone.png', [[0.9984, 0.0, -6.8929], [-0.0002, 1.0076, 0.0263]]),             # box open, golden rigatone inside
     # the Paragraph Spinner's words, four to a picture (and no little table by the sculpture)
-    'K1': ('v4-fork1.png', [[1.1089, -0.0002, 4.9382], [-0.0006, 0.9088, -4.6172]]),     # the Spinning Fork, frame 1
-    'K2': ('v4-fork2.png', [[1.1089, 0.0001, 4.8986], [0.0001, 0.908, -4.917]]),     # the Spinning Fork, frame 2
-    'K3': ('v4-fork3.png', [[1.1073, 0.0031, 4.8433], [-0.0003, 0.9077, -4.4399]]),     # the Spinning Fork, frame 3
-    'K4': ('v4-fork4.png', [[1.1098, -0.0003, 4.3119], [0.0004, 0.9077, -4.8382]]),     # the Spinning Fork, frame 4
+    'K1': ('v5-target1.png', [[1, 0, 0], [0, 1, 0]]),     # the Spinning Fork, frame 1 (a fork round a target, fitted into the frame)
+    'K2': ('v5-target2.png', [[1, 0, 0], [0, 1, 0]]),     # the Spinning Fork, frame 2 (a fork round a target, fitted into the frame)
+    'K3': ('v5-target3.png', [[1, 0, 0], [0, 1, 0]]),     # the Spinning Fork, frame 3 (a fork round a target, fitted into the frame)
+    'K4': ('v5-target4.png', [[1, 0, 0], [0, 1, 0]]),     # the Spinning Fork, frame 4 (a fork round a target, fitted into the frame)
     'F1': ('v3-F1-some-forks-look-raw.png', [[0.9999, -0.0018, -6.9143], [0.0006, 1.0093, -0.7931]]),
     'F2': ('v3-F2-no-bread-seem-bland.png', [[0.9989, -0.0007, -7.0147], [0.0003, 1.0118, 0.6126]]),
     'F3': ('v3-F3-all-pasta-is-holy.png', [[0.998, -0.0013, -6.0896], [0.0007, 1.0095, -0.8741]]),
