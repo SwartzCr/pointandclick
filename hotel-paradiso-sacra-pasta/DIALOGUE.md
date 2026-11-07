@@ -478,8 +478,8 @@ speaker as they are. Then upload the file and ask for it to be imported.
 ## Meatball Game
 
 - `s364` **Text:** SCORE %06d
-- `s365` **Text:** HI KHC 069990
-- `s366` **Text:** HI KHC 069990
+- `s365` **Text:** HI CHK 069990
+- `s366` **Text:** HI CHK 069990
 - `s367` **Text:** GET READY!
 - `s368` **Text:** GAME OVER
 - `s369` **Text:** INTO THE BOWL! +50000
@@ -492,13 +492,13 @@ speaker as they are. Then upload the file and ask for it to be imported.
 - `s376` **Text:** 1  FSM
 - `s377` **Text:** %06d
 - `s378` **Text:** %06d
-- `s379` **Text:** 2  KHC
+- `s379` **Text:** 2  CHK
 - `s380` **Text:** 069990
 - `s381` **Text:** 069990
-- `s382` **Text:** 3  KHC
+- `s382` **Text:** 3  CHK
 - `s383` **Text:** 069980
 - `s384` **Text:** 069980
-- `s385` **Text:** 4  KHC
+- `s385` **Text:** 4  CHK
 - `s386` **Text:** 069970
 - `s387` **Text:** 069970
 - `s388` **Text:** ALL HAIL THE MEATBALL MASTER!

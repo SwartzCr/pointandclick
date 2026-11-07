@@ -384,6 +384,139 @@ EFFECTS = {
     'aBleeps': sfx_bleeps, 'aSad': sfx_sad, 'aFanfare': sfx_fanfare, 'aSlurp': sfx_slurp,
     'aPhone': sfx_phone, 'aJump': sfx_jump, 'aSplat': sfx_splat,
 }
+# ------------------------------------------------------------------ more effects
+def _norm(x, peak=0.8):
+    m = np.max(np.abs(x)) or 1
+    return x / m * peak
+
+
+def sfx_rip():
+    """The tapestry's thread pulled out: a run of little tearing snaps."""
+    parts = []
+    t = 0.0
+    for k in range(14):
+        n = noise(0.03) * decay(int(0.03 * SR), 0.008)
+        parts.append((t, n * (0.5 + 0.5 * (k % 3 == 0))))
+        t += 0.035 + 0.02 * ((k * 7) % 3)
+    x = mix(*parts)
+    return _norm(x - lp_fast(x, 900), 0.6)
+
+
+def sfx_rumble():
+    """A little mountain heaving up out of the sod."""
+    d = 1.1
+    n = lp_fast(lp_fast(noise(d), 120), 180)
+    wob = 1 + 0.3 * np.sin(2 * np.pi * 7 * t_(d))
+    return _norm(n * wob * env(int(d * SR), 0.15, 0.4, 0.6, 0.4), 0.9)
+
+
+def sfx_splash():
+    """The marinara river parting: a swoosh that opens up."""
+    d = 0.8
+    n = noise(d)
+    lo = lp_fast(n, 1800) - lp_fast(n, 300)
+    return _norm(lo * env(int(d * SR), 0.05, 0.25, 0.4, 0.45), 0.6)
+
+
+def sfx_star():
+    """The purple star: a rising sparkle."""
+    parts = [(i * 0.06, tone(f, 0.5, 'sine') * decay(int(0.5 * SR), 0.18) * 0.25)
+             for i, f in enumerate([1047, 1319, 1568, 2093, 2637, 3136])]
+    return _norm(mix(*parts), 0.6)
+
+
+def sfx_cheer():
+    """The tiny folk cheering: lots of very small, very high voices."""
+    parts = []
+    r = np.random.default_rng(3)
+    for k in range(22):
+        f0 = r.uniform(900, 1600)
+        d = r.uniform(0.12, 0.25)
+        f = lambda t, f0=f0: f0 * (1 + 0.25 * np.sin(2 * np.pi * 9 * t)) * (1 + 0.4 * t)
+        parts.append((r.uniform(0, 0.6), tone(f, d, 'tri') * env(int(d * SR), 0.02, 0.05, 0.6, 0.05) * 0.12))
+    return _norm(mix(*parts), 0.55)
+
+
+def sfx_dig():
+    """Tiny shovels in the sod."""
+    parts = []
+    for k in range(10):
+        n = lp_fast(noise(0.06), 2500) * decay(int(0.06 * SR), 0.02)
+        parts.append((k * 0.11 + 0.03 * (k % 2), n))
+    return _norm(mix(*parts), 0.5)
+
+
+def sfx_choir():
+    """The ordination: a holy "aaah" chord."""
+    d = 2.2
+    t = t_(d)
+    out = np.zeros(len(t))
+    for f in (220, 277.2, 329.6, 440):
+        vib = 1 + 0.006 * np.sin(2 * np.pi * 5.2 * t + f)
+        w = tone(lambda tt, f=f: f * (1 + 0.006 * np.sin(2 * np.pi * 5.2 * tt)), d, 'saw')
+        out += lp_fast(w, 1400)
+    return _norm(out * env(len(t), 0.4, 0.3, 0.8, 0.8), 0.5)
+
+
+def sfx_honk():
+    """A clown's bulb horn: honk-honk."""
+    def one(f):
+        d = 0.18
+        w = tone(f, d, 'square') * 0.6 + tone(f * 1.5, d, 'saw') * 0.4
+        return lp_fast(w, 1600) * env(int(d * SR), 0.01, 0.05, 0.8, 0.05)
+    return _norm(mix((0, one(370)), (0.24, one(330))), 0.7)
+
+
+def sfx_roar():
+    """The T. Rex's roar, eight bits of it."""
+    d = 1.0
+    f = lambda t: 160 * (1 - 0.45 * t) + 25 * np.sin(2 * np.pi * 23 * t)
+    w = tone(f, d, 'saw') * 0.6 + lp_fast(noise(d), 700) * 0.6
+    return _norm(w * env(int(d * SR), 0.05, 0.2, 0.7, 0.4), 0.85)
+
+
+def sfx_cluck():
+    """A chicken: buk-buk-bukAWK."""
+    def buk(f, d):
+        return tone(lambda t: f * (1 - 0.3 * t / d), d, 'square') * env(int(d * SR), 0.005, 0.03, 0.5, 0.02)
+    x = mix((0, buk(520, 0.07)), (0.13, buk(520, 0.07)), (0.26, buk(500, 0.07)),
+            (0.42, tone(lambda t: 700 + 500 * t, 0.25, 'square') * env(int(0.25 * SR), 0.01, 0.05, 0.6, 0.08)))
+    return _norm(lp_fast(x, 2500), 0.6)
+
+
+def sfx_boot():
+    """The old computer switching on: a click, a hum, a beep."""
+    hum = (tone(60, 1.0, 'sine') * 0.5 + tone(120, 1.0, 'sine') * 0.2) * env(int(1.0 * SR), 0.2, 0.2, 0.6, 0.3)
+    click = noise(0.02) * decay(int(0.02 * SR), 0.004)
+    beep = tone(1000, 0.15, 'square') * 0.25
+    return _norm(mix((0, click), (0.02, hum), (0.7, beep)), 0.6)
+
+
+def sfx_cork():
+    """A cork popping, and the fizz."""
+    pop = tone(lambda t: 900 - 3000 * t, 0.08, 'sine') * decay(int(0.08 * SR), 0.02)
+    fizz = (noise(1.0) - lp_fast(noise(1.0), 3000)) * env(int(1.0 * SR), 0.02, 0.2, 0.4, 0.5) * 0.3
+    return _norm(mix((0, pop), (0.05, fizz)), 0.7)
+
+
+def sfx_plop():
+    """The meatball landing in the bowl of spaghetti."""
+    d = 0.25
+    w = tone(lambda t: 300 + 600 * t, d, 'sine') * decay(int(d * SR), 0.06)
+    return _norm(w + lp_fast(noise(d), 600) * decay(int(d * SR), 0.03) * 0.5, 0.7)
+
+
+def sfx_point():
+    """A small blip: an obstacle cleared."""
+    return tone(1568, 0.06, 'square') * env(int(0.06 * SR), 0.002, 0.03, 0.3, 0.02) * 0.2
+
+
+EFFECTS.update({'aRip': sfx_rip, 'aRumble': sfx_rumble, 'aSplash': sfx_splash, 'aStar': sfx_star,
+                'aCheer': sfx_cheer, 'aDig': sfx_dig, 'aChoir': sfx_choir, 'aHonk': sfx_honk,
+                'aRoar': sfx_roar, 'aCluck': sfx_cluck, 'aBoot': sfx_boot, 'aCork': sfx_cork,
+                'aPlop': sfx_plop, 'aPoint': sfx_point})
+
+
 MUSIC = {'aMusTitle': music_title, 'aMusCrypt': music_crypt, 'aMusEnding': music_ending}
 
 

@@ -3105,6 +3105,90 @@
    "repeat": false
   },
   {
+   "script": "aRip",
+   "file": "audio/aRip.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aRumble",
+   "file": "audio/aRumble.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aSplash",
+   "file": "audio/aSplash.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aStar",
+   "file": "audio/aStar.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aCheer",
+   "file": "audio/aCheer.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aDig",
+   "file": "audio/aDig.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aChoir",
+   "file": "audio/aChoir.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aHonk",
+   "file": "audio/aHonk.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aRoar",
+   "file": "audio/aRoar.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aCluck",
+   "file": "audio/aCluck.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aBoot",
+   "file": "audio/aBoot.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aCork",
+   "file": "audio/aCork.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aPlop",
+   "file": "audio/aPlop.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
+   "script": "aPoint",
+   "file": "audio/aPoint.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
    "script": "aTvClick",
    "file": "audio/aTvClick.wav",
    "type": 2,
