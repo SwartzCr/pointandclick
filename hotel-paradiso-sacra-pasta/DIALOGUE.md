@@ -759,76 +759,82 @@ speaker as they are. Then upload the file and ask for it to be imported.
 ## Use Item On Item
 
 - `s588` **Bellhop:** The pamphlet says to sauce it, not to read to it.
-- `s589` **Bellhop:** Those don't go together.
+- `s589` **Bellhop:** The pendant's already doing its job round my neck. Just look at things in its light.
+- `s590` **Bellhop:** Waving the pendant at things won't do much. I should try putting it on.
+- `s591` **Bellhop:** Those don't go together.
 
 ## Item Action
 
-- `s590` **Bellhop:** I already have it.
-- `s591` **Bellhop:** It doesn't say much.
-- `s592` **Bellhop:** That won't do anything.
+- `s592` **Bellhop:** I already have it.
+- `s593` **Bellhop:** It doesn't say much.
+- `s594` **Bellhop:** That won't do anything.
 
 ## Clicking on yourself
 
-- `s593` **Bellhop:** Beads, a glowing pendant and a bellhop's uniform. I look like a very confused disco priest.
-- `s594` **Bellhop:** Bellhop uniform, pasta beads. Holy, but still on the clock.
-- `s595` **Bellhop:** I'm glowing faintly purple. Stylish.
-- `s596` **Bellhop:** Still in my bellhop uniform. Nobody told me it wasn't a costume party.
-- `s597` **Bellhop:** I'd answer, but I already know what I'm going to say.
-- `s598` **Choice:** Take off the beads.
-- `s599` **Choice:** Take off the UV pendant.
-- `s600` **Choice:** Never mind.
-- `s601` **Bellhop:** I can't pick myself up. I've tried, emotionally.
-- `s602` **Bellhop:** I'd rather stay closed, thanks.
-- `s603` **Bellhop:** I'm not that kind of door.
-- `s604` **Bellhop:** Use me with what? I should pick something from my pockets first.
+- `s595` **Bellhop:** Beads, a glowing pendant and a bellhop's uniform. I look like a very confused disco priest.
+- `s596` **Bellhop:** Bellhop uniform, pasta beads. Holy, but still on the clock.
+- `s597` **Bellhop:** I'm glowing faintly purple. Stylish.
+- `s598` **Bellhop:** Still in my bellhop uniform. Nobody told me it wasn't a costume party.
+- `s599` **Bellhop:** I'd answer, but I already know what I'm going to say.
+- `s600` **Choice:** Take off the beads.
+- `s601` **Choice:** Take off the UV pendant.
+- `s602` **Choice:** Never mind.
+- `s603` **Bellhop:** I can't pick myself up. I've tried, emotionally.
+- `s604` **Bellhop:** I'd rather stay closed, thanks.
+- `s605` **Bellhop:** I'm not that kind of door.
+- `s606` **Bellhop:** Use me with what? I should pick something from my pockets first.
 
 ## Doing things
 
-- `s605` **Bellhop:** Chuk. He's wearing a colander and an air of great patience.
-- `s606` **Bellhop:** I don't think he'd like that.
-- `s607` **Chuk:** The news. On the computer. The new pastas are all in it. Read it!
-- `s608` **Bellhop:** Yes, Chuk.
-- `s609` **Bellhop:** It's the %s.
-- `s610` **Bellhop:** That doesn't work.
+- `s607` **Bellhop:** Chuk. He's wearing a colander and an air of great patience.
+- `s608` **Bellhop:** I don't think he'd like that.
+- `s609` **Bellhop:** I'm already wearing the pendant. Things only glow if I look at them in its light.
+- `s610` **Bellhop:** Holding the pendant up to it doesn't do much. Maybe I should try putting it on.
+- `s611` **Chuk:** The news. On the computer. The new pastas are all in it. Read it!
+- `s612` **Bellhop:** Yes, Chuk.
+- `s613` **Bellhop:** It's the %s.
+- `s614` **Bellhop:** Holding the pendant up to it doesn't do much. Maybe I should try putting it on.
+- `s615` **Bellhop:** I'm already wearing the pendant. Things only glow if I look at them in its light.
+- `s616` **Bellhop:** That doesn't work.
 
 ## UIClick
 
-- `s611` **Bellhop:** To take it off, I should use it on me.
-- `s612` **Bellhop:** To wear it, I should use it on me.
+- `s617` **Bellhop:** To take it off, I should use it on me.
+- `s618` **Bellhop:** To wear it, I should use it on me.
 
 ## The ending cards
 
-- `s613` **Card title:** Room Service for all
-- `s614` **Card text:** The clowns paraded through the hotel causing revelry and havoc. The party continued forever and spread far and wide.
-- `s615` **Card title:** Chuk and the new Pope of the Noodle
-- `s616` **Card text:** were whisked away. Some say they're still out there somewhere, partying on.
-- `s617` **Card title:** Now isn't it your turn to join in the party?
-- `s618` **Card text:** This is Room Service after all. Quit playing games and get out there!
-- `s619` **Card title:** All games are free play.
-- `s620` **Card text:** The clowns played all night, beating every one of Chuk's high scores.
-- `s621` **Card title:** The CONFESS cabinet
-- `s622` **Card text:** has heard things no cabinet should hear. I guess the party was pretty wild.
-- `s623` **Card title:** Chuk finally left his room
-- `s624` **Card text:** and spread the word of the Sacred Noodle far and wide. Why not join him, and go spread the word of the Sacred Pasta?
-- `s625` **Card title:** They drank all night.
-- `s626` **Card text:** Might as well enjoy the party while it's still going.
-- `s627` **Card title:** The next morning, the Nave.
-- `s628` **Card title:** Strike took all day.
-- `s629` **Card text:** But it was worth it to get to party. Speaking of which, shouldn't you be partying?
-- `s630` **Card text:** Thanks for playing Hotel Paradiso: Sacra Pasta.
+- `s619` **Card title:** Room Service for all
+- `s620` **Card text:** The clowns paraded through the hotel causing revelry and havoc. The party continued forever and spread far and wide.
+- `s621` **Card title:** Chuk and the new Pope of the Noodle
+- `s622` **Card text:** were whisked away. Some say they're still out there somewhere, partying on.
+- `s623` **Card title:** Now isn't it your turn to join in the party?
+- `s624` **Card text:** This is Room Service after all. Quit playing games and get out there!
+- `s625` **Card title:** All games are free play.
+- `s626` **Card text:** The clowns played all night, beating every one of Chuk's high scores.
+- `s627` **Card title:** The CONFESS cabinet
+- `s628` **Card text:** has heard things no cabinet should hear. I guess the party was pretty wild.
+- `s629` **Card title:** Chuk finally left his room
+- `s630` **Card text:** and spread the word of the Sacred Noodle far and wide. Why not join him, and go spread the word of the Sacred Pasta?
+- `s631` **Card title:** They drank all night.
+- `s632` **Card text:** Might as well enjoy the party while it's still going.
+- `s633` **Card title:** The next morning, the Nave.
+- `s634` **Card title:** Strike took all day.
+- `s635` **Card text:** But it was worth it to get to party. Speaking of which, shouldn't you be partying?
+- `s636` **Card text:** Thanks for playing Hotel Paradiso: Sacra Pasta.
 
 ## Arriving in rooms
 
-- `s631` **Guest:** Oh no. Not again.
-- `s632` **Bellhop:** Ninth floor, at last. The clowns dropped me at the end of the hall and honked off into the night.
-- `s633` **Bellhop:** Huh. This doesn't look like a hotel room anymore.
-- `s634` **Chuk:** Welcome, pilgrim, to the Nave.
-- `s635` **Bellhop:** Is this the party?
-- `s636` **Chuk:** The party is in the Crypt, beyond this wall.
-- `s637` **Bellhop:** What wall? Oh. That wall.
-- `s638` **Chuk:** Only the ordained may pass.
-- `s639` **Bellhop:** The Crypt! Arcade cabinets, candles, and a yarn monster on the ceiling.
-- `s640` **Chuk:** (without looking up) Welcome. I'm on level nine.
+- `s637` **Guest:** Oh no. Not again.
+- `s638` **Bellhop:** Ninth floor, at last. The clowns dropped me at the end of the hall and honked off into the night.
+- `s639` **Bellhop:** Huh. This doesn't look like a hotel room anymore.
+- `s640` **Chuk:** Welcome, pilgrim, to the Nave.
+- `s641` **Bellhop:** Is this the party?
+- `s642` **Chuk:** The party is in the Crypt, beyond this wall.
+- `s643` **Bellhop:** What wall? Oh. That wall.
+- `s644` **Chuk:** Only the ordained may pass.
+- `s645` **Bellhop:** The Crypt! Arcade cabinets, candles, and a yarn monster on the ceiling.
+- `s646` **Chuk:** (without looking up) Welcome. I'm on level nine.
 
 ## Hover names in the Nave
 
