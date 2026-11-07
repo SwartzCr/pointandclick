@@ -181,3 +181,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          timeout: 1800000     # 30 minutes: GitHub's side is sometimes slow to publish a large site
