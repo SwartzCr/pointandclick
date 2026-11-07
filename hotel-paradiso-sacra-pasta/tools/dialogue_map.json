@@ -1002,16 +1002,16 @@
 "id": "s112",
 "file": "game",
 "start": 42202,
-"end": 42237,
-"orig": "And green? Whose nose was that for?",
+"end": 42258,
+"orig": "And green? Since when does the Noodly One wear trousers?",
 "fn": "GiveKhuc",
 "who": "Chuk"
 },
 {
 "id": "s113",
 "file": "game",
-"start": 42271,
-"end": 42308,
+"start": 42292,
+"end": 42329,
 "orig": "No yellow. The One True Noodle weeps.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1019,8 +1019,8 @@
 {
 "id": "s114",
 "file": "game",
-"start": 42346,
-"end": 42403,
+"start": 42367,
+"end": 42424,
 "orig": "So much yellow. One is the number of the One True Noodle.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1028,8 +1028,8 @@
 {
 "id": "s115",
 "file": "game",
-"start": 42422,
-"end": 42440,
+"start": 42443,
+"end": 42461,
 "orig": "Improperly sauced.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1037,8 +1037,8 @@
 {
 "id": "s116",
 "file": "game",
-"start": 42477,
-"end": 42513,
+"start": 42498,
+"end": 42534,
 "orig": "He licks it clean and hands it back.",
 "fn": "GiveKhuc",
 "who": "Bellhop"
@@ -1046,8 +1046,8 @@
 {
 "id": "s117",
 "file": "game",
-"start": 42550,
-"end": 42640,
+"start": 42571,
+"end": 42661,
 "orig": "The recipe is in the story of the First Supper, pilgrim. Pick up the telephone and listen.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1055,8 +1055,8 @@
 {
 "id": "s118",
 "file": "game",
-"start": 42664,
-"end": 42757,
+"start": 42685,
+"end": 42778,
 "orig": "Try again, pilgrim. Listen to the First Supper on the telephone again if you've forgotten it.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1064,8 +1064,8 @@
 {
 "id": "s119",
 "file": "game",
-"start": 42902,
-"end": 42930,
+"start": 42923,
+"end": 42951,
 "orig": "One golden rigatone. Sauced.",
 "fn": "GiveKhuc",
 "who": "Bellhop"
@@ -1073,8 +1073,8 @@
 {
 "id": "s120",
 "file": "game",
-"start": 42949,
-"end": 43016,
+"start": 42970,
+"end": 43037,
 "orig": "Golden. Sauced exactly as the First Supper says. A worthy offering.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1082,8 +1082,8 @@
 {
 "id": "s121",
 "file": "game",
-"start": 43134,
-"end": 43154,
+"start": 43155,
+"end": 43175,
 "orig": "Now, speak the Word.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1091,8 +1091,8 @@
 {
 "id": "s122",
 "file": "game",
-"start": 43226,
-"end": 43286,
+"start": 43247,
+"end": 43307,
 "orig": "Golden, yes. But naked. An offering must be properly sauced.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1100,8 +1100,8 @@
 {
 "id": "s123",
 "file": "game",
-"start": 43334,
-"end": 43374,
+"start": 43355,
+"end": 43395,
 "orig": "The beads are not for me. You wear them.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1109,8 +1109,8 @@
 {
 "id": "s124",
 "file": "game",
-"start": 43425,
-"end": 43456,
+"start": 43446,
+"end": 43477,
 "orig": "I wrote that pamphlet. Read it.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1118,8 +1118,8 @@
 {
 "id": "s125",
 "file": "game",
-"start": 43506,
-"end": 43563,
+"start": 43527,
+"end": 43584,
 "orig": "Hold onto that. Things look different in the right light.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1127,8 +1127,8 @@
 {
 "id": "s126",
 "file": "game",
-"start": 43641,
-"end": 43655,
+"start": 43662,
+"end": 43676,
 "orig": "No, thank you.",
 "fn": "GiveKhuc",
 "who": "Chuk"
@@ -1136,8 +1136,8 @@
 {
 "id": "s127",
 "file": "game",
-"start": 43715,
-"end": 43735,
+"start": 43736,
+"end": 43756,
 "orig": "THE SPAGHETTI THEORY",
 "fn": "ReadPamphlet",
 "who": "Note title"
@@ -1145,8 +1145,8 @@
 {
 "id": "s128",
 "file": "game",
-"start": 43743,
-"end": 44174,
+"start": 43764,
+"end": 44195,
 "orig": "In the beginning was the String, and the String was boiled.[[I. Of all technologies, the String came first. Then came counting, then noodles, then at last the fork.[[II. The Word is spun, not spoken. It shows itself only under the holy ultraviolet light.[[III. An offering must be golden, and properly sauced.[[IV. Wear the beads, for they are the mark of a true pilgrim.[[V. For the sauce, listen to the story of the First Supper.",
 "fn": "ReadPamphlet",
 "who": "Note text"
@@ -1154,8 +1154,8 @@
 {
 "id": "s129",
 "file": "game",
-"start": 44247,
-"end": 44286,
+"start": 44268,
+"end": 44307,
 "orig": "The timeline's done. The drawer's open.",
 "fn": "PressTile",
 "who": "Bellhop"
@@ -1163,8 +1163,8 @@
 {
 "id": "s130",
 "file": "game",
-"start": 44358,
-"end": 44381,
+"start": 44379,
+"end": 44402,
 "orig": "That one's already lit.",
 "fn": "PressTile",
 "who": "Bellhop"
@@ -1172,8 +1172,8 @@
 {
 "id": "s131",
 "file": "game",
-"start": 45040,
-"end": 45086,
+"start": 45061,
+"end": 45107,
 "orig": "Oldest to newest! A little drawer popped open.",
 "fn": "PressTile",
 "who": "Bellhop"
@@ -1181,8 +1181,8 @@
 {
 "id": "s132",
 "file": "game",
-"start": 45309,
-"end": 45371,
+"start": 45330,
+"end": 45392,
 "orig": "Clunk. All four tiles went dark again. Wrong order, somewhere.",
 "fn": "PressTile",
 "who": "Bellhop"
@@ -1190,8 +1190,8 @@
 {
 "id": "s133",
 "file": "game",
-"start": 45638,
-"end": 45681,
+"start": 45659,
+"end": 45702,
 "orig": "Oh, for the love of the Noodle. Wait there.",
 "fn": "PressTile",
 "who": "Chuk"
@@ -1199,8 +1199,8 @@
 {
 "id": "s134",
 "file": "game",
-"start": 46059,
-"end": 46122,
+"start": 46080,
+"end": 46143,
 "orig": "The Spaghetti Theory. Read it. Oldest first. It's all in there.",
 "fn": "PressTile",
 "who": "Chuk"
@@ -1208,8 +1208,8 @@
 {
 "id": "s135",
 "file": "game",
-"start": 46144,
-"end": 46157,
+"start": 46165,
+"end": 46178,
 "orig": "Thanks, Chuk.",
 "fn": "PressTile",
 "who": "Bellhop"
@@ -1217,8 +1217,8 @@
 {
 "id": "s136",
 "file": "game",
-"start": 46317,
-"end": 46390,
+"start": 46338,
+"end": 46411,
 "orig": "Oldest first, pilgrim. The order is all in the Spaghetti Theory pamphlet.",
 "fn": "PressTile",
 "who": "Chuk"
@@ -1226,8 +1226,8 @@
 {
 "id": "s137",
 "file": "game",
-"start": 46411,
-"end": 46475,
+"start": 46432,
+"end": 46496,
 "orig": "There's one on the table, next to the telephone. Go and read it.",
 "fn": "PressTile",
 "who": "Chuk"
@@ -1235,8 +1235,8 @@
 {
 "id": "s138",
 "file": "game",
-"start": 46527,
-"end": 46601,
+"start": 46548,
+"end": 46622,
 "orig": "Oldest first, pilgrim. It's all in the Spaghetti Theory pamphlet. Read it.",
 "fn": "PressTile",
 "who": "Chuk"
@@ -1244,8 +1244,8 @@
 {
 "id": "s139",
 "file": "game",
-"start": 46670,
-"end": 46748,
+"start": 46691,
+"end": 46769,
 "orig": "You've got the pamphlet, pilgrim. Have another look at it. It knows the order.",
 "fn": "PressTile",
 "who": "Chuk"
@@ -1253,8 +1253,8 @@
 {
 "id": "s140",
 "file": "game",
-"start": 46812,
-"end": 46877,
+"start": 46833,
+"end": 46898,
 "orig": "A bowl of noodles. The plaque says they're about 4,000 years old.",
 "fn": "TileLook",
 "who": "Text"
@@ -1262,8 +1262,8 @@
 {
 "id": "s141",
 "file": "game",
-"start": 46902,
-"end": 46961,
+"start": 46923,
+"end": 46982,
 "orig": "A dinner fork. About 2,000 years old, give or take a Roman.",
 "fn": "TileLook",
 "who": "Text"
@@ -1271,8 +1271,8 @@
 {
 "id": "s142",
 "file": "game",
-"start": 46986,
-"end": 47060,
+"start": 47007,
+"end": 47081,
 "orig": "A piece of twisted cord. The plaque says string is about 50,000 years old.",
 "fn": "TileLook",
 "who": "Text"
@@ -1280,8 +1280,8 @@
 {
 "id": "s143",
 "file": "game",
-"start": 47073,
-"end": 47137,
+"start": 47094,
+"end": 47158,
 "orig": "A bone with tally marks on it: counting. About 20,000 years old.",
 "fn": "TileLook",
 "who": "Text"
@@ -1289,8 +1289,8 @@
 {
 "id": "s144",
 "file": "game",
-"start": 47324,
-"end": 47365,
+"start": 47345,
+"end": 47386,
 "orig": "Hands off, pilgrim! That is my reliquary.",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1298,8 +1298,8 @@
 {
 "id": "s145",
 "file": "game",
-"start": 47435,
-"end": 47449,
+"start": 47456,
+"end": 47470,
 "orig": "Can I open it?",
 "fn": "WarnBox",
 "who": "Bellhop"
@@ -1307,8 +1307,8 @@
 {
 "id": "s146",
 "file": "game",
-"start": 47468,
-"end": 47549,
+"start": 47489,
+"end": 47570,
 "orig": "Inside lies the golden rigatone. Only a true puzzle master may retrieve it. Or...",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1316,8 +1316,8 @@
 {
 "id": "s147",
 "file": "game",
-"start": 47568,
-"end": 47601,
+"start": 47589,
+"end": 47622,
 "orig": "Is that a whip-it in your pocket?",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1325,8 +1325,8 @@
 {
 "id": "s148",
 "file": "game",
-"start": 47620,
-"end": 47663,
+"start": 47641,
+"end": 47684,
 "orig": "Give it here, and I'll open my box for you.",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1334,8 +1334,8 @@
 {
 "id": "s149",
 "file": "game",
-"start": 47697,
-"end": 47711,
+"start": 47718,
+"end": 47732,
 "orig": "Can I open it?",
 "fn": "WarnBox",
 "who": "Bellhop"
@@ -1343,8 +1343,8 @@
 {
 "id": "s150",
 "file": "game",
-"start": 47728,
-"end": 47803,
+"start": 47749,
+"end": 47824,
 "orig": "Inside lies the golden rigatone. Only a true puzzle master may retrieve it.",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1352,8 +1352,8 @@
 {
 "id": "s151",
 "file": "game",
-"start": 47820,
-"end": 47887,
+"start": 47841,
+"end": 47908,
 "orig": "Solve every riddle in this room, and the answer will reveal itself.",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1361,8 +1361,8 @@
 {
 "id": "s152",
 "file": "game",
-"start": 47905,
-"end": 47946,
+"start": 47926,
+"end": 47967,
 "orig": "Every riddle? I'm much too lazy for that.",
 "fn": "WarnBox",
 "who": "Bellhop"
@@ -1370,8 +1370,8 @@
 {
 "id": "s153",
 "file": "game",
-"start": 47964,
-"end": 47987,
+"start": 47985,
+"end": 48008,
 "orig": "Is there an easier way?",
 "fn": "WarnBox",
 "who": "Bellhop"
@@ -1379,8 +1379,8 @@
 {
 "id": "s154",
 "file": "game",
-"start": 48004,
-"end": 48007,
+"start": 48025,
+"end": 48028,
 "orig": "...",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1388,8 +1388,8 @@
 {
 "id": "s155",
 "file": "game",
-"start": 48024,
-"end": 48140,
+"start": 48045,
+"end": 48161,
 "orig": "Bring me a whip-it, and I'll open it for you. A little steel canister. The party upstairs ran out of them hours ago.",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1397,8 +1397,8 @@
 {
 "id": "s156",
 "file": "game",
-"start": 48158,
-"end": 48215,
+"start": 48179,
+"end": 48236,
 "orig": "Where am I supposed to find a whip-it in a noodle shrine?",
 "fn": "WarnBox",
 "who": "Bellhop"
@@ -1406,8 +1406,8 @@
 {
 "id": "s157",
 "file": "game",
-"start": 48232,
-"end": 48320,
+"start": 48253,
+"end": 48341,
 "orig": "The tiny folk find all sorts of things in the sod. If you can get them to listen to you.",
 "fn": "WarnBox",
 "who": "Chuk"
@@ -1415,8 +1415,8 @@
 {
 "id": "s158",
 "file": "game",
-"start": 48640,
-"end": 48694,
+"start": 48661,
+"end": 48715,
 "orig": "The lid popped open! There's a golden rigatone inside.",
 "fn": "PressButton",
 "who": "Bellhop"
@@ -1424,8 +1424,8 @@
 {
 "id": "s159",
 "file": "game",
-"start": 48716,
-"end": 48770,
+"start": 48737,
+"end": 48791,
 "orig": "Golden pasta: the offering! Now it just needs saucing.",
 "fn": "PressButton",
 "who": "Bellhop"
@@ -1433,8 +1433,8 @@
 {
 "id": "s160",
 "file": "game",
-"start": 48871,
-"end": 48909,
+"start": 48892,
+"end": 48930,
 "orig": "Click. The buttons all popped back up.",
 "fn": "PressButton",
 "who": "Bellhop"
@@ -1442,8 +1442,8 @@
 {
 "id": "s161",
 "file": "game",
-"start": 49247,
-"end": 49275,
+"start": 49268,
+"end": 49296,
 "orig": "\\\"Story one: the Creation.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1451,8 +1451,8 @@
 {
 "id": "s162",
 "file": "game",
-"start": 49306,
-"end": 49418,
+"start": 49327,
+"end": 49439,
 "orig": "\\\"On the first day, the Noodly One boiled the waters. On the second, the sauce. On the third, the leftovers...\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1460,8 +1460,8 @@
 {
 "id": "s163",
 "file": "game",
-"start": 49449,
-"end": 49536,
+"start": 49470,
+"end": 49557,
 "orig": "\\\"...and the faithful shall know the Word by its glow, for it is spun and not spoken.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1469,8 +1469,8 @@
 {
 "id": "s164",
 "file": "game",
-"start": 49599,
-"end": 49631,
+"start": 49620,
+"end": 49652,
 "orig": "\\\"Story two: the First Supper.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1478,8 +1478,8 @@
 {
 "id": "s165",
 "file": "game",
-"start": 49662,
-"end": 49731,
+"start": 49683,
+"end": 49752,
 "orig": "\\\"And the Noodly One said: sauce Me an offering, and sauce it thus.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1487,17 +1487,17 @@
 {
 "id": "s166",
 "file": "game",
-"start": 49762,
-"end": 49838,
-"orig": "\\\"A pump of red for each of My eyes. A pump of green for each of My noses.\\\"",
+"start": 49783,
+"end": 49871,
+"orig": "\\\"A pump of red for each of My eyes. A pump of green for each pair of trousers I wear.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
 },
 {
 "id": "s167",
 "file": "game",
-"start": 49869,
-"end": 49948,
+"start": 49902,
+"end": 49981,
 "orig": "\\\"And a single pump of yellow, for the One True Noodle. Then dip, and be fed.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1505,8 +1505,8 @@
 {
 "id": "s168",
 "file": "game",
-"start": 50014,
-"end": 50061,
+"start": 50047,
+"end": 50094,
 "orig": "\\\"Story three: the Prophecy of the Tiny Folk.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1514,8 +1514,8 @@
 {
 "id": "s169",
 "file": "game",
-"start": 50092,
-"end": 50219,
+"start": 50125,
+"end": 50252,
 "orig": "\\\"The little ones of the sod will serve any god who shows them three signs. Ask, and they will search the very earth for you.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1523,8 +1523,8 @@
 {
 "id": "s170",
 "file": "game",
-"start": 50250,
-"end": 50349,
+"start": 50283,
+"end": 50382,
 "orig": "\\\"First, the mountain shall rise. Then the river shall part. And last, a purple star shall shine.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1532,8 +1532,8 @@
 {
 "id": "s171",
 "file": "game",
-"start": 50380,
-"end": 50424,
+"start": 50413,
+"end": 50457,
 "orig": "\\\"In that order. They are very particular.\\\"",
 "fn": "PlayPhone",
 "who": "Narration"
@@ -1541,8 +1541,8 @@
 {
 "id": "s172",
 "file": "game",
-"start": 50555,
-"end": 50638,
+"start": 50588,
+"end": 50671,
 "orig": "Audio stories. There seem to be a few; I'll get the next one if I pick it up again.",
 "fn": "PlayPhone",
 "who": "Bellhop"
@@ -1550,8 +1550,8 @@
 {
 "id": "s173",
 "file": "game",
-"start": 50802,
-"end": 50857,
+"start": 50835,
+"end": 50890,
 "orig": "The bowl's full. I'd better tip it out and start again.",
 "fn": "Pump",
 "who": "Bellhop"
@@ -1559,8 +1559,8 @@
 {
 "id": "s174",
 "file": "game",
-"start": 50934,
-"end": 50956,
+"start": 50967,
+"end": 50989,
 "orig": "Squirt. A pump of red.",
 "fn": "Pump",
 "who": "Bellhop"
@@ -1568,8 +1568,8 @@
 {
 "id": "s175",
 "file": "game",
-"start": 51008,
-"end": 51032,
+"start": 51041,
+"end": 51065,
 "orig": "Squirt. A pump of green.",
 "fn": "Pump",
 "who": "Bellhop"
@@ -1577,8 +1577,8 @@
 {
 "id": "s176",
 "file": "game",
-"start": 51068,
-"end": 51093,
+"start": 51101,
+"end": 51126,
 "orig": "Squirt. A pump of yellow.",
 "fn": "Pump",
 "who": "Bellhop"
@@ -1586,8 +1586,8 @@
 {
 "id": "s177",
 "file": "game",
-"start": 51168,
-"end": 51186,
+"start": 51201,
+"end": 51219,
 "orig": "The bowl is empty.",
 "fn": "BowlContents",
 "who": "Text"
@@ -1595,8 +1595,8 @@
 {
 "id": "s178",
 "file": "game",
-"start": 51213,
-"end": 51257,
+"start": 51246,
+"end": 51290,
 "orig": "In the bowl: %d red, %d green and %d yellow.",
 "fn": "BowlContents",
 "who": "Text"
@@ -1604,8 +1604,8 @@
 {
 "id": "s179",
 "file": "game",
-"start": 51352,
-"end": 51371,
+"start": 51385,
+"end": 51404,
 "orig": "It's already empty.",
 "fn": "EmptyBowl",
 "who": "Bellhop"
@@ -1613,8 +1613,8 @@
 {
 "id": "s180",
 "file": "game",
-"start": 51434,
-"end": 51527,
+"start": 51467,
+"end": 51560,
 "orig": "I tip the bowl out into the marinara river on the sod table. The tiny villagers are thrilled.",
 "fn": "EmptyBowl",
 "who": "Bellhop"
@@ -1622,8 +1622,8 @@
 {
 "id": "s181",
 "file": "game",
-"start": 51599,
-"end": 51660,
+"start": 51632,
+"end": 51693,
 "orig": "The bowl's empty. I'll need to pump some sauce into it first.",
 "fn": "Dip",
 "who": "Bellhop"
@@ -1631,8 +1631,8 @@
 {
 "id": "s182",
 "file": "game",
-"start": 51877,
-"end": 51941,
+"start": 51910,
+"end": 51974,
 "orig": "I roll the rigatone in the bowl. It soaks up every drop. Sauced!",
 "fn": "Dip",
 "who": "Bellhop"
@@ -1640,8 +1640,8 @@
 {
 "id": "s183",
 "file": "game",
-"start": 52447,
-"end": 52527,
+"start": 52480,
+"end": 52560,
 "orig": "The villagers bow down. I am their god now. I'd better ask for something useful.",
 "fn": "FindWhipit",
 "who": "Bellhop"
@@ -1649,8 +1649,8 @@
 {
 "id": "s184",
 "file": "game",
-"start": 52614,
-"end": 52675,
+"start": 52647,
+"end": 52708,
 "orig": "I take off the pendant. A god needs to see what he's getting.",
 "fn": "FindWhipit",
 "who": "Bellhop"
@@ -1658,8 +1658,8 @@
 {
 "id": "s185",
 "file": "game",
-"start": 52697,
-"end": 52754,
+"start": 52730,
+"end": 52787,
 "orig": "\\\"My people! Search the sod, and bring me... a whip-it!\\\"",
 "fn": "FindWhipit",
 "who": "Bellhop"
@@ -1667,8 +1667,8 @@
 {
 "id": "s186",
 "file": "game",
-"start": 52785,
-"end": 52928,
+"start": 52818,
+"end": 52961,
 "orig": "They scatter, digging under every tuft of grass. After a while a tiny procession comes back, carrying a little steel canister over their heads.",
 "fn": "FindWhipit",
 "who": "Bellhop"
@@ -1676,8 +1676,8 @@
 {
 "id": "s187",
 "file": "game",
-"start": 53039,
-"end": 53082,
+"start": 53072,
+"end": 53115,
 "orig": "A whip-it. The tiny folk are very thorough.",
 "fn": "FindWhipit",
 "who": "Bellhop"
@@ -1685,8 +1685,8 @@
 {
 "id": "s188",
 "file": "game",
-"start": 53100,
-"end": 53210,
+"start": 53133,
+"end": 53243,
 "orig": "They also dug up their entire village to find it. I guess a god needs to be considerate of his subjects. Oops.",
 "fn": "FindWhipit",
 "who": "Bellhop"
@@ -1694,8 +1694,8 @@
 {
 "id": "s189",
 "file": "game",
-"start": 53317,
-"end": 53400,
+"start": 53350,
+"end": 53433,
 "orig": "They've already dug up their whole village for me. I think they've suffered enough.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1703,8 +1703,8 @@
 {
 "id": "s190",
 "file": "game",
-"start": 53526,
-"end": 53604,
+"start": 53559,
+"end": 53637,
 "orig": "I push up a little mountain in the middle of the sod. The tiny villagers gasp.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1712,8 +1712,8 @@
 {
 "id": "s191",
 "file": "game",
-"start": 53639,
-"end": 53723,
+"start": 53672,
+"end": 53756,
 "orig": "I run a finger through the marinara river. It parts! The villagers cross on dry sod.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1721,8 +1721,8 @@
 {
 "id": "s192",
 "file": "game",
-"start": 53746,
-"end": 53848,
+"start": 53779,
+"end": 53881,
 "orig": "I hold the glowing pendant high over the tiny world. A purple star! The villagers fall to their knees.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1730,8 +1730,8 @@
 {
 "id": "s193",
 "file": "game",
-"start": 53964,
-"end": 54011,
+"start": 53997,
+"end": 54044,
 "orig": "They look up at me, waiting for something more.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1739,8 +1739,8 @@
 {
 "id": "s194",
 "file": "game",
-"start": 54036,
-"end": 54089,
+"start": 54069,
+"end": 54122,
 "orig": "They're whispering excitedly. One more sign, I think.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1748,8 +1748,8 @@
 {
 "id": "s195",
 "file": "game",
-"start": 54137,
-"end": 54197,
+"start": 54170,
+"end": 54230,
 "orig": "They've seen that one. They wait politely for something new.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1757,8 +1757,8 @@
 {
 "id": "s196",
 "file": "game",
-"start": 54245,
-"end": 54351,
+"start": 54278,
+"end": 54384,
 "orig": "They mutter and shake their tiny heads. Whatever that was, it wasn't in their prophecy. Not in that order.",
 "fn": "Miracle",
 "who": "Bellhop"
@@ -1766,8 +1766,8 @@
 {
 "id": "s197",
 "file": "game",
-"start": 54423,
-"end": 54448,
+"start": 54456,
+"end": 54481,
 "orig": "Make a purple star shine.",
 "fn": "PlayGod",
 "who": "Text"
@@ -1775,8 +1775,8 @@
 {
 "id": "s198",
 "file": "game",
-"start": 54469,
-"end": 54486,
+"start": 54502,
+"end": 54519,
 "orig": "Raise a mountain.",
 "fn": "PlayGod",
 "who": "Choice"
@@ -1784,8 +1784,8 @@
 {
 "id": "s199",
 "file": "game",
-"start": 54490,
-"end": 54514,
+"start": 54523,
+"end": 54547,
 "orig": "Part the marinara river.",
 "fn": "PlayGod",
 "who": "Choice"
@@ -1793,8 +1793,8 @@
 {
 "id": "s200",
 "file": "game",
-"start": 54524,
-"end": 54535,
+"start": 54557,
+"end": 54568,
 "orig": "Smite them.",
 "fn": "PlayGod",
 "who": "Choice"
@@ -1802,8 +1802,8 @@
 {
 "id": "s201",
 "file": "game",
-"start": 54539,
-"end": 54550,
+"start": 54572,
+"end": 54583,
 "orig": "Never mind.",
 "fn": "PlayGod",
 "who": "Choice"
@@ -1811,8 +1811,8 @@
 {
 "id": "s202",
 "file": "game",
-"start": 54673,
-"end": 54702,
+"start": 54706,
+"end": 54735,
 "orig": "I'm a benevolent god. Mostly.",
 "fn": "PlayGod",
 "who": "Bellhop"
@@ -1820,8 +1820,8 @@
 {
 "id": "s203",
 "file": "game",
-"start": 54880,
-"end": 54987,
+"start": 54913,
+"end": 55020,
 "orig": "I thread the elbow macaroni from the scale onto the string, one by one, and tie the medal on at the bottom.",
 "fn": "MakeBeads",
 "who": "Bellhop"
@@ -1829,8 +1829,8 @@
 {
 "id": "s204",
 "file": "game",
-"start": 55005,
-"end": 55063,
+"start": 55038,
+"end": 55096,
 "orig": "Pasta rosary beads! Handmade, holy, and slightly al dente.",
 "fn": "MakeBeads",
 "who": "Bellhop"
@@ -1838,8 +1838,8 @@
 {
 "id": "s205",
 "file": "game",
-"start": 55199,
-"end": 55257,
+"start": 55232,
+"end": 55290,
 "orig": "The archway to the Crypt. Purple light, and arcade noises.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1847,8 +1847,8 @@
 {
 "id": "s206",
 "file": "game",
-"start": 55284,
-"end": 55307,
+"start": 55317,
+"end": 55340,
 "orig": "An archway in the wall.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1856,8 +1856,8 @@
 {
 "id": "s207",
 "file": "game",
-"start": 55637,
-"end": 55713,
+"start": 55670,
+"end": 55746,
 "orig": "Room 913, where I came in. Someone hung a Do Not Disturb sign on the inside.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1865,8 +1865,8 @@
 {
 "id": "s208",
 "file": "game",
-"start": 55796,
-"end": 55841,
+"start": 55829,
+"end": 55874,
 "orig": "The party's in here. Well, somewhere in here.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1874,8 +1874,8 @@
 {
 "id": "s209",
 "file": "game",
-"start": 55930,
-"end": 55989,
+"start": 55963,
+"end": 56022,
 "orig": "Wallpaper strips, hung by hand. Tiny forks, all the way up.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1883,8 +1883,8 @@
 {
 "id": "s210",
 "file": "game",
-"start": 56043,
-"end": 56081,
+"start": 56076,
+"end": 56114,
 "orig": "I'm not peeling the art off the walls.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1892,8 +1892,8 @@
 {
 "id": "s211",
 "file": "game",
-"start": 56172,
-"end": 56269,
+"start": 56205,
+"end": 56302,
 "orig": "\\\"Weird Sauce.\\\" Three dispensers, red, green and yellow, pump into one spout over a little bowl.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1901,8 +1901,8 @@
 {
 "id": "s212",
 "file": "game",
-"start": 56309,
-"end": 56402,
+"start": 56342,
+"end": 56435,
 "orig": "How much of each, though? There must be a recipe. Maybe one of the stories on that telephone.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1910,8 +1910,8 @@
 {
 "id": "s213",
 "file": "game",
-"start": 56505,
-"end": 56549,
+"start": 56538,
+"end": 56582,
 "orig": "I put a finger under the spout and taste it.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1919,8 +1919,8 @@
 {
 "id": "s214",
 "file": "game",
-"start": 56571,
-"end": 56646,
+"start": 56604,
+"end": 56679,
 "orig": "Marinara, chocolate, and something like pickle brine. Weird. As advertised.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1928,8 +1928,8 @@
 {
 "id": "s215",
 "file": "game",
-"start": 56789,
-"end": 56832,
+"start": 56822,
+"end": 56865,
 "orig": "It's sauced enough. Any more and it's soup.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1937,8 +1937,8 @@
 {
 "id": "s216",
 "file": "game",
-"start": 56885,
-"end": 56909,
+"start": 56918,
+"end": 56942,
 "orig": "That doesn't need sauce.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1946,8 +1946,8 @@
 {
 "id": "s217",
 "file": "game",
-"start": 56978,
-"end": 57019,
+"start": 57011,
+"end": 57052,
 "orig": "Which one? There's red, green and yellow.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1955,8 +1955,8 @@
 {
 "id": "s218",
 "file": "game",
-"start": 57288,
-"end": 57336,
+"start": 57321,
+"end": 57369,
 "orig": "The red dispenser. Marinara, by the smell of it.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1964,8 +1964,8 @@
 {
 "id": "s219",
 "file": "game",
-"start": 57379,
-"end": 57414,
+"start": 57412,
+"end": 57447,
 "orig": "The green dispenser. Pesto, I hope.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1973,8 +1973,8 @@
 {
 "id": "s220",
 "file": "game",
-"start": 57441,
-"end": 57497,
+"start": 57474,
+"end": 57530,
 "orig": "The yellow dispenser. It might be custard. It might not.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1982,8 +1982,8 @@
 {
 "id": "s221",
 "file": "game",
-"start": 57675,
-"end": 57733,
+"start": 57708,
+"end": 57766,
 "orig": "It pumps into the bowl. I'll dip the rigatone in the bowl.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -1991,8 +1991,8 @@
 {
 "id": "s222",
 "file": "game",
-"start": 58091,
-"end": 58136,
+"start": 58124,
+"end": 58169,
 "orig": "It's sauced already. More would just be soup.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2000,8 +2000,8 @@
 {
 "id": "s223",
 "file": "game",
-"start": 58225,
-"end": 58299,
+"start": 58258,
+"end": 58332,
 "orig": "\\\"Glutenous Truth.\\\" A glowing loaf. I feel enlightened and slightly full.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2009,8 +2009,8 @@
 {
 "id": "s224",
 "file": "game",
-"start": 58389,
-"end": 58468,
+"start": 58422,
+"end": 58501,
 "orig": "A painted flat in the style of stained glass: the Noodly One, blessing a field.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2018,17 +2018,17 @@
 {
 "id": "s225",
 "file": "game",
-"start": 58490,
-"end": 58567,
-"orig": "Two eyes on stalks. No nose that I can see. Gods don't need noses, I suppose.",
+"start": 58523,
+"end": 58609,
+"orig": "Two eyes on stalks, and not a stitch of clothing. Gods don't need trousers, I suppose.",
 "fn": "NaveHot",
 "who": "Bellhop"
 },
 {
 "id": "s226",
 "file": "game",
-"start": 58646,
-"end": 58688,
+"start": 58688,
+"end": 58730,
 "orig": "It's plywood. Very nicely painted plywood.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2036,8 +2036,8 @@
 {
 "id": "s227",
 "file": "game",
-"start": 58782,
-"end": 58865,
+"start": 58824,
+"end": 58907,
 "orig": "\\\"Timeline of Ancient Technology.\\\" Four tiles, and an arrow from OLDEST to NEWEST.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2045,8 +2045,8 @@
 {
 "id": "s228",
 "file": "game",
-"start": 58905,
-"end": 58937,
+"start": 58947,
+"end": 58979,
 "orig": "I think you press them in order.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2054,8 +2054,8 @@
 {
 "id": "s229",
 "file": "game",
-"start": 59035,
-"end": 59154,
+"start": 59077,
+"end": 59196,
 "orig": "\\\"Sacred Topology.\\\" Two trefoil knots and a figure eight. None of them come undone without scissors. That's the point.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2063,8 +2063,8 @@
 {
 "id": "s230",
 "file": "game",
-"start": 59241,
-"end": 59314,
+"start": 59283,
+"end": 59356,
 "orig": "Crocheted pasta: farfalle, shells, a little ravioli. All yarn. I checked.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2072,8 +2072,8 @@
 {
 "id": "s231",
 "file": "game",
-"start": 59370,
-"end": 59435,
+"start": 59412,
+"end": 59477,
 "orig": "They're yarn. I can't sauce yarn. Well, I could, but I shouldn't.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2081,8 +2081,8 @@
 {
 "id": "s232",
 "file": "game",
-"start": 59525,
-"end": 59598,
+"start": 59567,
+"end": 59640,
 "orig": "\\\"First Taste.\\\" Someone eating their very first noodle. I remember mine.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2090,8 +2090,8 @@
 {
 "id": "s233",
 "file": "game",
-"start": 59717,
-"end": 59820,
+"start": 59759,
+"end": 59862,
 "orig": "The tiny village is in ruins. Holes everywhere, houses on their sides, the temple leaning like a drunk.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2099,8 +2099,8 @@
 {
 "id": "s234",
 "file": "game",
-"start": 59844,
-"end": 59928,
+"start": 59886,
+"end": 59970,
 "orig": "The villagers are sitting in the rubble, looking up at me, very proud of themselves.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2108,8 +2108,8 @@
 {
 "id": "s235",
 "file": "game",
-"start": 59952,
-"end": 60001,
+"start": 59994,
+"end": 60043,
 "orig": "The sign still says PLAY GOD. I've played enough.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2117,8 +2117,8 @@
 {
 "id": "s236",
 "file": "game",
-"start": 60052,
-"end": 60163,
+"start": 60094,
+"end": 60205,
 "orig": "A table covered in real sod. There's a tiny world on it: hills, a river of marinara, some very small villagers.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2126,8 +2126,8 @@
 {
 "id": "s237",
 "file": "game",
-"start": 60185,
-"end": 60206,
+"start": 60227,
+"end": 60248,
 "orig": "A sign says PLAY GOD.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2135,8 +2135,8 @@
 {
 "id": "s238",
 "file": "game",
-"start": 60228,
-"end": 60326,
+"start": 60270,
+"end": 60368,
 "orig": "In the middle there's a tiny temple, and the villagers keep glancing up, as if waiting for a sign.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2144,8 +2144,8 @@
 {
 "id": "s239",
 "file": "game",
-"start": 60642,
-"end": 60693,
+"start": 60684,
+"end": 60735,
 "orig": "I put on the pendant. It glows a deep, holy purple.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2153,8 +2153,8 @@
 {
 "id": "s240",
 "file": "game",
-"start": 60800,
-"end": 60831,
+"start": 60842,
+"end": 60873,
 "orig": "It's a whole disaster area now.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2162,8 +2162,8 @@
 {
 "id": "s241",
 "file": "game",
-"start": 60852,
-"end": 60875,
+"start": 60894,
+"end": 60917,
 "orig": "It's a whole ecosystem.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2171,8 +2171,8 @@
 {
 "id": "s242",
 "file": "game",
-"start": 60962,
-"end": 61015,
+"start": 61004,
+"end": 61057,
 "orig": "An old telephone handset. A label says AUDIO STORIES.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2180,8 +2180,8 @@
 {
 "id": "s243",
 "file": "game",
-"start": 61192,
-"end": 61330,
+"start": 61234,
+"end": 61372,
 "orig": "A glowing spaghetti sculpture. Noodles and meatballs pour out of a cooking pot that hangs in mid-air, held aloft as if by magic. Or faith.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2189,8 +2189,8 @@
 {
 "id": "s244",
 "file": "game",
-"start": 61396,
-"end": 61414,
+"start": 61438,
+"end": 61456,
 "orig": "Hands off the art.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2198,8 +2198,8 @@
 {
 "id": "s245",
 "file": "game",
-"start": 61483,
-"end": 61515,
+"start": 61525,
+"end": 61557,
 "orig": "It wobbles terrifyingly. I stop.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2207,8 +2207,8 @@
 {
 "id": "s246",
 "file": "game",
-"start": 61582,
-"end": 61614,
+"start": 61624,
+"end": 61656,
 "orig": "I'm not adding to the sculpture.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2216,8 +2216,8 @@
 {
 "id": "s247",
 "file": "game",
-"start": 61707,
-"end": 61799,
+"start": 61749,
+"end": 61841,
 "orig": "A paragraph spinner. Four windows of words, each with a lever. Spin them to make a sentence.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2225,8 +2225,8 @@
 {
 "id": "s248",
 "file": "game",
-"start": 61835,
-"end": 61870,
+"start": 61877,
+"end": 61912,
 "orig": "Right now it says: \\\"%s %s %s %s.\\\"",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2234,8 +2234,8 @@
 {
 "id": "s249",
 "file": "game",
-"start": 62016,
-"end": 62071,
+"start": 62058,
+"end": 62113,
 "orig": "I'll spin the windows one at a time, with their levers.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2243,8 +2243,8 @@
 {
 "id": "s250",
 "file": "game",
-"start": 62163,
-"end": 62239,
+"start": 62205,
+"end": 62281,
 "orig": "Scales of Pasta. One pan holds a little brass weight stamped ONE HOLY OUNCE.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2252,8 +2252,8 @@
 {
 "id": "s251",
 "file": "game",
-"start": 62288,
-"end": 62376,
+"start": 62330,
+"end": 62418,
 "orig": "The other holds exactly one holy ounce of elbow macaroni, and a big flat macaroni medal.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2261,8 +2261,8 @@
 {
 "id": "s252",
 "file": "game",
-"start": 62400,
-"end": 62462,
+"start": 62442,
+"end": 62504,
 "orig": "Holes all the way through. They'd thread nicely into a rosary.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2270,8 +2270,8 @@
 {
 "id": "s253",
 "file": "game",
-"start": 62497,
-"end": 62546,
+"start": 62539,
+"end": 62588,
 "orig": "The other pan is empty. I'm wearing its contents.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2279,8 +2279,8 @@
 {
 "id": "s254",
 "file": "game",
-"start": 62732,
-"end": 62828,
+"start": 62774,
+"end": 62870,
 "orig": "I'd just have loose macaroni rattling around my pockets. If I had something to thread them on...",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2288,8 +2288,8 @@
 {
 "id": "s255",
 "file": "game",
-"start": 62954,
-"end": 62994,
+"start": 62996,
+"end": 63036,
 "orig": "Exactly one holy ounce. Of course it is.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2297,8 +2297,8 @@
 {
 "id": "s256",
 "file": "game",
-"start": 63071,
-"end": 63097,
+"start": 63113,
+"end": 63139,
 "orig": "I don't need that weighed.",
 "fn": "NaveHot",
 "who": "Bellhop"
@@ -2306,8 +2306,8 @@
 {
 "id": "s257",
 "file": "game",
-"start": 63259,
-"end": 63276,
+"start": 63301,
+"end": 63318,
 "orig": "A wall. Probably.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2315,8 +2315,8 @@
 {
 "id": "s258",
 "file": "game",
-"start": 63376,
-"end": 63387,
+"start": 63418,
+"end": 63429,
 "orig": "Solid. Ish.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2324,8 +2324,8 @@
 {
 "id": "s259",
 "file": "game",
-"start": 63408,
-"end": 63435,
+"start": 63450,
+"end": 63477,
 "orig": "Only the ordained may pass.",
 "fn": "NaveObj",
 "who": "Chuk"
@@ -2333,8 +2333,8 @@
 {
 "id": "s260",
 "file": "game",
-"start": 63566,
-"end": 63688,
+"start": 63608,
+"end": 63730,
 "orig": "The tapestry of the Noodly One. Or what's left of it. There's a big ragged gap up the middle where his noodles used to be.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2342,8 +2342,8 @@
 {
 "id": "s261",
 "file": "game",
-"start": 63712,
-"end": 63764,
+"start": 63754,
+"end": 63806,
 "orig": "I'm going to hell. A very specific, carb-heavy hell.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2351,8 +2351,8 @@
 {
 "id": "s262",
 "file": "game",
-"start": 63803,
-"end": 63885,
+"start": 63845,
+"end": 63927,
 "orig": "A tapestry of the Flying Spaghetti Monster, woven in red and gold. It says R'AMEN.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2360,8 +2360,8 @@
 {
 "id": "s263",
 "file": "game",
-"start": 63909,
-"end": 63961,
+"start": 63951,
+"end": 64003,
 "orig": "There's a loose gold thread hanging from the bottom.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2369,8 +2369,8 @@
 {
 "id": "s264",
 "file": "game",
-"start": 63997,
-"end": 64065,
+"start": 64039,
+"end": 64107,
 "orig": "And glowing letters across it: PULL THE THREAD. Well, if it insists.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2378,8 +2378,8 @@
 {
 "id": "s265",
 "file": "game",
-"start": 64208,
-"end": 64282,
+"start": 64250,
+"end": 64324,
 "orig": "It's a sacred tapestry. If I pull that thread, there's no putting it back.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2387,8 +2387,8 @@
 {
 "id": "s266",
 "file": "game",
-"start": 64304,
-"end": 64327,
+"start": 64346,
+"end": 64369,
 "orig": "Pull the thread anyway.",
 "fn": "NaveObj",
 "who": "Choice"
@@ -2396,8 +2396,8 @@
 {
 "id": "s267",
 "file": "game",
-"start": 64331,
-"end": 64346,
+"start": 64373,
+"end": 64388,
 "orig": "Leave it alone.",
 "fn": "NaveObj",
 "who": "Choice"
@@ -2405,8 +2405,8 @@
 {
 "id": "s268",
 "file": "game",
-"start": 64395,
-"end": 64423,
+"start": 64437,
+"end": 64465,
 "orig": "Better not. Not yet, anyway.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2414,8 +2414,8 @@
 {
 "id": "s269",
 "file": "game",
-"start": 64598,
-"end": 64671,
+"start": 64640,
+"end": 64713,
 "orig": "I give the loose thread a little tug. And another. And it keeps coming...",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2423,8 +2423,8 @@
 {
 "id": "s270",
 "file": "game",
-"start": 64693,
-"end": 64712,
+"start": 64735,
+"end": 64754,
 "orig": "Oh no. Oh no no no.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2432,8 +2432,8 @@
 {
 "id": "s271",
 "file": "game",
-"start": 64734,
-"end": 64811,
+"start": 64776,
+"end": 64853,
 "orig": "Well. I have a good long string now. The tapestry has rather less Noodly One.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2441,8 +2441,8 @@
 {
 "id": "s272",
 "file": "game",
-"start": 64863,
-"end": 64921,
+"start": 64905,
+"end": 64963,
 "orig": "Was that... the R'amen tapestry? My grandmother wove that.",
 "fn": "NaveObj",
 "who": "Chuk"
@@ -2450,8 +2450,8 @@
 {
 "id": "s273",
 "file": "game",
-"start": 65002,
-"end": 65060,
+"start": 65044,
+"end": 65102,
 "orig": "I've done enough damage to that tapestry for one lifetime.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2459,8 +2459,8 @@
 {
 "id": "s274",
 "file": "game",
-"start": 65130,
-"end": 65203,
+"start": 65172,
+"end": 65245,
 "orig": "It's a tapestry. It doesn't open. It barely even holds together any more.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2468,8 +2468,8 @@
 {
 "id": "s275",
 "file": "game",
-"start": 65257,
-"end": 65285,
+"start": 65299,
+"end": 65327,
 "orig": "There's just wall behind it.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2477,8 +2477,8 @@
 {
 "id": "s276",
 "file": "game",
-"start": 65370,
-"end": 65435,
+"start": 65412,
+"end": 65477,
 "orig": "Pasta rosary beads. Macaroni on a string, with a big elbow medal.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2486,8 +2486,8 @@
 {
 "id": "s277",
 "file": "game",
-"start": 66265,
-"end": 66332,
+"start": 66307,
+"end": 66374,
 "orig": "A window of words. This one is glowing so brightly I can't read it.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2495,8 +2495,8 @@
 {
 "id": "s278",
 "file": "game",
-"start": 66373,
-"end": 66429,
+"start": 66415,
+"end": 66471,
 "orig": "A window of words. This one says %s. Its lever spins it.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2504,8 +2504,8 @@
 {
 "id": "s279",
 "file": "game",
-"start": 66591,
-"end": 66616,
+"start": 66633,
+"end": 66658,
 "orig": "I'll just pull its lever.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2513,8 +2513,8 @@
 {
 "id": "s280",
 "file": "game",
-"start": 66912,
-"end": 66941,
+"start": 66954,
+"end": 66983,
 "orig": "I'll press it with my finger.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2522,8 +2522,8 @@
 {
 "id": "s281",
 "file": "game",
-"start": 67042,
-"end": 67069,
+"start": 67084,
+"end": 67111,
 "orig": "They're fixed to the board.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2531,8 +2531,8 @@
 {
 "id": "s282",
 "file": "game",
-"start": 67179,
-"end": 67202,
+"start": 67221,
+"end": 67244,
 "orig": "An empty little drawer.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2540,8 +2540,8 @@
 {
 "id": "s283",
 "file": "game",
-"start": 67229,
-"end": 67266,
+"start": 67271,
+"end": 67308,
 "orig": "A little drawer with a pendant in it.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2549,8 +2549,8 @@
 {
 "id": "s284",
 "file": "game",
-"start": 67346,
-"end": 67368,
+"start": 67388,
+"end": 67410,
 "orig": "It's stuck open. Fine.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2558,8 +2558,8 @@
 {
 "id": "s285",
 "file": "game",
-"start": 67455,
-"end": 67507,
+"start": 67497,
+"end": 67549,
 "orig": "A crystal pendant with a tiny battery. A UV pendant!",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2567,8 +2567,8 @@
 {
 "id": "s286",
 "file": "game",
-"start": 67841,
-"end": 67895,
+"start": 67883,
+"end": 67937,
 "orig": "The puzzle box is open. A golden rigatone sits inside.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2576,8 +2576,8 @@
 {
 "id": "s287",
 "file": "game",
-"start": 67935,
-"end": 67955,
+"start": 67977,
+"end": 67997,
 "orig": "An empty puzzle box.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2585,8 +2585,8 @@
 {
 "id": "s288",
 "file": "game",
-"start": 67992,
-"end": 68078,
+"start": 68034,
+"end": 68120,
 "orig": "A wooden puzzle box with three buttons shaped like pasta: penne, farfalle and a shell.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2594,8 +2594,8 @@
 {
 "id": "s289",
 "file": "game",
-"start": 68102,
-"end": 68157,
+"start": 68144,
+"end": 68199,
 "orig": "A little brass plate says: THE ARK OF THE GOLDEN PASTA.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2603,8 +2603,8 @@
 {
 "id": "s290",
 "file": "game",
-"start": 68279,
-"end": 68297,
+"start": 68321,
+"end": 68339,
 "orig": "It's already open.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2612,8 +2612,8 @@
 {
 "id": "s291",
 "file": "game",
-"start": 68334,
-"end": 68383,
+"start": 68376,
+"end": 68425,
 "orig": "It's locked tight. The buttons must do something.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2621,8 +2621,8 @@
 {
 "id": "s292",
 "file": "game",
-"start": 68470,
-"end": 68562,
+"start": 68512,
+"end": 68604,
 "orig": "I tilt it to look at the bottom. There's writing, in letters so small they might be noodles.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2630,8 +2630,8 @@
 {
 "id": "s293",
 "file": "game",
-"start": 68584,
-"end": 68610,
+"start": 68626,
+"end": 68652,
 "orig": "I can't read a word of it.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2639,8 +2639,8 @@
 {
 "id": "s294",
 "file": "game",
-"start": 68906,
-"end": 68930,
+"start": 68948,
+"end": 68972,
 "orig": "A button shaped like %s.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2648,8 +2648,8 @@
 {
 "id": "s295",
 "file": "game",
-"start": 69039,
-"end": 69068,
+"start": 69081,
+"end": 69110,
 "orig": "I'll press it with my finger.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2657,8 +2657,8 @@
 {
 "id": "s296",
 "file": "game",
-"start": 69287,
-"end": 69364,
+"start": 69329,
+"end": 69406,
 "orig": "Ah-ah! Hands off my reliquary. Give me that whip-it and I'll open it for you.",
 "fn": "NaveObj",
 "who": "Chuk"
@@ -2666,8 +2666,8 @@
 {
 "id": "s297",
 "file": "game",
-"start": 69392,
-"end": 69439,
+"start": 69434,
+"end": 69481,
 "orig": "Ah-ah! Hands off my reliquary. A whip-it first.",
 "fn": "NaveObj",
 "who": "Chuk"
@@ -2675,8 +2675,8 @@
 {
 "id": "s298",
 "file": "game",
-"start": 69588,
-"end": 69675,
+"start": 69630,
+"end": 69717,
 "orig": "A golden rigatone. Golden as in painted gold. The offering, if I can sauce it properly.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2684,8 +2684,8 @@
 {
 "id": "s299",
 "file": "game",
-"start": 69976,
-"end": 70045,
+"start": 70018,
+"end": 70087,
 "orig": "\\\"Spinning Fork.\\\" It actually spins. Forever twirling, never eating.",
 "fn": "NaveObj",
 "who": "Bellhop"
@@ -2693,8 +2693,8 @@
 {
 "id": "s300",
 "file": "game",
-"start": 70310,
-"end": 70350,
+"start": 70352,
+"end": 70392,
 "orig": "The board's solved. I'm not touching it.",
 "fn": "PlaceShape",
 "who": "Bellhop"
@@ -2702,8 +2702,8 @@
 {
 "id": "s301",
 "file": "game",
-"start": 71060,
-"end": 71106,
+"start": 71102,
+"end": 71148,
 "orig": "Click. A drawer slid out from under the names.",
 "fn": "PlaceShape",
 "who": "Bellhop"
@@ -2711,8 +2711,8 @@
 {
 "id": "s302",
 "file": "game",
-"start": 71126,
-"end": 71187,
+"start": 71168,
+"end": 71229,
 "orig": "There's a crank inside! The Pope Seat's missing one of those.",
 "fn": "PlaceShape",
 "who": "Bellhop"
@@ -2720,8 +2720,8 @@
 {
 "id": "s303",
 "file": "game",
-"start": 71396,
-"end": 71452,
+"start": 71438,
+"end": 71494,
 "orig": "Clunk. All four shapes popped back out. Wrong somewhere.",
 "fn": "PlaceShape",
 "who": "Bellhop"
@@ -2729,8 +2729,8 @@
 {
 "id": "s304",
 "file": "game",
-"start": 71767,
-"end": 71824,
+"start": 71809,
+"end": 71866,
 "orig": "Right. That's it. Over to the computer with you, pilgrim.",
 "fn": "PlaceShape",
 "who": "Chuk"
@@ -2738,8 +2738,8 @@
 {
 "id": "s305",
 "file": "game",
-"start": 71909,
-"end": 71965,
+"start": 71951,
+"end": 72007,
 "orig": "Not like that, pilgrim. The new pastas were in the news.",
 "fn": "PlaceShape",
 "who": "Chuk"
@@ -2747,8 +2747,8 @@
 {
 "id": "s306",
 "file": "game",
-"start": 71988,
-"end": 72058,
+"start": 72030,
+"end": 72100,
 "orig": "Use the computer. The paper's on it, and it says which shape is which.",
 "fn": "PlaceShape",
 "who": "Chuk"
@@ -2756,8 +2756,8 @@
 {
 "id": "s307",
 "file": "game",
-"start": 72096,
-"end": 72182,
+"start": 72138,
+"end": 72224,
 "orig": "Have another look at the paper on the computer, pilgrim. It says which shape is which.",
 "fn": "PlaceShape",
 "who": "Chuk"
@@ -2765,8 +2765,8 @@
 {
 "id": "s308",
 "file": "game",
-"start": 72254,
-"end": 72328,
+"start": 72296,
+"end": 72370,
 "orig": "Try the CONFESS cabinet. Confession is good for the soul, and it pays out.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2774,8 +2774,8 @@
 {
 "id": "s309",
 "file": "game",
-"start": 72367,
-"end": 72411,
+"start": 72409,
+"end": 72453,
 "orig": "CONFESS paid you a token. It's on the floor.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2783,8 +2783,8 @@
 {
 "id": "s310",
 "file": "game",
-"start": 72452,
-"end": 72527,
+"start": 72494,
+"end": 72569,
 "orig": "Tokens are for the meatball cabinet. Nobody's ever beaten Meatball Madness.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2792,8 +2792,8 @@
 {
 "id": "s311",
 "file": "game",
-"start": 72562,
-"end": 72630,
+"start": 72604,
+"end": 72672,
 "orig": "You beat the meatball. Now take the Rex Seat and beat my high score.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2801,8 +2801,8 @@
 {
 "id": "s312",
 "file": "game",
-"start": 72679,
-"end": 72706,
+"start": 72721,
+"end": 72748,
 "orig": "The shapes go on the board.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2810,8 +2810,8 @@
 {
 "id": "s313",
 "file": "game",
-"start": 72743,
-"end": 72837,
+"start": 72785,
+"end": 72879,
 "orig": "Each shape goes over its name. The new pastas were in the news, and the computer has the news.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2819,8 +2819,8 @@
 {
 "id": "s314",
 "file": "game",
-"start": 72876,
-"end": 72913,
+"start": 72918,
+"end": 72955,
 "orig": "The board opened. Take what's inside.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2828,8 +2828,8 @@
 {
 "id": "s315",
 "file": "game",
-"start": 72953,
-"end": 73005,
+"start": 72995,
+"end": 73047,
 "orig": "Give me the crank, and I'll fit it to the Pope Seat.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2837,8 +2837,8 @@
 {
 "id": "s316",
 "file": "game",
-"start": 73027,
-"end": 73069,
+"start": 73069,
+"end": 73111,
 "orig": "Sit in the Pope Seat, your holiness-to-be.",
 "fn": "CryptHint",
 "who": "Chuk"
@@ -2846,8 +2846,8 @@
 {
 "id": "s317",
 "file": "game",
-"start": 73174,
-"end": 73235,
+"start": 73216,
+"end": 73277,
 "orig": "Ready when you are, your holiness-to-be. Sit, and I'll crank.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2855,8 +2855,8 @@
 {
 "id": "s318",
 "file": "game",
-"start": 73333,
-"end": 73351,
+"start": 73375,
+"end": 73393,
 "orig": "I'll let you play.",
 "fn": "TalkKhucCrypt",
 "who": "Text"
@@ -2864,8 +2864,8 @@
 {
 "id": "s319",
 "file": "game",
-"start": 73385,
-"end": 73419,
+"start": 73427,
+"end": 73461,
 "orig": "I'll leave you to your high score.",
 "fn": "TalkKhucCrypt",
 "who": "Text"
@@ -2873,8 +2873,8 @@
 {
 "id": "s320",
 "file": "game",
-"start": 73470,
-"end": 73491,
+"start": 73512,
+"end": 73533,
 "orig": "What are you playing?",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -2882,8 +2882,8 @@
 {
 "id": "s321",
 "file": "game",
-"start": 73495,
-"end": 73530,
+"start": 73537,
+"end": 73572,
 "orig": "Can you help me with the Pope Seat?",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -2891,8 +2891,8 @@
 {
 "id": "s322",
 "file": "game",
-"start": 73534,
-"end": 73560,
+"start": 73576,
+"end": 73602,
 "orig": "What's behind the curtain?",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -2900,8 +2900,8 @@
 {
 "id": "s323",
 "file": "game",
-"start": 73564,
-"end": 73574,
+"start": 73606,
+"end": 73616,
 "orig": "I'm stuck.",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -2909,8 +2909,8 @@
 {
 "id": "s324",
 "file": "game",
-"start": 73623,
-"end": 73644,
+"start": 73665,
+"end": 73686,
 "orig": "What are you playing?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -2918,8 +2918,8 @@
 {
 "id": "s325",
 "file": "game",
-"start": 73667,
-"end": 73718,
+"start": 73709,
+"end": 73760,
 "orig": "T. Rex. You jump over cacti until the meteor comes.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2927,8 +2927,8 @@
 {
 "id": "s326",
 "file": "game",
-"start": 73741,
-"end": 73832,
+"start": 73783,
+"end": 73874,
 "orig": "I'm trying to beat it so I can see the ending scene. Nobody has ever seen the ending scene.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2936,8 +2936,8 @@
 {
 "id": "s327",
 "file": "game",
-"start": 73885,
-"end": 73945,
+"start": 73927,
+"end": 73987,
 "orig": "But you beat Meatball Madness. You're a true gamer, pilgrim.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2945,8 +2945,8 @@
 {
 "id": "s328",
 "file": "game",
-"start": 73970,
-"end": 74040,
+"start": 74012,
+"end": 74082,
 "orig": "Take the Rex Seat and try it yourself. Beat my high score, if you can.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2954,8 +2954,8 @@
 {
 "id": "s329",
 "file": "game",
-"start": 74101,
-"end": 74136,
+"start": 74143,
+"end": 74178,
 "orig": "Can you help me with the Pope Seat?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -2963,8 +2963,8 @@
 {
 "id": "s330",
 "file": "game",
-"start": 74159,
-"end": 74253,
+"start": 74201,
+"end": 74295,
 "orig": "The Pope Seat is not for just anyone. Only the worthy may sit upon the throne and become Pope.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2972,8 +2972,8 @@
 {
 "id": "s331",
 "file": "game",
-"start": 74277,
-"end": 74302,
+"start": 74319,
+"end": 74344,
 "orig": "Who decides who's worthy?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -2981,8 +2981,8 @@
 {
 "id": "s332",
 "file": "game",
-"start": 74325,
-"end": 74389,
+"start": 74367,
+"end": 74431,
 "orig": "The Seat does. Well, the Hat does. Well, I do. I turn the crank.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2990,8 +2990,8 @@
 {
 "id": "s333",
 "file": "game",
-"start": 74412,
-"end": 74477,
+"start": 74454,
+"end": 74519,
 "orig": "The worthy must prove themselves in body, in mind, and in arcade.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -2999,8 +2999,8 @@
 {
 "id": "s334",
 "file": "game",
-"start": 74501,
-"end": 74511,
+"start": 74543,
+"end": 74553,
 "orig": "In arcade?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3008,8 +3008,8 @@
 {
 "id": "s335",
 "file": "game",
-"start": 74534,
-"end": 74616,
+"start": 74576,
+"end": 74658,
 "orig": "It's a crypt full of cabinets, pilgrim. What did you think worthiness looked like?",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3017,8 +3017,8 @@
 {
 "id": "s336",
 "file": "game",
-"start": 74639,
-"end": 74708,
+"start": 74681,
+"end": 74750,
 "orig": "Anyway, the crank's gone missing. I'll look into it after this level.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3026,8 +3026,8 @@
 {
 "id": "s337",
 "file": "game",
-"start": 74731,
-"end": 74767,
+"start": 74773,
+"end": 74809,
 "orig": "I've been saying that for some time.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3035,8 +3035,8 @@
 {
 "id": "s338",
 "file": "game",
-"start": 74818,
-"end": 74844,
+"start": 74860,
+"end": 74886,
 "orig": "What's behind the curtain?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3044,8 +3044,8 @@
 {
 "id": "s339",
 "file": "game",
-"start": 74867,
-"end": 74894,
+"start": 74909,
+"end": 74936,
 "orig": "The staff room. Staff only.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3053,8 +3053,8 @@
 {
 "id": "s340",
 "file": "game",
-"start": 74917,
-"end": 74982,
+"start": 74959,
+"end": 75024,
 "orig": "Spare colanders, folding chairs, and the drinks for after strike.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3062,8 +3062,8 @@
 {
 "id": "s341",
 "file": "game",
-"start": 75006,
-"end": 75013,
+"start": 75048,
+"end": 75055,
 "orig": "Strike?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3071,8 +3071,8 @@
 {
 "id": "s342",
 "file": "game",
-"start": 75036,
-"end": 75113,
+"start": 75078,
+"end": 75155,
 "orig": "When the party's over, it all comes down. Don't think about it. I try not to.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3080,8 +3080,8 @@
 {
 "id": "s343",
 "file": "game",
-"start": 75164,
-"end": 75174,
+"start": 75206,
+"end": 75216,
 "orig": "I'm stuck.",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3089,8 +3089,8 @@
 {
 "id": "s344",
 "file": "game",
-"start": 75325,
-"end": 75359,
+"start": 75367,
+"end": 75401,
 "orig": "I'll leave you to your high score.",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3098,8 +3098,8 @@
 {
 "id": "s345",
 "file": "game",
-"start": 75384,
-"end": 75410,
+"start": 75426,
+"end": 75452,
 "orig": "For now, pilgrim. For now.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3107,8 +3107,8 @@
 {
 "id": "s346",
 "file": "game",
-"start": 75453,
-"end": 75471,
+"start": 75495,
+"end": 75513,
 "orig": "I'll let you play.",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3116,8 +3116,8 @@
 {
 "id": "s347",
 "file": "game",
-"start": 75496,
-"end": 75510,
+"start": 75538,
+"end": 75552,
 "orig": "Meteor. Again.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3125,8 +3125,8 @@
 {
 "id": "s348",
 "file": "game",
-"start": 75588,
-"end": 75624,
+"start": 75630,
+"end": 75666,
 "orig": "Where's the crank for the Pope Seat?",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -3134,8 +3134,8 @@
 {
 "id": "s349",
 "file": "game",
-"start": 75628,
-"end": 75662,
+"start": 75670,
+"end": 75704,
 "orig": "How do the shapes go on the board?",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -3143,8 +3143,8 @@
 {
 "id": "s350",
 "file": "game",
-"start": 75666,
-"end": 75676,
+"start": 75708,
+"end": 75718,
 "orig": "I'm stuck.",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -3152,8 +3152,8 @@
 {
 "id": "s351",
 "file": "game",
-"start": 75680,
-"end": 75696,
+"start": 75722,
+"end": 75738,
 "orig": "Am I worthy yet?",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -3161,8 +3161,8 @@
 {
 "id": "s352",
 "file": "game",
-"start": 75700,
-"end": 75714,
+"start": 75742,
+"end": 75756,
 "orig": "See you later.",
 "fn": "TalkKhucCrypt",
 "who": "Choice"
@@ -3170,8 +3170,8 @@
 {
 "id": "s353",
 "file": "game",
-"start": 75758,
-"end": 75794,
+"start": 75800,
+"end": 75836,
 "orig": "Where's the crank for the Pope Seat?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3179,8 +3179,8 @@
 {
 "id": "s354",
 "file": "game",
-"start": 75833,
-"end": 75878,
+"start": 75875,
+"end": 75920,
 "orig": "You've got it. Give it here, and I'll fit it.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3188,8 +3188,8 @@
 {
 "id": "s355",
 "file": "game",
-"start": 75906,
-"end": 75992,
+"start": 75948,
+"end": 76034,
 "orig": "Locked in the Pasta Identification board, for safety. Match the shapes and it's yours.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3197,8 +3197,8 @@
 {
 "id": "s356",
 "file": "game",
-"start": 76043,
-"end": 76077,
+"start": 76085,
+"end": 76119,
 "orig": "How do the shapes go on the board?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3206,8 +3206,8 @@
 {
 "id": "s357",
 "file": "game",
-"start": 76100,
-"end": 76160,
+"start": 76142,
+"end": 76202,
 "orig": "Each shape over its name, of course. They're the new pastas.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3215,8 +3215,8 @@
 {
 "id": "s358",
 "file": "game",
-"start": 76183,
-"end": 76232,
+"start": 76225,
+"end": 76274,
 "orig": "It was in all the papers. If only we had a paper.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3224,8 +3224,8 @@
 {
 "id": "s359",
 "file": "game",
-"start": 76283,
-"end": 76293,
+"start": 76325,
+"end": 76335,
 "orig": "I'm stuck.",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3233,8 +3233,8 @@
 {
 "id": "s360",
 "file": "game",
-"start": 76426,
-"end": 76442,
+"start": 76468,
+"end": 76484,
 "orig": "Am I worthy yet?",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3242,8 +3242,8 @@
 {
 "id": "s361",
 "file": "game",
-"start": 76465,
-"end": 76547,
+"start": 76507,
+"end": 76589,
 "orig": "You beat Meatball Madness. You beat my high score. In arcade, you are very worthy.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3251,8 +3251,8 @@
 {
 "id": "s362",
 "file": "game",
-"start": 76585,
-"end": 76660,
+"start": 76627,
+"end": 76702,
 "orig": "In mind, that remains to be seen. The board, pilgrim. Match the new pastas.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3260,8 +3260,8 @@
 {
 "id": "s363",
 "file": "game",
-"start": 76706,
-"end": 76773,
+"start": 76748,
+"end": 76815,
 "orig": "And you solved my board. Bring me the crank, and the Seat is yours.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3269,8 +3269,8 @@
 {
 "id": "s364",
 "file": "game",
-"start": 76801,
-"end": 76853,
+"start": 76843,
+"end": 76895,
 "orig": "Worthier than anyone ever. Sit, your holiness-to-be.",
 "fn": "TalkKhucCrypt",
 "who": "Chuk"
@@ -3278,8 +3278,8 @@
 {
 "id": "s365",
 "file": "game",
-"start": 76892,
-"end": 76906,
+"start": 76934,
+"end": 76948,
 "orig": "See you later.",
 "fn": "TalkKhucCrypt",
 "who": "Bellhop"
@@ -3287,8 +3287,8 @@
 {
 "id": "s366",
 "file": "game",
-"start": 82109,
-"end": 82119,
+"start": 82151,
+"end": 82161,
 "orig": "SCORE %06d",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3296,8 +3296,8 @@
 {
 "id": "s367",
 "file": "game",
-"start": 82177,
-"end": 82190,
+"start": 82219,
+"end": 82232,
 "orig": "HI CHK 069990",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3305,8 +3305,8 @@
 {
 "id": "s368",
 "file": "game",
-"start": 82225,
-"end": 82238,
+"start": 82267,
+"end": 82280,
 "orig": "HI CHK 069990",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3314,8 +3314,8 @@
 {
 "id": "s369",
 "file": "game",
-"start": 82315,
-"end": 82325,
+"start": 82357,
+"end": 82367,
 "orig": "GET READY!",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3323,8 +3323,8 @@
 {
 "id": "s370",
 "file": "game",
-"start": 82395,
-"end": 82404,
+"start": 82437,
+"end": 82446,
 "orig": "GAME OVER",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3332,8 +3332,8 @@
 {
 "id": "s371",
 "file": "game",
-"start": 82489,
-"end": 82510,
+"start": 82531,
+"end": 82552,
 "orig": "INTO THE BOWL! +50000",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3341,8 +3341,8 @@
 {
 "id": "s372",
 "file": "game",
-"start": 82639,
-"end": 82655,
+"start": 82681,
+"end": 82697,
 "orig": "MEATBALL MADNESS",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3350,8 +3350,8 @@
 {
 "id": "s373",
 "file": "game",
-"start": 82709,
-"end": 82760,
+"start": 82751,
+"end": 82802,
 "orig": "Click, Space or Up to jump. Roll the meatball home!",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3359,8 +3359,8 @@
 {
 "id": "s374",
 "file": "game",
-"start": 83340,
-"end": 83355,
+"start": 83382,
+"end": 83397,
 "orig": "NEW HIGH SCORE!",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3368,8 +3368,8 @@
 {
 "id": "s375",
 "file": "game",
-"start": 83412,
-"end": 83427,
+"start": 83454,
+"end": 83469,
 "orig": "ENTER YOUR NAME",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3377,8 +3377,8 @@
 {
 "id": "s376",
 "file": "game",
-"start": 83593,
-"end": 83603,
+"start": 83635,
+"end": 83645,
 "orig": "%c  %c  %c",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3386,8 +3386,8 @@
 {
 "id": "s377",
 "file": "game",
-"start": 84073,
-"end": 84084,
+"start": 84115,
+"end": 84126,
 "orig": "HIGH SCORES",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3395,8 +3395,8 @@
 {
 "id": "s378",
 "file": "game",
-"start": 84137,
-"end": 84143,
+"start": 84179,
+"end": 84185,
 "orig": "1  FSM",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3404,8 +3404,8 @@
 {
 "id": "s379",
 "file": "game",
-"start": 84203,
-"end": 84207,
+"start": 84245,
+"end": 84249,
 "orig": "%06d",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3413,8 +3413,8 @@
 {
 "id": "s380",
 "file": "game",
-"start": 84264,
-"end": 84268,
+"start": 84306,
+"end": 84310,
 "orig": "%06d",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3422,23 +3422,14 @@
 {
 "id": "s381",
 "file": "game",
-"start": 84331,
-"end": 84337,
+"start": 84373,
+"end": 84379,
 "orig": "2  CHK",
 "fn": "MeatballGame",
 "who": "Text"
 },
 {
 "id": "s382",
-"file": "game",
-"start": 84383,
-"end": 84389,
-"orig": "069990",
-"fn": "MeatballGame",
-"who": "Text"
-},
-{
-"id": "s383",
 "file": "game",
 "start": 84425,
 "end": 84431,
@@ -3447,25 +3438,25 @@
 "who": "Text"
 },
 {
+"id": "s383",
+"file": "game",
+"start": 84467,
+"end": 84473,
+"orig": "069990",
+"fn": "MeatballGame",
+"who": "Text"
+},
+{
 "id": "s384",
 "file": "game",
-"start": 84486,
-"end": 84492,
+"start": 84528,
+"end": 84534,
 "orig": "3  CHK",
 "fn": "MeatballGame",
 "who": "Text"
 },
 {
 "id": "s385",
-"file": "game",
-"start": 84538,
-"end": 84544,
-"orig": "069980",
-"fn": "MeatballGame",
-"who": "Text"
-},
-{
-"id": "s386",
 "file": "game",
 "start": 84580,
 "end": 84586,
@@ -3474,25 +3465,25 @@
 "who": "Text"
 },
 {
+"id": "s386",
+"file": "game",
+"start": 84622,
+"end": 84628,
+"orig": "069980",
+"fn": "MeatballGame",
+"who": "Text"
+},
+{
 "id": "s387",
 "file": "game",
-"start": 84641,
-"end": 84647,
+"start": 84683,
+"end": 84689,
 "orig": "4  CHK",
 "fn": "MeatballGame",
 "who": "Text"
 },
 {
 "id": "s388",
-"file": "game",
-"start": 84693,
-"end": 84699,
-"orig": "069970",
-"fn": "MeatballGame",
-"who": "Text"
-},
-{
-"id": "s389",
 "file": "game",
 "start": 84735,
 "end": 84741,
@@ -3501,10 +3492,19 @@
 "who": "Text"
 },
 {
+"id": "s389",
+"file": "game",
+"start": 84777,
+"end": 84783,
+"orig": "069970",
+"fn": "MeatballGame",
+"who": "Text"
+},
+{
 "id": "s390",
 "file": "game",
-"start": 84795,
-"end": 84824,
+"start": 84837,
+"end": 84866,
 "orig": "ALL HAIL THE MEATBALL MASTER!",
 "fn": "MeatballGame",
 "who": "Text"
@@ -3512,8 +3512,8 @@
 {
 "id": "s391",
 "file": "game",
-"start": 85152,
-"end": 85205,
+"start": 85194,
+"end": 85247,
 "orig": "I've beaten Meatball Madness. My wrists have retired.",
 "fn": "PlayTrackball",
 "who": "Bellhop"
@@ -3521,8 +3521,8 @@
 {
 "id": "s392",
 "file": "game",
-"start": 85285,
-"end": 85325,
+"start": 85327,
+"end": 85367,
 "orig": "INSERT TOKEN, it says. I don't have one.",
 "fn": "PlayTrackball",
 "who": "Bellhop"
@@ -3530,8 +3530,8 @@
 {
 "id": "s393",
 "file": "game",
-"start": 85860,
-"end": 85926,
+"start": 85902,
+"end": 85968,
 "orig": "Splat. Hang on, the token just rolled back out of the coin return.",
 "fn": "PlayTrackball",
 "who": "Bellhop"
@@ -3539,8 +3539,8 @@
 {
 "id": "s394",
 "file": "game",
-"start": 85947,
-"end": 86038,
+"start": 85989,
+"end": 86080,
 "orig": "(without looking up) Coin return's broken. That cabinet has never kept a token in its life.",
 "fn": "PlayTrackball",
 "who": "Chuk"
@@ -3548,8 +3548,8 @@
 {
 "id": "s395",
 "file": "game",
-"start": 86059,
-"end": 86137,
+"start": 86101,
+"end": 86179,
 "orig": "Why do you think the sign says nobody's beaten it? Everyone just keeps trying.",
 "fn": "PlayTrackball",
 "who": "Chuk"
@@ -3557,8 +3557,8 @@
 {
 "id": "s396",
 "file": "game",
-"start": 86191,
-"end": 86258,
+"start": 86233,
+"end": 86300,
 "orig": "Splat again. And the token's back again. I could do this all night.",
 "fn": "PlayTrackball",
 "who": "Bellhop"
@@ -3566,8 +3566,8 @@
 {
 "id": "s397",
 "file": "game",
-"start": 86293,
-"end": 86364,
+"start": 86335,
+"end": 86406,
 "orig": "Token's back. The cabinet believes in me, even if the meatball doesn't.",
 "fn": "PlayTrackball",
 "who": "Bellhop"
@@ -3575,8 +3575,8 @@
 {
 "id": "s398",
 "file": "game",
-"start": 86404,
-"end": 86456,
+"start": 86446,
+"end": 86498,
 "orig": "FSM. For the Flying Spaghetti Monster. When in Rome.",
 "fn": "PlayTrackball",
 "who": "Bellhop"
@@ -3584,8 +3584,8 @@
 {
 "id": "s399",
 "file": "game",
-"start": 86665,
-"end": 86713,
+"start": 86707,
+"end": 86755,
 "orig": "Was that... the Meatball Madness victory jingle?",
 "fn": "PlayTrackball",
 "who": "Chuk"
@@ -3593,8 +3593,8 @@
 {
 "id": "s400",
 "file": "game",
-"start": 86812,
-"end": 86885,
+"start": 86854,
+"end": 86927,
 "orig": "Nobody beats Meatball Madness. I've been trying since they dug the Crypt.",
 "fn": "PlayTrackball",
 "who": "Chuk"
@@ -3602,8 +3602,8 @@
 {
 "id": "s401",
 "file": "game",
-"start": 86902,
-"end": 86931,
+"start": 86944,
+"end": 86973,
 "orig": "You're a true gamer, pilgrim.",
 "fn": "PlayTrackball",
 "who": "Chuk"
@@ -3611,8 +3611,8 @@
 {
 "id": "s402",
 "file": "game",
-"start": 86948,
-"end": 87036,
+"start": 86990,
+"end": 87078,
 "orig": "Fine. Take the Rex Seat. Beat my high score, and one of us might finally see the ending.",
 "fn": "PlayTrackball",
 "who": "Chuk"
@@ -3620,8 +3620,8 @@
 {
 "id": "s403",
 "file": "game",
-"start": 87098,
-"end": 87173,
+"start": 87140,
+"end": 87215,
 "orig": "Busy. Level nine. I'm going to beat this and see the ending if it kills me.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3629,8 +3629,8 @@
 {
 "id": "s404",
 "file": "game",
-"start": 87225,
-"end": 87262,
+"start": 87267,
+"end": 87304,
 "orig": "I've seen the ending. It's a chicken.",
 "fn": "PlayRex",
 "who": "Bellhop"
@@ -3638,8 +3638,8 @@
 {
 "id": "s405",
 "file": "game",
-"start": 87325,
-"end": 87364,
+"start": 87367,
+"end": 87406,
 "orig": "Chuk's high score is 99,999. Here goes.",
 "fn": "PlayRex",
 "who": "Bellhop"
@@ -3647,8 +3647,8 @@
 {
 "id": "s406",
 "file": "game",
-"start": 87594,
-"end": 87638,
+"start": 87636,
+"end": 87680,
 "orig": "Jump. Jump. Duck. Jump. A pterodactyl! Duck!",
 "fn": "PlayRex",
 "who": "Bellhop"
@@ -3656,8 +3656,8 @@
 {
 "id": "s407",
 "file": "game",
-"start": 87735,
-"end": 87763,
+"start": 87777,
+"end": 87805,
 "orig": "99,998... 99,999... 100,000!",
 "fn": "PlayRex",
 "who": "Bellhop"
@@ -3665,8 +3665,8 @@
 {
 "id": "s408",
 "file": "game",
-"start": 87874,
-"end": 87913,
+"start": 87916,
+"end": 87955,
 "orig": "NEW HIGH SCORE! PREPARE FOR THE ENDING!",
 "fn": "PlayRex",
 "who": "Narration"
@@ -3674,8 +3674,8 @@
 {
 "id": "s409",
 "file": "game",
-"start": 87985,
-"end": 88045,
+"start": 88027,
+"end": 88087,
 "orig": "THE METEOR FALLS... BUT T. REX RUNS FASTER! T. REX SURVIVES!",
 "fn": "PlayRex",
 "who": "Narration"
@@ -3683,8 +3683,8 @@
 {
 "id": "s410",
 "file": "game",
-"start": 88075,
-"end": 88100,
+"start": 88117,
+"end": 88142,
 "orig": "65 MILLION YEARS LATER...",
 "fn": "PlayRex",
 "who": "Narration"
@@ -3692,8 +3692,8 @@
 {
 "id": "s411",
 "file": "game",
-"start": 88145,
-"end": 88189,
+"start": 88187,
+"end": 88231,
 "orig": "T. REX HAS EVOLVED INTO: A CHICKEN. THE END.",
 "fn": "PlayRex",
 "who": "Narration"
@@ -3701,8 +3701,8 @@
 {
 "id": "s412",
 "file": "game",
-"start": 88207,
-"end": 88273,
+"start": 88249,
+"end": 88315,
 "orig": "It outran the meteor, survived extinction... and became a chicken.",
 "fn": "PlayRex",
 "who": "Bellhop"
@@ -3710,8 +3710,8 @@
 {
 "id": "s413",
 "file": "game",
-"start": 88551,
-"end": 88582,
+"start": 88593,
+"end": 88624,
 "orig": "All those years. For a chicken.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3719,8 +3719,8 @@
 {
 "id": "s414",
 "file": "game",
-"start": 88599,
-"end": 88691,
+"start": 88641,
+"end": 88733,
 "orig": "It cheated the meteor. Cheated extinction itself. And its reward was to become... a chicken.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3728,8 +3728,8 @@
 {
 "id": "s415",
 "file": "game",
-"start": 88708,
-"end": 88770,
+"start": 88750,
+"end": 88812,
 "orig": "I thought my theology was solid, pilgrim. Now I'm not so sure.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3737,8 +3737,8 @@
 {
 "id": "s416",
 "file": "game",
-"start": 88787,
-"end": 88891,
+"start": 88829,
+"end": 88933,
 "orig": "Maybe it's better to burn out in one glorious, fiery explosion than to grow old and become... a chicken.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3746,8 +3746,8 @@
 {
 "id": "s417",
 "file": "game",
-"start": 88908,
-"end": 88996,
+"start": 88950,
+"end": 89038,
 "orig": "I'm sorry, pilgrim. I've been so busy with games, I never finished setting up the Crypt.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3755,8 +3755,8 @@
 {
 "id": "s418",
 "file": "game",
-"start": 89013,
-"end": 89023,
+"start": 89055,
+"end": 89065,
 "orig": "Wait here.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3764,8 +3764,8 @@
 {
 "id": "s419",
 "file": "game",
-"start": 89393,
-"end": 89477,
+"start": 89435,
+"end": 89519,
 "orig": "The shapes for the Pasta Identification board. I never got round to putting them up.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3773,8 +3773,8 @@
 {
 "id": "s420",
 "file": "game",
-"start": 89647,
-"end": 89687,
+"start": 89689,
+"end": 89729,
 "orig": "These aren't pasta. They're... geometry.",
 "fn": "PlayRex",
 "who": "Bellhop"
@@ -3782,8 +3782,8 @@
 {
 "id": "s421",
 "file": "game",
-"start": 89704,
-"end": 89766,
+"start": 89746,
+"end": 89808,
 "orig": "They're the new pastas. Very modern. It was in all the papers.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3791,8 +3791,8 @@
 {
 "id": "s422",
 "file": "game",
-"start": 89783,
-"end": 89828,
+"start": 89825,
+"end": 89870,
 "orig": "And the computer. I never even plugged it in.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3800,8 +3800,8 @@
 {
 "id": "s423",
 "file": "game",
-"start": 90095,
-"end": 90145,
+"start": 90137,
+"end": 90187,
 "orig": "There. It's got the news on it, and a game or two.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3809,8 +3809,8 @@
 {
 "id": "s424",
 "file": "game",
-"start": 90252,
-"end": 90294,
+"start": 90294,
+"end": 90336,
 "orig": "I'll be by the Pope Seat when you need me.",
 "fn": "PlayRex",
 "who": "Chuk"
@@ -3818,8 +3818,8 @@
 {
 "id": "s425",
 "file": "game",
-"start": 90381,
-"end": 90432,
+"start": 90423,
+"end": 90474,
 "orig": "ABSOLVED ALREADY. GO IN PEACE. INSERT NO MORE SINS.",
 "fn": "ConfessGame",
 "who": "Narration"
@@ -3827,8 +3827,8 @@
 {
 "id": "s426",
 "file": "game",
-"start": 90530,
-"end": 90575,
+"start": 90572,
+"end": 90617,
 "orig": "WELCOME TO CONFESS! CONFESS YOUR SINS TO WIN!",
 "fn": "ConfessGame",
 "who": "Narration"
@@ -3836,8 +3836,8 @@
 {
 "id": "s427",
 "file": "game",
-"start": 90718,
-"end": 90765,
+"start": 90760,
+"end": 90807,
 "orig": "I stole a bellhop uniform from a hotel dresser.",
 "fn": "ConfessGame",
 "who": "Card title"
@@ -3845,8 +3845,8 @@
 {
 "id": "s428",
 "file": "game",
-"start": 90796,
-"end": 90854,
+"start": 90838,
+"end": 90896,
 "orig": "I unscrewed a medicine cabinet mirror. With a screwdriver.",
 "fn": "ConfessGame",
 "who": "Card text"
@@ -3854,8 +3854,8 @@
 {
 "id": "s429",
 "file": "game",
-"start": 90885,
-"end": 90935,
+"start": 90927,
+"end": 90977,
 "orig": "I ate a candy bar from the minibar and didn't pay.",
 "fn": "ConfessGame",
 "who": "Text"
@@ -3863,8 +3863,8 @@
 {
 "id": "s430",
 "file": "game",
-"start": 90966,
-"end": 90996,
+"start": 91008,
+"end": 91038,
 "orig": "I once put pineapple on pasta.",
 "fn": "ConfessGame",
 "who": "Text"
@@ -3872,8 +3872,8 @@
 {
 "id": "s431",
 "file": "game",
-"start": 91031,
-"end": 91050,
+"start": 91073,
+"end": 91092,
 "orig": "I'd rather not say.",
 "fn": "ConfessGame",
 "who": "Choice"
@@ -3881,8 +3881,8 @@
 {
 "id": "s432",
 "file": "game",
-"start": 91090,
-"end": 91109,
+"start": 91132,
+"end": 91151,
 "orig": "I'd rather not say.",
 "fn": "ConfessGame",
 "who": "Bellhop"
@@ -3890,8 +3890,8 @@
 {
 "id": "s433",
 "file": "game",
-"start": 91159,
-"end": 91177,
+"start": 91201,
+"end": 91219,
 "orig": "COWARD! GAME OVER.",
 "fn": "ConfessGame",
 "who": "Narration"
@@ -3899,8 +3899,8 @@
 {
 "id": "s434",
 "file": "game",
-"start": 91274,
-"end": 91321,
+"start": 91316,
+"end": 91363,
 "orig": "I stole a bellhop uniform from a hotel dresser.",
 "fn": "ConfessGame",
 "who": "Bellhop"
@@ -3908,8 +3908,8 @@
 {
 "id": "s435",
 "file": "game",
-"start": 91355,
-"end": 91413,
+"start": 91397,
+"end": 91455,
 "orig": "I unscrewed a medicine cabinet mirror. With a screwdriver.",
 "fn": "ConfessGame",
 "who": "Bellhop"
@@ -3917,8 +3917,8 @@
 {
 "id": "s436",
 "file": "game",
-"start": 91447,
-"end": 91497,
+"start": 91489,
+"end": 91539,
 "orig": "I ate a candy bar from the minibar and didn't pay.",
 "fn": "ConfessGame",
 "who": "Bellhop"
@@ -3926,8 +3926,8 @@
 {
 "id": "s437",
 "file": "game",
-"start": 91541,
-"end": 91571,
+"start": 91583,
+"end": 91613,
 "orig": "I once put pineapple on pasta.",
 "fn": "ConfessGame",
 "who": "Bellhop"
@@ -3935,8 +3935,8 @@
 {
 "id": "s438",
 "file": "game",
-"start": 91626,
-"end": 91658,
+"start": 91668,
+"end": 91700,
 "orig": "UNFORGIVABLE! ALL PROGRESS LOST.",
 "fn": "ConfessGame",
 "who": "Narration"
@@ -3944,8 +3944,8 @@
 {
 "id": "s439",
 "file": "game",
-"start": 91881,
-"end": 91892,
+"start": 91923,
+"end": 91934,
 "orig": "GOOD. MORE.",
 "fn": "ConfessGame",
 "who": "Narration"
@@ -3953,8 +3953,8 @@
 {
 "id": "s440",
 "file": "game",
-"start": 91947,
-"end": 91963,
+"start": 91989,
+"end": 92005,
 "orig": "MORE! MORE SINS!",
 "fn": "ConfessGame",
 "who": "Narration"
@@ -3962,8 +3962,8 @@
 {
 "id": "s441",
 "file": "game",
-"start": 92037,
-"end": 92061,
+"start": 92079,
+"end": 92103,
 "orig": "ABSOLVED!! HAVE A TOKEN.",
 "fn": "ConfessGame",
 "who": "Narration"
@@ -3971,8 +3971,8 @@
 {
 "id": "s442",
 "file": "game",
-"start": 93110,
-"end": 93131,
+"start": 93152,
+"end": 93173,
 "orig": "Room service for all!",
 "fn": "EndRoomService",
 "who": "Narration"
@@ -3980,8 +3980,8 @@
 {
 "id": "s443",
 "file": "game",
-"start": 93148,
-"end": 93205,
+"start": 93190,
+"end": 93247,
 "orig": "Room service for all?? Do you know what you've just done!",
 "fn": "EndRoomService",
 "who": "Chuk"
@@ -3989,8 +3989,8 @@
 {
 "id": "s444",
 "file": "game",
-"start": 93249,
-"end": 93282,
+"start": 93291,
+"end": 93324,
 "orig": "They're going to send the clowns!",
 "fn": "EndRoomService",
 "who": "Chuk"
@@ -3998,8 +3998,8 @@
 {
 "id": "s445",
 "file": "game",
-"start": 93549,
-"end": 93562,
+"start": 93591,
+"end": 93604,
 "orig": "ROOM SERVICE!",
 "fn": "EndRoomService",
 "who": "Clown"
@@ -4007,8 +4007,8 @@
 {
 "id": "s446",
 "file": "game",
-"start": 94587,
-"end": 94611,
+"start": 94629,
+"end": 94653,
 "orig": "Put me down! I'm clergy!",
 "fn": "EndRoomService",
 "who": "Chuk"
@@ -4016,8 +4016,8 @@
 {
 "id": "s447",
 "file": "game",
-"start": 96118,
-"end": 96142,
+"start": 96160,
+"end": 96184,
 "orig": "All games are free play!",
 "fn": "EndFreePlay",
 "who": "Narration"
@@ -4025,8 +4025,8 @@
 {
 "id": "s448",
 "file": "game",
-"start": 96159,
-"end": 96200,
+"start": 96201,
+"end": 96242,
 "orig": "FREE PLAY! You beautiful, beautiful Pope!",
 "fn": "EndFreePlay",
 "who": "Chuk"
@@ -4034,8 +4034,8 @@
 {
 "id": "s449",
 "file": "game",
-"start": 96511,
-"end": 96521,
+"start": 96553,
+"end": 96563,
 "orig": "FREE PLAY!",
 "fn": "EndFreePlay",
 "who": "Clown"
@@ -4043,8 +4043,8 @@
 {
 "id": "s450",
 "file": "game",
-"start": 97076,
-"end": 97118,
+"start": 97118,
+"end": 97160,
 "orig": "Hey! That's MY high score they're beating!",
 "fn": "EndFreePlay",
 "who": "Chuk"
@@ -4052,8 +4052,8 @@
 {
 "id": "s451",
 "file": "game",
-"start": 97211,
-"end": 97223,
+"start": 97253,
+"end": 97265,
 "orig": "Let's party!",
 "fn": "EndParty",
 "who": "Narration"
@@ -4061,8 +4061,8 @@
 {
 "id": "s452",
 "file": "game",
-"start": 97254,
-"end": 97322,
+"start": 97296,
+"end": 97364,
 "orig": "Let's party? Hasn't that been what we've been doing this whole time?",
 "fn": "EndParty",
 "who": "Chuk"
@@ -4070,8 +4070,8 @@
 {
 "id": "s453",
 "file": "game",
-"start": 97339,
-"end": 97425,
+"start": 97381,
+"end": 97467,
 "orig": "Look at the time. It's nearly strike anyway. Everything gets torn down in the morning.",
 "fn": "EndParty",
 "who": "Chuk"
@@ -4079,8 +4079,8 @@
 {
 "id": "s454",
 "file": "game",
-"start": 97442,
-"end": 97529,
+"start": 97484,
+"end": 97571,
 "orig": "Come on, your holiness. One drink in the staff room before we have to tear it all down.",
 "fn": "EndParty",
 "who": "Chuk"
@@ -4088,8 +4088,8 @@
 {
 "id": "s455",
 "file": "game",
-"start": 98429,
-"end": 98502,
+"start": 98471,
+"end": 98544,
 "orig": "Comfy. But the hat only comes down by the crank, and the crank's missing.",
 "fn": "SitPope",
 "who": "Narration"
@@ -4097,8 +4097,8 @@
 {
 "id": "s456",
 "file": "game",
-"start": 98547,
-"end": 98588,
+"start": 98589,
+"end": 98630,
 "orig": "There's just an empty socket on the side.",
 "fn": "SitPope",
 "who": "Narration"
@@ -4106,8 +4106,8 @@
 {
 "id": "s457",
 "file": "game",
-"start": 98705,
-"end": 98731,
+"start": 98747,
+"end": 98773,
 "orig": "Hold still, your holiness.",
 "fn": "SitPope",
 "who": "Chuk"
@@ -4115,8 +4115,8 @@
 {
 "id": "s458",
 "file": "game",
-"start": 99068,
-"end": 99096,
+"start": 99110,
+"end": 99138,
 "orig": "Behold! The Hat is upon you!",
 "fn": "SitPope",
 "who": "Chuk"
@@ -4124,8 +4124,8 @@
 {
 "id": "s459",
 "file": "game",
-"start": 99113,
-"end": 99203,
+"start": 99155,
+"end": 99245,
 "orig": "You beat my high score. And you solved every one of my puzzles. Nobody has ever done both.",
 "fn": "SitPope",
 "who": "Chuk"
@@ -4133,8 +4133,8 @@
 {
 "id": "s460",
 "file": "game",
-"start": 99220,
-"end": 99258,
+"start": 99262,
+"end": 99300,
 "orig": "Nobody has ever done either, actually.",
 "fn": "SitPope",
 "who": "Chuk"
@@ -4142,8 +4142,8 @@
 {
 "id": "s461",
 "file": "game",
-"start": 99275,
-"end": 99368,
+"start": 99317,
+"end": 99410,
 "orig": "So by the power of the Hat, I decree it: you are Pope! And every Pope gets one papal request.",
 "fn": "SitPope",
 "who": "Chuk"
@@ -4151,8 +4151,8 @@
 {
 "id": "s462",
 "file": "game",
-"start": 99406,
-"end": 99431,
+"start": 99448,
+"end": 99473,
 "orig": "\\\"Room service for all!\\\"",
 "fn": "SitPope",
 "who": "Choice"
@@ -4160,8 +4160,8 @@
 {
 "id": "s463",
 "file": "game",
-"start": 99435,
-"end": 99463,
+"start": 99477,
+"end": 99505,
 "orig": "\\\"All games are free play!\\\"",
 "fn": "SitPope",
 "who": "Choice"
@@ -4169,8 +4169,8 @@
 {
 "id": "s464",
 "file": "game",
-"start": 99467,
-"end": 99483,
+"start": 99509,
+"end": 99525,
 "orig": "\\\"Let's party!\\\"",
 "fn": "SitPope",
 "who": "Choice"
@@ -4178,8 +4178,8 @@
 {
 "id": "s465",
 "file": "game",
-"start": 99781,
-"end": 99818,
+"start": 99823,
+"end": 99860,
 "orig": "A game called HOTEL.EXE. Let's see...",
 "fn": "RunHotel",
 "who": "Bellhop"
@@ -4187,8 +4187,8 @@
 {
 "id": "s466",
 "file": "game",
-"start": 100585,
-"end": 100601,
+"start": 100627,
+"end": 100643,
 "orig": "The Daily Noodle",
 "fn": "ReadNewspaper",
 "who": "Note title"
@@ -4196,8 +4196,8 @@
 {
 "id": "s467",
 "file": "game",
-"start": 100609,
-"end": 101156,
+"start": 100651,
+"end": 101198,
 "orig": "NEW PASTAS BAFFLE DINERS! The Church of the Noodle has unveiled four new shapes, cut from pure geometry.[[OTTINI never end: follow one round and you cross the middle, like an eight. TORTINI have a single twist, and so only one side. ANELLI are plain rings, with a hole for your finger. And NODINI are tied in a knot of three loops that can never be undone.[[The Crypt's Pasta Identification board will be updated, says its keeper, after this level.[[Also inside: clowns spotted roaming the hotel. Be on the lookout for hijinks. Duck still missing.",
 "fn": "ReadNewspaper",
 "who": "Note text"
@@ -4205,8 +4205,8 @@
 {
 "id": "s468",
 "file": "game",
-"start": 101272,
-"end": 101284,
+"start": 101314,
+"end": 101326,
 "orig": "I dial zero.",
 "fn": "CallGustav",
 "who": "Bellhop"
@@ -4214,8 +4214,8 @@
 {
 "id": "s469",
 "file": "game",
-"start": 101357,
-"end": 101405,
+"start": 101399,
+"end": 101447,
 "orig": "Front desk, Gustav speaking. How may I help you?",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4223,8 +4223,8 @@
 {
 "id": "s470",
 "file": "game",
-"start": 101468,
-"end": 101499,
+"start": 101510,
+"end": 101541,
 "orig": "Gustav! It's me, from Room 714.",
 "fn": "CallGustav",
 "who": "Choice"
@@ -4232,8 +4232,8 @@
 {
 "id": "s471",
 "file": "game",
-"start": 101503,
-"end": 101549,
+"start": 101545,
+"end": 101591,
 "orig": "Gustav, do you know you're in a computer game?",
 "fn": "CallGustav",
 "who": "Choice"
@@ -4241,8 +4241,8 @@
 {
 "id": "s472",
 "file": "game",
-"start": 101572,
-"end": 101600,
+"start": 101614,
+"end": 101642,
 "orig": "Any tips for the pasta wall?",
 "fn": "CallGustav",
 "who": "Choice"
@@ -4250,8 +4250,8 @@
 {
 "id": "s473",
 "file": "game",
-"start": 101604,
-"end": 101630,
+"start": 101646,
+"end": 101672,
 "orig": "What's it like down there?",
 "fn": "CallGustav",
 "who": "Choice"
@@ -4259,8 +4259,8 @@
 {
 "id": "s474",
 "file": "game",
-"start": 101634,
-"end": 101654,
+"start": 101676,
+"end": 101696,
 "orig": "Never mind. Goodbye.",
 "fn": "CallGustav",
 "who": "Choice"
@@ -4268,8 +4268,8 @@
 {
 "id": "s475",
 "file": "game",
-"start": 101694,
-"end": 101725,
+"start": 101736,
+"end": 101767,
 "orig": "Gustav! It's me, from Room 714.",
 "fn": "CallGustav",
 "who": "Bellhop"
@@ -4277,8 +4277,8 @@
 {
 "id": "s476",
 "file": "game",
-"start": 101743,
-"end": 101818,
+"start": 101785,
+"end": 101860,
 "orig": "Sir checked out hours ago. I have it in the ledger. Ninth floor, wasn't it?",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4286,8 +4286,8 @@
 {
 "id": "s477",
 "file": "game",
-"start": 101836,
-"end": 101923,
+"start": 101878,
+"end": 101965,
 "orig": "And yet here sir is, calling from 714. On a phone that is, if you'll forgive me, drawn.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4295,8 +4295,8 @@
 {
 "id": "s478",
 "file": "game",
-"start": 101970,
-"end": 102016,
+"start": 102012,
+"end": 102058,
 "orig": "Gustav, do you know you're in a computer game?",
 "fn": "CallGustav",
 "who": "Bellhop"
@@ -4304,8 +4304,8 @@
 {
 "id": "s479",
 "file": "game",
-"start": 102034,
-"end": 102089,
+"start": 102076,
+"end": 102131,
 "orig": "Sir, I am the front desk. I am in whatever I am put in.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4313,8 +4313,8 @@
 {
 "id": "s480",
 "file": "game",
-"start": 102107,
-"end": 102186,
+"start": 102149,
+"end": 102228,
 "orig": "Between ourselves, sir is in one too. And that one is on a computer in a crypt.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4322,8 +4322,8 @@
 {
 "id": "s481",
 "file": "game",
-"start": 102204,
-"end": 102249,
+"start": 102246,
+"end": 102291,
 "orig": "I try not to think about who is playing that.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4331,8 +4331,8 @@
 {
 "id": "s482",
 "file": "game",
-"start": 102296,
-"end": 102324,
+"start": 102338,
+"end": 102366,
 "orig": "Any tips for the pasta wall?",
 "fn": "CallGustav",
 "who": "Bellhop"
@@ -4340,8 +4340,8 @@
 {
 "id": "s483",
 "file": "game",
-"start": 102342,
-"end": 102451,
+"start": 102384,
+"end": 102493,
 "orig": "Read the paper, sir. There's a piece about the new pastas. We slid it under the door at considerable expense.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4349,8 +4349,8 @@
 {
 "id": "s484",
 "file": "game",
-"start": 102498,
-"end": 102524,
+"start": 102540,
+"end": 102566,
 "orig": "What's it like down there?",
 "fn": "CallGustav",
 "who": "Bellhop"
@@ -4358,8 +4358,8 @@
 {
 "id": "s485",
 "file": "game",
-"start": 102542,
-"end": 102608,
+"start": 102584,
+"end": 102650,
 "orig": "Quiet, sir. The clowns have gone up to some sort of noodle church.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4367,8 +4367,8 @@
 {
 "id": "s486",
 "file": "game",
-"start": 102626,
-"end": 102740,
+"start": 102668,
+"end": 102782,
 "orig": "They are still on duty, of course. Should sir require room service, wherever sir may be, sir need only ask for it.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4376,8 +4376,8 @@
 {
 "id": "s487",
 "file": "game",
-"start": 102758,
-"end": 102800,
+"start": 102800,
+"end": 102842,
 "orig": "Out loud. With conviction. They will come.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4385,8 +4385,8 @@
 {
 "id": "s488",
 "file": "game",
-"start": 102818,
-"end": 102885,
+"start": 102860,
+"end": 102927,
 "orig": "Also there is a duck in the lobby. Nobody knows whose. Nobody asks.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4394,8 +4394,8 @@
 {
 "id": "s489",
 "file": "game",
-"start": 102920,
-"end": 102940,
+"start": 102962,
+"end": 102982,
 "orig": "Never mind. Goodbye.",
 "fn": "CallGustav",
 "who": "Bellhop"
@@ -4403,8 +4403,8 @@
 {
 "id": "s490",
 "file": "game",
-"start": 102958,
-"end": 103011,
+"start": 103000,
+"end": 103053,
 "orig": "Good night, sir. Do enjoy whichever party you are at.",
 "fn": "CallGustav",
 "who": "Gustav"
@@ -4412,8 +4412,8 @@
 {
 "id": "s491",
 "file": "game",
-"start": 103183,
-"end": 103210,
+"start": 103225,
+"end": 103252,
 "orig": "LOG OFF. Back to the Crypt.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4421,8 +4421,8 @@
 {
 "id": "s492",
 "file": "game",
-"start": 103311,
-"end": 103376,
+"start": 103353,
+"end": 103418,
 "orig": "I'm not going back in the bathroom. Some things you only do once.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4430,8 +4430,8 @@
 {
 "id": "s493",
 "file": "game",
-"start": 103729,
-"end": 103780,
+"start": 103771,
+"end": 103822,
 "orig": "Click. The weather. Sunny, with a chance of clowns.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4439,8 +4439,8 @@
 {
 "id": "s494",
 "file": "game",
-"start": 103825,
-"end": 103895,
+"start": 103867,
+"end": 103937,
 "orig": "Click. A cooking show. A man in a colander is shouting about rigatoni.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4448,8 +4448,8 @@
 {
 "id": "s495",
 "file": "game",
-"start": 103940,
-"end": 104004,
+"start": 103982,
+"end": 104046,
 "orig": "Click. A tiny bellhop, in a tiny Crypt, playing a tiny computer.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4457,8 +4457,8 @@
 {
 "id": "s496",
 "file": "game",
-"start": 104029,
-"end": 104084,
+"start": 104071,
+"end": 104126,
 "orig": "Click. Static. Even the TV needs a break from all this.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4466,8 +4466,8 @@
 {
 "id": "s497",
 "file": "game",
-"start": 104315,
-"end": 104349,
+"start": 104357,
+"end": 104391,
 "orig": "I close the curtains. Much better.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4475,8 +4475,8 @@
 {
 "id": "s498",
 "file": "game",
-"start": 104555,
-"end": 104618,
+"start": 104597,
+"end": 104660,
 "orig": "I peek out. The city at night, eight colours deep. A full moon.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4484,8 +4484,8 @@
 {
 "id": "s499",
 "file": "game",
-"start": 104638,
-"end": 104705,
+"start": 104680,
+"end": 104747,
 "orig": "Somewhere down there, a clown is parallel parking a very small car.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4493,8 +4493,8 @@
 {
 "id": "s500",
 "file": "game",
-"start": 104864,
-"end": 104882,
+"start": 104906,
+"end": 104924,
 "orig": "It's already shut.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4502,8 +4502,8 @@
 {
 "id": "s501",
 "file": "game",
-"start": 105066,
-"end": 105105,
+"start": 105108,
+"end": 105147,
 "orig": "I shut the minibar. Temptation averted.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4511,8 +4511,8 @@
 {
 "id": "s502",
 "file": "game",
-"start": 105242,
-"end": 105292,
+"start": 105284,
+"end": 105334,
 "orig": "It's already open. The candy bar is looking at me.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4520,8 +4520,8 @@
 {
 "id": "s503",
 "file": "game",
-"start": 105472,
-"end": 105526,
+"start": 105514,
+"end": 105568,
 "orig": "I open the minibar. Little bottles, and one candy bar.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4529,8 +4529,8 @@
 {
 "id": "s504",
 "file": "game",
-"start": 105696,
-"end": 105749,
+"start": 105738,
+"end": 105791,
 "orig": "Click. Click. It stays on. They only drew it one way.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4538,8 +4538,8 @@
 {
 "id": "s505",
 "file": "game",
-"start": 105847,
-"end": 105880,
+"start": 105889,
+"end": 105922,
 "orig": "I lie down for a quick pixel nap.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4547,8 +4547,8 @@
 {
 "id": "s506",
 "file": "game",
-"start": 105947,
-"end": 105990,
+"start": 105989,
+"end": 106032,
 "orig": "I wake up. Still in the game. Both of them.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4556,8 +4556,8 @@
 {
 "id": "s507",
 "file": "game",
-"start": 106108,
-"end": 106198,
+"start": 106150,
+"end": 106240,
 "orig": "The safe behind the painting. I'm not doing the safe again. I still dream about that code.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4565,8 +4565,8 @@
 {
 "id": "s508",
 "file": "game",
-"start": 106312,
-"end": 106413,
+"start": 106354,
+"end": 106455,
 "orig": "Through that door is the ninth floor, the Nave, Chuk, and eventually a computer with this game on it.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4574,8 +4574,8 @@
 {
 "id": "s509",
 "file": "game",
-"start": 106433,
-"end": 106442,
+"start": 106475,
+"end": 106484,
 "orig": "Best not.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4583,8 +4583,8 @@
 {
 "id": "s510",
 "file": "game",
-"start": 106504,
-"end": 106575,
+"start": 106546,
+"end": 106617,
 "orig": "I already did all that. It's a much smaller game the second time round.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4592,8 +4592,8 @@
 {
 "id": "s511",
 "file": "game",
-"start": 106637,
-"end": 106735,
+"start": 106679,
+"end": 106777,
 "orig": "The door of Room 714. There's a party upstairs I haven't been to yet. Well, I have, but he hasn't.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4601,8 +4601,8 @@
 {
 "id": "s512",
 "file": "game",
-"start": 106779,
-"end": 106839,
+"start": 106821,
+"end": 106881,
 "orig": "The TV. There are four channels, and they're all a bit much.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4610,8 +4610,8 @@
 {
 "id": "s513",
 "file": "game",
-"start": 106889,
-"end": 106963,
+"start": 106931,
+"end": 107005,
 "orig": "The bathroom. I'm not going back in there. Not after the medicine cabinet.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4619,8 +4619,8 @@
 {
 "id": "s514",
 "file": "game",
-"start": 107012,
-"end": 107085,
+"start": 107054,
+"end": 107127,
 "orig": "The dresser where I found the bellhop uniform. Small world. Small pixels.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4628,8 +4628,8 @@
 {
 "id": "s515",
 "file": "game",
-"start": 107156,
-"end": 107207,
+"start": 107198,
+"end": 107249,
 "orig": "The city at night. Somewhere out there, the clowns.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4637,8 +4637,8 @@
 {
 "id": "s516",
 "file": "game",
-"start": 107228,
-"end": 107273,
+"start": 107270,
+"end": 107315,
 "orig": "Curtains. The clowns are out there somewhere.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4646,8 +4646,8 @@
 {
 "id": "s517",
 "file": "game",
-"start": 107324,
-"end": 107373,
+"start": 107366,
+"end": 107415,
 "orig": "The minibar. I'd rather not relive the candy bar.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4655,8 +4655,8 @@
 {
 "id": "s518",
 "file": "game",
-"start": 107419,
-"end": 107459,
+"start": 107461,
+"end": 107501,
 "orig": "A lamp. It's on. It's always on in here.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4664,8 +4664,8 @@
 {
 "id": "s519",
 "file": "game",
-"start": 107506,
-"end": 107550,
+"start": 107548,
+"end": 107592,
 "orig": "The phone. Nobody's calling a computer game.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4673,8 +4673,8 @@
 {
 "id": "s520",
 "file": "game",
-"start": 107602,
-"end": 107638,
+"start": 107644,
+"end": 107680,
 "orig": "The nightstand. Empty, as I left it.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4682,8 +4682,8 @@
 {
 "id": "s521",
 "file": "game",
-"start": 107688,
-"end": 107750,
+"start": 107730,
+"end": 107792,
 "orig": "The deer painting, with the safe behind it. I know its tricks.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4691,8 +4691,8 @@
 {
 "id": "s522",
 "file": "game",
-"start": 107795,
-"end": 107870,
+"start": 107837,
+"end": 107912,
 "orig": "The bed. I could lie down, but then I'd have to play the whole thing again.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4700,8 +4700,8 @@
 {
 "id": "s523",
 "file": "game",
-"start": 107917,
-"end": 107952,
+"start": 107959,
+"end": 107994,
 "orig": "The coffee table. Mercifully empty.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4709,8 +4709,8 @@
 {
 "id": "s524",
 "file": "game",
-"start": 107975,
-"end": 107993,
+"start": 108017,
+"end": 108035,
 "orig": "It's very pixelly.",
 "fn": "HotelHot",
 "who": "Bellhop"
@@ -4718,8 +4718,8 @@
 {
 "id": "s525",
 "file": "game",
-"start": 108202,
-"end": 108266,
+"start": 108244,
+"end": 108308,
 "orig": "A newspaper. Someone must have slid it under the door overnight.",
 "fn": "HotelObj",
 "who": "Bellhop"
@@ -4727,8 +4727,8 @@
 {
 "id": "s526",
 "file": "game",
-"start": 108311,
-"end": 108440,
+"start": 108353,
+"end": 108482,
 "orig": "Hang on. I'm reading a newspaper, in a hotel room, in a video game, in the crypt, in a video game, in the crypt, in a hotel room?",
 "fn": "HotelObj",
 "who": "Bellhop"
@@ -4736,8 +4736,8 @@
 {
 "id": "s527",
 "file": "game",
-"start": 108570,
-"end": 108636,
+"start": 108612,
+"end": 108678,
 "orig": "This metafiction has gotten a little out of hand, don't you think?",
 "fn": "HotelObj",
 "who": "Bellhop"
@@ -4745,8 +4745,8 @@
 {
 "id": "s528",
 "file": "game",
-"start": 108732,
-"end": 108771,
+"start": 108774,
+"end": 108813,
 "orig": "One candy bar, priced at forty dollars.",
 "fn": "HotelObj",
 "who": "Bellhop"
@@ -4754,8 +4754,8 @@
 {
 "id": "s529",
 "file": "game",
-"start": 108862,
-"end": 108920,
+"start": 108904,
+"end": 108962,
 "orig": "One candy bar, priced at forty dollars. I know better now.",
 "fn": "HotelObj",
 "who": "Bellhop"
@@ -4763,8 +4763,8 @@
 {
 "id": "s530",
 "file": "game",
-"start": 109083,
-"end": 109112,
+"start": 109125,
+"end": 109154,
 "orig": "The archway back to the Nave.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4772,8 +4772,8 @@
 {
 "id": "s531",
 "file": "game",
-"start": 109418,
-"end": 109497,
+"start": 109460,
+"end": 109539,
 "orig": "The Flying Spaghetti Monster, crocheted out of yarn. Its meatballs are pompoms.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4781,8 +4781,8 @@
 {
 "id": "s532",
 "file": "game",
-"start": 109568,
-"end": 109606,
+"start": 109610,
+"end": 109648,
 "orig": "I can't reach it, and I wouldn't dare.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4790,8 +4790,8 @@
 {
 "id": "s533",
 "file": "game",
-"start": 109702,
-"end": 109813,
+"start": 109744,
+"end": 109855,
 "orig": "\\\"Pasta Identification.\\\" OTTINI, TORTINI, ANELLI, NODINI. Pastas I've never heard of, and four empty recesses.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4799,8 +4799,8 @@
 {
 "id": "s534",
 "file": "game",
-"start": 109850,
-"end": 109891,
+"start": 109892,
+"end": 109933,
 "orig": "And a brass plate underneath, shut tight.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4808,8 +4808,8 @@
 {
 "id": "s535",
 "file": "game",
-"start": 109976,
-"end": 110009,
+"start": 110018,
+"end": 110051,
 "orig": "Which recess? I'll put it in one.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4817,8 +4817,8 @@
 {
 "id": "s536",
 "file": "game",
-"start": 110095,
-"end": 110147,
+"start": 110137,
+"end": 110189,
 "orig": "The staff area. Something smells amazing back there.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4826,8 +4826,8 @@
 {
 "id": "s537",
 "file": "game",
-"start": 110235,
-"end": 110347,
+"start": 110277,
+"end": 110389,
 "orig": "A confessional booth with three arcade buttons. CONFESS, it says, in red neon. A lot of judgment in one cabinet.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4835,8 +4835,8 @@
 {
 "id": "s538",
 "file": "game",
-"start": 110454,
-"end": 110473,
+"start": 110496,
+"end": 110515,
 "orig": "It only takes sins.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4844,8 +4844,8 @@
 {
 "id": "s539",
 "file": "game",
-"start": 110611,
-"end": 110678,
+"start": 110653,
+"end": 110720,
 "orig": "A trackball cabinet: MEATBALL MADNESS. The trackball is a meatball.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4853,8 +4853,8 @@
 {
 "id": "s540",
 "file": "game",
-"start": 110719,
-"end": 110784,
+"start": 110761,
+"end": 110826,
 "orig": "INSERT TOKEN. Nobody has ever beaten it, says a handwritten sign.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4862,8 +4862,8 @@
 {
 "id": "s541",
 "file": "game",
-"start": 110965,
-"end": 110986,
+"start": 111007,
+"end": 111028,
 "orig": "It only takes tokens.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4871,8 +4871,8 @@
 {
 "id": "s542",
 "file": "game",
-"start": 111094,
-"end": 111169,
+"start": 111136,
+"end": 111211,
 "orig": "A classic computer, beige and humming. There's a folder on it called GAMES.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4880,8 +4880,8 @@
 {
 "id": "s543",
 "file": "game",
-"start": 111196,
-"end": 111283,
+"start": 111238,
+"end": 111325,
 "orig": "A classic computer, beige and silent. Its power cable is lying on the floor, unplugged.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4889,8 +4889,8 @@
 {
 "id": "s544",
 "file": "game",
-"start": 111421,
-"end": 111455,
+"start": 111463,
+"end": 111497,
 "orig": "Nothing. It isn't even plugged in.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4898,8 +4898,8 @@
 {
 "id": "s545",
 "file": "game",
-"start": 111516,
-"end": 111550,
+"start": 111558,
+"end": 111592,
 "orig": "I'll set that up after this level.",
 "fn": "CryptHot",
 "who": "Chuk"
@@ -4907,8 +4907,8 @@
 {
 "id": "s546",
 "file": "game",
-"start": 111691,
-"end": 111790,
+"start": 111733,
+"end": 111832,
 "orig": "A T. Rex game built into a real T. rex skull. You sit in its jaws. Jump the cacti. Fear the meteor.",
 "fn": "CryptHot",
 "who": "Bellhop"
@@ -4916,8 +4916,8 @@
 {
 "id": "s547",
 "file": "game",
-"start": 112099,
-"end": 112126,
+"start": 112141,
+"end": 112168,
 "orig": "The recess above %s. Empty.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4925,8 +4925,8 @@
 {
 "id": "s548",
 "file": "game",
-"start": 112182,
-"end": 112209,
+"start": 112224,
+"end": 112251,
 "orig": "%s, in the recess above %s.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4934,8 +4934,8 @@
 {
 "id": "s549",
 "file": "game",
-"start": 112412,
-"end": 112441,
+"start": 112454,
+"end": 112483,
 "orig": "That doesn't go on the board.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4943,8 +4943,8 @@
 {
 "id": "s550",
 "file": "game",
-"start": 112554,
-"end": 112591,
+"start": 112596,
+"end": 112633,
 "orig": "The board's solved. I'll leave it be.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4952,8 +4952,8 @@
 {
 "id": "s551",
 "file": "game",
-"start": 112855,
-"end": 112903,
+"start": 112897,
+"end": 112945,
 "orig": "An empty recess. One of the shapes must go here.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4961,8 +4961,8 @@
 {
 "id": "s552",
 "file": "game",
-"start": 112930,
-"end": 112983,
+"start": 112972,
+"end": 113025,
 "orig": "An empty recess. Something's missing from this board.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4970,8 +4970,8 @@
 {
 "id": "s553",
 "file": "game",
-"start": 113321,
-"end": 113384,
+"start": 113363,
+"end": 113426,
 "orig": "The drawer under the names. It slid shut once I took the crank.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4979,8 +4979,8 @@
 {
 "id": "s554",
 "file": "game",
-"start": 113425,
-"end": 113460,
+"start": 113467,
+"end": 113502,
 "orig": "The drawer under the names is open.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4988,8 +4988,8 @@
 {
 "id": "s555",
 "file": "game",
-"start": 113487,
-"end": 113558,
+"start": 113529,
+"end": 113600,
 "orig": "A drawer under the names, with no handle to pull. It must open somehow.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -4997,8 +4997,8 @@
 {
 "id": "s556",
 "file": "game",
-"start": 113700,
-"end": 113731,
+"start": 113742,
+"end": 113773,
 "orig": "It's empty now. Best left shut.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5006,8 +5006,8 @@
 {
 "id": "s557",
 "file": "game",
-"start": 113772,
-"end": 113790,
+"start": 113814,
+"end": 113832,
 "orig": "It's open already.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5015,8 +5015,8 @@
 {
 "id": "s558",
 "file": "game",
-"start": 113817,
-"end": 113872,
+"start": 113859,
+"end": 113914,
 "orig": "It won't budge. The board has to be right first, I bet.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5024,8 +5024,8 @@
 {
 "id": "s559",
 "file": "game",
-"start": 113968,
-"end": 114042,
+"start": 114010,
+"end": 114084,
 "orig": "An iron crank with a wooden handle. It'd fit the Pope Seat's empty socket.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5033,8 +5033,8 @@
 {
 "id": "s560",
 "file": "game",
-"start": 114283,
-"end": 114297,
+"start": 114325,
+"end": 114339,
 "orig": "Got the crank.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5042,8 +5042,8 @@
 {
 "id": "s561",
 "file": "game",
-"start": 114511,
-"end": 114540,
+"start": 114553,
+"end": 114582,
 "orig": "An arcade token, stamped FSM.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5051,8 +5051,8 @@
 {
 "id": "s562",
 "file": "game",
-"start": 114842,
-"end": 114924,
+"start": 114884,
+"end": 114966,
 "orig": "The staff room. Shelves of boxes, folding chairs, and the drinks for after strike.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5060,8 +5060,8 @@
 {
 "id": "s563",
 "file": "game",
-"start": 115085,
-"end": 115146,
+"start": 115127,
+"end": 115188,
 "orig": "Staff only! That's where we keep the drinks for after strike.",
 "fn": "CryptObj",
 "who": "Chuk"
@@ -5069,8 +5069,8 @@
 {
 "id": "s564",
 "file": "game",
-"start": 115185,
-"end": 115215,
+"start": 115227,
+"end": 115257,
 "orig": "It says STAFF. I'd better not.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5078,8 +5078,8 @@
 {
 "id": "s565",
 "file": "game",
-"start": 115324,
-"end": 115389,
+"start": 115366,
+"end": 115431,
 "orig": "The Pope Seat: a red throne with a big red button on the armrest.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5087,8 +5087,8 @@
 {
 "id": "s566",
 "file": "game",
-"start": 115411,
-"end": 115462,
+"start": 115453,
+"end": 115504,
 "orig": "A pope hat made of lasagna hangs over it on a rope.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5096,8 +5096,8 @@
 {
 "id": "s567",
 "file": "game",
-"start": 115502,
-"end": 115565,
+"start": 115544,
+"end": 115607,
 "orig": "There's an empty socket on the side, where the crank should go.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5105,8 +5105,8 @@
 {
 "id": "s568",
 "file": "game",
-"start": 115650,
-"end": 115699,
+"start": 115692,
+"end": 115741,
 "orig": "I'll need someone to turn it while I sit, though.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5114,8 +5114,8 @@
 {
 "id": "s569",
 "file": "game",
-"start": 115794,
-"end": 115824,
+"start": 115836,
+"end": 115866,
 "orig": "That doesn't go on the throne.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5123,8 +5123,8 @@
 {
 "id": "s570",
 "file": "game",
-"start": 115964,
-"end": 116024,
+"start": 116006,
+"end": 116066,
 "orig": "I can't sit in the seat and turn the crank at the same time.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5132,8 +5132,8 @@
 {
 "id": "s571",
 "file": "game",
-"start": 116051,
-"end": 116096,
+"start": 116093,
+"end": 116138,
 "orig": "There's nothing to pull. The crank's missing.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5141,8 +5141,8 @@
 {
 "id": "s572",
 "file": "game",
-"start": 116190,
-"end": 116249,
+"start": 116232,
+"end": 116291,
 "orig": "A pope hat made of lasagna. The sauce band is a nice touch.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5150,8 +5150,8 @@
 {
 "id": "s573",
 "file": "game",
-"start": 116320,
-"end": 116393,
+"start": 116362,
+"end": 116435,
 "orig": "It's on a rope, way up there. It comes down when someone turns the crank.",
 "fn": "CryptObj",
 "who": "Bellhop"
@@ -5159,8 +5159,8 @@
 {
 "id": "s574",
 "file": "game",
-"start": 116667,
-"end": 116714,
+"start": 116709,
+"end": 116756,
 "orig": "Pasta rosary beads. Elbow macaroni on a string.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5168,8 +5168,8 @@
 {
 "id": "s575",
 "file": "game",
-"start": 116815,
-"end": 116882,
+"start": 116857,
+"end": 116924,
 "orig": "The UV pendant. I'm wearing it. To take it off, I use it on myself.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5177,8 +5177,8 @@
 {
 "id": "s576",
 "file": "game",
-"start": 116927,
-"end": 116990,
+"start": 116969,
+"end": 117032,
 "orig": "A UV pendant. A crystal with a little ultraviolet light inside.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5186,8 +5186,8 @@
 {
 "id": "s577",
 "file": "game",
-"start": 117036,
-"end": 117123,
+"start": 117078,
+"end": 117165,
 "orig": "A golden rigatone. The offering, but unsauced. The Weird Sauce machine should fix that.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5195,8 +5195,8 @@
 {
 "id": "s578",
 "file": "game",
-"start": 117167,
-"end": 117209,
+"start": 117209,
+"end": 117251,
 "orig": "A golden rigatone, covered in Weird Sauce.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5204,8 +5204,8 @@
 {
 "id": "s579",
 "file": "game",
-"start": 117252,
-"end": 117281,
+"start": 117294,
+"end": 117323,
 "orig": "An arcade token, stamped FSM.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5213,8 +5213,8 @@
 {
 "id": "s580",
 "file": "game",
-"start": 117324,
-"end": 117346,
+"start": 117366,
+"end": 117388,
 "orig": "The Pope Seat's crank.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5222,8 +5222,8 @@
 {
 "id": "s581",
 "file": "game",
-"start": 117415,
-"end": 117477,
+"start": 117457,
+"end": 117519,
 "orig": "%s, made of dried pasta. Chuk says it's one of the new pastas.",
 "fn": "LookItem",
 "who": "Bellhop"
@@ -5231,8 +5231,8 @@
 {
 "id": "s582",
 "file": "game",
-"start": 117800,
-"end": 117838,
+"start": 117842,
+"end": 117880,
 "orig": "I put on the beads. I feel 12% holier.",
 "fn": "PutOn",
 "who": "Bellhop"
@@ -5240,8 +5240,8 @@
 {
 "id": "s583",
 "file": "game",
-"start": 118083,
-"end": 118163,
+"start": 118125,
+"end": 118205,
 "orig": "I put on the pendant. Everything goes purple, and writing shows up on the walls!",
 "fn": "PutOn",
 "who": "Bellhop"
@@ -5249,8 +5249,8 @@
 {
 "id": "s584",
 "file": "game",
-"start": 118350,
-"end": 118371,
+"start": 118392,
+"end": 118413,
 "orig": "I take the beads off.",
 "fn": "TakeOff",
 "who": "Bellhop"
@@ -5258,8 +5258,8 @@
 {
 "id": "s585",
 "file": "game",
-"start": 118556,
-"end": 118613,
+"start": 118598,
+"end": 118655,
 "orig": "I take off the pendant. Back to boring old visible light.",
 "fn": "TakeOff",
 "who": "Bellhop"
@@ -5267,8 +5267,8 @@
 {
 "id": "s586",
 "file": "game",
-"start": 119133,
-"end": 119163,
+"start": 119175,
+"end": 119205,
 "orig": "It's an offering, not a snack.",
 "fn": "UseOnSelf",
 "who": "Bellhop"
@@ -5276,8 +5276,8 @@
 {
 "id": "s587",
 "file": "game",
-"start": 119206,
-"end": 119242,
+"start": 119248,
+"end": 119284,
 "orig": "I flip the token. Heads: a meatball.",
 "fn": "UseOnSelf",
 "who": "Bellhop"
@@ -5285,8 +5285,8 @@
 {
 "id": "s588",
 "file": "game",
-"start": 119285,
-"end": 119327,
+"start": 119327,
+"end": 119369,
 "orig": "I crank myself. Nothing happens. As usual.",
 "fn": "UseOnSelf",
 "who": "Bellhop"
@@ -5294,8 +5294,8 @@
 {
 "id": "s589",
 "file": "game",
-"start": 119376,
-"end": 119420,
+"start": 119418,
+"end": 119462,
 "orig": "I turn it over in my hands. Still not pasta.",
 "fn": "UseOnSelf",
 "who": "Bellhop"
@@ -5303,8 +5303,8 @@
 {
 "id": "s590",
 "file": "game",
-"start": 119582,
-"end": 119631,
+"start": 119624,
+"end": 119673,
 "orig": "The pamphlet says to sauce it, not to read to it.",
 "fn": "UseItemOnItem",
 "who": "Bellhop"
@@ -5312,8 +5312,8 @@
 {
 "id": "s591",
 "file": "game",
-"start": 119719,
-"end": 119803,
+"start": 119761,
+"end": 119845,
 "orig": "The pendant's already doing its job round my neck. Just look at things in its light.",
 "fn": "UseItemOnItem",
 "who": "Bellhop"
@@ -5321,8 +5321,8 @@
 {
 "id": "s592",
 "file": "game",
-"start": 119828,
-"end": 119899,
+"start": 119870,
+"end": 119941,
 "orig": "Waving the pendant at things won't do much. I should try putting it on.",
 "fn": "UseItemOnItem",
 "who": "Bellhop"
@@ -5330,8 +5330,8 @@
 {
 "id": "s593",
 "file": "game",
-"start": 119933,
-"end": 119957,
+"start": 119975,
+"end": 119999,
 "orig": "Those don't go together.",
 "fn": "UseItemOnItem",
 "who": "Bellhop"
@@ -5339,8 +5339,8 @@
 {
 "id": "s594",
 "file": "game",
-"start": 120184,
-"end": 120202,
+"start": 120226,
+"end": 120244,
 "orig": "I already have it.",
 "fn": "ItemAction",
 "who": "Bellhop"
@@ -5348,8 +5348,8 @@
 {
 "id": "s595",
 "file": "game",
-"start": 120242,
-"end": 120262,
+"start": 120284,
+"end": 120304,
 "orig": "It doesn't say much.",
 "fn": "ItemAction",
 "who": "Bellhop"
@@ -5357,8 +5357,8 @@
 {
 "id": "s596",
 "file": "game",
-"start": 120285,
-"end": 120308,
+"start": 120327,
+"end": 120350,
 "orig": "That won't do anything.",
 "fn": "ItemAction",
 "who": "Bellhop"
@@ -5366,8 +5366,8 @@
 {
 "id": "s597",
 "file": "game",
-"start": 120890,
-"end": 120981,
+"start": 120932,
+"end": 121023,
 "orig": "Beads, a glowing pendant and a bellhop's uniform. I look like a very confused disco priest.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5375,8 +5375,8 @@
 {
 "id": "s598",
 "file": "game",
-"start": 121021,
-"end": 121080,
+"start": 121063,
+"end": 121122,
 "orig": "Bellhop uniform, pasta beads. Holy, but still on the clock.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5384,8 +5384,8 @@
 {
 "id": "s599",
 "file": "game",
-"start": 121117,
-"end": 121153,
+"start": 121159,
+"end": 121195,
 "orig": "I'm glowing faintly purple. Stylish.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5393,8 +5393,8 @@
 {
 "id": "s600",
 "file": "game",
-"start": 121178,
-"end": 121248,
+"start": 121220,
+"end": 121290,
 "orig": "Still in my bellhop uniform. Nobody told me it wasn't a costume party.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5402,8 +5402,8 @@
 {
 "id": "s601",
 "file": "game",
-"start": 121292,
-"end": 121345,
+"start": 121334,
+"end": 121387,
 "orig": "I'd answer, but I already know what I'm going to say.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5411,8 +5411,8 @@
 {
 "id": "s602",
 "file": "game",
-"start": 121437,
-"end": 121456,
+"start": 121479,
+"end": 121498,
 "orig": "Take off the beads.",
 "fn": "SelfAction",
 "who": "Choice"
@@ -5420,8 +5420,8 @@
 {
 "id": "s603",
 "file": "game",
-"start": 121460,
-"end": 121484,
+"start": 121502,
+"end": 121526,
 "orig": "Take off the UV pendant.",
 "fn": "SelfAction",
 "who": "Choice"
@@ -5429,8 +5429,8 @@
 {
 "id": "s604",
 "file": "game",
-"start": 121488,
-"end": 121499,
+"start": 121530,
+"end": 121541,
 "orig": "Never mind.",
 "fn": "SelfAction",
 "who": "Choice"
@@ -5438,8 +5438,8 @@
 {
 "id": "s605",
 "file": "game",
-"start": 121713,
-"end": 121761,
+"start": 121755,
+"end": 121803,
 "orig": "I can't pick myself up. I've tried, emotionally.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5447,8 +5447,8 @@
 {
 "id": "s606",
 "file": "game",
-"start": 121817,
-"end": 121848,
+"start": 121859,
+"end": 121890,
 "orig": "I'd rather stay closed, thanks.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5456,8 +5456,8 @@
 {
 "id": "s607",
 "file": "game",
-"start": 121903,
-"end": 121929,
+"start": 121945,
+"end": 121971,
 "orig": "I'm not that kind of door.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5465,8 +5465,8 @@
 {
 "id": "s608",
 "file": "game",
-"start": 121968,
-"end": 122032,
+"start": 122010,
+"end": 122074,
 "orig": "Use me with what? I should pick something from my pockets first.",
 "fn": "SelfAction",
 "who": "Bellhop"
@@ -5474,8 +5474,8 @@
 {
 "id": "s609",
 "file": "game",
-"start": 123304,
-"end": 123363,
+"start": 123346,
+"end": 123405,
 "orig": "Chuk. He's wearing a colander and an air of great patience.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5483,8 +5483,8 @@
 {
 "id": "s610",
 "file": "game",
-"start": 123674,
-"end": 123703,
+"start": 123716,
+"end": 123745,
 "orig": "I don't think he'd like that.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5492,8 +5492,8 @@
 {
 "id": "s611",
 "file": "game",
-"start": 123999,
-"end": 124080,
+"start": 124041,
+"end": 124122,
 "orig": "I'm already wearing the pendant. Things only glow if I look at them in its light.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5501,8 +5501,8 @@
 {
 "id": "s612",
 "file": "game",
-"start": 124105,
-"end": 124184,
+"start": 124147,
+"end": 124226,
 "orig": "Holding the pendant up to it doesn't do much. Maybe I should try putting it on.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5510,8 +5510,8 @@
 {
 "id": "s613",
 "file": "game",
-"start": 124905,
-"end": 124970,
+"start": 124947,
+"end": 125012,
 "orig": "The news. On the computer. The new pastas are all in it. Read it!",
 "fn": "DoAction",
 "who": "Chuk"
@@ -5519,8 +5519,8 @@
 {
 "id": "s614",
 "file": "game",
-"start": 124990,
-"end": 125000,
+"start": 125032,
+"end": 125042,
 "orig": "Yes, Chuk.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5528,8 +5528,8 @@
 {
 "id": "s615",
 "file": "game",
-"start": 125098,
-"end": 125110,
+"start": 125140,
+"end": 125152,
 "orig": "It's the %s.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5537,8 +5537,8 @@
 {
 "id": "s616",
 "file": "game",
-"start": 125198,
-"end": 125277,
+"start": 125240,
+"end": 125319,
 "orig": "Holding the pendant up to it doesn't do much. Maybe I should try putting it on.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5546,8 +5546,8 @@
 {
 "id": "s617",
 "file": "game",
-"start": 125336,
-"end": 125417,
+"start": 125378,
+"end": 125459,
 "orig": "I'm already wearing the pendant. Things only glow if I look at them in its light.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5555,8 +5555,8 @@
 {
 "id": "s618",
 "file": "game",
-"start": 125472,
-"end": 125490,
+"start": 125514,
+"end": 125532,
 "orig": "That doesn't work.",
 "fn": "DoAction",
 "who": "Bellhop"
@@ -5564,8 +5564,8 @@
 {
 "id": "s619",
 "file": "game",
-"start": 126690,
-"end": 126728,
+"start": 126732,
+"end": 126770,
 "orig": "To take it off, I should use it on me.",
 "fn": "UIClick",
 "who": "Bellhop"
@@ -5573,8 +5573,8 @@
 {
 "id": "s620",
 "file": "game",
-"start": 126814,
-"end": 126848,
+"start": 126856,
+"end": 126890,
 "orig": "To wear it, I should use it on me.",
 "fn": "UIClick",
 "who": "Bellhop"
@@ -5582,8 +5582,8 @@
 {
 "id": "s621",
 "file": "game",
-"start": 131082,
-"end": 131102,
+"start": 131124,
+"end": 131144,
 "orig": "Room Service for all",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5591,8 +5591,8 @@
 {
 "id": "s622",
 "file": "game",
-"start": 131110,
-"end": 131226,
+"start": 131152,
+"end": 131268,
 "orig": "The clowns paraded through the hotel causing revelry and havoc. The party continued forever and spread far and wide.",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5600,8 +5600,8 @@
 {
 "id": "s623",
 "file": "game",
-"start": 131284,
-"end": 131319,
+"start": 131326,
+"end": 131361,
 "orig": "Chuk and the new Pope of the Noodle",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5609,8 +5609,8 @@
 {
 "id": "s624",
 "file": "game",
-"start": 131327,
-"end": 131402,
+"start": 131369,
+"end": 131444,
 "orig": "were whisked away. Some say they're still out there somewhere, partying on.",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5618,8 +5618,8 @@
 {
 "id": "s625",
 "file": "game",
-"start": 131432,
-"end": 131476,
+"start": 131474,
+"end": 131518,
 "orig": "Now isn't it your turn to join in the party?",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5627,8 +5627,8 @@
 {
 "id": "s626",
 "file": "game",
-"start": 131484,
-"end": 131553,
+"start": 131526,
+"end": 131595,
 "orig": "This is Room Service after all. Quit playing games and get out there!",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5636,8 +5636,8 @@
 {
 "id": "s627",
 "file": "game",
-"start": 131617,
-"end": 131641,
+"start": 131659,
+"end": 131683,
 "orig": "All games are free play.",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5645,8 +5645,8 @@
 {
 "id": "s628",
 "file": "game",
-"start": 131649,
-"end": 131718,
+"start": 131691,
+"end": 131760,
 "orig": "The clowns played all night, beating every one of Chuk's high scores.",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5654,8 +5654,8 @@
 {
 "id": "s629",
 "file": "game",
-"start": 131773,
-"end": 131792,
+"start": 131815,
+"end": 131834,
 "orig": "The CONFESS cabinet",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5663,8 +5663,8 @@
 {
 "id": "s630",
 "file": "game",
-"start": 131800,
-"end": 131875,
+"start": 131842,
+"end": 131917,
 "orig": "has heard things no cabinet should hear. I guess the party was pretty wild.",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5672,8 +5672,8 @@
 {
 "id": "s631",
 "file": "game",
-"start": 131905,
-"end": 131931,
+"start": 131947,
+"end": 131973,
 "orig": "Chuk finally left his room",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5681,8 +5681,8 @@
 {
 "id": "s632",
 "file": "game",
-"start": 131939,
-"end": 132055,
+"start": 131981,
+"end": 132097,
 "orig": "and spread the word of the Sacred Noodle far and wide. Why not join him, and go spread the word of the Sacred Pasta?",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5690,8 +5690,8 @@
 {
 "id": "s633",
 "file": "game",
-"start": 132098,
-"end": 132119,
+"start": 132140,
+"end": 132161,
 "orig": "They drank all night.",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5699,8 +5699,8 @@
 {
 "id": "s634",
 "file": "game",
-"start": 132127,
-"end": 132180,
+"start": 132169,
+"end": 132222,
 "orig": "Might as well enjoy the party while it's still going.",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5708,8 +5708,8 @@
 {
 "id": "s635",
 "file": "game",
-"start": 132210,
-"end": 132237,
+"start": 132252,
+"end": 132279,
 "orig": "The next morning, the Nave.",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5717,8 +5717,8 @@
 {
 "id": "s636",
 "file": "game",
-"start": 132289,
-"end": 132309,
+"start": 132331,
+"end": 132351,
 "orig": "Strike took all day.",
 "fn": "ShowEnding",
 "who": "Card title"
@@ -5726,8 +5726,8 @@
 {
 "id": "s637",
 "file": "game",
-"start": 132317,
-"end": 132399,
+"start": 132359,
+"end": 132441,
 "orig": "But it was worth it to get to party. Speaking of which, shouldn't you be partying?",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5735,8 +5735,8 @@
 {
 "id": "s638",
 "file": "game",
-"start": 132441,
-"end": 132488,
+"start": 132483,
+"end": 132530,
 "orig": "Thanks for playing Hotel Paradiso: Sacra Pasta.",
 "fn": "ShowEnding",
 "who": "Card text"
@@ -5744,8 +5744,8 @@
 {
 "id": "s639",
 "file": "game",
-"start": 134790,
-"end": 134807,
+"start": 134832,
+"end": 134849,
 "orig": "Oh no. Not again.",
 "fn": "on_event",
 "who": "Guest"
@@ -5753,8 +5753,8 @@
 {
 "id": "s640",
 "file": "game",
-"start": 134935,
-"end": 135032,
+"start": 134977,
+"end": 135074,
 "orig": "Ninth floor, at last. The clowns dropped me at the end of the hall and honked off into the night.",
 "fn": "on_event",
 "who": "Bellhop"
@@ -5762,8 +5762,8 @@
 {
 "id": "s641",
 "file": "game",
-"start": 135054,
-"end": 135103,
+"start": 135096,
+"end": 135145,
 "orig": "Huh. This doesn't look like a hotel room anymore.",
 "fn": "on_event",
 "who": "Bellhop"
@@ -5771,8 +5771,8 @@
 {
 "id": "s642",
 "file": "game",
-"start": 135124,
-"end": 135154,
+"start": 135166,
+"end": 135196,
 "orig": "Welcome, pilgrim, to the Nave.",
 "fn": "on_event",
 "who": "Chuk"
@@ -5780,8 +5780,8 @@
 {
 "id": "s643",
 "file": "game",
-"start": 135219,
-"end": 135237,
+"start": 135261,
+"end": 135279,
 "orig": "Is this the party?",
 "fn": "on_event",
 "who": "Bellhop"
@@ -5789,8 +5789,8 @@
 {
 "id": "s644",
 "file": "game",
-"start": 135258,
-"end": 135302,
+"start": 135300,
+"end": 135344,
 "orig": "The party is in the Crypt, beyond this wall.",
 "fn": "on_event",
 "who": "Chuk"
@@ -5798,8 +5798,8 @@
 {
 "id": "s645",
 "file": "game",
-"start": 135324,
-"end": 135349,
+"start": 135366,
+"end": 135391,
 "orig": "What wall? Oh. That wall.",
 "fn": "on_event",
 "who": "Bellhop"
@@ -5807,8 +5807,8 @@
 {
 "id": "s646",
 "file": "game",
-"start": 135370,
-"end": 135397,
+"start": 135412,
+"end": 135439,
 "orig": "Only the ordained may pass.",
 "fn": "on_event",
 "who": "Chuk"
@@ -5816,8 +5816,8 @@
 {
 "id": "s647",
 "file": "game",
-"start": 135703,
-"end": 135774,
+"start": 135745,
+"end": 135816,
 "orig": "The Crypt! Arcade cabinets, candles, and a yarn monster on the ceiling.",
 "fn": "on_event",
 "who": "Bellhop"
@@ -5825,8 +5825,8 @@
 {
 "id": "s648",
 "file": "game",
-"start": 135797,
-"end": 135845,
+"start": 135839,
+"end": 135887,
 "orig": "(without looking up) Welcome. I'm on level nine.",
 "fn": "on_event",
 "who": "Chuk"

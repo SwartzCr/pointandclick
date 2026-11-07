@@ -165,7 +165,7 @@ speaker as they are. Then upload the file and ask for it to be imported.
 - `s109` **Chuk:** Let me taste.
 - `s110` **Chuk:** Not enough red.
 - `s111` **Chuk:** Far too much red.
-- `s112` **Chuk:** And green? Whose nose was that for?
+- `s112` **Chuk:** And green? Since when does the Noodly One wear trousers?
 - `s113` **Chuk:** No yellow. The One True Noodle weeps.
 - `s114` **Chuk:** So much yellow. One is the number of the One True Noodle.
 - `s115` **Chuk:** Improperly sauced.
@@ -237,7 +237,7 @@ speaker as they are. Then upload the file and ask for it to be imported.
 - `s163` **Narration:** "...and the faithful shall know the Word by its glow, for it is spun and not spoken."
 - `s164` **Narration:** "Story two: the First Supper."
 - `s165` **Narration:** "And the Noodly One said: sauce Me an offering, and sauce it thus."
-- `s166` **Narration:** "A pump of red for each of My eyes. A pump of green for each of My noses."
+- `s166` **Narration:** "A pump of red for each of My eyes. A pump of green for each pair of trousers I wear."
 - `s167` **Narration:** "And a single pump of yellow, for the One True Noodle. Then dip, and be fed."
 - `s168` **Narration:** "Story three: the Prophecy of the Tiny Folk."
 - `s169` **Narration:** "The little ones of the sod will serve any god who shows them three signs. Ask, and they will search the very earth for you."
@@ -323,7 +323,7 @@ speaker as they are. Then upload the file and ask for it to be imported.
 - `s222` **Bellhop:** It's sauced already. More would just be soup.
 - `s223` **Bellhop:** "Glutenous Truth." A glowing loaf. I feel enlightened and slightly full.
 - `s224` **Bellhop:** A painted flat in the style of stained glass: the Noodly One, blessing a field.
-- `s225` **Bellhop:** Two eyes on stalks. No nose that I can see. Gods don't need noses, I suppose.
+- `s225` **Bellhop:** Two eyes on stalks, and not a stitch of clothing. Gods don't need trousers, I suppose.
 - `s226` **Bellhop:** It's plywood. Very nicely painted plywood.
 - `s227` **Bellhop:** "Timeline of Ancient Technology." Four tiles, and an arrow from OLDEST to NEWEST.
 - `s228` **Bellhop:** I think you press them in order.
