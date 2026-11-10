@@ -296,6 +296,9 @@ def nave():
     sc.hotspot('hHandset', 'telephone handset', (250, F), [('rect', [229, 175, 271, 201])])
     sc.hotspot('hSculpture', 'spaghetti sculpture', (325, 274), [('poly', SCULPTURE)])
     sc.hotspot('hSpinner', 'paragraph spinner', (398, 264), [('rect', [412, 164, 500, 244])])
+    # each window's lever (the brass knob under it) spins that window too
+    for i, wb in enumerate(WINDOW_BOXES):
+        sc.hotspot('hLever%d' % (i + 1), 'lever', (398, 264), [('rect', [wb[0], wb[3] + 1, wb[2], wb[3] + 10])])
     sc.hotspot('hScales', 'scales of pasta', (382, F), [('rect', [352, 160, 410, 244])])
 
     # ---------- A1: the archway, plastered over until you're ordained (from A)
