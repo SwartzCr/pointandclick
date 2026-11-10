@@ -446,11 +446,12 @@ room ResRoom {
     // ------------------------------------------------------------ inventory
     script inventoryClick(int item) {
         if(curVerb == Use && !withItem) {
-            // Worn uniform: Use takes it off. Otherwise it goes into
-            // "Use uniform with..." like any item: the coffee table to set it
-            // down, yourself (or the uniform again) to put it on.
-            if(item == invUniform && wearingUniform) {
-                wearUniform(0);
+            // "Use uniform" puts it on, and "Use robe" (the same item while
+            // the uniform's on) changes back, no target needed. A dirty or
+            // wet uniform still goes into "Use uniform with..." (the sink,
+            // the soap, the towel) to be cleaned up first.
+            if(item == invUniform && (wearingUniform || !uniformState)) {
+                wearUniform(!wearingUniform);
                 curVerb = WalkTo;
                 return;
             }

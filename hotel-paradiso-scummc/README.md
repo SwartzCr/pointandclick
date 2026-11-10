@@ -35,8 +35,9 @@ no verb chosen, the sentence line shows what a click will do ("Open minibar", "P
 candy bar"), and just the item's name over the inventory.
 Right-click an object to look at it.
 To use an inventory item on something, click **Use**, the item, then the object.
-To eat the candy, just **Use** it. To use another item on yourself (put on the
-uniform), click **Use**, the item, then either yourself or the item again.
+To eat the candy or put on the uniform, just **Use** it (and **Use** the robe to change
+back). To use another item on yourself, click **Use**, the item, then either yourself or
+the item again.
 F5 opens the menu, `.` skips a line of dialogue.
 
 ## The rooms
@@ -47,8 +48,8 @@ The things you can take (candy bar, matchbook, bellhop uniform, and the screwdri
 little bag of powder in the safe) are objects of their own, clickable only while you can
 see them. Your wallet is hidden under the bed covers.
 
-There's a bellhop uniform folded in the dresser's top drawer. Take it and use it on
-yourself to put it on: the player switches to a second costume with its own full set of walking and
+There's a bellhop uniform folded in the dresser's top drawer. Take it and **Use** it
+to put it on: the player switches to a second costume with its own full set of walking and
 talking frames. **Use** it again to take it off. It's a costume party, so you need it on
 to leave.
 
