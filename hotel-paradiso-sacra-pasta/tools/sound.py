@@ -267,11 +267,23 @@ def sfx_slurp():
 
 
 def sfx_phone():
-    """A crackly little voice: band-limited noise shaped like syllables."""
-    n = int(2.2 * SR)
-    syll = (np.sin(2 * np.pi * 4.5 * t_(2.2)) > -0.2).astype(float)
-    voice = tone(lambda t: 160 + 40 * np.sin(t * 9), 2.2, 'saw') * syll
-    return (lp_fast(voice, 1800) * 0.6 + noise(2.2) * 0.08) * env(n, 0.05, 1.5, 0.7, 0.3)
+    """One ring of an old bell telephone: the clapper rattling between two bells."""
+    dur = 1.3
+    t = t_(dur)
+    ring_len = 0.95
+    bells = sum(amp * np.sin(2 * np.pi * f * t) * np.exp(-t * dk)
+                for f, amp, dk in ((1180, 0.5, 2.0), (1420, 0.4, 2.4), (2950, 0.18, 4.0), (3870, 0.1, 5.0)))
+    # the clapper strikes about 25 times a second; each strike re-excites the bells
+    strikes = np.zeros_like(t)
+    k = np.arange(int(ring_len * 25))
+    strikes[(k / 25 * SR).astype(int)] = 1.0
+    hit = np.exp(-np.arange(int(0.04 * SR)) / (0.012 * SR))
+    clap = np.convolve(strikes, hit)[:len(t)]
+    ring = np.sin(2 * np.pi * 1180 * t) * 0.5 + np.sin(2 * np.pi * 1420 * t) * 0.45 + np.sin(2 * np.pi * 2950 * t) * 0.15
+    body = ring * np.clip(clap, 0, 1)
+    tail = (t > ring_len) * bells * np.exp(-(t - ring_len).clip(0) * 6)
+    out = body + tail * 0.6 + noise(dur) * np.clip(clap, 0, 1) * 0.03
+    return out / np.max(np.abs(out)) * 0.7 * env(len(t), 0.003, 0.0, 1.0, 0.15)
 
 
 def sfx_step_creak():
