@@ -355,7 +355,12 @@ room Hotel {
         } else if(!readyToParty) {
             egoSay("I'm fed and dressed, but I'm just not feeling it."); waitForMessage();
             deskSays(); print("Many guests keep their party supplies in the room safe, sir."); waitForMessage();
-            if(tableMirrorState >= 3 && !tookWallet) {
+            if(tableMirrorState == 2 && !tookShaver) {
+                // powder on the mirror, nothing to chop it with
+                egoSay("I've got it all laid out, but it's one big lump."); waitForMessage();
+                deskSays(); print("Something sharp, sir? There's a razor in the bathroom medicine cabinet."); waitForMessage();
+                deskSays(); print("A gentleman never parties without a shave. Good night."); waitForMessage();
+            } else if(tableMirrorState >= 3 && !tookWallet) {
                 deskSays(); print("Guests who've lost their wallet usually find it in the bed, sir. Good night."); waitForMessage();
             } else if(!safeOpen && !tookScrewdriver) {
                 deskSays(); print("Behind the painting. The code is whatever you wrote down. Good night."); waitForMessage();
