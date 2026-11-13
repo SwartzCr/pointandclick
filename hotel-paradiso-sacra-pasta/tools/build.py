@@ -123,6 +123,9 @@ def main():
                  'mm_sky', 'mm_hills', 'mm_ground', 'mm_splat', 'mm_bowl', 'mm_fork', 'mm_colander',
                  'mm_parmesan', 'mm_bread', 'mm_bowlfull', 'mm_finale', 'mm_ball0', 'mm_ball1', 'mm_ball2', 'mm_ball3'):
         things.append('#define SPR_%s %d' % (name.upper(), num[name]))
+    import rex_game
+    for name in rex_game.NAMES:
+        things.append('#define SPR_%s %d' % (name.upper(), num[name]))
     for k in range(6):
         things.append('#define SPR_HP_LOAD%d %d' % (k, num['hp_loading%d' % k]))
     things.append('#define SPR_CURSOR %d' % num['cursor'])
