@@ -8,8 +8,7 @@
 //   games/sacra-pasta/               sacrapasta.ags
 //   art/<id>.png                     the picture on each card
 //
-// While the menu is in front: no Dock, no menu bar, no Cmd-Tab, no Force Quit window and no
-// log-out shortcut. Clicking a card starts that game full screen; quitting the game brings the
+// While the menu is in front there's no Dock or menu bar (but no keys are blocked). Clicking a card starts that game full screen; quitting the game brings the
 // menu back, and so does holding the right mouse button down for three seconds during a game.
 // To leave the menu, press Control-Option-Command-Q and type the exit code: the first
 // line of ~/Library/Application Support/Hotel Paradiso Arcade/exit-code.txt if that exists,
@@ -221,9 +220,11 @@ final class Arcade: NSObject, NSApplicationDelegate {
         return base.appendingPathComponent("Hotel Paradiso Arcade")
     }
 
+    // The Dock and the menu bar are hidden while the menu is up, but no keys are blocked: the arcade
+    // Mac has no keyboard, and whoever plugs one in to look after it should be able to use
+    // Force Quit, Cmd-Tab and the rest. (The profile is what keeps visitors to the arcade.)
     func kiosk() {
-        NSApp.presentationOptions = [.hideDock, .hideMenuBar, .disableProcessSwitching, .disableForceQuit,
-                                     .disableSessionTermination, .disableHideApplication, .disableAppleMenu]
+        NSApp.presentationOptions = [.hideDock, .hideMenuBar]
     }
 
     func applicationDidFinishLaunching(_ note: Notification) {
@@ -234,7 +235,8 @@ final class Arcade: NSObject, NSApplicationDelegate {
         window = KioskWindow(contentRect: screen, styleMask: [.borderless], backing: .buffered, defer: false)
         window.backgroundColor = NIGHT
         window.isMovable = false
-        window.collectionBehavior = [.fullScreenPrimary, .stationary]
+        // on every Space, so it's there to come back to whatever a game did with the screen
+        window.collectionBehavior = [.canJoinAllSpaces, .stationary]
         menu = MenuView(frame: NSRect(origin: .zero, size: screen.size))
         for g in GAMES {
             let img = NSImage(contentsOf: res.appendingPathComponent("art/\(g.id).png"))
@@ -262,19 +264,12 @@ final class Arcade: NSObject, NSApplicationDelegate {
                                                queue: .main) { [weak self] _ in
             if let s = NSScreen.main?.frame { self?.window.setFrame(s, display: true) }
         }
-        // if anything else comes to the front while no game is running, take the screen back
-        NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didActivateApplicationNotification, object: nil,
-                                                          queue: .main) { [weak self] n in
-            guard let self = self, self.running == nil, !self.allowQuit else { return }
-            let app = n.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication
-            if app?.processIdentifier != ProcessInfo.processInfo.processIdentifier {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self.comeBack() }
-            }
-        }
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        return allowQuit ? .terminateNow : .terminateCancel
+        // nothing is held back: logging out or shutting down closes the arcade like any other app
+        running?.terminate()
+        return .terminateNow
     }
 
     func writeScummVMConfig() {
@@ -313,6 +308,12 @@ final class Arcade: NSObject, NSApplicationDelegate {
             else { args += ["--no-aspect-ratio", "--auto-detect"] }
             p.arguments = args
         }
+        // SDL (which both ScummVM and Ren'Py use) normally goes full screen in a Space of its own,
+        // and a game closed from outside can leave that Space behind as a black screen. Plain
+        // full screen on the desktop instead, so the menu is right there when the game ends.
+        var env = ProcessInfo.processInfo.environment
+        env["SDL_VIDEO_MAC_FULLSCREEN_SPACES"] = "0"
+        p.environment = env
         p.terminationHandler = { [weak self] _ in
             DispatchQueue.main.async { self?.gameOver() }
         }
@@ -350,7 +351,7 @@ final class Arcade: NSObject, NSApplicationDelegate {
                 hideHold()
                 holdTime = -1000                       // once is enough
                 p.terminate()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                     if p.isRunning { kill(p.processIdentifier, SIGKILL) }
                 }
             }
