@@ -569,3 +569,266 @@ EFFECTS.update({
     'aPhoneDial': lambda: read_voc('phone_dial.voc'),
     'aPhoneHang': lambda: read_voc('phone_hang.voc'),
 })
+
+
+# ------------------------------------------------------------------ second pass: wetter, more natural sounds
+# (each has its own random generator, so remaking one never changes the others)
+from scipy.signal import butter, sosfilt
+
+
+def _bp(x, lo, hi, order=2):
+    return sosfilt(butter(order, [lo, hi], btype='band', fs=SR, output='sos'), x)
+
+
+def _hp(x, f, order=2):
+    return sosfilt(butter(order, f, btype='high', fs=SR, output='sos'), x)
+
+
+def _reson(x, f, bw):
+    """A two-pole resonator (a formant) at f Hz with bandwidth bw Hz."""
+    r = math.exp(-math.pi * bw / SR)
+    th = 2 * math.pi * f / SR
+    return lfilter([1 - r], [1, -2 * r * math.cos(th), r * r], x)
+
+
+def _bubble(f0, dur, rise=2.0, tau=None):
+    """One liquid bubble (a Minnaert resonance): a sine whose pitch rises as it decays."""
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    tau = tau or 0.4 / f0 ** 0.6
+    ph = 2 * np.pi * np.cumsum(f0 * (1 + rise * t / dur)) / SR
+    return np.sin(ph) * np.exp(-t / tau)
+
+
+def _bubbles(r, count, span, flo, fhi, amp=0.5):
+    parts = []
+    for _ in range(count):
+        f = math.exp(r.uniform(math.log(flo), math.log(fhi)))
+        parts.append((r.uniform(0, span), _bubble(f, 0.06, r.uniform(0.5, 3)) * amp * r.uniform(0.3, 1)))
+    return mix(*parts)
+
+
+def sfx_squirt2():
+    """A pump of sauce: a wet squelch from the pump, a splutter of sauce, bubbles popping in the bowl."""
+    r = np.random.default_rng(101)
+    d = 0.6
+    n = int(d * SR)
+    t = np.arange(n) / SR
+    # the squelch: noise through a mouth-like formant that sweeps down as the pump presses
+    sq = r.uniform(-1, 1, n) * env(n, 0.01, 0.12, 0.25, 0.25)
+    sweep = np.zeros(n)
+    for f0, f1, bw, a in ((1400, 500, 220, 1.0), (2600, 1500, 300, 0.5)):
+        f = f0 + (f1 - f0) * np.clip(t / 0.25, 0, 1)
+        # time-varying formant: filter in short blocks
+        blk = 256
+        for i in range(0, n, blk):
+            seg = sq[i:i + blk]
+            sweep[i:i + blk] += _reson(seg, float(f[i]), bw) * a
+    sweep = _norm(sweep, 0.5)
+    # sputter: the sauce coming out in uneven gobs
+    gobs = []
+    for k in range(7):
+        o = 0.05 + k * 0.035 + r.uniform(0, 0.02)
+        g = _bp(r.uniform(-1, 1, int(0.03 * SR)), 300, 1800) * decay(int(0.03 * SR), 0.008)
+        gobs.append((o, g * r.uniform(0.3, 0.7)))
+    # bubbles in the bowl
+    bub = _bubbles(r, 18, 0.45, 350, 1500, 0.35)
+    out = mix((0, sweep), (0, mix(*gobs) * 0.6), (0.08, bub))
+    return _norm(lp_fast(out, 5000), 0.7)
+
+
+def sfx_slurp2():
+    """Slurping sauce off a rigatone: a sucked, gargly airflow rising in pitch, and a smack."""
+    r = np.random.default_rng(202)
+    d = 1.0
+    n = int(d * SR)
+    t = np.arange(n) / SR
+    air = r.uniform(-1, 1, n)
+    # the slurp: turbulent air through a narrowing mouth, so the resonance climbs
+    out = np.zeros(n)
+    blk = 200
+    for i in range(0, n, blk):
+        u = t[i] / d
+        f1 = 500 + 1300 * u ** 1.3
+        f2 = 1500 + 1500 * u
+        seg = air[i:i + blk]
+        out[i:i + blk] = _reson(seg, f1, 160) + _reson(seg, f2, 260) * 0.5
+    # liquid gets dragged in with it: amplitude flutters with bubbles bursting
+    flutter = 0.45 + 0.55 * np.abs(np.sin(2 * np.pi * (11 + 6 * t) * t + r.uniform(0, 6)))
+    out = _norm(out, 0.5) * flutter * env(n, 0.06, 0.1, 0.9, 0.12) * np.clip(1.1 - t, 0, 1)
+    bub = _bubbles(r, 26, 0.75, 500, 2200, 0.25)
+    # the smack at the end: lips parting
+    smack = _bp(r.uniform(-1, 1, int(0.03 * SR)), 900, 4000) * decay(int(0.03 * SR), 0.004)
+    res = mix((0, out), (0.05, bub), (0.9, smack * 0.8))
+    return _norm(res, 0.7)
+
+
+def sfx_dig2():
+    """Tiny shovels biting into the sod: gritty crunches and earth tossed aside, no thuds."""
+    r = np.random.default_rng(303)
+    parts = []
+    o = 0.0
+    for k in range(6):
+        # the bite: a dense crackle of grains, high and crunchy (tiny shovels)
+        d = 0.09
+        nn = int(d * SR)
+        grains = np.zeros(nn)
+        for _ in range(140):
+            i = int(r.uniform(0, 1) ** 1.6 * (nn - 40))
+            grains[i:i + 30] += r.uniform(-1, 1) * np.exp(-np.arange(30) / 4)
+        bite = _bp(grains, 1500, 7000) * env(nn, 0.004, 0.05, 0.3, 0.03)
+        scrape = _bp(r.uniform(-1, 1, nn), 2500, 6000) * env(nn, 0.01, 0.05, 0.2, 0.03) * 0.25
+        # the toss: a softer spray of crumbs landing a moment later
+        dt = 0.16
+        nt = int(dt * SR)
+        crumbs = np.zeros(nt)
+        for _ in range(45):
+            i = int(r.uniform(0, nt - 40))
+            crumbs[i:i + 25] += r.uniform(-1, 1) * np.exp(-np.arange(25) / 3)
+        toss = _bp(crumbs, 2000, 8000) * env(nt, 0.02, 0.05, 0.6, 0.06) * 0.35
+        parts += [(o, (bite + scrape) * r.uniform(0.7, 1)), (o + 0.11, toss)]
+        o += r.uniform(0.17, 0.24)
+    return _norm(mix(*parts), 0.55)
+
+
+def _voice(r, f0s, vowels, dur, breath=0.15, jitter=0.02):
+    """A tiny formant voice. f0s and vowels are lists of (time 0..1, value) keyframes;
+    vowels are (F1, F2, F3) in Hz, already scaled up for a very small throat."""
+    n = int(dur * SR)
+    u = np.arange(n) / n
+    def kf(keys, i):
+        ts = [k[0] for k in keys]
+        return np.interp(u, ts, [k[1][i] if isinstance(k[1], tuple) else k[1] for k in keys])
+    f0 = kf(f0s, 0) * (1 + jitter * np.convolve(r.normal(0, 1, n), np.ones(200) / 200, 'same') * 10)
+    ph = np.cumsum(f0) / SR
+    # a glottal pulse: sharp closing edge, rounded opening
+    g = (ph % 1.0)
+    src = np.where(g < 0.6, 0.5 - 0.5 * np.cos(np.pi * g / 0.6), np.cos(np.pi * (g - 0.6) / 0.8)) - 0.3
+    src = np.diff(src, prepend=src[0]) * 30
+    src += r.normal(0, 1, n) * breath
+    F = [kf(vowels, i) for i in range(3)]
+    out = np.zeros(n)
+    blk = 128
+    for i in range(0, n, blk):
+        seg = src[i:i + blk]
+        out[i:i + blk] = (_reson(seg, F[0][i], 90) * 1.0 + _reson(seg, F[1][i], 120) * 0.6
+                          + _reson(seg, F[2][i], 180) * 0.3)
+    return out
+
+
+def sfx_cheer2():
+    """The tiny folk cheering: a little crowd of high voices going "yaaay!" and "woo!"."""
+    r = np.random.default_rng(404)
+    k = 1.55                                   # small people, small throats: every formant up
+    AH, EH, EE, OO, AY = (730, 1100, 2450), (530, 1840, 2480), (300, 2300, 3000), (330, 870, 2240), (660, 1700, 2400)
+    sc = lambda v: tuple(x * k for x in v)
+    parts = []
+    for v in range(16):
+        dur = r.uniform(0.45, 0.8)
+        f0 = r.uniform(380, 620)
+        if r.uniform() < 0.65:                 # "yaaay": y-glide into ah, ending in ee
+            vow = [(0, sc(EE)), (0.12, sc(AH)), (0.7, sc(AY)), (1, sc(EE))]
+            pitch = [(0, f0 * 0.9), (0.25, f0 * 1.25), (0.8, f0 * 1.1), (1, f0 * 0.8)]
+        else:                                  # "woo!": rising hoot
+            vow = [(0, sc(OO)), (1, sc(OO))]
+            pitch = [(0, f0 * 0.9), (0.4, f0 * 1.45), (1, f0 * 1.2)]
+        x = _voice(r, pitch, vow, dur, breath=0.2)
+        nn = len(x)
+        x *= env(nn, 0.04, 0.1, 0.8, 0.18)
+        parts.append((r.uniform(0, 0.35), _norm(x, r.uniform(0.25, 0.5))))
+    crowd = mix(*parts)
+    # a few claps from very small hands
+    claps = []
+    for c in range(14):
+        cl = _bp(r.uniform(-1, 1, int(0.02 * SR)), 2000, 7000) * decay(int(0.02 * SR), 0.003)
+        claps.append((r.uniform(0.05, 0.9), cl * r.uniform(0.15, 0.3)))
+    out = mix((0, _hp(crowd, 250)), *claps)
+    n = len(out)
+    out *= np.concatenate([np.ones(n - int(0.15 * SR)), np.linspace(1, 0, int(0.15 * SR))])
+    return _norm(out, 0.6)
+
+
+def sfx_cluck2():
+    """A chicken: bok, bok, bok... ba-GAWK! Rough, nasal, with a squawk at the end."""
+    r = np.random.default_rng(505)
+    def call(dur, pitch, vowel, rough=0.4, breath=0.25):
+        x = _voice(r, pitch, vowel, dur, breath=breath, jitter=0.05)
+        n = len(x)
+        # roughness: every other glottal pulse weaker (a chicken's rattly syrinx)
+        t = np.arange(n) / SR
+        f = np.interp(np.arange(n) / n, [p[0] for p in pitch], [p[1] for p in pitch])
+        x *= 1 - rough * (0.5 + 0.5 * np.sign(np.sin(np.pi * np.cumsum(f) / SR)))
+        return x
+    BOK = [(0, (450, 1000, 2600)), (1, (380, 800, 2400))]
+    AH = [(0, (500, 1200, 2700)), (0.25, (850, 1500, 2900)), (1, (750, 1300, 2700))]
+    def bok(f):
+        x = call(0.075, [(0, f * 1.15), (1, f * 0.8)], BOK, rough=0.35)
+        n = len(x)
+        return x * env(n, 0.004, 0.03, 0.4, 0.02)
+    def gawk():
+        d = 0.36
+        x = call(d, [(0, 480), (0.15, 820), (0.5, 760), (1, 520)], AH, rough=0.55, breath=0.35)
+        n = len(x)
+        # the "g" onset
+        x[:int(0.015 * SR)] *= np.linspace(0, 1, int(0.015 * SR))
+        return x * env(n, 0.01, 0.08, 0.7, 0.12)
+    out = mix((0, _norm(bok(330), 0.5)), (0.17, _norm(bok(340), 0.5)), (0.33, _norm(bok(320), 0.45)),
+              (0.5, _norm(bok(360), 0.35)), (0.58, _norm(gawk(), 0.8)))
+    return _norm(_hp(out, 200), 0.7)
+
+
+def music_ending2():
+    """The ending: the title's tarantella again, now in A major and bright, finishing on a big chord."""
+    beat = 0.16
+    bar = beat * 6
+    melody = [
+        'A4', 'C#5', 'E5', 'A5', 'G#5', 'E5', 'F#5', 'E5', 'D5', 'C#5', 'B4', 'A4',
+        'G#4', 'B4', 'E5', 'G#5', 'F#5', 'E5', 'D5', 'C#5', 'B4', 'A4', 'B4', 'G#4',
+        'A4', 'C#5', 'E5', 'A5', 'B5', 'C#6', 'B5', 'A5', 'G#5', 'F#5', 'E5', 'D5',
+        'C#5', 'D5', 'E5', 'F#5', 'G#5', 'B5', 'A5', '-', '-', '-', '-', '-',
+    ]
+    chords = [('A3', 'C#4', 'E4'), ('D3', 'F#3', 'A3'), ('E3', 'G#3', 'B3'), ('E3', 'G#3', 'B3'),
+              ('A3', 'C#4', 'E4'), ('F#3', 'A3', 'C#4'), ('D3', 'F#3', 'A3'), ('E3', 'G#3', 'B3')]
+    roots = ['A2', 'D2', 'E2', 'E2', 'A2', 'F#2', 'D2', 'E2']
+    parts = []
+    for i, nname in enumerate(melody):
+        if nname != '-':
+            parts.append((i * beat, mandolin(hz(nname), beat * 1.6) * 0.9))
+            if i >= 24:                           # second half: an octave-up sparkle on top
+                parts.append((i * beat, mandolin(hz(nname) * 2, beat * 1.2) * 0.25))
+    for b, ch in enumerate(chords[:4] + chords[4:]):
+        for k in range(2):
+            o = b * bar + k * beat * 3
+            parts.append((o, bass(hz(roots[b]), beat * 1.5) * 0.9))
+            for nname in ch:
+                parts.append((o + beat, accordion(hz(nname), beat * 0.9) * 0.22))
+                parts.append((o + beat * 2, accordion(hz(nname), beat * 0.9) * 0.22))
+    for i in range(48):
+        jingle = lp_fast(noise(0.06), 6000) * decay(int(0.06 * SR), 0.015) * (0.25 if i % 3 == 0 else 0.12)
+        parts.append((i * beat, jingle))
+    # the finish: a big held A major chord, accordion swell, mandolin tremolo and a last tambourine shake
+    end = 8 * bar - beat * 5
+    for nname in ('A2', 'E3', 'A3', 'C#4', 'E4', 'A4'):
+        parts.append((end, accordion(hz(nname), 2.4) * 0.2 * env(int(2.4 * SR), 0.02, 0.3, 0.8, 0.9)))
+    parts.append((end, bass(hz('A1'), 2.0) * 1.0))
+    for j in range(16):
+        f = hz('C#6') if j % 2 else hz('A5')
+        parts.append((end + j * 0.07, mandolin(f, 0.25) * 0.35 * (1 - j / 18)))
+    shake = lp_fast(noise(0.8), 6000) * env(int(0.8 * SR), 0.05, 0.1, 0.5, 0.5) * 0.18
+    parts.append((end, shake))
+    out = mix(*parts)
+    n = int(0.6 * SR)
+    out[-n:] *= np.linspace(1, 0, n)
+    return out
+
+
+def _instead(old, new):
+    """Use the new sound, but still run the old one first so the shared random generator
+    stays in step and every other sound comes out exactly as before."""
+    return lambda: (old(), new())[1]
+
+
+EFFECTS.update({'aSquirt': _instead(sfx_squirt, sfx_squirt2), 'aSlurp': _instead(sfx_slurp, sfx_slurp2),
+                'aDig': _instead(sfx_dig, sfx_dig2), 'aCheer': _instead(sfx_cheer, sfx_cheer2),
+                'aCluck': _instead(sfx_cluck, sfx_cluck2), 'aHonk': _instead(sfx_honk, lambda: read_voc('honk.voc'))})
+MUSIC['aMusEnding'] = _instead(music_ending, music_ending2)  # Room 714's honk, for the clowns
