@@ -134,8 +134,9 @@ jobs:
             --disable-png --disable-gif --disable-freetype2 --disable-fribidi --disable-vpx --disable-mikmod \
             --disable-openmpt --disable-mpcdec --disable-sonivox --disable-imgui --disable-retrowave \
             --disable-opl2lpt --disable-timidity --disable-mt32emu --disable-osx-dock-plugin
-          # the program first (in parallel), then the bundle round it (the bundle step can't run in parallel)
-          if ! { make -j"$(sysctl -n hw.ncpu)" scummvm-static STATICLIBPATH="$HOME/arcade-deps" && make bundle STATICLIBPATH="$HOME/arcade-deps"; } > build.log 2>&1; then
+          # the program first (in parallel), then the bundle round it (the bundle step can't run in parallel);
+          # zlib comes from macOS itself
+          if ! { make -j"$(sysctl -n hw.ncpu)" scummvm-static STATICLIBPATH="$HOME/arcade-deps" OSX_ZLIB=-lz && make bundle STATICLIBPATH="$HOME/arcade-deps" OSX_ZLIB=-lz; } > build.log 2>&1; then
             grep -n -E 'error|Error' build.log | head -40
             tail -60 build.log
             exit 1
