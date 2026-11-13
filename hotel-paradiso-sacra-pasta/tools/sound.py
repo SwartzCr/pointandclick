@@ -869,3 +869,66 @@ def music_ending3():
 
 
 MUSIC['aMusEnding'] = _instead(music_ending, music_ending3)  # Room 714's honk, for the clowns
+
+
+# ------------------------------------------------------------------ third pass: the sauce
+def sfx_squirt3():
+    """A pump of Weird Sauce: the pump clicks, sauce sputters out of the spout in thick wet blorts,
+    and lands in the bowl with a couple of splats."""
+    r = np.random.default_rng(611)
+    d = 0.62
+    n = int(d * SR)
+    parts = []
+    # the pump: a hollow plastic click
+    click = _bp(r.uniform(-1, 1, int(0.015 * SR)), 1200, 4500) * decay(int(0.015 * SR), 0.003)
+    parts.append((0, click * 0.6))
+    parts.append((0, modal([620, 1340], 0.06, 0.012, [0.3, 0.15])))
+    # the sputter: air pushing through thick sauce, a low rasp in uneven bursts
+    t = 0.035
+    for k in range(9):
+        L = r.uniform(0.022, 0.045) * (1.25 if k < 3 else 1.0)
+        m = int(L * SR)
+        tt = np.arange(m) / SR
+        f0 = r.uniform(70, 120) * (1 + 0.6 * tt / L)
+        rasp = np.sign(np.sin(2 * np.pi * np.cumsum(f0) / SR))
+        body = lp_fast(rasp * 0.6 + r.uniform(-1, 1, m) * 0.5, 900)
+        body = _reson(body, r.uniform(380, 650), 260) * 0.6 + body * 0.4
+        e = np.minimum(1, np.arange(m) / (0.004 * SR)) * np.exp(-np.arange(m) / (L * 0.5 * SR))
+        parts.append((t, body * e * (1.0 - k * 0.07)))
+        t += L + r.uniform(0.004, 0.02)
+    # landing: wet splats and a bubble or two in the bowl
+    for o, a in ((t + 0.01, 0.8), (t + 0.07, 0.5), (t + 0.12, 0.35)):
+        sp = _bp(r.uniform(-1, 1, int(0.05 * SR)), 250, 1600) * decay(int(0.05 * SR), 0.01)
+        parts.append((o, sp * a))
+        parts.append((o + 0.01, _bubble(r.uniform(240, 420), 0.07, 1.5) * a * 0.5))
+    out = mix(*parts, length=d)[:n]
+    return _norm(lp_fast(out, 4500), 0.75)
+
+
+def sfx_dip():
+    """The rigatone dunked in the bowl of sauce: a thick gloop, a squelch as it comes out,
+    and a drip or two falling back."""
+    r = np.random.default_rng(612)
+    parts = []
+    # going in: a big low bubble (the gloop) with a soft thud under it
+    parts.append((0, _bubble(170, 0.12, 1.4, tau=0.045) * 0.9))
+    parts.append((0, lp_fast(r.uniform(-1, 1, int(0.05 * SR)), 300) * decay(int(0.05 * SR), 0.015) * 0.8))
+    parts.append((0.05, _bubble(290, 0.09, 1.2, tau=0.03) * 0.5))
+    # coming out: thick sauce letting go, a squelch whose resonance climbs
+    m = int(0.16 * SR)
+    sq = r.uniform(-1, 1, m)
+    out = np.zeros(m)
+    for i in range(0, m, 128):
+        u = i / m
+        out[i:i + 128] = _reson(sq[i:i + 128], 300 + 900 * u, 120) + _reson(sq[i:i + 128], 900 + 1200 * u, 200) * 0.4
+    out = _norm(out, 0.5) * env(m, 0.02, 0.05, 0.7, 0.05)
+    parts.append((0.22, out))
+    parts.append((0.3, _bubble(420, 0.06, 2.0) * 0.35))
+    # drips falling back in
+    for o, f in ((0.48, 950), (0.62, 1150)):
+        parts.append((o, _bubble(f, 0.05, 2.5) * 0.3))
+    return _norm(lp_fast(mix(*parts), 5000), 0.75)
+
+
+EFFECTS.update({'aSquirt': _instead(sfx_squirt, sfx_squirt3)})
+EFFECTS['aDip'] = sfx_dip

@@ -3251,6 +3251,12 @@
    "repeat": false
   },
   {
+   "script": "aDip",
+   "file": "audio/aDip.wav",
+   "type": 2,
+   "repeat": false
+  },
+  {
    "script": "aMusTitle",
    "file": "audio/aMusTitle.wav",
    "type": 1,

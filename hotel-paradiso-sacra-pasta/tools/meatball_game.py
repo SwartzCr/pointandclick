@@ -116,7 +116,9 @@ def meatball(frame):
     d.point((4, 3), fill=P['bread_hi'])
     d.arc([1, 1, 14, 14], 20, 160, fill=P['meat_dk'])
     for k in range(3):
-        a = frame * math.pi / 2 + k * 2 * math.pi / 3
+        # 30 degrees a frame, clockwise: the three flecks repeat every 120 degrees, so a bigger step
+        # (it was 90) reads as the ball spinning backwards
+        a = frame * math.pi / 6 + k * 2 * math.pi / 3
         x, y = round(7.5 + 4.2 * math.cos(a)), round(7.5 + 4.2 * math.sin(a))
         d.rectangle([x, y, x + 1, y], fill=P['herb'])
         d.point((x, y + 1), fill=P['meat_dk'])
