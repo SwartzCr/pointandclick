@@ -188,10 +188,20 @@ room ResRoom {
         tripping = 0;
     }
 
-    // "New game" on the title screen. Every puzzle flag and object state is
-    // still at its boot value (the ending restarts the engine), so this just
-    // brings up the verb bar and goes to the bedroom.
+    // "New game" on the title screen. The ending restarts the engine, which resets
+    // every number but not the yes/no flags (ScummVM keeps bit variables across a
+    // restart), so they're all cleared here: otherwise a second game would start with
+    // the first one's flags (wearing the uniform, the candy eaten, ...).
     script startNewGame() {
+        gameOver = 0; lampOn = 0; tvOn = 0; curtainsOpen = 0; minibarOpen = 0; drawerOpen = 0;
+        safeOpen = 0; knowsCode = 0; hasMatchbook = 0; hasCandy = 0; hasUniform = 0;
+        tookMatchbook = 0; tookCandy = 0; ateCandy = 0; hasScrewdriver = 0; tookScrewdriver = 0;
+        hasPowder = 0; tookPowder = 0; hasMirror = 0; mirrorRemoved = 0; tripping = 0;
+        readyToParty = 0; hasWallet = 0; tookWallet = 0; hasDollar = 0; bedOpen = 0;
+        wearingUniform = 0; tookUniform = 0; dresserOpen = 0; hasTowel = 0; hasSoap = 0;
+        tookTowel = 0; tookSoap = 0; hasShaver = 0; tookShaver = 0; bathCurtainOpen = 0;
+        cabinetOpen = 0; hotelVisited = 0; bathroomVisited = 0; tvAd = 0;
+        uniformState = 0; tableMirrorState = 0; linesDone = 0; phoneCalls = 0; duckTalks = 0;
         titleMode = 0;
         curVerb = WalkTo;
         withItem = 0;

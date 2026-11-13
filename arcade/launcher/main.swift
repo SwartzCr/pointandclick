@@ -10,7 +10,8 @@
 //
 // While the menu is in front: no Dock, no menu bar, no Cmd-Tab, no Force Quit window and no
 // log-out shortcut. Clicking a card starts that game full screen; quitting the game brings the
-// menu back. To leave the menu, press Control-Option-Command-Q and type the exit code: the first
+// menu back, and so does holding the right mouse button down for three seconds during a game.
+// To leave the menu, press Control-Option-Command-Q and type the exit code: the first
 // line of ~/Library/Application Support/Hotel Paradiso Arcade/exit-code.txt if that exists,
 // otherwise the ArcadeExitCode key in Info.plist ("paradiso").
 
@@ -171,7 +172,7 @@ final class MenuView: NSView {
                  in: NSRect(x: 0, y: h * 0.80, width: bounds.width, height: h * 0.12), glow: NEON)
         drawText("ARCADE", font(h * 0.032, bold: true), GOLD,
                  in: NSRect(x: 0, y: h * 0.755, width: bounds.width, height: h * 0.05))
-        let foot = status.isEmpty ? "Click a game to play. When you quit the game, you come back here." : status
+        let foot = status.isEmpty ? "Click a game to play. To come back here, quit the game, or hold the right mouse button down for 3 seconds." : status
         drawText(foot, font(max(14, h * 0.022)), DIM, in: NSRect(x: 0, y: h * 0.05, width: bounds.width, height: h * 0.05))
     }
 }
@@ -182,11 +183,37 @@ final class KioskWindow: NSWindow {
     override var canBecomeMain: Bool { true }
 }
 
+// the little sign that shows while the right button is held down during a game
+final class HoldView: NSView {
+    var progress: CGFloat = 0 { didSet { needsDisplay = true } }
+    override func draw(_ dirtyRect: NSRect) {
+        let r = bounds.insetBy(dx: 2, dy: 2)
+        let box = NSBezierPath(roundedRect: r, xRadius: 12, yRadius: 12)
+        NSColor(calibratedWhite: 0, alpha: 0.8).setFill()
+        box.fill()
+        GOLD.setStroke()
+        box.lineWidth = 2
+        box.stroke()
+        drawText("Keep holding the right button to go back to the menu", font(16, bold: true), CREAM,
+                 in: NSRect(x: r.minX + 16, y: r.midY - 4, width: r.width - 32, height: 26))
+        let bar = NSRect(x: r.minX + 20, y: r.minY + 16, width: r.width - 40, height: 10)
+        NSColor(calibratedWhite: 1, alpha: 0.2).setFill()
+        NSBezierPath(roundedRect: bar, xRadius: 5, yRadius: 5).fill()
+        NEON.setFill()
+        NSBezierPath(roundedRect: NSRect(x: bar.minX, y: bar.minY, width: bar.width * progress, height: bar.height),
+                     xRadius: 5, yRadius: 5).fill()
+    }
+}
+
 final class Arcade: NSObject, NSApplicationDelegate {
     var window: KioskWindow!
     var menu: MenuView!
     var running: Process?
     var allowQuit = false
+    var holdTimer: Timer?
+    var holdTime: TimeInterval = 0
+    var holdPanel: NSPanel?
+    var holdView: HoldView?
     let res = URL(fileURLWithPath: Bundle.main.resourcePath ?? ".")
     var support: URL {
         let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
@@ -294,6 +321,7 @@ final class Arcade: NSObject, NSApplicationDelegate {
             return fail(g)
         }
         running = p
+        watchForHold()
         for c in menu.cards { c.busy = true }
         menu.status = "Starting \(g.subtitle)…"
     }
@@ -302,7 +330,69 @@ final class Arcade: NSObject, NSApplicationDelegate {
         menu.status = "\(g.subtitle) couldn't start. Please let a grown-up know."
     }
 
+    // Holding the right mouse button for three seconds during a game ends it and brings the
+    // menu back, for when a game has no quit button (or someone's wandered off mid-game).
+    // The button is polled rather than watched with event monitors, which needs no extra
+    // permissions and keeps working whichever app is in front.
+    func watchForHold() {
+        holdTimer?.invalidate()
+        holdTime = 0
+        holdTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in self?.holdTick() }
+    }
+
+    func holdTick() {
+        guard let p = running else { stopHold(); return }
+        if NSEvent.pressedMouseButtons & 2 != 0 {
+            holdTime += 0.1
+            if holdTime >= 0.8 { showHold(min(1, CGFloat((holdTime - 0.8) / 2.2))) }
+            if holdTime >= 3.0 {
+                hideHold()
+                holdTime = -1000                       // once is enough
+                p.terminate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    if p.isRunning { kill(p.processIdentifier, SIGKILL) }
+                }
+            }
+        } else {
+            if holdTime > 0 { hideHold() }
+            holdTime = 0
+        }
+    }
+
+    func showHold(_ progress: CGFloat) {
+        if holdPanel == nil {
+            let screen = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 1280, height: 800)
+            let size = NSSize(width: 560, height: 90)
+            let panel = NSPanel(contentRect: NSRect(x: screen.midX - size.width / 2, y: screen.maxY - size.height - 60,
+                                                    width: size.width, height: size.height),
+                                styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
+            panel.level = .screenSaver
+            panel.isOpaque = false
+            panel.backgroundColor = .clear
+            panel.ignoresMouseEvents = true
+            panel.hidesOnDeactivate = false
+            panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
+            let v = HoldView(frame: NSRect(origin: .zero, size: size))
+            panel.contentView = v
+            holdPanel = panel
+            holdView = v
+        }
+        holdView?.progress = progress
+        holdPanel?.orderFrontRegardless()
+    }
+
+    func hideHold() {
+        holdPanel?.orderOut(nil)
+    }
+
+    func stopHold() {
+        holdTimer?.invalidate()
+        holdTimer = nil
+        hideHold()
+    }
+
     func gameOver() {
+        stopHold()
         running = nil
         for c in menu.cards { c.busy = false; c.hover = false }
         menu.status = ""
