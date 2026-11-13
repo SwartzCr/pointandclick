@@ -1,9 +1,9 @@
 // Hotel Paradiso Arcade: a full-screen, mouse-only menu for the two Hotel Paradiso games and
-// Do Not Disturb, meant to be the only thing on a kiosk Mac (macOS 10.15 and later).
+// Late Checkout, meant to be the only thing on a kiosk Mac (macOS 10.15 and later).
 //
 // The games live inside this app's Resources folder:
 //   ScummVM.app                      plays both point-and-clicks
-//   DoNotDisturb.app                 the Ren'Py visual novel
+//   VisualNovel.app                  the Ren'Py visual novel (Late Checkout)
 //   games/hotel-paradiso/            tentacle.000, tentacle.001
 //   games/sacra-pasta/               sacrapasta.ags
 //   art/<id>.png                     the picture on each card
@@ -28,7 +28,7 @@ let GAMES = [
          blurb: "There's a party on the ninth floor, and you are in no state to go. Yet."),
     Game(id: "sacra-pasta", title: "Hotel Paradiso 2", subtitle: "Sacra Pasta",
          blurb: "Room 913 has become a shrine to the noodle. Join the church. Become Pope."),
-    Game(id: "do-not-disturb", title: "Do Not Disturb", subtitle: "Three nights at the Hotel Paradiso",
+    Game(id: "late-checkout", title: "Late Checkout", subtitle: "A Hotel Paradiso experience",
          blurb: "A secret party, a hotel full of art rooms, and a ceremony at 11:11."),
 ]
 
@@ -295,8 +295,8 @@ final class Arcade: NSObject, NSApplicationDelegate {
         guard running == nil else { return }
         let p = Process()
         switch g.id {
-        case "do-not-disturb":
-            guard let exe = Bundle(url: res.appendingPathComponent("DoNotDisturb.app"))?.executableURL else { return fail(g) }
+        case "late-checkout":
+            guard let exe = Bundle(url: res.appendingPathComponent("VisualNovel.app"))?.executableURL else { return fail(g) }
             p.executableURL = exe
             p.arguments = []
         default:

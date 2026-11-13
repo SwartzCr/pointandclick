@@ -36,6 +36,7 @@ if pgrep -x HotelParadisoArcade >/dev/null 2>&1; then
       echo "Closing it (you may be asked for your password)..."
       sudo pkill -x HotelParadisoArcade || true
       sudo pkill -x scummvm || true
+      sudo pkill -x LateCheckout || true
       sudo pkill -x DoNotDisturb || true
       sleep 2
       ;;

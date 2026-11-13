@@ -2,7 +2,7 @@
 # Puts Hotel Paradiso Arcade.app together and packs it into a disk image. Runs on macOS (in
 # GitHub Actions, see .github/workflows/arcade-mac.yml).
 #
-#   arcade/assemble.sh <ScummVM.app> <Do Not Disturb mac zip> <Do Not Disturb main menu image> <out dir>
+#   arcade/assemble.sh <ScummVM.app> <visual novel mac zip> <visual novel main menu image> <out dir>
 set -euo pipefail
 SCUMMVM_APP=$1
 VN_ZIP=$2
@@ -37,7 +37,7 @@ mkdir "$WORK/vn"
 ditto -x -k "$VN_ZIP" "$WORK/vn"
 VN_APP=$(find "$WORK/vn" -maxdepth 3 -name '*.app' -type d | head -n 1)
 if [ -z "$VN_APP" ]; then echo "No .app in $VN_ZIP" >&2; find "$WORK/vn" -maxdepth 3; exit 1; fi
-ditto "$VN_APP" "$APP/Contents/Resources/DoNotDisturb.app"
+ditto "$VN_APP" "$APP/Contents/Resources/VisualNovel.app"
 
 # ---- will every program in here run on macOS $MIN_OS? (each Mach-O file's minimum macOS)
 echo "Minimum macOS of each program in the app:"
@@ -66,7 +66,7 @@ done < <(find "$APP/Contents/MacOS" "$APP/Contents/Resources/ScummVM.app/Content
 [ $bad = 0 ] || exit 1
 
 # ---- sign it (ad hoc: no developer account, but macOS wants every program signed somehow)
-codesign --force --deep --sign - "$APP/Contents/Resources/DoNotDisturb.app"
+codesign --force --deep --sign - "$APP/Contents/Resources/VisualNovel.app"
 codesign --force --deep --sign - "$APP/Contents/Resources/ScummVM.app"
 codesign --force --deep --sign - "$APP"
 codesign --verify --deep --strict "$APP" && echo "Signature OK"

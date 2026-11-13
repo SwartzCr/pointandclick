@@ -1,11 +1,14 @@
 # Builds Hotel Paradiso Arcade: a Mac app (macOS 10.15 Catalina and later) with a full-screen,
-# mouse-only menu of Hotel Paradiso, Sacra Pasta and Do Not Disturb, for a kiosk Mac. The disk
+# mouse-only menu of Hotel Paradiso, Sacra Pasta and Late Checkout, for a kiosk Mac. The disk
 # image (with the restrictions profile and the set-up guide) goes on the "arcade" release:
 # https://github.com/SwartzCr/pointandclick/releases/tag/arcade
 name: Mac arcade
 
 on:
   workflow_dispatch:
+  # the visual novel lives in its own repo; pick up its changes every night
+  schedule:
+    - cron: '17 11 * * *'
   push:
     branches: [main]
     paths:
@@ -30,11 +33,11 @@ env:
   CACHE_VERSION: 2
 
 jobs:
-  # Do Not Disturb, packaged for the Mac by Ren'Py itself
+  # Late Checkout (the visual novel), packaged for the Mac by Ren'Py itself
   visual-novel:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out Do Not Disturb
+      - name: Check out the visual novel
         uses: actions/checkout@v4
         with:
           repository: SwartzCr/visualnovel

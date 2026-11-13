@@ -1,8 +1,8 @@
 """The pictures for the arcade launcher's cards, and its icon.
 
-    python3 arcade/make_art.py <out dir> <Do Not Disturb's game/gui/main_menu image>
+    python3 arcade/make_art.py <out dir> <the visual novel's game/gui/main_menu image>
 
-Writes <out>/art/hotel-paradiso.png, sacra-pasta.png, do-not-disturb.png and
+Writes <out>/art/hotel-paradiso.png, sacra-pasta.png, late-checkout.png and
 <out>/AppIcon.iconset/ (turn that into AppIcon.icns with `iconutil -c icns`).
 """
 import os
@@ -23,7 +23,7 @@ def main(out, vn_menu):
     sacra.crop((0, 0, 640, 288)).resize((1280, 576), Image.NEAREST).save(os.path.join(out, 'art', 'sacra-pasta.png'))
     vn = Image.open(vn_menu).convert('RGB')
     vn.thumbnail((1600, 900))
-    vn.save(os.path.join(out, 'art', 'do-not-disturb.png'))
+    vn.save(os.path.join(out, 'art', 'late-checkout.png'))
 
     # the icon: the middle of the Sacra Pasta title, on a rounded square
     side = 288
