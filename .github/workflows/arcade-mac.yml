@@ -19,7 +19,7 @@ permissions:
 
 concurrency:
   group: arcade-mac
-  cancel-in-progress: true
+  cancel-in-progress: false   # a newer push waits its turn instead of killing a half-done build
 
 env:
   # the same ScummVM as the web version (see pages.yml)
