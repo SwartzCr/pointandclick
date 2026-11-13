@@ -10,7 +10,7 @@
 //
 // While the menu is in front there's no Dock or menu bar (but no keys are blocked). Clicking a card starts that game full screen; quitting the game brings the
 // menu back, and so does holding the right mouse button down for three seconds during a game.
-// To leave the menu, press Control-Option-Command-Q and type the exit code: the first
+// To leave the menu, press Command-Q (or Control-Q) and type the exit code: the first
 // line of ~/Library/Application Support/Hotel Paradiso Arcade/exit-code.txt if that exists,
 // otherwise the ArcadeExitCode key in Info.plist ("paradiso").
 
@@ -253,7 +253,9 @@ final class Arcade: NSObject, NSApplicationDelegate {
         // the way out, for whoever looks after the machine
         NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] e in
             let mods = e.modifierFlags.intersection(.deviceIndependentFlagsMask)
-            if mods.contains([.control, .option, .command]) && e.charactersIgnoringModifiers?.lowercased() == "q" {
+            // Command-Q (any keyboard: on a PC keyboard that's the Windows key and Q), Control-Q, or
+            // the old Control-Option-Command-Q; all of them ask for the exit code first
+            if (mods.contains(.command) || mods.contains(.control)) && e.charactersIgnoringModifiers?.lowercased() == "q" {
                 self?.askToQuit()
                 return nil
             }
