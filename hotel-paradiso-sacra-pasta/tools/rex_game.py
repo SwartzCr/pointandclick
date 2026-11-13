@@ -379,81 +379,137 @@ def cursor():
     return im
 
 
-def victory():
-    """The victory picture: the morning after the meteors. The T. Rex roars on a rock above
-    the jungle, the sky still streaked with fire, the volcano smoking (320x144)."""
-    im = Image.new('RGBA', (W, H), (0, 0, 0, 255))
-    px = im.load()
+# ------------------------------------------------------------------ the victory screen
+def rot(pts, cx, cy, deg):
+    a = math.radians(deg)
+    c, s = math.cos(a), math.sin(a)
+    return [(cx + (x - cx) * c - (y - cy) * s, cy + (x - cx) * s + (y - cy) * c) for x, y in pts]
+
+
+def tf(pts, ox, oy, k, flip=False):
+    out = []
+    for x, y in pts:
+        if flip:
+            x = 146 - x
+        out.append((ox + x * k, oy + y * k))
+    return out
+
+
+def rex_profile(d, ox, oy, k=1.0, pose='roar', cols=None, flip=False, stride=0):
+    """Draws the T. Rex facing right with its feet on y = oy + 80*k. 146*k wide.
+    pose: 'roar' (head thrown up, jaws wide), 'stand' (jaws shut), 'run' (leaning forward)."""
+    G, D, Hh, B = cols or (P['rex'], P['rex_dk'], P['rex_hi'], (170, 200, 120))
+    T = lambda pts: tf(pts, ox, oy, k, flip)
+    lean = -6 if pose == 'run' else 0
+    body_pts = [(0, 40), (28, 31), (60, 24), (80, 23), (96, 26), (104, 30),
+                (106, 40), (100, 48), (88, 53), (72, 54), (58, 50), (30, 45), (0, 42)]
+    body_pts = rot(body_pts, 70, 50, lean)
+    # far leg, behind everything (darker), swung opposite to the near one
+    s = stride
+    far = [(66, 34), (80, 34), (82, 48), (74 - s, 60), (70 - s, 74), (64 - s, 74), (66 - s, 58), (62, 46)]
+    far_foot = [(58 - s, 74), (78 - s, 74), (80 - s, 80), (56 - s, 80)]
+    d.polygon(T(rot(far, 70, 50, lean)), fill=D)
+    d.polygon(T(far_foot), fill=D)
+    # body and tail
+    d.polygon(T(body_pts), fill=G, outline=D)
+    # back stripe and belly light
+    d.line(T(rot([(20, 35), (60, 27), (90, 27)], 70, 50, lean)), fill=D, width=max(1, int(k)))
+    d.line(T(rot([(60, 50), (86, 50), (98, 46)], 70, 50, lean)), fill=B, width=max(1, int(k)))
+    for x in range(30, 96, 9):                      # a few stripes across the back
+        p = rot([(x, 27 + (6 if x < 50 else 0) * (50 - x) / 20), (x + 4, 33)], 70, 50, lean)
+        d.line(T(p), fill=D)
+    # neck and head
+    pivot = rot([(104, 30)], 70, 50, lean)[0]
+    head = [(100, 26), (108, 16), (122, 11), (140, 13), (147, 18), (146, 23), (128, 26), (112, 30), (104, 34)]
+    jaw = [(110, 30), (126, 27), (144, 26), (142, 30), (128, 33), (114, 36)]
+    hdeg = {'roar': -28, 'stand': -4, 'run': 4}[pose]
+    jaw_open = {'roar': 26, 'stand': 0, 'run': 8}[pose]
+    head = rot([(x, y + (rot([(0, 0)], 0, 0, 0)[0][1])) for x, y in head], 70, 50, lean)
+    jaw = rot(jaw, 70, 50, lean)
+    head = rot(head, pivot[0], pivot[1], hdeg)
+    jaw = rot(rot(jaw, 112, 31, jaw_open), pivot[0], pivot[1], hdeg)
+    d.polygon(T(jaw), fill=G, outline=D)
+    if jaw_open:
+        # the inside of the mouth, between the jaws
+        mouth = [head[6], head[5], jaw[2], jaw[1]]
+        d.polygon(T(mouth), fill=(120, 26, 36))
+        for t in range(5):                           # teeth along both jaws
+            u = 0.2 + t * 0.17
+            ux = head[6][0] + (head[5][0] - head[6][0]) * u
+            uy = head[6][1] + (head[5][1] - head[6][1]) * u
+            lx = jaw[1][0] + (jaw[2][0] - jaw[1][0]) * u
+            ly = jaw[1][1] + (jaw[2][1] - jaw[1][1]) * u
+            d.polygon(T([(ux - 1, uy), (ux + 1, uy), (ux, uy + 2.5)]), fill=P['claw'])
+            d.polygon(T([(lx - 1, ly), (lx + 1, ly), (lx, ly - 2.5)]), fill=P['claw'])
+    d.polygon(T(head), fill=G, outline=D)
+    # neck filling the gap between head and shoulders
+    d.polygon(T([rot([(98, 28)], 70, 50, lean)[0], head[1], head[0], jaw[5], rot([(106, 42)], 70, 50, lean)[0]]), fill=G)
+    # eye, brow, nostril
+    e = rot(rot([(124, 16)], 70, 50, lean), pivot[0], pivot[1], hdeg)[0]
+    br = rot(rot([(119, 13), (128, 13)], 70, 50, lean), pivot[0], pivot[1], hdeg)
+    n = rot(rot([(142, 16)], 70, 50, lean), pivot[0], pivot[1], hdeg)[0]
+    ex, ey = T([e])[0]
+    d.rectangle([ex - k * 0.8, ey - k * 0.8, ex + k * 0.8, ey + k * 0.8], fill=P['eye'])
+    d.point((ex + k * 0.5, ey), fill=P['ink'])
+    d.line(T(br), fill=D, width=max(1, int(k)))
+    nx, ny = T([n])[0]
+    d.point((nx, ny), fill=P['ink'])
+    # the tiny arm
+    arm = rot([(100, 42), (106, 48), (110, 47)], 70, 50, lean)
+    if pose == 'roar':
+        arm = rot([(100, 42), (106, 46), (109, 42)], 70, 50, lean)
+    d.line(T(arm), fill=D, width=max(1, int(1.5 * k)))
+    # near leg: big drumstick thigh, shin, foot with claws
+    near = [(60, 30), (82, 30), (86, 44), (80 + s, 56), (84 + s, 72), (78 + s, 74), (72 + s, 58), (64, 50)]
+    d.polygon(T(rot(near, 70, 50, lean)), fill=G, outline=D)
+    d.line(T(rot([(66, 34), (78, 34)], 70, 50, lean)), fill=Hh)
+    foot = [(74 + s, 74), (94 + s, 74), (96 + s, 80), (72 + s, 80)]
+    d.polygon(T(foot), fill=G, outline=D)
+    for cx in (90, 94):
+        x, y = T([(cx + s, 80)])[0]
+        d.point((x, y), fill=P['claw'])
+
+
+def _vsky(px, top, mid, low, y1=40, y2=100):
     for y in range(H):
-        if y < 40:
-            dither(px, 0, y, W, y + 1, 'red_hi', 'red', round(4 * y / 40))
-        elif y < 90:
-            dither(px, 0, y, W, y + 1, 'red', 'red_lo', min(4, round(4 * (y - 40) / 50)))
+        if y < y1:
+            dither(px, 0, y, W, y + 1, top, mid, round(4 * y / y1))
         else:
-            dither(px, 0, y, W, y + 1, 'red_lo', 'sun', min(4, round(4 * (y - 90) / 30)))
+            dither(px, 0, y, W, y + 1, mid, low, min(4, round(4 * (y - y1) / (y2 - y1))))
+
+
+def _streaks(d, pts, col=None):
+    for x, y, l in pts:
+        d.line([(x, y), (x + l, y + l // 2)], fill=col or P['fire'])
+        d.point((x + l, y + l // 2), fill=P['white'])
+
+
+# --- A: roaring on the rock at sunrise (the same scene as now, new T. Rex)
+
+
+def victory():
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 255))
+    _vsky(im.load(), 'red', 'red_lo', 'sun', 50, 120)
     d = ImageDraw.Draw(im)
-    # the sun coming up, and the last of the meteors
-    d.ellipse([200, 70, 280, 150], fill=P['sun'])
-    d.ellipse([214, 84, 266, 136], fill=P['fire_hi'])
-    for x, y, l in ((30, 10, 18), (90, 24, 12), (150, 6, 22), (292, 30, 10)):
-        d.line([(x, y), (x + l, y + l // 2)], fill=P['fire'])
-        d.line([(x + l - 4, y + l // 2 - 2), (x + l, y + l // 2)], fill=P['white'])
-    # the volcano, far off, still smoking
-    d.polygon([(10, 112), (46, 70), (58, 70), (100, 112)], fill=P['volcano'])
-    d.rectangle([46, 68, 58, 71], fill=P['lava'])
-    for k, (x, y, r) in enumerate(((52, 60, 6), (58, 50, 8), (50, 40, 7), (62, 30, 9))):
-        d.ellipse([x - r, y - r, x + r, y + r], fill=P['smoke_hi'] if k % 2 else P['smoke'])
-    # jungle along the bottom
+    d.ellipse([88, 14, 232, 158], fill=P['fire_hi'])
+    for y in range(40, 140, 7):                     # bands across the sun
+        d.line([(80, y), (240, y)], fill=P['sun'])
+    _streaks(d, [(20, 14, 16), (250, 8, 20), (286, 34, 12), (40, 44, 10)], P['fire_hi'])
+    ink = (30, 14, 20)
     for x in range(W):
-        h = 18 + 5 * math.sin(x / 9) + 4 * math.sin(x / 23 + 2)
-        d.line([(x, H - h), (x, H)], fill=P['leaf_dk'])
-    for x0 in (20, 70, 250, 300):
-        for a in range(-160, -15, 25):
+        h = 18 + 6 * math.sin(x / 11) + 3 * math.sin(x / 5 + 1)
+        d.line([(x, H - h), (x, H)], fill=ink)
+    for x0 in (14, 40, 280, 304):                    # palm silhouettes
+        d.line([(x0, H - 20), (x0 + 3, H - 64)], fill=ink, width=3)
+        for a in (-160, -125, -90, -55, -20):
             ar = math.radians(a)
-            pts = [(x0 + t * math.cos(ar), H - 26 + t * math.sin(ar) + t * t / 30) for t in range(0, 22, 2)]
-            d.line(pts, fill=P['leaf'], width=2)
-    # the rock
-    d.polygon([(96, H), (112, 108), (150, 98), (196, 104), (214, H)], fill=P['rock_dk'])
-    d.polygon([(104, H), (116, 110), (150, 101), (190, 106), (204, H)], fill=P['rock'])
-    d.line([(120, 112), (150, 104), (180, 108)], fill=P['rock_hi'])
-    # the T. Rex in profile, facing right, head up, roaring
-    G, D, Hh = P['rex'], P['rex_dk'], P['rex_hi']
-    lift = 0
-    # tail sweeping down to the left
-    d.polygon([(124, 80), (96, 92), (78, 100), (98, 96), (128, 90)], fill=D)
-    d.polygon([(126, 80), (98, 90), (84, 97), (128, 87)], fill=G)
-    # back leg (far side) then body
-    d.polygon([(140, 84), (134, 100), (130, 101), (126, 101), (136, 82)], fill=D)
-    d.ellipse([118, 62, 168, 92], fill=D)
-    d.ellipse([120, 62, 166, 89], fill=G)
-    d.line([(126, 66), (160, 64)], fill=Hh)
-    # near leg: big thigh and foot planted on the rock
-    d.ellipse([132, 74, 156, 98], fill=D)
-    d.ellipse([133, 74, 154, 95], fill=G)
-    d.polygon([(142, 94), (150, 94), (148, 102), (140, 102)], fill=D)
-    d.polygon([(136, 102), (156, 102), (156, 105), (134, 105)], fill=D)
-    for x in (152, 155):
-        d.point((x, 105), fill=P['claw'])
-    # neck up to the head
-    d.polygon([(150, 70), (164, 62), (172, 46), (162, 42), (152, 56)], fill=G)
-    d.line([(164, 62), (172, 46)], fill=D)
-    # head thrown back, jaws open
-    d.polygon([(158, 44), (166, 32), (186, 24), (196, 26), (186, 34), (172, 42)], fill=G)   # upper jaw
-    d.polygon([(166, 44), (178, 42), (192, 44), (186, 48), (168, 50)], fill=G)                 # lower jaw
-    d.polygon([(172, 42), (186, 34), (192, 44), (178, 42)], fill=(130, 30, 40))                 # mouth
-    for k in range(4):
-        d.point((176 + k * 4, 37 - k * 2 + 1), fill=P['claw'])
-        d.point((178 + k * 3, 44), fill=P['claw'])
-    d.line([(158, 44), (166, 32), (186, 24), (196, 26)], fill=D)
-    d.rectangle([168, 31, 169, 32], fill=P['eye'])
-    d.point((193, 26), fill=P['ink'])
-    # the tiny arm, raised in triumph
-    d.line([(160, 70), (166, 64), (168, 60)], fill=D, width=2)
-    d.point((169, 59), fill=P['claw'])
-    # the roar
-    for k, r in enumerate((8, 14, 20)):
-        d.arc([200 - r, 22 - r, 200 + r, 22 + r], -60, 30, fill=P['fire_hi'] if k == 0 else P['sun'])
+            pts = [(x0 + 3 + t * math.cos(ar), H - 64 + t * math.sin(ar) + t * t / 40) for t in range(0, 20, 2)]
+            d.line(pts, fill=ink, width=2)
+    rex_profile(d, 86, 44, 0.98, 'roar', cols=(ink, ink, ink, ink))
     return im
+
+
+# --- C: striding away from a smoking crater, looking pleased with itself
 
 
 def sprites():
