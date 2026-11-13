@@ -124,6 +124,8 @@ jobs:
           sed -i '' 's/-fforce-mem//g' configure
           CFLAGS="-O2" ./configure --prefix="$HOME/arcade-deps" --disable-shared --enable-static \
             --enable-fpm=64bit --disable-debugging --build=x86_64-apple-darwin --host=x86_64-apple-darwin > /dev/null
+          # ...and a handful more it writes into the Makefile
+          sed -i '' -E 's/-f(thread-jumps|cse-follow-jumps|cse-skip-blocks|regmove|expensive-optimizations|schedule-insns2|force-mem)//g' Makefile
           make -j"$(sysctl -n hw.ncpu)" > /dev/null
           make install > /dev/null
           ls "$HOME/arcade-deps/lib" "$HOME/arcade-deps/include"
