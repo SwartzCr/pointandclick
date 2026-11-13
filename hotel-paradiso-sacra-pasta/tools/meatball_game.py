@@ -223,68 +223,115 @@ def bowl_full():
     return im2
 
 
-def finale():
-    """The close-up at the end: the meatball sitting on a heap of spaghetti, full screen."""
-    import math
-    import random
-    im = sky()
-    px = im.load()
-    d = ImageDraw.Draw(im)
-    # sunburst behind the bowl
-    cx, cy = 160, 64
-    for k in range(16):
-        a0 = k * math.pi / 8
-        a1 = a0 + math.pi / 16
-        d.polygon([(cx, cy), (cx + 260 * math.cos(a0), cy + 260 * math.sin(a0)),
-                   (cx + 260 * math.cos(a1), cy + 260 * math.sin(a1))], fill=P['sky_lo'])
-    # the tablecloth
+# ------------------------------------------------------------------ the close-up at the end
+import math
+import random
+FIN_CX = 160
+
+
+def _fin_table(im, top):
     g = ground()
+    tile = Image.new('RGBA', (32, H - top), (0, 0, 0, 0))
+    for y in range(0, H - top, g.height):
+        tile.alpha_composite(g, (0, y))
     for x in range(0, W, 32):
-        im.alpha_composite(g, (x, GROUND))
-    # the bowl, big
-    d.pieslice([70, 40, 250, 150], 0, 180, fill=P['bowl'], outline=P['bowl_dk'])
-    d.rectangle([120, 142, 200, 147], fill=P['bowl_dk'])
-    d.arc([78, 50, 242, 140], 20, 160, fill=P['bowl_dk'])
-    d.line([(96, 104), (110, 112)], fill=(255, 255, 255))
-    # the heap of spaghetti
-    rnd = random.Random(5)
-    d.ellipse([74, 70, 246, 106], fill=P['noodle'])
-    d.ellipse([96, 50, 224, 96], fill=P['noodle'])
-    for _ in range(70):
-        x = rnd.randint(84, 236)
-        y = rnd.randint(58, 100)
-        if ((x - 160) / 80) ** 2 + ((y - 82) / 26) ** 2 < 1:
-            d.arc([x - 7, y - 3, x + 7, y + 4], rnd.choice([0, 180]), rnd.choice([150, 330]), fill=P['cheese_dk'])
-    # strands over the rim
-    for x in (88, 118, 196, 226):
-        d.line([(x, 92), (x - 2, 106), (x + 1, 116)], fill=P['noodle'])
-    # the sauce, and the meatball on top
-    d.ellipse([118, 52, 202, 80], fill=P['sauce'])
-    d.ellipse([130, 56, 160, 66], fill=P['sauce_hi'])
-    for x in (126, 196):
-        d.line([(x, 72), (x, 84)], fill=P['sauce'], width=2)
-    # the meatball, drawn big at the same pixel size as everything else
-    mb = canvas(46, 44)
-    md = ImageDraw.Draw(mb)
-    md.ellipse([0, 0, 45, 43], fill=P['meat_dk'])
-    md.ellipse([1, 0, 41, 37], fill=P['meat'])
-    md.ellipse([8, 6, 22, 15], fill=P['meat_hi'])
-    md.ellipse([11, 8, 15, 11], fill=P['bread_hi'])
+        im.alpha_composite(tile, (x, top))
+
+
+
+def _fin_meatball(size=40):
+    mb = canvas(size + 1, size + 1)
+    d = ImageDraw.Draw(mb)
+    d.ellipse([0, 0, size, size], fill=P['meat_dk'])
+    d.ellipse([1, 0, size - 3, size - 4], fill=P['meat'])
+    d.ellipse([7, 5, 19, 13], fill=P['meat_hi'])
+    d.ellipse([10, 7, 13, 9], fill=P['bread_hi'])
     rr = random.Random(9)
-    for _ in range(26):
-        x, y = rr.randint(6, 39), rr.randint(6, 38)
-        if ((x - 22.5) / 20) ** 2 + ((y - 21.5) / 19) ** 2 < 1:
-            md.rectangle([x, y, x + 1, y], fill=rr.choice([P['herb'], P['meat_dk'], P['meat_hi']]))
-    im.alpha_composite(mb, (137, 16))
-    # a basil leaf and some steam and sparkle
-    d.polygon([(176, 30), (192, 24), (186, 36)], fill=P['herb'])
-    d.line([(176, 30), (190, 27)], fill=(110, 170, 80))
-    for k, x in enumerate((122, 160, 198)):
-        for t in range(0, 22, 2):
-            d.point((x + int(3 * math.sin((t + k * 4) / 3)), 14 - t // 2 + 0), fill=(250, 246, 236))
-    for x, y in ((60, 30), (262, 40), (44, 70), (280, 84), (100, 20)):
-        d.line([(x - 3, y), (x + 3, y)], fill=P['sun'])
-        d.line([(x, y - 3), (x, y + 3)], fill=P['sun'])
+    c = size / 2
+    n = 0
+    while n < 18:
+        x, y = rr.randint(5, size - 6), rr.randint(5, size - 6)
+        if ((x - c) / (c - 4)) ** 2 + ((y - c) / (c - 4)) ** 2 < 1 and not (5 <= x <= 20 and 4 <= y <= 14):
+            d.rectangle([x, y, x + 1, y], fill=rr.choice([P['herb'], P['meat_dk']]))
+            n += 1
+    return mb
+
+
+
+def _fin_bowl(im, cy_rim=80, half_w=64, depth=34, heap=22):
+    """A bowl of spaghetti, centred, rim at cy_rim. Returns the top of the heap."""
+    d = ImageDraw.Draw(im)
+    x0, x1 = FIN_CX - half_w, FIN_CX + half_w
+    bottom = cy_rim + depth
+    d.rectangle([FIN_CX - 22, bottom - 3, FIN_CX + 22, bottom + 2], fill=P['bowl_dk'])
+    d.chord([x0, cy_rim - depth, x1, bottom], 0, 180, fill=P['bowl'], outline=P['bowl_dk'])
+    # shading: the lower right of the bowl a shade darker, a highlight on the left
+    px = im.load()
+    for y in range(cy_rim + 4, bottom):
+        for x in range(x0, x1):
+            if px[x, y][:3] == P['bowl'] and ((x - FIN_CX) / half_w * 0.7 + (y - cy_rim) / depth) > 0.75 and (x + y) % 2:
+                px[x, y] = P['bowl_dk'] + (255,)
+    d.arc([x0 + 8, cy_rim - depth + 6, x1 - 8, bottom - 6], 140, 160, fill=(255, 255, 255))
+    d.ellipse([x0, cy_rim - 6, x1, cy_rim + 6], fill=P['bowl'], outline=P['bowl_dk'])
+    d.ellipse([x0 + 4, cy_rim - 4, x1 - 4, cy_rim + 4], fill=P['noodle_dk'] if 'noodle_dk' in P else P['cheese_dk'])
+    # the heap: a lumpy mound of noodles
+    top = cy_rim - heap
+    d.chord([x0 + 8, top, x1 - 8, cy_rim + heap], 180, 360, fill=P['noodle'])
+    rnd = random.Random(4)
+    for k in range(9):
+        a = math.pi + (k + 0.5) * math.pi / 9
+        x = FIN_CX + (half_w - 14) * math.cos(a)
+        y = cy_rim + heap * 0.95 * math.sin(a)
+        d.ellipse([x - 9, y - 5, x + 9, y + 5], fill=P['noodle'])
+    # strands: short curls in a darker yellow, scattered inside the mound
+    n = 0
+    while n < 26:
+        x = rnd.randint(x0 + 14, x1 - 14)
+        y = rnd.randint(top + 4, cy_rim + 2)
+        if ((x - FIN_CX) / (half_w - 16)) ** 2 + ((y - cy_rim) / (heap - 3)) ** 2 < 1:
+            d.arc([x - 6, y - 2, x + 6, y + 3], rnd.choice([190, 20]), rnd.choice([340, 160]), fill=P['cheese_dk'])
+            n += 1
+    return top
+
+
+
+def _fin_sauce_and_ball(im, top, size=40):
+    d = ImageDraw.Draw(im)
+    sw = 30
+    y0 = top - 1
+    d.ellipse([FIN_CX - sw, y0, FIN_CX + sw, y0 + 14], fill=P['sauce'])
+    # a few blobs round the edge so the sauce isn't a perfect oval
+    for dx, dy, r in ((-26, 9, 5), (24, 10, 6), (-12, 12, 5), (10, 13, 4), (30, 6, 3)):
+        d.ellipse([FIN_CX + dx - r, y0 + dy - r // 2, FIN_CX + dx + r, y0 + dy + r // 2 + 1], fill=P['sauce'])
+    d.ellipse([FIN_CX - sw + 6, y0 + 2, FIN_CX - 8, y0 + 6], fill=P['sauce_hi'])
+    mb = _fin_meatball(size)
+    im.alpha_composite(mb, (FIN_CX - size // 2, y0 - size + 9))
+    bx, by = FIN_CX + 6, y0 - size + 9
+    d.polygon([(bx, by + 4), (bx + 14, by - 2), (bx + 10, by + 8)], fill=P['herb'])
+    d.line([(bx + 1, by + 4), (bx + 12, by)], fill=(110, 170, 80))
+    return y0 - size + 9
+
+
+
+def _fin_sky():
+    im = Image.new('RGBA', (W, H), P['sky'] + (255,))
+    px = im.load()
+    for a, b, y0, y1 in [('sky_hi', 'sky', 0, 40), ('sky', 'sky_lo', 40, 80)]:
+        for y in range(y0, y1):
+            dither(px, 0, y, W, y + 1, a, b, round(4 * (y - y0) / (y1 - y0)))
+    ImageDraw.Draw(im).rectangle([0, 80, W, H], fill=P['sky_lo'])
+    return im
+
+
+def finale():
+    """The close-up at the end: the meatball on a heap of spaghetti, the sunset's sun as a halo behind it."""
+    im = _fin_sky()
+    d = ImageDraw.Draw(im)
+    d.ellipse([FIN_CX - 44, 0, FIN_CX + 44, 88], fill=P['sun'])
+    d.ellipse([FIN_CX - 36, 8, FIN_CX + 36, 80], fill=P['flame_hi'])
+    _fin_table(im, 106)
+    top = _fin_bowl(im)
+    _fin_sauce_and_ball(im, top)
     return im
 
 
