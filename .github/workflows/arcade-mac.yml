@@ -133,8 +133,9 @@ jobs:
             --disable-fluidlite --disable-mpeg2 --disable-a52 --disable-theoradec --disable-faad --disable-jpeg \
             --disable-png --disable-gif --disable-freetype2 --disable-fribidi --disable-vpx --disable-mikmod \
             --disable-openmpt --disable-mpcdec --disable-sonivox --disable-imgui --disable-retrowave \
-            --disable-opl2lpt --disable-timidity --disable-mt32emu
-          if ! make -j"$(sysctl -n hw.ncpu)" bundle STATICLIBPATH="$HOME/arcade-deps" > build.log 2>&1; then
+            --disable-opl2lpt --disable-timidity --disable-mt32emu --disable-osx-dock-plugin
+          # the program first (in parallel), then the bundle round it (the bundle step can't run in parallel)
+          if ! { make -j"$(sysctl -n hw.ncpu)" scummvm-static STATICLIBPATH="$HOME/arcade-deps" && make bundle STATICLIBPATH="$HOME/arcade-deps"; } > build.log 2>&1; then
             grep -n -E 'error|Error' build.log | head -40
             tail -60 build.log
             exit 1
