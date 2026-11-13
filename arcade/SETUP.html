@@ -94,8 +94,11 @@ profile: <strong>Screen Time</strong> &gt; Options: turn it on and <em>Use Scree
   <li><strong>To use the Mac yourself:</strong> <kbd>Control</kbd> <kbd>Option</kbd> <kbd>Command</kbd>
       <kbd>Q</kbd>, the exit code, then <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>Q</kbd> to log out, and
       log in as yourself.</li>
-  <li><strong>To update the games:</strong> from your own account, replace the app in Applications with
-      the one from a newer disk image, and run the <code>xattr</code> line from step 1 again.</li>
+  <li><strong>To update the games:</strong> log the Arcade account out, then from your own account run
+      <strong>update-arcade.command</strong> (on this disk image, and copied to
+      <code>/Users/Shared/Hotel Paradiso Arcade</code>; the first time, right-click it and choose Open).
+      It downloads the newest version, replaces the app in Applications and unblocks it. Or paste this into Terminal:
+<pre>curl -fsSL https://raw.githubusercontent.com/SwartzCr/pointandclick/main/arcade/update-arcade.command | bash</pre></li>
   <li><strong>To undo it all:</strong> from your own account, in Terminal:
 <pre>sudo profiles -R -p io.github.swartzcr.hotelparadiso.arcade.profile.main -U arcade</pre>
       then delete the Arcade account in Users &amp; Groups.</li>

@@ -79,6 +79,8 @@ ditto "$APP" "$STAGE/$NAME.app"
 ln -s /Applications "$STAGE/Applications"
 cp "$ROOT/arcade/profile/Hotel Paradiso Arcade.mobileconfig" "$STAGE/"
 cp "$ROOT/arcade/SETUP.html" "$STAGE/Set up the arcade Mac.html"
+cp "$ROOT/arcade/update-arcade.command" "$STAGE/update-arcade.command"
+chmod +x "$STAGE/update-arcade.command"
 # hdiutil sometimes fails with "Resource busy" on GitHub's Macs; try a few times
 for i in 1 2 3 4 5; do
   if hdiutil create -volname "$NAME" -srcfolder "$STAGE" -ov -format UDZO "$OUT/Hotel-Paradiso-Arcade.dmg"; then break; fi
