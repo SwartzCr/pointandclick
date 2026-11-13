@@ -831,4 +831,41 @@ def _instead(old, new):
 EFFECTS.update({'aSquirt': _instead(sfx_squirt, sfx_squirt2), 'aSlurp': _instead(sfx_slurp, sfx_slurp2),
                 'aDig': _instead(sfx_dig, sfx_dig2), 'aCheer': _instead(sfx_cheer, sfx_cheer2),
                 'aCluck': _instead(sfx_cluck, sfx_cluck2), 'aHonk': _instead(sfx_honk, lambda: read_voc('honk.voc'))})
-MUSIC['aMusEnding'] = _instead(music_ending, music_ending2)  # Room 714's honk, for the clowns
+def _choir_ah(freq, dur):
+    """One choir voice singing "aah": a saw with vibrato through the formants of the vowel."""
+    t = t_(dur)
+    w = tone(lambda tt: freq * (1 + 0.007 * np.sin(2 * np.pi * 5.0 * tt + freq)), dur, 'saw')
+    w += tone(lambda tt: freq * 1.003 * (1 + 0.007 * np.sin(2 * np.pi * 5.4 * tt)), dur, 'saw')
+    v = _reson(w, 750, 120) + _reson(w, 1150, 150) * 0.6 + _reson(w, 2600, 250) * 0.25
+    return v * env(len(t), 0.25, 0.2, 0.85, 0.35)
+
+
+def music_ending3():
+    """The ending: the old organ chorale with a choir, now in A major and climbing,
+    with the top voice rising to a bright held finish."""
+    step = 1.35
+    chords = [('A2', 'E3', 'A3', 'C#4', 'E4'), ('D2', 'A2', 'F#3', 'A3', 'F#4'),
+              ('E2', 'B2', 'G#3', 'B3', 'G#4'), ('F#2', 'C#3', 'A3', 'C#4', 'A4'),
+              ('D2', 'A2', 'F#3', 'A3', 'B4'), ('E2', 'B2', 'G#3', 'B3', 'B4'),
+              ('A2', 'E3', 'A3', 'C#4', 'E4', 'A4', 'C#5')]
+    parts = []
+    for i, ch in enumerate(chords):
+        last = i == len(chords) - 1
+        dur = 3.4 if last else step + 0.1
+        for nname in ch:
+            parts.append((i * step, organ(hz(nname), dur) * 0.2))
+        # the choir sings the upper three notes, an octave of warmth over the organ
+        for nname in ch[-3:]:
+            parts.append((i * step, _choir_ah(hz(nname), dur) * 0.05))
+    # bells ringing out over the last chord
+    end = (len(chords) - 1) * step
+    for j, nname in enumerate(['A5', 'C#6', 'E6', 'A6']):
+        f = hz(nname)
+        parts.append((end + 0.25 + j * 0.18, modal([f, f * 2.76, f * 5.4], 2.2, 0.5, [1, 0.35, 0.15]) * 0.12))
+    out = lp_fast(mix(*parts), 3600)
+    n = int(1.0 * SR)
+    out[-n:] *= np.linspace(1, 0, n) ** 1.5
+    return out
+
+
+MUSIC['aMusEnding'] = _instead(music_ending, music_ending3)  # Room 714's honk, for the clowns
