@@ -159,43 +159,68 @@ def jungle_side(flip=False):
 
 
 # ------------------------------------------------------------------ the T. Rex, from behind
-def rex(frame):
-    """44x46, running away from us: four frames (legs and tail swap sides)."""
-    im = canvas(44, 46)
-    d = ImageDraw.Draw(im)
-    sw = (-1, 0, 1, 0)[frame]                # tail sway
-    lift = (0, 1, 0, 1)[frame]               # body bob
+def poly(d, pts, fill, outline=None):
+    d.polygon(pts, fill=fill)
+    if outline:
+        d.line(pts + [pts[0]], fill=outline)
+
+
+def thighs(d, cx, frame, lift, col, dk, hi, claw, H=54, spread=11):
+    """Big drumstick thighs either side of the hips, legs pumping."""
     left_up = frame in (0, 1)
-    # legs: big thighs, one lifted
     for side, up in ((-1, left_up), (1, not left_up)):
-        x = 22 + side * 9
-        top = 26 - lift
-        foot = 44 - (5 if up else 0)
-        d.ellipse([x - 7, top, x + 7, top + 14], fill=P['rex_dk'])
-        d.ellipse([x - 6, top, x + 5, top + 12], fill=P['rex'])
-        d.rectangle([x - 3, top + 10, x + 3, foot - 2], fill=P['rex_dk'])
-        d.rectangle([x - 5, foot - 3, x + 5, foot], fill=P['rex_dk'])
+        x = cx + side * spread
+        knee = 40 - lift - (3 if up else 0)
+        foot = H - 1 - (6 if up else 0)
+        # shin and foot first (behind the thigh)
+        d.polygon([(x - 3, knee), (x + 3, knee), (x + 2, foot - 2), (x - 2, foot - 2)], fill=dk)
+        d.rectangle([x - 5, foot - 3, x + 5, foot], fill=dk)
         if up:
-            d.line([(x - 4, foot), (x + 4, foot)], fill=P['claw'])
-    # body: a big pear seen from behind
-    d.ellipse([9, 8 - lift, 35, 36 - lift], fill=P['rex_dk'])
-    d.ellipse([10, 8 - lift, 33, 34 - lift], fill=P['rex'])
-    # back stripes
-    for k, y in enumerate((14, 19, 24, 29)):
-        w = 6 - abs(k - 1)
-        d.line([(22 - w, y - lift), (22 + w, y - lift)], fill=P['rex_dk'])
-    d.line([(14, 12 - lift), (14, 26 - lift)], fill=P['rex_hi'])
-    # the tiny arms poking out at the sides
-    d.line([(9, 18 - lift), (6, 21 - lift)], fill=P['rex_dk'], width=2)
-    d.line([(34, 18 - lift), (37, 21 - lift)], fill=P['rex_dk'], width=2)
-    # head on top, turned a little so one eye shows
-    d.ellipse([14, 0 - lift, 31, 13 - lift], fill=P['rex_dk'])
-    d.ellipse([15, 0 - lift, 29, 11 - lift], fill=P['rex'])
-    d.point((28, 5 - lift), fill=P['eye'])
-    d.point((28, 6 - lift), fill=P['ink'])
-    # the tail, coming towards us and swinging
-    d.polygon([(17, 30 - lift), (27, 30 - lift), (22 + sw * 5, 45)], fill=P['rex_dk'])
-    d.polygon([(18, 30 - lift), (25, 30 - lift), (22 + sw * 5, 43)], fill=P['rex'])
+            d.line([(x - 4, foot), (x + 4, foot)], fill=claw)
+        else:
+            for cxx in (x - 4, x, x + 4):
+                d.point((cxx, foot), fill=claw)
+        # the thigh: a drumstick, wide at the hip
+        d.polygon([(x - 8, 28 - lift), (x + 8, 28 - lift), (x + 5, knee + 2), (x - 4, knee + 2)], fill=dk)
+        d.polygon([(x - 7, 28 - lift), (x + 6, 28 - lift), (x + 4, knee), (x - 3, knee)], fill=col)
+        d.line([(x - 5 * side, 30 - lift), (x - 3 * side, knee - 2)], fill=hi if side < 0 else dk)
+
+
+def rex(frame):
+    """56x54, running away from us: one body seen three-quarters from behind, the tail swinging
+    towards us and the head turned back in profile to look over its shoulder. Four frames."""
+    G, D, Hh = P['rex'], P['rex_dk'], P['rex_hi']
+    im = canvas(56, 54)
+    d = ImageDraw.Draw(im)
+    lift = (0, 1, 0, 1)[frame]
+    sw = (-1, 0, 1, 0)[frame]
+    thighs(d, 30, frame, lift, G, D, Hh, P['claw'], spread=10)
+    # one continuous body: tail tip (near, bottom) -> hips -> back -> neck -> head (left, turned)
+    body = [(30 + sw * 7, 52), (24, 34 - lift), (18, 26 - lift), (16, 18 - lift), (20, 12 - lift),
+            (28, 10 - lift), (38, 14 - lift), (44, 22 - lift), (44, 32 - lift), (36, 36 - lift)]
+    poly(d, body, G, D)
+    d.polygon([(30 + sw * 7, 52), (24, 34 - lift), (18, 26 - lift), (21, 26 - lift), (27, 34 - lift)], fill=D)
+    d.line([(38, 16 - lift), (42, 26 - lift)], fill=Hh)
+    for k, y in enumerate(range(12, 44, 5)):
+        x = 30 + int(sw * 7 * max(0, y - 34) / 18) + (0 if y > 30 else int((30 - y) * 0.2))
+        d.point((x, y - lift), fill=D)
+        d.point((x, y - lift - 1), fill=D)
+    # neck curling round, and the head in profile facing left (looking back over the shoulder)
+    poly(d, [(18, 14 - lift), (22, 10 - lift), (20, 4 - lift), (14, 6 - lift)], G, D)
+    hx, hy = 0, -1 - lift
+    head = [(hx + 2, hy + 6), (hx + 6, hy + 3), (hx + 18, hy + 2), (hx + 23, hy + 5), (hx + 23, hy + 11), (hx + 18, hy + 14), (hx + 3, hy + 13), (hx, hy + 10)]
+    poly(d, head, G, D)
+    d.polygon([(hx + 3, hy + 13), (hx + 18, hy + 14), (hx + 23, hy + 11), (hx + 20, hy + 11), (hx + 2, hy + 11)], fill=D)
+    d.line([(hx + 1, hy + 10), (hx + 19, hy + 10)], fill=P['ink'])
+    for x in range(hx + 2, hx + 17, 3):
+        d.point((x, hy + 9), fill=P['claw'])
+        d.point((x + 1, hy + 11), fill=P['claw'])
+    d.point((hx + 4, hy + 5), fill=P['ink'])
+    d.rectangle([hx + 15, hy + 4, hx + 16, hy + 5], fill=P['eye'])
+    d.point((hx + 16, hy + 5), fill=P['ink'])
+    d.line([(hx + 13, hy + 3), (hx + 18, hy + 3)], fill=D)
+    # the tiny arm
+    d.line([(17, 20 - lift), (12, 23 - lift), (13, 25 - lift)], fill=D, width=2)
     return im
 
 
