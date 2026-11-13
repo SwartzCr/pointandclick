@@ -21,6 +21,7 @@ room ResRoom {
     sound washSnd = "sink.soun";       // the bathroom tap, for washing the uniform
 
     bit cursorShown;
+    bit uiDim;          // the verbs and pockets are greyed out while someone is talking
 
     script inventoryClick(int item);
     script wearUniform(int on);
@@ -217,7 +218,7 @@ room ResRoom {
             setVerbXY(196, 154 + slot * 9);
         else
             setVerbXY(258, 154 + (slot - 5) * 9);
-        setVerbOn();
+        if(uiDim) verbDim(); else setVerbOn();
         redrawVerb();
     }
 
@@ -272,16 +273,44 @@ room ResRoom {
             startObject(2, obj, DefaultVerb, [ DefaultVerb, obj, 0 ]);
     }
 
+    // ------------------------------------------------------------ greying out while talking
+    // While a line of dialogue is up the verbs and the pockets go dark grey, so it's clear a
+    // click will have to wait. (A dimmed verb can't be clicked, either.)
+    script dimVerb(int vrb, int on) {
+        setCurrentVerb(vrb);
+        if(on) verbDim(); else setVerbOn();
+        redrawVerb();
+    }
+
+    script dimVerbs(int on) {
+        uiDim = on;
+        dimVerb(Open, on);   dimVerb(Close, on);  dimVerb(TalkTo, on);
+        dimVerb(PickUp, on); dimVerb(LookAt, on); dimVerb(Use, on);
+        dimVerb(Push, on);   dimVerb(Pull, on);   dimVerb(WalkTo, on);
+        refreshInventory();         // the pockets, dimmed or not to match
+    }
+
     // ------------------------------------------------------------ sentence line
     // Runs forever: rebuilds "Verb object" whenever the cursor or verb changes.
     script mouseWatch() {
-        int obj, inv, lastObj, lastInv, lastVerb, lastWith, dflt, lastDflt;
+        int obj, inv, lastObj, lastInv, lastVerb, lastWith, dflt, lastDflt, talking;
         lastObj = -1;
         while(1) {
-            if(titleMode) {
+            if(titleMode || gameOver) {
                 lastObj = -1;
+                talking = 0;
+                uiDim = 0;
                 breakScript();
                 continue;
+            }
+            // grey the interface out a moment after a line of dialogue appears (not for a
+            // blink-length one), and back to normal as soon as it's gone
+            if(VAR_HAVE_MSG) {
+                talking++;
+                if(talking == 6 && !uiDim) dimVerbs(1);
+            } else {
+                talking = 0;
+                if(uiDim) dimVerbs(0);
             }
             obj = getObjectAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y);
             if(withItem && getActorAt(VAR_VIRT_MOUSE_X, VAR_VIRT_MOUSE_Y) == VAR_EGO)
