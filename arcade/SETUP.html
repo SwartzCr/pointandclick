@@ -60,6 +60,8 @@ Terminal for this account, so anything else has to happen before it.</p>
       this guide). In Terminal, with your code in place of <code>mysecret</code>:
 <pre>mkdir -p ~/Library/Application\ Support/Hotel\ Paradiso\ Arcade
 echo 'mysecret' &gt; ~/Library/Application\ Support/Hotel\ Paradiso\ Arcade/exit-code.txt</pre></li>
+  <li>So that a game crashing can't leave a "quit unexpectedly" box on the screen, in Terminal:
+<pre>defaults write com.apple.CrashReporter DialogType none</pre></li>
   <li>System Preferences &gt; <strong>Energy Saver</strong>: set the display and computer never to sleep
       (or as long as you like). <strong>Desktop &amp; Screen Saver</strong>: screen saver to Never.</li>
   <li>System Preferences &gt; <strong>Keyboard</strong> &gt; Shortcuts &gt; <strong>Spotlight</strong>:

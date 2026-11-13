@@ -289,6 +289,7 @@ final class Arcade: NSObject, NSApplicationDelegate {
         savepath=\(saves)
         updates_check=0
         gui_browser_native=false
+        original_gui=false
         """
         try? text.write(to: ini, atomically: true, encoding: .utf8)
     }
@@ -397,12 +398,22 @@ final class Arcade: NSObject, NSApplicationDelegate {
         for c in menu.cards { c.busy = false; c.hover = false }
         menu.status = ""
         comeBack()
+        // a full-screen game can take a moment to hand the screen back; make sure the menu ends up in front
+        for t in [0.6, 1.5, 3.0] {
+            DispatchQueue.main.asyncAfter(deadline: .now() + t) { [weak self] in
+                guard let self = self, self.running == nil, !self.allowQuit else { return }
+                self.comeBack()
+            }
+        }
     }
 
     func comeBack() {
         kiosk()
+        if let s = NSScreen.main?.frame { window.setFrame(s, display: true) }
+        NSApp.unhide(nil)
         NSApp.activate(ignoringOtherApps: true)
         window.makeKeyAndOrderFront(nil)
+        window.orderFrontRegardless()
     }
 
     func askToQuit() {
