@@ -355,6 +355,107 @@ def arrow(left):
     return im
 
 
+def dir_arrow(left, bright):
+    """The big arrow beside the T. Rex showing which way a click will take it: 26x22.
+    Two brightnesses: resting, and the moment of the click."""
+    im = canvas(26, 22)
+    d = ImageDraw.Draw(im)
+    pts = [(1, 11), (12, 1), (12, 6), (24, 6), (24, 16), (12, 16), (12, 21)]
+    if not left:
+        pts = [(25 - x, y) for x, y in pts]
+    fill = (255, 236, 120, 255) if bright else (255, 214, 90, 200)
+    d.polygon(pts, fill=fill, outline=(40, 20, 16, 255))
+    d.line([pts[1], pts[2]] if left else [pts[1], pts[2]], fill=(255, 255, 220, 255))
+    return im
+
+
+def cursor():
+    """A pointer that shows up on any background: 11x11 crosshair ring, white with a dark edge."""
+    im = canvas(11, 11)
+    d = ImageDraw.Draw(im)
+    d.ellipse([1, 1, 9, 9], outline=(20, 10, 24, 255), width=3)
+    d.ellipse([2, 2, 8, 8], outline=(255, 255, 255, 255))
+    d.point((5, 5), fill=(255, 255, 255, 255))
+    return im
+
+
+def victory():
+    """The victory picture: the morning after the meteors. The T. Rex roars on a rock above
+    the jungle, the sky still streaked with fire, the volcano smoking (320x144)."""
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 255))
+    px = im.load()
+    for y in range(H):
+        if y < 40:
+            dither(px, 0, y, W, y + 1, 'red_hi', 'red', round(4 * y / 40))
+        elif y < 90:
+            dither(px, 0, y, W, y + 1, 'red', 'red_lo', min(4, round(4 * (y - 40) / 50)))
+        else:
+            dither(px, 0, y, W, y + 1, 'red_lo', 'sun', min(4, round(4 * (y - 90) / 30)))
+    d = ImageDraw.Draw(im)
+    # the sun coming up, and the last of the meteors
+    d.ellipse([200, 70, 280, 150], fill=P['sun'])
+    d.ellipse([214, 84, 266, 136], fill=P['fire_hi'])
+    for x, y, l in ((30, 10, 18), (90, 24, 12), (150, 6, 22), (292, 30, 10)):
+        d.line([(x, y), (x + l, y + l // 2)], fill=P['fire'])
+        d.line([(x + l - 4, y + l // 2 - 2), (x + l, y + l // 2)], fill=P['white'])
+    # the volcano, far off, still smoking
+    d.polygon([(10, 112), (46, 70), (58, 70), (100, 112)], fill=P['volcano'])
+    d.rectangle([46, 68, 58, 71], fill=P['lava'])
+    for k, (x, y, r) in enumerate(((52, 60, 6), (58, 50, 8), (50, 40, 7), (62, 30, 9))):
+        d.ellipse([x - r, y - r, x + r, y + r], fill=P['smoke_hi'] if k % 2 else P['smoke'])
+    # jungle along the bottom
+    for x in range(W):
+        h = 18 + 5 * math.sin(x / 9) + 4 * math.sin(x / 23 + 2)
+        d.line([(x, H - h), (x, H)], fill=P['leaf_dk'])
+    for x0 in (20, 70, 250, 300):
+        for a in range(-160, -15, 25):
+            ar = math.radians(a)
+            pts = [(x0 + t * math.cos(ar), H - 26 + t * math.sin(ar) + t * t / 30) for t in range(0, 22, 2)]
+            d.line(pts, fill=P['leaf'], width=2)
+    # the rock
+    d.polygon([(96, H), (112, 108), (150, 98), (196, 104), (214, H)], fill=P['rock_dk'])
+    d.polygon([(104, H), (116, 110), (150, 101), (190, 106), (204, H)], fill=P['rock'])
+    d.line([(120, 112), (150, 104), (180, 108)], fill=P['rock_hi'])
+    # the T. Rex in profile, facing right, head up, roaring
+    G, D, Hh = P['rex'], P['rex_dk'], P['rex_hi']
+    lift = 0
+    # tail sweeping down to the left
+    d.polygon([(124, 80), (96, 92), (78, 100), (98, 96), (128, 90)], fill=D)
+    d.polygon([(126, 80), (98, 90), (84, 97), (128, 87)], fill=G)
+    # back leg (far side) then body
+    d.polygon([(140, 84), (134, 100), (130, 101), (126, 101), (136, 82)], fill=D)
+    d.ellipse([118, 62, 168, 92], fill=D)
+    d.ellipse([120, 62, 166, 89], fill=G)
+    d.line([(126, 66), (160, 64)], fill=Hh)
+    # near leg: big thigh and foot planted on the rock
+    d.ellipse([132, 74, 156, 98], fill=D)
+    d.ellipse([133, 74, 154, 95], fill=G)
+    d.polygon([(142, 94), (150, 94), (148, 102), (140, 102)], fill=D)
+    d.polygon([(136, 102), (156, 102), (156, 105), (134, 105)], fill=D)
+    for x in (152, 155):
+        d.point((x, 105), fill=P['claw'])
+    # neck up to the head
+    d.polygon([(150, 70), (164, 62), (172, 46), (162, 42), (152, 56)], fill=G)
+    d.line([(164, 62), (172, 46)], fill=D)
+    # head thrown back, jaws open
+    d.polygon([(158, 44), (166, 32), (186, 24), (196, 26), (186, 34), (172, 42)], fill=G)   # upper jaw
+    d.polygon([(166, 44), (178, 42), (192, 44), (186, 48), (168, 50)], fill=G)                 # lower jaw
+    d.polygon([(172, 42), (186, 34), (192, 44), (178, 42)], fill=(130, 30, 40))                 # mouth
+    for k in range(4):
+        d.point((176 + k * 4, 37 - k * 2 + 1), fill=P['claw'])
+        d.point((178 + k * 3, 44), fill=P['claw'])
+    d.line([(158, 44), (166, 32), (186, 24), (196, 26)], fill=D)
+    d.rectangle([168, 31, 169, 32], fill=P['eye'])
+    d.point((193, 26), fill=P['ink'])
+    # the tiny arm, raised in triumph
+    d.line([(160, 70), (166, 64), (168, 60)], fill=D, width=2)
+    d.point((169, 59), fill=P['claw'])
+    # the roar
+    for k, r in enumerate((8, 14, 20)):
+        d.arc([200 - r, 22 - r, 200 + r, 22 + r], -60, 30, fill=P['fire_hi'] if k == 0 else P['sun'])
+    return im
+
+
 def sprites():
     """{sprite name: image}, all doubled."""
     out = {'rex_sky': big(sky(False)), 'rex_skyred': big(sky(True)),
@@ -364,7 +465,10 @@ def sprites():
            'rex_crater0': big(crater(0)), 'rex_crater1': big(crater(1)),
            'rex_meteor0': big(meteor(0)), 'rex_meteor1': big(meteor(1)),
            'rex_target': big(target()), 'rex_heart': big(heart(True)), 'rex_heartx': big(heart(False)),
-           'rex_arrow_l': big(arrow(True)), 'rex_arrow_r': big(arrow(False))}
+           'rex_arrow_l': big(arrow(True)), 'rex_arrow_r': big(arrow(False)),
+           'rex_dir_l': big(dir_arrow(True, False)), 'rex_dir_r': big(dir_arrow(False, False)),
+           'rex_dir_l_on': big(dir_arrow(True, True)), 'rex_dir_r_on': big(dir_arrow(False, True)),
+           'rex_cursor': big(cursor()), 'rex_victory': big(victory())}
     for k in range(4):                       # numbered in order: the game adds 0..3 to the first
         out['rex_ground%d' % k] = big(ground(k))
     for k in range(4):
@@ -375,7 +479,8 @@ def sprites():
 NAMES = ['rex_sky', 'rex_skyred', 'rex_side_l', 'rex_side_r', 'rex_ground0', 'rex_ground1', 'rex_ground2',
          'rex_ground3', 'rex_run0', 'rex_run1', 'rex_run2', 'rex_run3', 'rex_boulder', 'rex_cycad', 'rex_ptero0',
          'rex_ptero1', 'rex_crater0', 'rex_crater1', 'rex_meteor0', 'rex_meteor1', 'rex_target', 'rex_heart',
-         'rex_heartx', 'rex_arrow_l', 'rex_arrow_r']
+         'rex_heartx', 'rex_arrow_l', 'rex_arrow_r', 'rex_dir_l', 'rex_dir_r', 'rex_dir_l_on', 'rex_dir_r_on',
+         'rex_cursor', 'rex_victory']
 
 
 def preview(path, red=False, phase=0):
