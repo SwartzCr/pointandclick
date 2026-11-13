@@ -27,7 +27,7 @@ env:
   SDL_VERSION: 2.30.9
   RENPY_VERSION: 8.3.7
   # bump to throw the cached ScummVM away and rebuild it
-  CACHE_VERSION: 1
+  CACHE_VERSION: 2
 
 jobs:
   # Do Not Disturb, packaged for the Mac by Ren'Py itself
@@ -111,6 +111,23 @@ jobs:
           make install > /dev/null
           ls "$HOME/arcade-deps/lib"
 
+      - name: Build libmad (static; the AGS engine needs it for MP3)
+        if: steps.scummvm.outputs.cache-hit != 'true'
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          curl -sfL "https://downloads.sourceforge.net/project/mad/libmad/0.15.1b/libmad-0.15.1b.tar.gz" -o mad.tar.gz \
+            || curl -sfL "https://ftp.osuosl.org/pub/blfs/conglomeration/libmad/libmad-0.15.1b.tar.gz" -o mad.tar.gz
+          tar -xzf mad.tar.gz
+          cd libmad-0.15.1b
+          # its 2004 configure adds a gcc-only flag that clang refuses
+          sed -i '' 's/-fforce-mem//g' configure
+          CFLAGS="-O2" ./configure --prefix="$HOME/arcade-deps" --disable-shared --enable-static \
+            --enable-fpm=64bit --disable-debugging --build=x86_64-apple-darwin --host=x86_64-apple-darwin > /dev/null
+          make -j"$(sysctl -n hw.ncpu)" > /dev/null
+          make install > /dev/null
+          ls "$HOME/arcade-deps/lib" "$HOME/arcade-deps/include"
+
       - name: Check out ScummVM
         if: steps.scummvm.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
@@ -129,11 +146,14 @@ jobs:
           ./configure --enable-release --disable-all-engines --enable-engine=scumm,ags \
             --with-sdl-prefix="$HOME/arcade-deps" \
             --disable-libcurl --disable-sdlnet --disable-cloud --disable-sparkle --disable-updates --disable-discord \
-            --disable-mad --disable-vorbis --disable-tremor --disable-flac --disable-ogg --disable-fluidsynth \
+            --with-mad-prefix="$HOME/arcade-deps" --enable-mad --disable-vorbis --disable-tremor --disable-flac --disable-ogg --disable-fluidsynth \
             --disable-fluidlite --disable-mpeg2 --disable-a52 --disable-theoradec --disable-faad --disable-jpeg \
             --disable-png --disable-gif --disable-freetype2 --disable-fribidi --disable-vpx --disable-mikmod \
             --disable-openmpt --disable-mpcdec --disable-sonivox --disable-imgui --disable-retrowave \
             --disable-opl2lpt --disable-timidity --disable-mt32emu --disable-osx-dock-plugin
+          # both engines have to be in (an engine with an unmet dependency is quietly left out)
+          grep -q '^ENABLE_AGS ' config.mk || { echo "::error::the AGS engine was left out"; exit 1; }
+          grep -q '^ENABLE_SCUMM ' config.mk || { echo "::error::the SCUMM engine was left out"; exit 1; }
           # the program first (in parallel), then the bundle round it (the bundle step can't run in parallel);
           # zlib comes from macOS itself
           if ! { make -j"$(sysctl -n hw.ncpu)" scummvm-static STATICLIBPATH="$HOME/arcade-deps" OSX_ZLIB=-lz && make bundle STATICLIBPATH="$HOME/arcade-deps" OSX_ZLIB=-lz; } > build.log 2>&1; then

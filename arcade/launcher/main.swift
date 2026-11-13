@@ -27,7 +27,7 @@ struct Game {
 let GAMES = [
     Game(id: "hotel-paradiso", title: "Hotel Paradiso", subtitle: "Room 714",
          blurb: "There's a party on the ninth floor, and you are in no state to go. Yet."),
-    Game(id: "sacra-pasta", title: "Hotel Paradiso", subtitle: "Sacra Pasta",
+    Game(id: "sacra-pasta", title: "Hotel Paradiso 2", subtitle: "Sacra Pasta",
          blurb: "Room 913 has become a shrine to the noodle. Join the church. Become Pope."),
     Game(id: "do-not-disturb", title: "Do Not Disturb", subtitle: "Three nights at the Hotel Paradiso",
          blurb: "A secret party, a hotel full of art rooms, and a ceremony at 11:11."),
