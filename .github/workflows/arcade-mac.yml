@@ -1,0 +1,170 @@
+# Builds Hotel Paradiso Arcade: a Mac app (macOS 10.15 Catalina and later) with a full-screen,
+# mouse-only menu of Hotel Paradiso, Sacra Pasta and Do Not Disturb, for a kiosk Mac. The disk
+# image (with the restrictions profile and the set-up guide) goes on the "arcade" release:
+# https://github.com/SwartzCr/pointandclick/releases/tag/arcade
+name: Mac arcade
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'arcade/**'
+      - '.github/workflows/arcade-mac.yml'
+      - 'hotel-paradiso-scummc/dist/**'
+      - 'hotel-paradiso-sacra-pasta/dist/**'
+
+permissions:
+  contents: write          # to publish the release
+
+concurrency:
+  group: arcade-mac
+  cancel-in-progress: true
+
+env:
+  # the same ScummVM as the web version (see pages.yml)
+  SCUMMVM_REF: 21955df19b580dad2807ec55f573b5f348690a81
+  SDL_VERSION: 2.30.9
+  RENPY_VERSION: 8.3.7
+  # bump to throw the cached ScummVM away and rebuild it
+  CACHE_VERSION: 1
+
+jobs:
+  # Do Not Disturb, packaged for the Mac by Ren'Py itself
+  visual-novel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Do Not Disturb
+        uses: actions/checkout@v4
+        with:
+          repository: SwartzCr/visualnovel
+          path: vn
+
+      - name: Cache the Ren'Py SDK
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/renpy-sdk
+          key: renpy-sdk-${{ env.RENPY_VERSION }}
+
+      - name: Download the Ren'Py SDK
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          curl -sfL "https://www.renpy.org/dl/$RENPY_VERSION/renpy-$RENPY_VERSION-sdk.tar.bz2" -o sdk.tar.bz2
+          tar -xjf sdk.tar.bz2
+          mv "renpy-$RENPY_VERSION-sdk" ~/renpy-sdk
+
+      - name: Build the Mac version
+        env:
+          SDL_AUDIODRIVER: dummy
+          SDL_VIDEODRIVER: dummy
+        run: |
+          set -euo pipefail
+          # in the arcade it opens full screen
+          printf 'define config.default_fullscreen = True\n' > vn/game/zz_arcade.rpy
+          mkdir -p "$RUNNER_TEMP/vn-dist"
+          cd ~/renpy-sdk
+          ./renpy.sh launcher distribute "$GITHUB_WORKSPACE/vn" --package mac --destination "$RUNNER_TEMP/vn-dist" --no-update
+          ls -la "$RUNNER_TEMP/vn-dist"
+          cp "$GITHUB_WORKSPACE/vn/game/gui/main_menu.webp" "$RUNNER_TEMP/vn-dist/"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vn-mac
+          path: |
+            ${{ runner.temp }}/vn-dist/*-mac.zip
+            ${{ runner.temp }}/vn-dist/main_menu.webp
+
+  mac:
+    needs: visual-novel
+    runs-on: macos-15-intel
+    env:
+      MACOSX_DEPLOYMENT_TARGET: "10.13"
+    steps:
+      - name: Check out the games
+        uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: vn-mac
+          path: vn-mac
+
+      - name: Restore the compiled ScummVM
+        id: scummvm
+        uses: actions/cache@v4
+        with:
+          path: ~/ScummVM.app
+          key: scummvm-mac-${{ env.CACHE_VERSION }}-${{ env.SCUMMVM_REF }}-${{ env.SDL_VERSION }}-${{ hashFiles('.github/workflows/arcade-mac.yml') }}
+
+      - name: Build SDL2 (static, for macOS 10.13 and later)
+        if: steps.scummvm.outputs.cache-hit != 'true'
+        working-directory: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          curl -sfL "https://github.com/libsdl-org/SDL/releases/download/release-$SDL_VERSION/SDL2-$SDL_VERSION.tar.gz" -o sdl.tar.gz
+          tar -xzf sdl.tar.gz
+          cd "SDL2-$SDL_VERSION"
+          ./configure --prefix="$HOME/arcade-deps" --disable-shared --enable-static > /dev/null
+          make -j"$(sysctl -n hw.ncpu)" > /dev/null
+          make install > /dev/null
+          ls "$HOME/arcade-deps/lib"
+
+      - name: Check out ScummVM
+        if: steps.scummvm.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: scummvm/scummvm
+          ref: ${{ env.SCUMMVM_REF }}
+          path: scummvm
+
+      - name: Build ScummVM (SCUMM and AGS only, no outside libraries but SDL)
+        if: steps.scummvm.outputs.cache-hit != 'true'
+        working-directory: scummvm
+        run: |
+          set -euo pipefail
+          # keep Homebrew's libraries out: anything linked from there wouldn't exist on the arcade Mac
+          export PKG_CONFIG_LIBDIR="$HOME/arcade-deps/lib/pkgconfig"
+          ./configure --enable-release --disable-all-engines --enable-engine=scumm,ags \
+            --with-sdl-prefix="$HOME/arcade-deps" \
+            --disable-libcurl --disable-sdlnet --disable-cloud --disable-sparkle --disable-updates --disable-discord \
+            --disable-mad --disable-vorbis --disable-tremor --disable-flac --disable-ogg --disable-fluidsynth \
+            --disable-fluidlite --disable-mpeg2 --disable-a52 --disable-theoradec --disable-faad --disable-jpeg \
+            --disable-png --disable-gif --disable-freetype2 --disable-fribidi --disable-vpx --disable-mikmod \
+            --disable-openmpt --disable-mpcdec --disable-sonivox --disable-imgui --disable-retrowave \
+            --disable-opl2lpt --disable-timidity --disable-mt32emu
+          if ! make -j"$(sysctl -n hw.ncpu)" bundle STATICLIBPATH="$HOME/arcade-deps" > build.log 2>&1; then
+            grep -n -E 'error|Error' build.log | head -40
+            tail -60 build.log
+            exit 1
+          fi
+          test -d ScummVM.app
+          ditto ScummVM.app ~/ScummVM.app
+          otool -L ScummVM.app/Contents/MacOS/scummvm
+
+      - name: Put the arcade together
+        run: |
+          set -euo pipefail
+          chmod +x arcade/assemble.sh
+          arcade/assemble.sh ~/ScummVM.app "$(ls vn-mac/*-mac.zip | head -n 1)" vn-mac/main_menu.webp out
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Hotel-Paradiso-Arcade
+          path: out/Hotel-Paradiso-Arcade.dmg
+
+      - name: Publish it on the "arcade" release
+        if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          notes="Hotel Paradiso Arcade for macOS 10.15 Catalina and later, built from $(git rev-parse --short HEAD) on $(date -u +%Y-%m-%d).
+          Open the disk image and read **Set up the arcade Mac** first."
+          if gh release view arcade > /dev/null 2>&1; then
+            gh release upload arcade out/Hotel-Paradiso-Arcade.dmg --clobber
+            gh release edit arcade --notes "$notes"
+          else
+            gh release create arcade out/Hotel-Paradiso-Arcade.dmg --title "Hotel Paradiso Arcade (Mac)" --notes "$notes" --latest=false
+          fi

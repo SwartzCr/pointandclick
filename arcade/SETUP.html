@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set up the arcade Mac</title>
+<style>
+  :root { --bg: #15101c; --panel: #211a2b; --fg: #f3ece2; --muted: #b9adc3; --neon: #ff6bb3; --gold: #ffd473; --line: #3a3046; }
+  body { background: var(--bg); color: var(--fg); font: 16px/1.55 -apple-system, "Helvetica Neue", Helvetica, sans-serif; margin: 0; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 20px 64px; }
+  h1 { font-size: 34px; margin: 0; color: var(--neon); letter-spacing: .5px; }
+  .lede { color: var(--muted); margin: 6px 0 28px; }
+  h2 { font-size: 20px; margin: 34px 0 6px; color: var(--gold); }
+  ol, ul { padding-left: 22px; }
+  li { margin: 6px 0; }
+  code, kbd { font: 14px Menlo, Monaco, monospace; background: var(--panel); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+  pre { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; font: 14px/1.5 Menlo, Monaco, monospace; white-space: pre-wrap; }
+  .note { border-left: 3px solid var(--neon); padding: 4px 0 4px 14px; color: var(--muted); }
+  strong { color: #fff; }
+</style>
+</head>
+<body>
+<main>
+<h1>Set up the arcade Mac</h1>
+<p class="lede">Hotel Paradiso Arcade is a full-screen menu of Hotel Paradiso, Sacra Pasta and Do Not
+Disturb, played with just the mouse. These steps give it its own user account on the Mac, open it
+by itself at login, and stop that account from running anything else or visiting websites. Your
+own account stays exactly as it is. It takes about 15 minutes. You need macOS 10.15 Catalina or
+later and an administrator account.</p>
+
+<h2>1. Install the app (in your own account)</h2>
+<ol>
+  <li>Drag <strong>Hotel Paradiso Arcade</strong> from this disk image into <strong>Applications</strong>.</li>
+  <li>The app isn't from the App Store or signed by a registered developer, so macOS would block it.
+      Open <strong>Terminal</strong> (Applications &gt; Utilities), paste this line and press Return:
+<pre>xattr -dr com.apple.quarantine "/Applications/Hotel Paradiso Arcade.app"</pre></li>
+  <li>Open the app from Applications and try each game. To leave the arcade, press
+      <kbd>Control</kbd> <kbd>Option</kbd> <kbd>Command</kbd> <kbd>Q</kbd> and type the exit code,
+      <code>paradiso</code>.</li>
+</ol>
+
+<h2>2. Make the Arcade account</h2>
+<ol>
+  <li>System Preferences &gt; <strong>Users &amp; Groups</strong>. Click the lock, then <strong>+</strong>.</li>
+  <li>New Account: <strong>Standard</strong>. Full name <code>Arcade</code>, account name <code>arcade</code>.
+      Give it a password (you'll need it for step 3).</li>
+  <li>Click <strong>Login Options</strong> and set <strong>Automatic login</strong> to Arcade, so the Mac goes
+      straight into the arcade when it's switched on. (If FileVault is on, macOS won't allow automatic
+      login; you'd type the Arcade password at start-up instead.)</li>
+  <li>Copy <strong>Hotel Paradiso Arcade.mobileconfig</strong> from this disk image into the
+      <strong>Shared</strong> folder (<code>/Users/Shared</code>) so the Arcade account can reach it.</li>
+</ol>
+
+<h2>3. Set up the Arcade account</h2>
+<p class="note">Do these in order. The profile in the last step blocks System Preferences and
+Terminal for this account, so anything else has to happen before it.</p>
+<ol>
+  <li>Log out, and log in as <strong>Arcade</strong>. Skip the Apple ID and Siri questions.</li>
+  <li><strong>Choose your own exit code</strong> (recommended, since <code>paradiso</code> is printed in
+      this guide). In Terminal, with your code in place of <code>mysecret</code>:
+<pre>mkdir -p ~/Library/Application\ Support/Hotel\ Paradiso\ Arcade
+echo 'mysecret' &gt; ~/Library/Application\ Support/Hotel\ Paradiso\ Arcade/exit-code.txt</pre></li>
+  <li>System Preferences &gt; <strong>Energy Saver</strong>: set the display and computer never to sleep
+      (or as long as you like). <strong>Desktop &amp; Screen Saver</strong>: screen saver to Never.</li>
+  <li>System Preferences &gt; <strong>Keyboard</strong> &gt; Shortcuts &gt; <strong>Spotlight</strong>:
+      untick both shortcuts.</li>
+  <li>Open <strong>/Users/Shared</strong> in Finder and double-click
+      <strong>Hotel Paradiso Arcade.mobileconfig</strong>. System Preferences opens on
+      <strong>Profiles</strong>: click <strong>Install</strong>, then Install again, and type
+      <em>your</em> administrator name and password when asked.</li>
+  <li>Log out and log back in as Arcade. The arcade should fill the screen by itself.</li>
+</ol>
+
+<h2>4. Check it's locked down</h2>
+<ul>
+  <li>The arcade opens at login, with no Dock or menu bar.</li>
+  <li>Each game starts, and quitting it (the game's own Quit, or <kbd>Command</kbd> <kbd>Q</kbd>) brings
+      the menu back.</li>
+  <li>While a game is running, try <kbd>Command</kbd> <kbd>Tab</kbd> to Finder and open Safari or
+      Terminal from Applications: macOS should refuse ("You don't have permission to use the
+      application").</li>
+</ul>
+<p class="note">The profile hasn't been tried on a real Catalina Mac yet. If the last check doesn't
+hold (Safari still opens), use Screen Time instead, from the Arcade account before installing the
+profile: <strong>Screen Time</strong> &gt; Options: turn it on and <em>Use Screen Time Passcode</em>;
+<strong>Downtime</strong>: Every Day, 12:00 AM to 11:59 PM, with <em>Block at downtime</em>;
+<strong>Always Allowed</strong>: tick only Hotel Paradiso Arcade; <strong>Content &amp; Privacy</strong>
+&gt; Content: <em>Allowed Websites Only</em>, with the list emptied.</p>
+
+<h2>Getting out, updating, removing</h2>
+<ul>
+  <li><strong>To use the Mac yourself:</strong> <kbd>Control</kbd> <kbd>Option</kbd> <kbd>Command</kbd>
+      <kbd>Q</kbd>, the exit code, then <kbd>Shift</kbd> <kbd>Command</kbd> <kbd>Q</kbd> to log out, and
+      log in as yourself.</li>
+  <li><strong>To update the games:</strong> from your own account, replace the app in Applications with
+      the one from a newer disk image, and run the <code>xattr</code> line from step 1 again.</li>
+  <li><strong>To undo it all:</strong> from your own account, in Terminal:
+<pre>sudo profiles -R -p io.github.swartzcr.hotelparadiso.arcade.profile.main -U arcade</pre>
+      then delete the Arcade account in Users &amp; Groups.</li>
+</ul>
+
+<h2>Worth knowing</h2>
+<ul>
+  <li>Saved games are kept for the Arcade account, so they're shared by everyone who plays.</li>
+  <li>Someone who knows Macs well could still get past this with the power button and a restart into
+      recovery mode. On an Intel Mac you can stop that with a firmware password: restart holding
+      <kbd>Command</kbd> <kbd>R</kbd>, then Utilities &gt; Startup Security Utility (or Firmware
+      Password Utility).</li>
+</ul>
+</main>
+</body>
+</html>

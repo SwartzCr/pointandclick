@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>PayloadDisplayName</key>
+			<string>Only the arcade can run</string>
+			<key>PayloadEnabled</key>
+			<true/>
+			<key>PayloadIdentifier</key>
+			<string>io.github.swartzcr.hotelparadiso.arcade.profile.apps</string>
+			<key>PayloadType</key>
+			<string>com.apple.applicationaccess.new</string>
+			<key>PayloadUUID</key>
+			<string>D41D0A69-3EB4-579C-9AB5-F38676E1A299</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>familyControlsEnabled</key>
+			<true/>
+			<key>pathBlackList</key>
+			<array/>
+			<key>pathWhiteList</key>
+			<array>
+				<string>/Applications/Hotel Paradiso Arcade.app/</string>
+				<string>/System/Library/CoreServices/</string>
+			</array>
+			<key>whiteList</key>
+			<array/>
+		</dict>
+		<dict>
+			<key>PayloadDisplayName</key>
+			<string>No websites</string>
+			<key>PayloadEnabled</key>
+			<true/>
+			<key>PayloadIdentifier</key>
+			<string>io.github.swartzcr.hotelparadiso.arcade.profile.web</string>
+			<key>PayloadType</key>
+			<string>com.apple.familycontrols.contentfilter</string>
+			<key>PayloadUUID</key>
+			<string>E288FB4A-5522-588C-BB10-612CBD3CF6EF</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>restrictWeb</key>
+			<true/>
+			<key>siteWhitelist</key>
+			<array/>
+			<key>useContentFilter</key>
+			<false/>
+			<key>whitelistEnabled</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>AutoLaunchedApplicationDictionary-managed</key>
+			<array>
+				<dict>
+					<key>Hide</key>
+					<false/>
+					<key>Path</key>
+					<string>/Applications/Hotel Paradiso Arcade.app</string>
+				</dict>
+			</array>
+			<key>PayloadDisplayName</key>
+			<string>Open the arcade at login</string>
+			<key>PayloadEnabled</key>
+			<true/>
+			<key>PayloadIdentifier</key>
+			<string>io.github.swartzcr.hotelparadiso.arcade.profile.login</string>
+			<key>PayloadType</key>
+			<string>com.apple.loginitems.managed</string>
+			<key>PayloadUUID</key>
+			<string>B4AC9520-5DAA-5E9A-87E1-5ADC9B2CC7B7</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>PayloadDisplayName</key>
+			<string>Hide the Dock</string>
+			<key>PayloadEnabled</key>
+			<true/>
+			<key>PayloadIdentifier</key>
+			<string>io.github.swartzcr.hotelparadiso.arcade.profile.dock</string>
+			<key>PayloadType</key>
+			<string>com.apple.dock</string>
+			<key>PayloadUUID</key>
+			<string>EA236B03-B03F-5D9D-954C-5BF5D88F93FB</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>autohide</key>
+			<true/>
+			<key>autohide-immutable</key>
+			<true/>
+			<key>contents-immutable</key>
+			<true/>
+			<key>show-recents</key>
+			<false/>
+			<key>static-apps</key>
+			<array/>
+			<key>static-only</key>
+			<true/>
+			<key>static-others</key>
+			<array/>
+		</dict>
+	</array>
+	<key>PayloadDescription</key>
+	<string>Turns this user account into an arcade: only Hotel Paradiso Arcade can run, no websites, and the arcade opens at login. Install it while logged in as the arcade user.</string>
+	<key>PayloadDisplayName</key>
+	<string>Hotel Paradiso Arcade</string>
+	<key>PayloadIdentifier</key>
+	<string>io.github.swartzcr.hotelparadiso.arcade.profile.main</string>
+	<key>PayloadOrganization</key>
+	<string>Hotel Paradiso</string>
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+	<key>PayloadScope</key>
+	<string>User</string>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>697AEDD9-DD3E-5C94-A118-77BF1B5BFFD2</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
