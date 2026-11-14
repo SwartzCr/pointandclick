@@ -66,6 +66,7 @@ jobs:
         run: |
           set -euo pipefail
           # in the arcade it opens full screen
+          echo "Visual novel: $(git -C vn log -1 --format='%h %ci %s')"
           printf 'define config.default_fullscreen = True\n' > vn/game/zz_arcade.rpy
           mkdir -p "$RUNNER_TEMP/vn-dist"
           cd ~/renpy-sdk

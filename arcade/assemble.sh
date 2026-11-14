@@ -32,6 +32,11 @@ iconutil -c icns "$WORK/art-out/AppIcon.iconset" -o "$APP/Contents/Resources/App
 cp "$ROOT/hotel-paradiso-scummc/dist/tentacle.000" "$ROOT/hotel-paradiso-scummc/dist/tentacle.001" \
    "$APP/Contents/Resources/games/hotel-paradiso/"
 cp "$ROOT/hotel-paradiso-sacra-pasta/dist/sacrapasta.ags" "$APP/Contents/Resources/games/sacra-pasta/"
+# which version of each game went in (compare with the repo's dist files)
+echo "Games in this build:"
+for f in "$APP/Contents/Resources/games/hotel-paradiso/"* "$APP/Contents/Resources/games/sacra-pasta/"*; do
+  echo "  $(md5 -q "$f")  ${f#$APP/Contents/Resources/games/}"
+done
 ditto "$SCUMMVM_APP" "$APP/Contents/Resources/ScummVM.app"
 mkdir "$WORK/vn"
 ditto -x -k "$VN_ZIP" "$WORK/vn"

@@ -128,9 +128,9 @@ final class CardView: NSView {
         p.lineBreakMode = .byWordWrapping
         p.paragraphSpacing = ts * 0.3
         let body = NSMutableAttributedString(string: game.blurb + "\n",
-                                             attributes: [.font: font(ts * 0.47), .foregroundColor: DIM, .paragraphStyle: p])
+                                             attributes: [.font: font(ts * 0.6), .foregroundColor: DIM, .paragraphStyle: p])
         body.append(NSAttributedString(string: game.details,
-                                       attributes: [.font: font(ts * 0.47, bold: true), .foregroundColor: CREAM, .paragraphStyle: p]))
+                                       attributes: [.font: font(ts * 0.6, bold: true), .foregroundColor: CREAM, .paragraphStyle: p]))
         body.draw(with: NSRect(x: tr.minX, y: tr.minY, width: tr.width, height: tr.height - ts * 2.5),
                   options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine])
         // the frame: gold when the mouse is over it
