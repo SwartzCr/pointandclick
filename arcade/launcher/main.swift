@@ -202,21 +202,23 @@ final class KioskWindow: NSWindow {
 // window at the "shielding" level, which sits over every ordinary window level.
 let OVER_GAMES = NSWindow.Level(rawValue: Int(CGShieldingWindowLevel()) + 1)
 
-// the reminder in the top-left corner during a game: how to get back to the menu
+// the reminder in the top-left corner during a game: how to get back to the menu. It sits well in
+// from the edges, where a frame or bezel round the arcade's monitor can't cover it.
+let HINT_INSET = NSPoint(x: 120, y: 60)
 final class HintView: NSView {
     static let text = "Hold the right mouse button for 3 seconds to return to the menu"
-    static let textFont = font(15, bold: true)
+    static let textFont = font(22, bold: true)
     static var size: NSSize {
         let w = (text as NSString).size(withAttributes: [.font: textFont]).width
-        return NSSize(width: ceil(w) + 36, height: 34)
+        return NSSize(width: ceil(w) + 44, height: 46)
     }
     override func draw(_ dirtyRect: NSRect) {
-        let box = NSBezierPath(roundedRect: bounds.insetBy(dx: 1, dy: 1), xRadius: 9, yRadius: 9)
-        NSColor(calibratedWhite: 0, alpha: 0.62).setFill()
+        let box = NSBezierPath(roundedRect: bounds.insetBy(dx: 1, dy: 1), xRadius: 11, yRadius: 11)
+        NSColor(calibratedWhite: 0, alpha: 0.7).setFill()
         box.fill()
         NSColor(calibratedWhite: 1, alpha: 0.25).setStroke()
         box.stroke()
-        drawText(HintView.text, HintView.textFont, CREAM, in: NSRect(x: 18, y: 7, width: bounds.width - 36, height: 22), align: .left)
+        drawText(HintView.text, HintView.textFont, CREAM, in: NSRect(x: 22, y: 9, width: bounds.width - 44, height: 30), align: .left)
     }
 }
 
@@ -467,7 +469,7 @@ final class Arcade: NSObject, NSApplicationDelegate {
         if hintPanel == nil {
             let screen = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 1280, height: 800)
             let size = HintView.size
-            let panel = NSPanel(contentRect: NSRect(x: screen.minX + 16, y: screen.maxY - size.height - 16,
+            let panel = NSPanel(contentRect: NSRect(x: screen.minX + HINT_INSET.x, y: screen.maxY - size.height - HINT_INSET.y,
                                                     width: size.width, height: size.height),
                                 styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
             panel.level = OVER_GAMES
@@ -483,7 +485,7 @@ final class Arcade: NSObject, NSApplicationDelegate {
         guard let panel = hintPanel else { return }
         if on {
             if let screen = NSScreen.main?.frame {
-                panel.setFrameOrigin(NSPoint(x: screen.minX + 16, y: screen.maxY - panel.frame.height - 16))
+                panel.setFrameOrigin(NSPoint(x: screen.minX + HINT_INSET.x, y: screen.maxY - panel.frame.height - HINT_INSET.y))
             }
             panel.orderFrontRegardless()
         }
