@@ -21,15 +21,19 @@ struct Game {
     let title: String
     let subtitle: String
     let blurb: String
+    let details: String     // what kind of game and how long, under the blurb
 }
 
 let GAMES = [
     Game(id: "hotel-paradiso", title: "Hotel Paradiso", subtitle: "Room 714",
-         blurb: "There's a party on the ninth floor, and you are in no state to go. Yet."),
+         blurb: "There's a party on the ninth floor, and you are in no state to go. Yet.",
+         details: "5-10 minute point and click adventure game"),
     Game(id: "sacra-pasta", title: "Hotel Paradiso 2", subtitle: "Sacra Pasta",
-         blurb: "Room 913 has become a shrine to the noodle. Join the church. Become Pope."),
+         blurb: "Room 913 has become a shrine to the noodle. Join the church. Become Pope.",
+         details: "A point and click adventure sequel. 20-30 minutes"),
     Game(id: "late-checkout", title: "Late Checkout", subtitle: "A Hotel Paradiso experience",
-         blurb: "A secret party, a hotel full of art rooms, and a ceremony at 11:11."),
+         blurb: "A secret party, a hotel full of art rooms, and a ceremony at 11:11.",
+         details: "A room service dating sim! 15-25 minutes. Great if you like lots of reading!"),
 ]
 
 // ------------------------------------------------------------------ colours and fonts
@@ -119,8 +123,16 @@ final class CardView: NSView {
                  in: NSRect(x: tr.minX, y: tr.maxY - ts * 1.3, width: tr.width, height: ts * 1.4), align: .left)
         drawText(game.subtitle, font(ts * 0.62, bold: true), NEON,
                  in: NSRect(x: tr.minX, y: tr.maxY - ts * 2.25, width: tr.width, height: ts), align: .left)
-        drawText(game.blurb, font(ts * 0.5), DIM,
-                 in: NSRect(x: tr.minX, y: tr.minY, width: tr.width, height: tr.height - ts * 2.5), align: .left)
+        // the blurb, then (a little brighter) what kind of game it is and how long it takes
+        let p = NSMutableParagraphStyle()
+        p.lineBreakMode = .byWordWrapping
+        p.paragraphSpacing = ts * 0.3
+        let body = NSMutableAttributedString(string: game.blurb + "\n",
+                                             attributes: [.font: font(ts * 0.47), .foregroundColor: DIM, .paragraphStyle: p])
+        body.append(NSAttributedString(string: game.details,
+                                       attributes: [.font: font(ts * 0.47, bold: true), .foregroundColor: CREAM, .paragraphStyle: p]))
+        body.draw(with: NSRect(x: tr.minX, y: tr.minY, width: tr.width, height: tr.height - ts * 2.5),
+                  options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine])
         // the frame: gold when the mouse is over it
         card.lineWidth = hover ? 4 : 2
         (hover ? GOLD : NSColor(calibratedWhite: 1, alpha: 0.15)).setStroke()
@@ -143,8 +155,12 @@ final class MenuView: NSView {
         super.layout()
         let n = CGFloat(cards.count)
         let gap = bounds.width * 0.025
-        let cw = min((bounds.width * 0.9 - gap * (n - 1)) / n, 520)
-        let ch = cw * 9 / 16 + cw * 0.5
+        // the card: a 16:9 picture over room for the words; no taller than ~58% of the screen,
+        // so the cards stay clear of the title above and the footer below
+        let body: CGFloat = 0.74
+        var cw = min((bounds.width * 0.9 - gap * (n - 1)) / n, 520)
+        cw = min(cw, bounds.height * 0.58 / (9.0 / 16.0 + body))
+        let ch = cw * 9 / 16 + cw * body
         let total = cw * n + gap * (n - 1)
         var x = bounds.midX - total / 2
         let y = bounds.midY - ch / 2 - bounds.height * 0.04
