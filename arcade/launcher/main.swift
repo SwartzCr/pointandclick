@@ -409,11 +409,11 @@ final class Arcade: NSObject, NSApplicationDelegate {
     func holdTick() {
         guard let p = running else { stopHold(); return }
         let now = Date()
-        // the corner reminder: for the first 10 seconds of a game, and again whenever the mouse has
+        // the corner reminder: for the first 6 seconds of a game, and again whenever the mouse has
         // sat still for 30 seconds (someone new has probably walked up); it goes as soon as it moves
         let m = NSEvent.mouseLocation
         if m != lastMouse { lastMouse = m; lastMove = now }
-        setHint(now.timeIntervalSince(gameStart) < 10 || now.timeIntervalSince(lastMove) > 30)
+        setHint(now.timeIntervalSince(gameStart) < 6 || now.timeIntervalSince(lastMove) > 30)
         if NSEvent.pressedMouseButtons & 2 != 0 {
             holdLastDown = now
             if holdStart == nil { holdStart = now }
