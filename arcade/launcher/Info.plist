@@ -26,6 +26,9 @@
 	<string>10.15</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
+	<!-- the menu watches for the hold-to-leave gesture from the background: no App Nap -->
+	<key>NSAppSleepDisabled</key>
+	<true/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>LSApplicationCategoryType</key>

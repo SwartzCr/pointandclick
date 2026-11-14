@@ -210,7 +210,10 @@ final class Arcade: NSObject, NSApplicationDelegate {
     var running: Process?
     var allowQuit = false
     var holdTimer: Timer?
-    var holdTime: TimeInterval = 0
+    var holdStart: Date?                 // when the right button went down (nil: not held)
+    var holdLastDown = Date.distantPast  // the last time it was seen down
+    var holdDone = false                 // already ended this game; wait for the button to come up
+    var awake: NSObjectProtocol?         // keeps macOS from napping the menu while a game runs
     var holdPanel: NSPanel?
     var holdView: HoldView?
     let res = URL(fileURLWithPath: Bundle.main.resourcePath ?? ".")
@@ -340,26 +343,43 @@ final class Arcade: NSObject, NSApplicationDelegate {
     // permissions and keeps working whichever app is in front.
     func watchForHold() {
         holdTimer?.invalidate()
-        holdTime = 0
-        holdTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in self?.holdTick() }
+        holdStart = nil
+        holdDone = false
+        // In the background, macOS's App Nap would slow this timer to a crawl (that's why the hold
+        // sometimes didn't work); ask it not to while a game is running.
+        if awake == nil {
+            awake = ProcessInfo.processInfo.beginActivity(options: [.userInitiated, .latencyCritical],
+                                                          reason: "Watching for the hold-to-leave gesture")
+        }
+        let t = Timer(timeInterval: 0.05, repeats: true) { [weak self] _ in self?.holdTick() }
+        t.tolerance = 0
+        RunLoop.main.add(t, forMode: .common)
+        holdTimer = t
     }
 
     func holdTick() {
         guard let p = running else { stopHold(); return }
+        let now = Date()
         if NSEvent.pressedMouseButtons & 2 != 0 {
-            holdTime += 0.1
-            if holdTime >= 0.8 { showHold(min(1, CGFloat((holdTime - 0.8) / 2.2))) }
-            if holdTime >= 3.0 {
-                hideHold()
-                holdTime = -1000                       // once is enough
-                p.terminate()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    if p.isRunning { kill(p.processIdentifier, SIGKILL) }
-                }
+            holdLastDown = now
+            if holdStart == nil { holdStart = now }
+        } else if now.timeIntervalSince(holdLastDown) > 0.35 {
+            // let go (a blink of "up" in the middle of a hold doesn't count)
+            if holdStart != nil { hideHold() }
+            holdStart = nil
+            holdDone = false
+            return
+        }
+        guard let start = holdStart, !holdDone else { return }
+        let held = now.timeIntervalSince(start)        // real time, however often the timer fires
+        if held >= 0.8 { showHold(min(1, CGFloat((held - 0.8) / 2.2))) }
+        if held >= 3.0 {
+            hideHold()
+            holdDone = true
+            p.terminate()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                if p.isRunning { kill(p.processIdentifier, SIGKILL) }
             }
-        } else {
-            if holdTime > 0 { hideHold() }
-            holdTime = 0
         }
     }
 
@@ -392,6 +412,8 @@ final class Arcade: NSObject, NSApplicationDelegate {
     func stopHold() {
         holdTimer?.invalidate()
         holdTimer = nil
+        holdStart = nil
+        if let a = awake { ProcessInfo.processInfo.endActivity(a); awake = nil }
         hideHold()
     }
 
