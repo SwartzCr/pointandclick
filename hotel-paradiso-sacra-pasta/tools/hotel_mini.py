@@ -116,8 +116,10 @@ def hotel():
     d = sc.d
     # a LOG OFF button in the top-right corner, and the program's name
     f = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 10)
-    d.rectangle([556, 6, 628, 22], fill=rgba((214, 204, 172)), outline=rgba((90, 80, 64)))
-    d.text((592, 14), 'LOG OFF', font=f, fill=rgba((60, 40, 30)), anchor='mm')
+    fb = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf', 16)
+    d.rectangle([520, 4, 636, 32], fill=rgba((214, 204, 172)), outline=rgba((90, 80, 64)), width=2)
+    d.line([(522, 30), (634, 30)], fill=rgba((150, 140, 116)), width=2)     # a bit of depth
+    d.text((578, 17), 'LOG OFF', font=fb, fill=rgba((60, 40, 30)), anchor='mm')
     d.text((14, 14), 'HOTEL.EXE', font=f, fill=rgba((200, 255, 200)), anchor='lm')
 
     # hotspots (Room 714 at 2x)
@@ -133,7 +135,7 @@ def hotel():
     sc.hotspot('hPainting', 'painting', (520, 210), [('rect', [496, 32, 592, 80])])
     sc.hotspot('hBed', 'bed', (450, 250), [('rect', [470, 90, 640, 264])])
     sc.hotspot('hTable', 'coffee table', (320, 270), [('rect', [224, 206, 416, 258])])
-    sc.hotspot('hLogoff', 'LOG OFF', (520, 210), [('rect', [556, 6, 628, 22])])
+    sc.hotspot('hLogoff', 'LOG OFF', (520, 210), [('rect', [520, 4, 636, 32])])
 
     sc.obj('oNewspaper', 'newspaper', {'on': newspaper()}, 66, 214, baseline=214)   # slid under the door
 
