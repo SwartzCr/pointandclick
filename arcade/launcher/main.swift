@@ -198,6 +198,28 @@ final class KioskWindow: NSWindow {
     override var canBecomeMain: Bool { true }
 }
 
+// Above everything, full-screen games included: SDL's plain (no-Space) full screen puts the game
+// window at the "shielding" level, which sits over every ordinary window level.
+let OVER_GAMES = NSWindow.Level(rawValue: Int(CGShieldingWindowLevel()) + 1)
+
+// the reminder in the top-left corner during a game: how to get back to the menu
+final class HintView: NSView {
+    static let text = "Hold the right mouse button for 3 seconds to return to the menu"
+    static let textFont = font(15, bold: true)
+    static var size: NSSize {
+        let w = (text as NSString).size(withAttributes: [.font: textFont]).width
+        return NSSize(width: ceil(w) + 36, height: 34)
+    }
+    override func draw(_ dirtyRect: NSRect) {
+        let box = NSBezierPath(roundedRect: bounds.insetBy(dx: 1, dy: 1), xRadius: 9, yRadius: 9)
+        NSColor(calibratedWhite: 0, alpha: 0.62).setFill()
+        box.fill()
+        NSColor(calibratedWhite: 1, alpha: 0.25).setStroke()
+        box.stroke()
+        drawText(HintView.text, HintView.textFont, CREAM, in: NSRect(x: 18, y: 7, width: bounds.width - 36, height: 22), align: .left)
+    }
+}
+
 // the little sign that shows while the right button is held down during a game
 final class HoldView: NSView {
     var progress: CGFloat = 0 { didSet { needsDisplay = true } }
@@ -229,6 +251,11 @@ final class Arcade: NSObject, NSApplicationDelegate {
     var holdStart: Date?                 // when the right button went down (nil: not held)
     var holdLastDown = Date.distantPast  // the last time it was seen down
     var holdDone = false                 // already ended this game; wait for the button to come up
+    var hintPanel: NSPanel?
+    var hintShown = false
+    var gameStart = Date()
+    var lastMouse = NSPoint.zero
+    var lastMove = Date()
     var awake: NSObjectProtocol?         // keeps macOS from napping the menu while a game runs
     var holdPanel: NSPanel?
     var holdView: HoldView?
@@ -359,6 +386,10 @@ final class Arcade: NSObject, NSApplicationDelegate {
     // permissions and keeps working whichever app is in front.
     func watchForHold() {
         holdTimer?.invalidate()
+        gameStart = Date()
+        lastMove = gameStart
+        lastMouse = NSEvent.mouseLocation
+        setHint(true)
         holdStart = nil
         holdDone = false
         // In the background, macOS's App Nap would slow this timer to a crawl (that's why the hold
@@ -376,6 +407,11 @@ final class Arcade: NSObject, NSApplicationDelegate {
     func holdTick() {
         guard let p = running else { stopHold(); return }
         let now = Date()
+        // the corner reminder: for the first 10 seconds of a game, and again whenever the mouse has
+        // sat still for 30 seconds (someone new has probably walked up); it goes as soon as it moves
+        let m = NSEvent.mouseLocation
+        if m != lastMouse { lastMouse = m; lastMove = now }
+        setHint(now.timeIntervalSince(gameStart) < 10 || now.timeIntervalSince(lastMove) > 30)
         if NSEvent.pressedMouseButtons & 2 != 0 {
             holdLastDown = now
             if holdStart == nil { holdStart = now }
@@ -406,7 +442,7 @@ final class Arcade: NSObject, NSApplicationDelegate {
             let panel = NSPanel(contentRect: NSRect(x: screen.midX - size.width / 2, y: screen.maxY - size.height - 60,
                                                     width: size.width, height: size.height),
                                 styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
-            panel.level = .screenSaver
+            panel.level = OVER_GAMES
             panel.isOpaque = false
             panel.backgroundColor = .clear
             panel.ignoresMouseEvents = true
@@ -425,7 +461,43 @@ final class Arcade: NSObject, NSApplicationDelegate {
         holdPanel?.orderOut(nil)
     }
 
+    func setHint(_ on: Bool) {
+        if on == hintShown { return }
+        hintShown = on
+        if hintPanel == nil {
+            let screen = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 1280, height: 800)
+            let size = HintView.size
+            let panel = NSPanel(contentRect: NSRect(x: screen.minX + 16, y: screen.maxY - size.height - 16,
+                                                    width: size.width, height: size.height),
+                                styleMask: [.borderless, .nonactivatingPanel], backing: .buffered, defer: false)
+            panel.level = OVER_GAMES
+            panel.isOpaque = false
+            panel.backgroundColor = .clear
+            panel.ignoresMouseEvents = true
+            panel.hidesOnDeactivate = false
+            panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
+            panel.contentView = HintView(frame: NSRect(origin: .zero, size: size))
+            panel.alphaValue = 0
+            hintPanel = panel
+        }
+        guard let panel = hintPanel else { return }
+        if on {
+            if let screen = NSScreen.main?.frame {
+                panel.setFrameOrigin(NSPoint(x: screen.minX + 16, y: screen.maxY - panel.frame.height - 16))
+            }
+            panel.orderFrontRegardless()
+        }
+        NSAnimationContext.runAnimationGroup({ ctx in
+            ctx.duration = on ? 0.3 : 0.6
+            panel.animator().alphaValue = on ? 1 : 0
+        }, completionHandler: { [weak self] in
+            if self?.hintShown == false { panel.orderOut(nil) }
+        })
+    }
+
     func stopHold() {
+        hintShown = true
+        setHint(false)
         holdTimer?.invalidate()
         holdTimer = nil
         holdStart = nil
