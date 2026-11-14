@@ -29,6 +29,7 @@ room ResRoom {
     script wearUniform(int on);
     script useOnSelf(int item);
     script defaultAction(int vrb, int item);
+    script failed();
     script openWallet();
 
     // ------------------------------------------------------------ verbs
@@ -204,7 +205,7 @@ room ResRoom {
         wearingUniform = 0; tookUniform = 0; dresserOpen = 0; hasTowel = 0; hasSoap = 0;
         tookTowel = 0; tookSoap = 0; hasShaver = 0; tookShaver = 0; bathCurtainOpen = 0;
         cabinetOpen = 0; hotelVisited = 0; bathroomVisited = 0; tvAd = 0;
-        uniformState = 0; tableMirrorState = 0; linesDone = 0; phoneCalls = 0; duckTalks = 0;
+        uniformState = 0; tableMirrorState = 0; linesDone = 0; phoneCalls = 0; duckTalks = 0; failStreak = 0;
         titleMode = 0;
         curVerb = WalkTo;
         withItem = 0;
@@ -458,11 +459,23 @@ room ResRoom {
         withItem = 0;
     }
 
+    // Every few actions that get nowhere, remind the player the front desk can help.
+    // The count starts again after each reminder and after each call to the desk.
+    script failed() {
+        failStreak++;
+        if(failStreak < 5) return;
+        failStreak = 0;
+        waitForMessage();
+        if(VAR_ROOM == Hotel) egoSay("I'm getting nowhere. Maybe I should call the front desk.");
+        else egoSay("I'm getting nowhere. The phone by the bed would get me the front desk.");
+    }
+
     script defaultAction(int vrb, int item) {
         int r;
         r = getRandomNumber(1);
         if(item) {
             egoSay("That doesn't work.");
+            failed();
             return;
         }
         switch(vrb) {
@@ -493,6 +506,7 @@ room ResRoom {
         default:
             egoSay("Hmm.");
         }
+        if(vrb != LookAt) failed();
     }
 
     // ------------------------------------------------------------ inventory
@@ -540,7 +554,7 @@ room ResRoom {
             else if(isAnyOf(withItem, [ invPowder, invShaver ]) && isAnyOf(item, [ invPowder, invShaver ]))
                 egoSay("I need to pour it out on something flat first.");
             else
-                egoSay("Combining those won't help.");
+                { egoSay("Combining those won't help."); failed(); }
             withItem = 0;
             curVerb = WalkTo;
             return;

@@ -63,6 +63,7 @@ bit bathCurtainOpen, cabinetOpen;
 bit hotelVisited, bathroomVisited;
 bit tvAd;
 int phoneCalls;
+int failStreak;     // actions in a row that got nowhere (see ResRoom::failed)
 int duckTalks;      // how many prophecies the duck has made
 
 // EGA colours, kept at palette indices 0..15 by tools/make_assets.py

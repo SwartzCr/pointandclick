@@ -43,6 +43,9 @@ washes a stained uniform you're carrying, and on the towel rail dries a wet one.
 To eat the candy or put on the uniform, just **Use** it (and **Use** the robe to change
 back). To use another item on yourself, click **Use**, the item, then either yourself or
 the item again.
+If you're stuck, the phone gets you the front desk. After every five actions that get
+nowhere ("It won't budge", "That doesn't work"...), the guest says so and suggests calling
+it. Looking at things doesn't count, and calling the desk starts the count again.
 F5 opens the menu, `.` skips a line of dialogue.
 
 ## The rooms
