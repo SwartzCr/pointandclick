@@ -24,9 +24,12 @@ room ResRoom {
     bit uiDim;          // the verbs and pockets are greyed out while someone is talking
 
     script inventoryClick(int item);
+    script smartUse(int item);
+    script useItemOn(int item, int obj);
     script wearUniform(int on);
     script useOnSelf(int item);
     script defaultAction(int vrb, int item);
+    script failed();
     script openWallet();
 
     // ------------------------------------------------------------ verbs
@@ -202,7 +205,7 @@ room ResRoom {
         wearingUniform = 0; tookUniform = 0; dresserOpen = 0; hasTowel = 0; hasSoap = 0;
         tookTowel = 0; tookSoap = 0; hasShaver = 0; tookShaver = 0; bathCurtainOpen = 0;
         cabinetOpen = 0; hotelVisited = 0; bathroomVisited = 0; tvAd = 0;
-        uniformState = 0; tableMirrorState = 0; linesDone = 0; phoneCalls = 0; duckTalks = 0;
+        uniformState = 0; tableMirrorState = 0; linesDone = 0; phoneCalls = 0; duckTalks = 0; failStreak = 0;
         titleMode = 0;
         curVerb = WalkTo;
         withItem = 0;
@@ -340,7 +343,7 @@ room ResRoom {
                     else
                         setVerbName("Use %v{withItem} with %n{hoverObj}");
                 } else if(inv && curVerb == WalkTo)
-                    setVerbName("%v{hoverInv}");      // no verb chosen: just the item
+                    setVerbName("Use %v{hoverInv}");  // a plain click uses it
                 else if(inv)
                     setVerbName("%v{curVerb} %v{hoverInv}");
                 else if(curVerb == WalkTo && dflt) {
@@ -370,8 +373,19 @@ room ResRoom {
         }
 
         if(area == 1) {
-            if(isAnyOf(cmd, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror, invWallet, invDollar ]))
-                inventoryClick(cmd);
+            if(isAnyOf(cmd, [ invMatchbook, invCandy, invUniform, invTowel, invSoap, invShaver, invScrewdriver, invPowder, invMirror, invWallet, invDollar ])) {
+                if(btn == 2) {
+                    // right click: look at it, whatever verb is chosen
+                    withItem = 0;
+                    curVerb = LookAt;
+                    inventoryClick(cmd);
+                    curVerb = WalkTo;
+                } else {
+                    // a plain click on an item means "Use" it
+                    if(curVerb == WalkTo && !withItem) curVerb = Use;
+                    inventoryClick(cmd);
+                }
+            }
             else if(isAnyOf(cmd, [ Open, Close, TalkTo, PickUp, LookAt,
                                    Use, Push, Pull, WalkTo ])) {
                 curVerb = cmd;
@@ -445,11 +459,23 @@ room ResRoom {
         withItem = 0;
     }
 
+    // Every few actions that get nowhere, remind the player the front desk can help.
+    // The count starts again after each reminder and after each call to the desk.
+    script failed() {
+        failStreak++;
+        if(failStreak < 5) return;
+        failStreak = 0;
+        waitForMessage();
+        if(VAR_ROOM == Hotel) egoSay("I'm getting nowhere. Maybe I should call the front desk.");
+        else egoSay("I'm getting nowhere. The phone by the bed would get me the front desk.");
+    }
+
     script defaultAction(int vrb, int item) {
         int r;
         r = getRandomNumber(1);
         if(item) {
             egoSay("That doesn't work.");
+            failed();
             return;
         }
         switch(vrb) {
@@ -480,6 +506,7 @@ room ResRoom {
         default:
             egoSay("Hmm.");
         }
+        if(vrb != LookAt) failed();
     }
 
     // ------------------------------------------------------------ inventory
@@ -497,6 +524,12 @@ room ResRoom {
             // "Use candy" just eats it; no need to pick yourself as the target
             if(item == invCandy) {
                 useOnSelf(invCandy);
+                curVerb = WalkTo;
+                return;
+            }
+            // Items with one obvious target right now use it straight away
+            if(smartUse(item)) {
+                withItem = 0;
                 curVerb = WalkTo;
                 return;
             }
@@ -521,7 +554,7 @@ room ResRoom {
             else if(isAnyOf(withItem, [ invPowder, invShaver ]) && isAnyOf(item, [ invPowder, invShaver ]))
                 egoSay("I need to pour it out on something flat first.");
             else
-                egoSay("Combining those won't help.");
+                { egoSay("Combining those won't help."); failed(); }
             withItem = 0;
             curVerb = WalkTo;
             return;
@@ -695,6 +728,31 @@ room ResRoom {
         refreshInventory();
         egoSay("Inside: one dollar bill. And a receipt for a fourteen-dollar candy bar."); waitForMessage();
         egoSay("I'll keep the dollar handy and the wallet in my pocket.");
+    }
+
+    // Walk to obj and use item with it, as if "Use item with obj" was clicked
+    script useItemOn(int item, int obj) {
+        stopSentence();
+        sentenceItem = item;
+        doSentence(Use, obj, 0, 0);
+    }
+
+    // "Use <item>" with no target: if there's one obvious thing to do with it
+    // right now, do it and return 1; otherwise return 0 and the item waits
+    // for a target as usual ("Use soap with...").
+    script smartUse(int item) {
+        // the stained / wet uniform
+        if(item == invUniform && uniformState == 1 && VAR_ROOM == Bathroom) { washUniform(); return 1; }
+        if(item == invUniform && uniformState == 2 && (hasTowel || (VAR_ROOM == Bathroom && !tookTowel))) { dryUniform(); return 1; }
+        if(item == invSoap && uniformState == 1) { washUniform(); return 1; }
+        if(item == invTowel && uniformState == 2) { dryUniform(); return 1; }
+        // the pre-game chain: each step's only target. (Not the dollar: doing
+        // a line stays a deliberate "Use dollar with mirror".)
+        if(item == invScrewdriver && VAR_ROOM == Bathroom && !mirrorRemoved) { useItemOn(invScrewdriver, bathMirrorObj); return 1; }
+        if(item == invMirror && VAR_ROOM == Hotel) { useItemOn(invMirror, tableObj); return 1; }
+        if(item == invPowder && VAR_ROOM == Hotel && tableMirrorState == 1) { useItemOn(invPowder, tableMirrorObj); return 1; }
+        if(item == invShaver && VAR_ROOM == Hotel && tableMirrorState == 2) { useItemOn(invShaver, tableMirrorObj); return 1; }
+        return 0;
     }
 
     // Soap on the dirty uniform, at the bathroom sink: clean, but soaking wet

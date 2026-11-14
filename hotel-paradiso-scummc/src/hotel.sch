@@ -35,7 +35,10 @@ int curVerb;       // verb the next room click will use
 int withItem;      // inventory verb chosen for "Use X with ..."
 int hoverObj;      // room object under the cursor
 int hoverInv;      // inventory verb under the cursor
-int sentenceItem;  // the item in a "Use X with..." sentence (see sentenceHandler)
+int sentenceItem;
+// Objects the inventory sends you to with a plain "Use <item>", set by each
+// room's entry (room objects can't be named from ResRoom)
+int tableObj, tableMirrorObj, bathMirrorObj;  // the item in a "Use X with..." sentence (see sentenceHandler)
 bit gameOver;
 bit titleMode;     // on the title screen: only the menu responds
 
@@ -60,6 +63,7 @@ bit bathCurtainOpen, cabinetOpen;
 bit hotelVisited, bathroomVisited;
 bit tvAd;
 int phoneCalls;
+int failStreak;     // actions in a row that got nowhere (see ResRoom::failed)
 int duckTalks;      // how many prophecies the duck has made
 
 // EGA colours, kept at palette indices 0..15 by tools/make_assets.py

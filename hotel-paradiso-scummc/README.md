@@ -32,12 +32,20 @@ Finishing the game, or losing it, brings you back to it.
 verb, and you'll do the obvious thing with it: open (or close) doors, drawers, the minibar
 and the safe, pick items up, use the phone, lamp, TV and toilet, pull the painting. With
 no verb chosen, the sentence line shows what a click will do ("Open minibar", "Pick up
-candy bar"), and just the item's name over the inventory.
-Right-click an object to look at it.
-To use an inventory item on something, click **Use**, the item, then the object.
+candy bar"), and "Use <item>" over the inventory.
+Right-click an object or an inventory item to look at it.
+To use an inventory item on something, click the item (a plain click means **Use**), then
+the object. When there's only one sensible target, a plain click on the item does it
+straight away: the soap or the stained uniform in the bathroom washes it, the towel dries
+a wet uniform, the screwdriver goes to work on the bathroom mirror, and in the bedroom the
+mirror, powder and razor go to the coffee table. A plain click on the sink or the soap
+washes a stained uniform you're carrying, and on the towel rail dries a wet one.
 To eat the candy or put on the uniform, just **Use** it (and **Use** the robe to change
 back). To use another item on yourself, click **Use**, the item, then either yourself or
 the item again.
+If you're stuck, the phone gets you the front desk. After every five actions that get
+nowhere ("It won't budge", "That doesn't work"...), the guest says so and suggests calling
+it. Looking at things doesn't count, and calling the desk starts the count again.
 F5 opens the menu, `.` skips a line of dialogue.
 
 ## The rooms
@@ -151,7 +159,11 @@ sign on the door handle says as much).
   `startObject()`, which the engine executes immediately. It uses the "recursive" flag so
   it doesn't stop a script the object is already running. `mouseWatch` asks every frame
   and shows "%v{defaultVerb} %n{hoverObj}". A click asks again and sends that verb with
-  `doSentence()`.
+  `doSentence()`. A plain click on an inventory item sets the verb to `Use`, and
+  `smartUse` checks whether the item has one obvious target in the current room. If it
+  does, it runs that action at once (`washUniform`, `dryUniform`, or `useItemOn`, which
+  queues "Use item with object"). Room objects can't be named from `ResRoom`, so each
+  room's `entry` copies the ones it needs into globals (`tableObj`, `bathMirrorObj`...).
 * **Interface.** `mouseWatch` runs every frame and rebuilds the sentence line with SCUMM's
   string codes (`%v{curVerb} %n{hoverObj}`), which the engine expands when it draws the verb.
 * **Actions.** A room click queues `doSentence(verb, object, 0, item)`. The engine then runs
