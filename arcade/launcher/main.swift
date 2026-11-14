@@ -26,10 +26,10 @@ struct Game {
 
 let GAMES = [
     Game(id: "hotel-paradiso", title: "Hotel Paradiso", subtitle: "Room 714",
-         blurb: "There's a party on the ninth floor, and you are in no state to go. Yet.",
+         blurb: "There's a party on the 9th floor and you have to get ready! Solve the puzzles to escape your hotel room!",
          details: "5-10 minute point and click adventure game"),
     Game(id: "sacra-pasta", title: "Hotel Paradiso 2", subtitle: "Sacra Pasta",
-         blurb: "Room 913 has become a shrine to the noodle. Join the church. Become Pope.",
+         blurb: "You've entered the room of the Sacra Pasta! Solve the puzzles to discover what's behind the wall and prove you're a video game master.",
          details: "A point and click adventure sequel. 20-30 minutes"),
     Game(id: "late-checkout", title: "Late Checkout", subtitle: "A Hotel Paradiso experience",
          blurb: "A secret party, a hotel full of art rooms, and a ceremony at 11:11.",
