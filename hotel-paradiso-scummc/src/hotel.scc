@@ -1399,6 +1399,8 @@ room Hotel {
 
     local script entry() {
         createBoxMatrix();
+        tableObj = coffeeTable;          // for "Use mirror" etc. from the inventory
+        tableMirrorObj = tableMirror;
 
         // Coming back from the bathroom: step out of the doorway. Object
         // states and classes are global, so nothing else needs resetting.

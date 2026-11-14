@@ -345,7 +345,8 @@ room Bathroom {
 
         verb(int vrb, int objA, int objB) {
         case DefaultVerb:        // what a plain click does
-            defaultVerb = PickUp;
+            if(uniformState == 1 && hasUniform) defaultVerb = Use;   // wash the uniform with it
+            else defaultVerb = PickUp;
             return;
         case LookAt:
             egoSay("A tiny bar of soap with the hotel's crest pressed into it."); waitForMessage();
@@ -359,7 +360,7 @@ room Bathroom {
             egoSay("Free soap. The best kind of soap."); waitForMessage();
             return;
         case Use:
-            if(objB == invUniform) {
+            if(objB == invUniform || (!objB && uniformState == 1 && hasUniform)) {
                 ResRoom::washUniform();     // the soap on the sink works as well as one in hand
                 return;
             }
@@ -383,7 +384,8 @@ room Bathroom {
             egoSay("A pedestal sink. Spotless, unlike me."); waitForMessage();
             return;
         case Use:
-            if(objB == invUniform) {
+            // a plain "Use sink" washes a stained uniform you're carrying
+            if(objB == invUniform || (!objB && uniformState == 1 && hasUniform)) {
                 ResRoom::washUniform();
                 return;
             }
@@ -516,7 +518,8 @@ room Bathroom {
 
         verb(int vrb, int objA, int objB) {
         case DefaultVerb:        // what a plain click does
-            defaultVerb = PickUp;
+            if(uniformState == 2) defaultVerb = Use;                 // dry the uniform on it
+            else defaultVerb = PickUp;
             return;
         case LookAt:
             egoSay("A fluffy white towel with a teal stripe."); waitForMessage();
@@ -530,7 +533,7 @@ room Bathroom {
             egoSay("A towel. Every traveller should have one."); waitForMessage();
             return;
         case Use:
-            if(objB == invUniform) {
+            if(objB == invUniform || (!objB && uniformState == 2)) {
                 ResRoom::dryUniform();      // the towel on the rail works as well as one in hand
                 return;
             }
@@ -542,6 +545,7 @@ room Bathroom {
     // ------------------------------------------------------------ entry
     local script entry() {
         createBoxMatrix();
+        bathMirrorObj = mirror;          // for "Use screwdriver" from the inventory
         unless(bathroomVisited) {
             bathroomVisited = 1;
             setObjectClass(shavingKit, [ SET_CLASS | UNTOUCHABLE ]);
