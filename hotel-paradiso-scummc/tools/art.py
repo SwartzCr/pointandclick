@@ -921,13 +921,15 @@ def clown_side(name, step=0, arms_up=False, talk=False):
 
 
 def cursor_image():
-    """16x16 crosshair. Index 0 (magenta) is transparent."""
+    """16x16 crosshair. Index 0 (magenta) is transparent.
+    Each arm is a black line with a white outline, so it shows up on the
+    black verb bar and inventory as well as on the pale bathroom tiles."""
     im = Image.new('RGB', (16, 16), (255, 0, 255))
     d = ImageDraw.Draw(im)
-    for (x0, y0, x1, y1) in [(7, 0, 9, 6), (7, 10, 9, 16), (0, 7, 6, 9), (10, 7, 16, 9)]:
-        d.rectangle([x0, y0, x1 - 1, y1 - 1], fill=(8, 8, 12))
-    for (x0, y0, x1, y1) in [(8, 1, 8, 5), (8, 11, 8, 15), (1, 8, 5, 8), (11, 8, 15, 8)]:
-        d.line([(x0, y0), (x1, y1)], fill=(255, 255, 255))
+    for (x0, y0, x1, y1) in [(7, 0, 9, 5), (7, 10, 9, 15), (0, 7, 5, 9), (10, 7, 15, 9)]:
+        d.rectangle([x0, y0, x1, y1], fill=(250, 250, 250))   # 3px wide, white (pure white comes out black in a ScummVM cursor)
+    for (x0, y0, x1, y1) in [(8, 1, 8, 4), (8, 11, 8, 14), (1, 8, 4, 8), (11, 8, 14, 8)]:
+        d.line([(x0, y0), (x1, y1)], fill=(8, 8, 12))          # black core
     return im
 
 

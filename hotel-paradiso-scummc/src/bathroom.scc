@@ -175,8 +175,8 @@ room Bathroom {
             egoSay("I give it a nudge. It bobs back, unbothered."); waitForMessage();
             return;
         case Use:
-            if(objB == invSoap) { egoSay("It's clean enough. Cleaner than me, anyway."); waitForMessage(); }
-            else if(objB) { egoSay("The duck wants for nothing."); waitForMessage(); }
+            if(objB == invSoap) { egoSay("It's clean enough. Cleaner than me, anyway."); waitForMessage(); ResRoom::failed(); }
+            else if(objB) { egoSay("The duck wants for nothing."); waitForMessage(); ResRoom::failed(); }
             else { startSound(duckSnd); egoSay("I give it a squeeze. Squeak."); waitForMessage(); }
             return;
         }
@@ -241,9 +241,9 @@ room Bathroom {
             else { egoSay("A claw-foot tub. The curtain's drawn."); waitForMessage(); }
             return;
         case Use:
-            if(objB == invSoap) { egoSay("Tempting. But check-out was at noon."); waitForMessage(); }
-            else if(objB) { egoSay("That doesn't need a bath."); waitForMessage(); }
-            else { egoSay("No time for a bath. Check-out was at noon."); waitForMessage(); }
+            if(objB == invSoap) { egoSay("Tempting. But check-out was at noon."); waitForMessage(); ResRoom::failed(); }
+            else if(objB) { egoSay("That doesn't need a bath."); waitForMessage(); ResRoom::failed(); }
+            else { egoSay("No time for a bath. Check-out was at noon."); waitForMessage(); ResRoom::failed(); }
             return;
         case TalkTo:
             if(bathCurtainOpen) talkToDuck();
@@ -282,7 +282,8 @@ room Bathroom {
             egoSay("It's already on the floor. It can't get much lower."); waitForMessage();
             return;
         case Use:
-            if(objB == invTowel) { egoSay("A towel on a bath mat. That's just a thicker bath mat."); waitForMessage(); }
+            if(objB == invTowel) { egoSay("A towel on a bath mat. That's just a thicker bath mat."); waitForMessage(); ResRoom::failed(); }
+            else if(objB) { egoSay("The mat doesn't need that."); waitForMessage(); ResRoom::failed(); }
             else { egoSay("I wipe my feet. Very civilised."); waitForMessage(); }
             return;
         }
@@ -309,7 +310,7 @@ room Bathroom {
             egoSay("A toilet. The lid's up. The handle is very shiny."); waitForMessage();
             return;
         case Use:
-            if(objB) { egoSay("That is not going down there."); waitForMessage(); }
+            if(objB) { egoSay("That is not going down there."); waitForMessage(); ResRoom::failed(); }
             else flushToilet();
             return;
         case Push:
@@ -364,7 +365,8 @@ room Bathroom {
                 ResRoom::washUniform();     // the soap on the sink works as well as one in hand
                 return;
             }
-            egoSay("I wash my hands. Very hygienic."); waitForMessage();
+            if(objB) { egoSay("That doesn't need soaping."); waitForMessage(); ResRoom::failed(); }
+            else { egoSay("I wash my hands. Very hygienic."); waitForMessage(); }
             return;
         }
     }
@@ -390,10 +392,10 @@ room Bathroom {
                 return;
             }
             unless(objB == invTowel || (objB && objB != invSoap && objB != invShaver)) startSound(sinkSnd);
-            if(objB == invSoap) { egoSay("I wash my hands. Very hygienic. I feel like a new guest."); waitForMessage(); }
-            else if(objB == invShaver) { egoSay("A proper wet shave at the sink. I feel like a new guest."); waitForMessage(); }
-            else if(objB == invTowel) { egoSay("I dry the sink. Nobody asked me to."); waitForMessage(); }
-            else if(objB) { egoSay("I'd rather not get that wet."); waitForMessage(); }
+            if(objB == invSoap) { egoSay("I wash my hands. Very hygienic. I feel like a new guest."); waitForMessage(); ResRoom::failed(); }
+            else if(objB == invShaver) { egoSay("A proper wet shave at the sink. I feel like a new guest."); waitForMessage(); ResRoom::failed(); }
+            else if(objB == invTowel) { egoSay("I dry the sink. Nobody asked me to."); waitForMessage(); ResRoom::failed(); }
+            else if(objB) { egoSay("I'd rather not get that wet."); waitForMessage(); ResRoom::failed(); }
             else { egoSay("I splash some cold water on my face. That's better."); waitForMessage(); }
             return;
         case Open:
@@ -428,7 +430,7 @@ room Bathroom {
             return;
         case Open:
         case Use:
-            egoSay("I'll take it out first."); waitForMessage();
+            egoSay("I'll take it out first."); waitForMessage(); ResRoom::failed();
             return;
         }
     }
@@ -494,9 +496,10 @@ room Bathroom {
             if(objB == invScrewdriver) {
                 if(mirrorRemoved) { egoSay("I've already taken the door off."); waitForMessage(); }
                 else removeMirror();
-            } else if(mirrorRemoved) { egoSay("There's no mirror left. I'll use the one I'm carrying."); waitForMessage(); }
-            else if(objB == invTowel) { egoSay("I polish the mirror. Now I can see myself more clearly. Mixed feelings."); waitForMessage(); }
-            else if(objB == invShaver) { egoSay("I shave in the mirror. Very dapper. Only one nick."); waitForMessage(); }
+            } else if(mirrorRemoved) { egoSay("There's no mirror left. I'll use the one I'm carrying."); waitForMessage(); if(objB) ResRoom::failed(); }
+            else if(objB == invTowel) { egoSay("I polish the mirror. Now I can see myself more clearly. Mixed feelings."); waitForMessage(); ResRoom::failed(); }
+            else if(objB == invShaver) { egoSay("I shave in the mirror. Very dapper. Only one nick."); waitForMessage(); ResRoom::failed(); }
+            else if(objB) { egoSay("The mirror doesn't need that."); waitForMessage(); ResRoom::failed(); }
             else { egoSay("I check my teeth. All present."); waitForMessage(); }
             return;
         case TalkTo:
@@ -537,7 +540,8 @@ room Bathroom {
                 ResRoom::dryUniform();      // the towel on the rail works as well as one in hand
                 return;
             }
-            egoSay("I dry my hands on it. Then I put it back exactly how it was."); waitForMessage();
+            if(objB) { egoSay("That doesn't need drying."); waitForMessage(); ResRoom::failed(); }
+            else { egoSay("I dry my hands on it. Then I put it back exactly how it was."); waitForMessage(); }
             return;
         }
     }

@@ -459,11 +459,12 @@ room ResRoom {
         withItem = 0;
     }
 
-    // Every few actions that get nowhere, remind the player the front desk can help.
+    // Every few actions that get nowhere (stock replies here, wrong items and dead
+    // ends in the rooms' own object code), remind the player the front desk can help.
     // The count starts again after each reminder and after each call to the desk.
     script failed() {
         failStreak++;
-        if(failStreak < 5) return;
+        if(failStreak < 4) return;
         failStreak = 0;
         waitForMessage();
         if(VAR_ROOM == Hotel) egoSay("I'm getting nowhere. Maybe I should call the front desk.");
@@ -700,9 +701,9 @@ room ResRoom {
                 egoSay("I can't go to a party like this. I need to wash it.");
             }
         } else if(item == invPowder)
-            egoSay("Straight from the bag? I'm not an animal. I need a mirror and a flat surface.");
+            { egoSay("Straight from the bag? I'm not an animal. I need a mirror and a flat surface."); failed(); }
         else if(item == invScrewdriver)
-            egoSay("I'm not that loose.");
+            { egoSay("I'm not that loose."); failed(); }
         else if(item == invWallet)
             openWallet();
         else if(item == invDollar)

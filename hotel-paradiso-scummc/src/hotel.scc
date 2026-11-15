@@ -90,23 +90,23 @@ room Hotel {
         if(item == invShaver) { chopLines(); return; }
         if(item == invDollar) {
             if(tableMirrorState >= 3) doLine();
-            else { egoSay("I'll hang on to my last dollar. I'll need it in a minute."); waitForMessage(); }
+            else { egoSay("I'll hang on to my last dollar. I'll need it in a minute."); waitForMessage(); ResRoom::failed(); }
             return;
         }
         if(item == invWallet) {
-            egoSay("I'm not leaving my wallet lying around. Not again."); waitForMessage();
+            egoSay("I'm not leaving my wallet lying around. Not again."); waitForMessage(); ResRoom::failed();
             return;
         }
         if(item == invScrewdriver) {
-            egoSay("I'll hang on to the screwdriver. You never know."); waitForMessage();
+            egoSay("I'll hang on to the screwdriver. You never know."); waitForMessage(); ResRoom::failed();
             return;
         }
         if(item == invUniform) {
-            egoSay("The uniform stays with me. It's the whole costume."); waitForMessage();
+            egoSay("The uniform stays with me. It's the whole costume."); waitForMessage(); ResRoom::failed();
             return;
         }
         if(item == invTowel || item == invSoap) {
-            egoSay("That belongs in the bathroom, not on the coffee table."); waitForMessage();
+            egoSay("That belongs in the bathroom, not on the coffee table."); waitForMessage(); ResRoom::failed();
             return;
         }
         slot = 0;
@@ -599,7 +599,7 @@ room Hotel {
             egoSay("It's hooked on the handle, and it's doing important work. I'm not to be disturbed."); waitForMessage();
             return;
         case Use:
-            if(objB) { egoSay("It's a sign. It doesn't take attachments."); waitForMessage(); }
+            if(objB) { egoSay("It's a sign. It doesn't take attachments."); waitForMessage(); ResRoom::failed(); }
             else { egoSay("It's already doing its job. Nobody has disturbed me all day."); waitForMessage(); }
             return;
         case Open:
@@ -633,8 +633,8 @@ room Hotel {
             tryDoor();
             return;
         case Use:
-            if(objB == invScrewdriver) { egoSay("Take the door off its hinges? It already opens. That's not the problem."); waitForMessage(); }
-            else if(objB) { egoSay("The door doesn't need that."); waitForMessage(); }
+            if(objB == invScrewdriver) { egoSay("Take the door off its hinges? It already opens. That's not the problem."); waitForMessage(); ResRoom::failed(); }
+            else if(objB) { egoSay("The door doesn't need that."); waitForMessage(); ResRoom::failed(); }
             else tryDoor();
             return;
         case Push:
@@ -676,7 +676,7 @@ room Hotel {
             takeUniform();
             return;
         case Use:
-            egoSay("I'll take it out first."); waitForMessage();
+            egoSay("I'll take it out first."); waitForMessage(); ResRoom::failed();
             return;
         case TalkTo:
             egoSay("Front! Boy!"); waitForMessage();
@@ -732,7 +732,7 @@ room Hotel {
             else { egoSay("It's furniture. It stays."); waitForMessage(); }
             return;
         case Use:
-            if(objB) { egoSay("I'll leave the drawers to the professionals. The coffee table's right there."); waitForMessage(); }
+            if(objB) { egoSay("I'll leave the drawers to the professionals. The coffee table's right there."); waitForMessage(); ResRoom::failed(); }
             else { egoSay("I could open it."); waitForMessage(); }
             return;
         }
@@ -763,7 +763,7 @@ room Hotel {
         case Use:
         case Push:
             if(objB) {
-                egoSay("I don't think the TV needs that."); waitForMessage();
+                egoSay("I don't think the TV needs that."); waitForMessage(); ResRoom::failed();
             } else if(tvOn) {
                 tvOn = 0;
                 startSound(tvOffSnd);
@@ -820,8 +820,8 @@ room Hotel {
             else { egoSay("They're already closed."); waitForMessage(); }
             return;
         case Use:
-            if(objB == invMatchbook) { egoSay("Setting the curtains on fire is not a plan. It's a crime."); waitForMessage(); }
-            else { egoSay("Climbing out the window is not an option. Twelve floors."); waitForMessage(); }
+            if(objB == invMatchbook) { egoSay("Setting the curtains on fire is not a plan. It's a crime."); waitForMessage(); ResRoom::failed(); }
+            else { egoSay("Climbing out the window is not an option. Twelve floors."); waitForMessage(); ResRoom::failed(); }
             return;
         }
     }
@@ -848,7 +848,7 @@ room Hotel {
             return;
         case Use:
         case TalkTo:
-            egoSay("I'll take it first."); waitForMessage();
+            egoSay("I'll take it first."); waitForMessage(); ResRoom::failed();
             return;
         }
     }
@@ -919,7 +919,7 @@ room Hotel {
         case Push:
         case Pull:
             if(objB) {
-                egoSay("The lamp doesn't need that."); waitForMessage();
+                egoSay("The lamp doesn't need that."); waitForMessage(); ResRoom::failed();
             } else if(lampOn) {
                 lampOn = 0;
                 startSound(lampSnd);
@@ -955,7 +955,7 @@ room Hotel {
         case Use:
         case TalkTo:
         case PickUp:
-            if(objB) { egoSay("I'd rather use it to make a call."); waitForMessage(); }
+            if(objB) { egoSay("I'd rather use it to make a call."); waitForMessage(); ResRoom::failed(); }
             else callDesk();
             return;
         }
@@ -983,7 +983,7 @@ room Hotel {
             return;
         case Use:
         case Open:
-            egoSay("I'll take it first."); waitForMessage();
+            egoSay("I'll take it first."); waitForMessage(); ResRoom::failed();
             return;
         }
     }
@@ -1090,7 +1090,7 @@ room Hotel {
             takeScrewdriver();
             return;
         case Use:
-            egoSay("I'll take it first."); waitForMessage();
+            egoSay("I'll take it first."); waitForMessage(); ResRoom::failed();
             return;
         }
     }
@@ -1113,7 +1113,7 @@ room Hotel {
             return;
         case Use:
         case Open:
-            egoSay("I'll take it first."); waitForMessage();
+            egoSay("I'll take it first."); waitForMessage(); ResRoom::failed();
             return;
         }
     }
@@ -1149,7 +1149,7 @@ room Hotel {
             if(safeOpen) {
                 egoSay("It's already open."); waitForMessage();
             } else if(objB && objB != invMatchbook) {
-                egoSay("That won't open a safe."); waitForMessage();
+                egoSay("That won't open a safe."); waitForMessage(); ResRoom::failed();
             } else if(knowsCode)
                 openSafe(); else if(hasMatchbook) {
                 egoSay("I think I wrote the code inside the matchbook. I should read it."); waitForMessage();
@@ -1261,8 +1261,8 @@ room Hotel {
             if(objB == invPowder) powderOnMirror();
             else if(objB == invShaver) chopLines();
             else if(objB == invDollar && tableMirrorState >= 3) doLine();
-            else if(objB == invDollar) { egoSay("Not yet. It isn't ready."); waitForMessage(); }
-            else if(objB) { egoSay("That doesn't go on the mirror."); waitForMessage(); }
+            else if(objB == invDollar) { egoSay("Not yet. It isn't ready."); waitForMessage(); ResRoom::failed(); }
+            else if(objB) { egoSay("That doesn't go on the mirror."); waitForMessage(); ResRoom::failed(); }
             else if(tableMirrorState >= 3 && readyToParty) doLine();
             else if(tableMirrorState >= 3 && (hasDollar || hasWallet)) { egoSay("Not with my bare nose. I'll roll up that dollar bill."); waitForMessage(); }
             else if(tableMirrorState >= 3) { egoSay("Not with my bare nose. I need something to roll up. Some cash, say."); waitForMessage(); }
@@ -1326,7 +1326,7 @@ room Hotel {
             return;
         case Open:
         case Use:
-            egoSay("I'll take it first."); waitForMessage();
+            egoSay("I'll take it first."); waitForMessage(); ResRoom::failed();
             return;
         }
     }
@@ -1355,7 +1355,8 @@ room Hotel {
             else { egoSay("Unmade. My work. There's a lump under the covers."); waitForMessage(); }
             return;
         case Use:
-            egoSay("No time for a nap. There's a party on."); waitForMessage();
+            if(objB) { egoSay("The bed doesn't need that."); waitForMessage(); ResRoom::failed(); }
+            else { egoSay("No time for a nap. There's a party on."); waitForMessage(); ResRoom::failed(); }
             return;
         case Push:
             egoSay("I'm not wrestling a mattress today."); waitForMessage();

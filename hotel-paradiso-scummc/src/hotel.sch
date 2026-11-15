@@ -92,6 +92,7 @@ room ResRoom {
     script showGameVerbs(int on);
     script startNewGame();
     script washUniform();
+    script failed();
     script dryUniform();
     script startTrip();
     script stopTrip();
